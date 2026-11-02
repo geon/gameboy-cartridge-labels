@@ -22,7 +22,7 @@ Photos of a release from a better source replace those from a worse one, wheneve
 ## Steps
 
 Done, run with `make` (see the Makefile): add-photos, read-text, fit-cartridge (the plastic), fit-label (the label in its
-recess). Tools for judging and fixing fits: review-fits, review-labels, fit-by-hand; learn-choice (fit-cartridge's choice among its fits, learned from the verdicts: run it again as verdicts grow); for finding and naming photos:
+recess), render-labels and render-carts (one straightened image per release, src/render.py). Tools for judging and fixing fits: review-fits, review-labels, fit-by-hand; learn-choice (fit-cartridge's choice among its fits, learned from the verdicts: run it again as verdicts grow); for finding and naming photos:
 search-photos, name-photos.
 
 ## Open work
@@ -31,7 +31,7 @@ search-photos, name-photos.
 - **Depth layers for the CGB shell**: built (cartridge.camera_of, seen_at; 2026-11-01) and tried; no clear gain
   (results in src/cartridge.py). The measured ridges are taken in flat (cgb_ridge_samples; not inside the recess):
   hard photos 11 -> 25 within 1 mm, accepted ones 57 -> 48 within 0.3 mm. CGB photos not yet refitted.
-- Then: rectify (straighten the label), group the artwork, pick the best photo of each release.
+- Then: group the artwork. (Straightening the label and picking each release's photo: render-labels, render-carts.)
 - **A tool comparing labels by their look against their serials**: similar labels with different serials (likely
   misreads: about 2 % of photos named by their text are wrong), and identical serials that look different (misnamed
   photos, or real variants such as reprints).

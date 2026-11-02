@@ -1,0 +1,144 @@
+import concurrent.futures, hashlib, io, json, os, re, sys, cv2, numpy as np
+from PIL import Image
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import fits, photos, serials
+from cartridge import SHELLS, project, shell_of
+from fit_cartridge import load
+
+# render-labels and render-carts: one image per release, straightened (perspective removed through its fits) and with
+# its colors evened out (src/color.py, as the steps read photos), as AVIF:
+#   labels: generated/render-labels/<release>.avif, the label alone, stretched to LABEL_MM (the labels' size varies a
+#     few tenths of a mm: their fits' model corners are mapped to the image's corners);
+#   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at the same
+#     scale; where the margin runs off the photo, transparent.
+# The release's photo: its preferred one (preferred.json, chosen in find-doubles) if the fit the image needs (the label
+# for labels, the plastic for carts) is accepted or placed by hand, else the best one by source (photos.SOURCES) whose
+# fit is; the fakes (photos.FAKES) never. A release with no such photo gets no image. So a release's label and cart
+# come from different photos while its preferred photo's label isn't accepted. Each step's made.json records what each image was made from (the photo's
+# SHA-1, the fits, this code's version); an image is made again when any of it changes, and those of releases no
+# longer rendered are removed.
+# Usage: render.py labels|carts
+PX_PER_MM = 5
+# The labels' size, mm: the median of the accepted and hand-placed label fits (2026-11-02): DMG 42.0 x 37.0 (1956),
+# CGB 41.5 x 37.0 (107). 210 x 185 px.
+LABEL_MM = (42.0, 37.0)
+CART_MARGIN = 10.0
+# AVIF through Pillow, not OpenCV: OpenCV's encoder always halves the color's resolution (4:2:0), which smears colored
+# text at this size, whatever the quality (ΔE 99th percentile about 14 at quality 95). Measured on 16 labels against
+# lossless (2026-11-02), 4:4:4: quality 80 13.6 KB, ΔE median 2.1, 99th percentile 8.2; 90 18.6 KB, 1.7, 6.1;
+# 95 25.8 KB, 1.3, 4.3.
+QUALITY = 90
+# Drawn at SUPERSAMPLE times the scale, from the photo shrunk to at most twice that, then shrunk by area: every output
+# pixel the mean of the photo under it, not a sample of it.
+SUPERSAMPLE = 4
+OUT = {"labels": "generated/render-labels", "carts": "generated/render-carts"}
+CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
+                             for f in ("render.py", "color.py"))).hexdigest()
+
+
+def chosen(kind):
+    """Each release's photo to render for kind (labels or carts): release id -> (stem, path, sha1, shell name, plastic and
+    label homographies; the label None for carts)."""
+    release_of, known, preferred = serials.releases_by_serial(), fits.load(), photos.load_preferred()
+    candidates = {}
+    for source, system, name, entry in photos.all_sources():
+        if source in photos.FAKES:
+            continue
+        stem, sha1 = photos.stem(name), entry.get("sha1")
+        fit = fits.of(known, stem, sha1)["fit"]
+        if not fits.good(fit.get("plastic")) or kind == "labels" and not fits.good(fit.get("label")):
+            continue
+        serial = photos.serial_of(name)
+        release = (serials.release_of_serial(serial, release_of) or {}).get("id", serial)
+        candidates.setdefault(release, []).append((preferred.get(release) != sha1, photos.rank(source), name, stem,
+                                                   os.path.join(photos.ROOT, source, system, name), sha1, shell_of(serial).name,
+                                                   fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind == "labels" else None))
+    return {release: min(c)[3:] for release, c in candidates.items()}
+
+
+def frame(H, box, size):
+    """The photo's pixels, H mapping mm to them, rendered for box (x0, y0, x1, y1, mm) into size (w, h px): a homography
+    from the supersampled image's pixels to the photo's."""
+    (x0, y0, x1, y1), (w, h) = box, size
+    sx, sy = (x1 - x0) / (w * SUPERSAMPLE), (y1 - y0) / (h * SUPERSAMPLE)
+    return np.asarray(H, np.float64) @ np.array([[sx, 0, x0 + sx / 2], [0, sy, y0 + sy / 2], [0, 0, 1]])
+
+
+def rendered(photo, M, size, alpha=False):
+    """The photo seen through M (the supersampled image's pixels -> the photo's), size px (w, h); with alpha, its
+    pixels off the photo transparent (BGRA)."""
+    w, h = size[0] * SUPERSAMPLE, size[1] * SUPERSAMPLE
+    c = project(M, [[w / 2, h / 2], [w / 2 + 1, h / 2], [w / 2, h / 2 + 1]])
+    (ax, ay), (bx, by) = c[1] - c[0], c[2] - c[0]
+    photo_px = np.sqrt(abs(ax * by - ay * bx))  # photo px per supersampled px, at the middle
+    if photo_px > 2:
+        shrink = 2 / photo_px
+        photo = cv2.resize(photo, None, fx=shrink, fy=shrink, interpolation=cv2.INTER_AREA)
+        M = np.array([[shrink, 0, (shrink - 1) / 2], [0, shrink, (shrink - 1) / 2], [0, 0, 1]]) @ M
+    if alpha:
+        photo = np.dstack([photo, np.full(photo.shape[:2], 255, np.uint8)])
+    big = cv2.warpPerspective(photo, M, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    return cv2.resize(big, size, interpolation=cv2.INTER_AREA)
+
+
+def label_image(photo, shell, label_H):
+    model = SHELLS[shell].label
+    size = (round(LABEL_MM[0] * PX_PER_MM), round(LABEL_MM[1] * PX_PER_MM))
+    return rendered(photo, frame(label_H, model, size), size)
+
+
+def cart_image(photo, shell, plastic_H):
+    w, h = SHELLS[shell].body
+    box = (-CART_MARGIN, -CART_MARGIN, w + CART_MARGIN, h + CART_MARGIN)
+    size = (round((box[2] - box[0]) * PX_PER_MM), round((box[3] - box[1]) * PX_PER_MM))
+    return rendered(photo, frame(plastic_H, box, size), size, alpha=True)
+
+
+def render(kind, release, path, shell, plastic_H, label_H, out):
+    photo = load(path)
+    image = label_image(photo, shell, label_H) if kind == "labels" else cart_image(photo, shell, plastic_H)
+    data = io.BytesIO()
+    Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA if image.shape[2] == 4 else cv2.COLOR_BGR2RGB)).save(
+        data, "AVIF", quality=QUALITY, subsampling="4:4:4", speed=4)
+    open(out + ".tmp", "wb").write(data.getvalue())
+    os.replace(out + ".tmp", out)
+    return release
+
+
+def file_of(release):
+    return re.sub(r"[^A-Za-z0-9._()-]", "_", release) + ".avif"
+
+
+def main(kind):
+    folder = OUT[kind]
+    os.makedirs(folder, exist_ok=True)
+    made_path = os.path.join(folder, "made.json")
+    made = json.load(open(made_path)) if os.path.exists(made_path) else {}
+    photo_of = chosen(kind)
+    want = {release: {"photo": stem, "sha1": sha1, "shell": shell, "pose": plastic_H if kind == "carts" else label_H, "code": CODE}
+            for release, (stem, path, sha1, shell, plastic_H, label_H) in photo_of.items()}
+    for release in set(made) - set(want):
+        if os.path.exists(os.path.join(folder, file_of(release))):
+            os.remove(os.path.join(folder, file_of(release)))
+        del made[release]
+    todo = [r for r in sorted(want) if made.get(r) != want[r] or not os.path.exists(os.path.join(folder, file_of(r)))]
+    print(f"{len(want)} releases, {len(todo)} to render into {folder}/")
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        jobs = [pool.submit(render, kind, r, *photo_of[r][1:2], *photo_of[r][3:], os.path.join(folder, file_of(r))) for r in todo]
+        for n, job in enumerate(concurrent.futures.as_completed(jobs), 1):
+            try:
+                release = job.result()
+                made[release] = want[release]
+            except Exception as e:
+                print(f"  failed: {e}")
+            if n % 100 == 0 or n == len(jobs):
+                print(f"  {n}/{len(jobs)}")
+                open(made_path, "w").write(json.dumps(made, indent=0, sort_keys=True))
+    open(made_path, "w").write(json.dumps(made, indent=0, sort_keys=True))
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2 or sys.argv[1] not in OUT:
+        sys.exit("Usage: render.py labels|carts")
+    main(sys.argv[1])

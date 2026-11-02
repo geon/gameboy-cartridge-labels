@@ -16,6 +16,12 @@
 #   make fit-label
 #   Fits the label in the recess of every photo whose plastic is accepted or placed by hand, into fits.json: its pose, as a homography from the label's model to the photo's pixels, not yet reviewed; its shift, turn and width into generated/fit-label/<photo>.json; a fit sticking out of the recess is rejected; a label accepted or placed by hand is kept (src/fit_label.py).
 #
+#   make render-labels
+#   Renders each release's label, straightened and its colors evened out, stretched to 42.0 x 37.0 mm at 5 px per mm (210 x 185 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
+#
+#   make render-carts
+#   Renders each release's cartridge front the same way, with 10 mm around it (385 x 425 px; off the photo transparent), into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
+#
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
 #
@@ -41,7 +47,7 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label render-labels clean-render-labels render-carts clean-render-carts learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -69,6 +75,18 @@ fit-label:
 
 clean-fit-label:
 	rm -rf generated/fit-label
+
+render-labels:
+	$(PYTHON) src/render.py labels
+
+clean-render-labels:
+	rm -rf generated/render-labels
+
+render-carts:
+	$(PYTHON) src/render.py carts
+
+clean-render-carts:
+	rm -rf generated/render-carts
 
 learn-choice:
 	$(PYTHON) src/learn_choice.py
