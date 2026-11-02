@@ -10,8 +10,8 @@ from fit_cartridge import load
 # its colors evened out (src/color.py, as the steps read photos), as AVIF:
 #   labels: generated/render-labels/<release>.avif, the label alone, stretched to LABEL_MM (the labels' size varies a
 #     few tenths of a mm: their fits' model corners are mapped to the image's corners);
-#   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at the same
-#     scale; where the margin runs off the photo, transparent.
+#   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at
+#     CART_PX_PER_MM: meant as the canonical images of the cartridges; where the margin runs off the photo, transparent.
 # The release's photo: its preferred one (preferred.json, chosen in find-doubles) if the fit the image needs (the label
 # for labels, the plastic for carts) is accepted or placed by hand, else the best one by source (photos.SOURCES) whose
 # fit is; the fakes (photos.FAKES) never. A release with no such photo gets no image. So a release's label and cart
@@ -19,19 +19,24 @@ from fit_cartridge import load
 # SHA-1, the fits, this code's version); an image is made again when any of it changes, and those of releases no
 # longer rendered are removed.
 # Usage: render.py labels|carts
-PX_PER_MM = 5
+LABEL_PX_PER_MM = 5
 # The labels' size, mm: the median of the accepted and hand-placed label fits (2026-11-02): DMG 42.0 x 37.0 (1956),
 # CGB 41.5 x 37.0 (107). 210 x 185 px.
 LABEL_MM = (42.0, 37.0)
-CART_MARGIN = 10.0
+CART_MARGIN = 5.0
+# The cartridge images' scale: 20 px per mm, 1340 x 1500 px. Measured on the photos render-carts uses (1402,
+# 2026-11-03): the cartridge is seen at a median 18 px per mm (Hit-Japan 20, jnlgame 19, my own 43, otakaraou 10);
+# 33 % have 20 or more, 61 % 15, 82 % 10. So the best sources keep their detail; the others are enlarged.
+CART_PX_PER_MM = 20
 # AVIF through Pillow, not OpenCV: OpenCV's encoder always halves the color's resolution (4:2:0), which smears colored
 # text at this size, whatever the quality (ΔE 99th percentile about 14 at quality 95). Measured on 16 labels against
 # lossless (2026-11-02), 4:4:4: quality 80 13.6 KB, ΔE median 2.1, 99th percentile 8.2; 90 18.6 KB, 1.7, 6.1;
 # 95 25.8 KB, 1.3, 4.3.
+# On 8 cartridge images (1340 x 1500 px, 2026-11-03): quality 75 159 KB, ΔE 1.2, 3.8; 80 189 KB, 1.1, 3.6; 90 302 KB, 1.0, 3.1.
 QUALITY = 90
 # Drawn at SUPERSAMPLE times the scale, from the photo shrunk to at most twice that, then shrunk by area: every output
-# pixel the mean of the photo under it, not a sample of it.
-SUPERSAMPLE = 4
+# pixel the mean of the photo under it, not a sample of it. Less for the carts, whose image is large.
+SUPERSAMPLE = {"labels": 4, "carts": 2}
 OUT = {"labels": "generated/render-labels", "carts": "generated/render-carts"}
 CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
                              for f in ("render.py", "color.py"))).hexdigest()
@@ -57,18 +62,18 @@ def chosen(kind):
     return {release: min(c)[3:] for release, c in candidates.items()}
 
 
-def frame(H, box, size):
+def frame(H, box, size, supersample):
     """The photo's pixels, H mapping mm to them, rendered for box (x0, y0, x1, y1, mm) into size (w, h px): a homography
     from the supersampled image's pixels to the photo's."""
     (x0, y0, x1, y1), (w, h) = box, size
-    sx, sy = (x1 - x0) / (w * SUPERSAMPLE), (y1 - y0) / (h * SUPERSAMPLE)
+    sx, sy = (x1 - x0) / (w * supersample), (y1 - y0) / (h * supersample)
     return np.asarray(H, np.float64) @ np.array([[sx, 0, x0 + sx / 2], [0, sy, y0 + sy / 2], [0, 0, 1]])
 
 
-def rendered(photo, M, size, alpha=False):
+def rendered(photo, M, size, supersample, alpha=False):
     """The photo seen through M (the supersampled image's pixels -> the photo's), size px (w, h); with alpha, its
     pixels off the photo transparent (BGRA)."""
-    w, h = size[0] * SUPERSAMPLE, size[1] * SUPERSAMPLE
+    w, h = size[0] * supersample, size[1] * supersample
     c = project(M, [[w / 2, h / 2], [w / 2 + 1, h / 2], [w / 2, h / 2 + 1]])
     (ax, ay), (bx, by) = c[1] - c[0], c[2] - c[0]
     photo_px = np.sqrt(abs(ax * by - ay * bx))  # photo px per supersampled px, at the middle
@@ -84,15 +89,15 @@ def rendered(photo, M, size, alpha=False):
 
 def label_image(photo, shell, label_H):
     model = SHELLS[shell].label
-    size = (round(LABEL_MM[0] * PX_PER_MM), round(LABEL_MM[1] * PX_PER_MM))
-    return rendered(photo, frame(label_H, model, size), size)
+    size = (round(LABEL_MM[0] * LABEL_PX_PER_MM), round(LABEL_MM[1] * LABEL_PX_PER_MM))
+    return rendered(photo, frame(label_H, model, size, SUPERSAMPLE["labels"]), size, SUPERSAMPLE["labels"])
 
 
 def cart_image(photo, shell, plastic_H):
     w, h = SHELLS[shell].body
     box = (-CART_MARGIN, -CART_MARGIN, w + CART_MARGIN, h + CART_MARGIN)
-    size = (round((box[2] - box[0]) * PX_PER_MM), round((box[3] - box[1]) * PX_PER_MM))
-    return rendered(photo, frame(plastic_H, box, size), size, alpha=True)
+    size = (round((box[2] - box[0]) * CART_PX_PER_MM), round((box[3] - box[1]) * CART_PX_PER_MM))
+    return rendered(photo, frame(plastic_H, box, size, SUPERSAMPLE["carts"]), size, SUPERSAMPLE["carts"], alpha=True)
 
 
 def render(kind, release, path, shell, plastic_H, label_H, out):

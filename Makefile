@@ -20,7 +20,7 @@
 #   Renders each release's label, straightened and its colors evened out, stretched to 42.0 x 37.0 mm at 5 px per mm (210 x 185 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
 #   make render-carts
-#   Renders each release's cartridge front the same way, with 10 mm around it (385 x 425 px; off the photo transparent), into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
+#   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
