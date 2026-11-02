@@ -34,6 +34,13 @@ def releases_by_serial():
     return release_of
 
 
+def release_of_serial(serial, release_of):
+    """The release a photo's serial is filed under (release_of: releases_by_serial()), the region dropped if gb-game-list
+    lacks it (DMG-A8-UKV); None if it isn't listed."""
+    match = next((s for s in (serial, re.sub(r"-[A-Z]{3}$", "", serial)) if s in release_of), None)
+    return release_of[match] if match else None
+
+
 def reads(text):
     """The serial-like strings in a line of text."""
     t = unicodedata.normalize("NFKC", text).upper()

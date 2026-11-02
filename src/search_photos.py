@@ -106,8 +106,7 @@ release_of = serials.releases_by_serial()
 covered, otakaraou, fake = set(), {}, set()  # otakaraou: release -> the URL of its otakaraou photo
 for source, _, name, entry in photos.all_sources():
     serial = photos.serial_of(name)
-    serial = next((s for s in (serial, re.sub(r"-[A-Z]{3}$", "", serial)) if s in release_of), None)  # DMG-A8-UKV: a region gb-game-list lacks
-    release = release_of[serial]["id"] if serial else None
+    release = (serials.release_of_serial(serial, release_of) or {}).get("id")
     if release:
         if source == "otakaraou":
             otakaraou.setdefault(release, entry["image_url"])

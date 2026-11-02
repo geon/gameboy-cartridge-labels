@@ -1,4 +1,4 @@
-import json, os, re, sys, threading, urllib.parse, cv2
+import json, os, sys, threading, urllib.parse, cv2
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -7,7 +7,7 @@ from fit_cartridge import load
 
 # find-doubles: a local page listing every photo in photos/, one release per row (the release its serial is filed
 # under in gb-game-list, the region dropped if gb-game-list lacks it; else the serial itself), its photos sorted by
-# their source's quality (SOURCES, best first), each marked with an orange check if its plastic is fitted (accepted or
+# their source's quality (photos.SOURCES, best first), each marked with an orange check if its plastic is fitted (accepted or
 # placed by hand), a green one if its label is too. Each photo can be deleted (photos.delete), its fits with it, or
 # renamed to a corrected serial (photos.rename: tidied, numbered if taken, moved to its system's folder), its fits
 # following it. Clicking a photo makes it its release's preferred one (clicking it again unmakes it), saved in
@@ -18,29 +18,7 @@ from fit_cartridge import load
 # one stays shown until the rows are drawn again).
 # Usage: find_doubles.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
-# The sources, best first: Hit-Japan highest, otakaraou the lowest. A source not listed goes just above otakaraou.
-SOURCES = ("ebay-hitjapan", "my-collection", "ebay-elrocinante", "yugiyahirano", "jnlgame", "jauce", "mercari", "rakuma",
-           "retros-ae", "gbhwdb", "ebay", "tradera", "kleinanzeigen", "marktplaats", "gamestop", "google", "unrecorded",
-           "otakaraou")
-
-
-PREFERRED = "preferred.json"
 lock = threading.Lock()
-
-
-def load_preferred():
-    return json.load(open(PREFERRED)) if os.path.exists(PREFERRED) else {}
-
-
-def save_preferred(preferred):
-    """One line per release, so that the file's history reads as choices changed."""
-    lines = [f"{json.dumps(k)}: {json.dumps(v)}" for k, v in sorted(preferred.items())]
-    open(PREFERRED + ".tmp", "w").write("{\n" + ",\n".join(lines) + "\n}\n" if lines else "{}\n")
-    os.replace(PREFERRED + ".tmp", PREFERRED)
-
-
-def rank(source):
-    return SOURCES.index(source) if source in SOURCES else SOURCES.index("otakaraou") - 0.5
 
 
 def image(path, longest):
@@ -55,14 +33,13 @@ def rows():
     """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred"}]}],
     by release, the preferred photo first, then by source."""
     release_of = serials.releases_by_serial()
-    known, preferred = fits.load(), load_preferred()
+    known, preferred = fits.load(), photos.load_preferred()
     found = {}
     for source, system, name, entry in photos.all_sources():
         if source in photos.FAKES:
             continue
         serial = photos.serial_of(name)
-        match = next((s for s in (serial, re.sub(r"-[A-Z]{3}$", "", serial)) if s in release_of), None)
-        release = release_of[match] if match else None
+        release = serials.release_of_serial(serial, release_of)
         key = release["id"] if release else serial
         row = found.setdefault(key, {"release": key, "title": release["title"] if release else "(not in gb-game-list)", "photos": []})
         fit = fits.of(known, photos.stem(name), entry.get("sha1"))["fit"]
@@ -70,7 +47,7 @@ def rows():
         row["photos"].append({"path": os.path.join(photos.ROOT, source, system, name), "sha1": entry.get("sha1"), "source": source,
                               "fitted": fitted, "preferred": preferred.get(key) == entry.get("sha1")})
     for row in found.values():
-        row["photos"].sort(key=lambda p: (not p["preferred"], rank(p["source"]), p["path"]))
+        row["photos"].sort(key=lambda p: (not p["preferred"], photos.rank(p["source"]), p["path"]))
     return [found[k] for k in sorted(found)]
 
 
@@ -86,7 +63,7 @@ def prefer(path):
             del preferred[row["release"]]
         else:
             preferred[row["release"]] = photo["sha1"]
-        save_preferred(preferred)
+        photos.save_preferred(preferred)
         return row["release"], None if photo["preferred"] else path
 
 

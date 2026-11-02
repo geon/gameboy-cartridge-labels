@@ -18,6 +18,28 @@ SYSTEMS = ("dmg", "cgb", "agb", "unknown")
 EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".avif", ".heic", ".heif")
 # The sources of fakes made from box art on a rendered cartridge: not photos.
 FAKES = ("emumovies", "launchbox-abeezy1388")
+# The sources, best first: Hit-Japan highest, otakaraou the lowest. A source not listed goes just above otakaraou.
+SOURCES = ("ebay-hitjapan", "my-collection", "ebay-elrocinante", "yugiyahirano", "jnlgame", "jauce", "mercari", "rakuma",
+           "retros-ae", "gbhwdb", "ebay", "tradera", "kleinanzeigen", "marktplaats", "gamestop", "google", "unrecorded",
+           "otakaraou")
+# Each release's preferred photo, chosen in find-doubles (src/find_doubles.py): release id -> the photo's SHA-1.
+PREFERRED = "preferred.json"
+
+
+def load_preferred():
+    return json.load(open(PREFERRED)) if os.path.exists(PREFERRED) else {}
+
+
+def save_preferred(preferred):
+    """One line per release, so that the file's history reads as choices changed."""
+    lines = [f"{json.dumps(k)}: {json.dumps(v)}" for k, v in sorted(preferred.items())]
+    open(PREFERRED + ".tmp", "w").write("{\n" + ",\n".join(lines) + "\n}\n" if lines else "{}\n")
+    os.replace(PREFERRED + ".tmp", PREFERRED)
+
+
+def rank(source):
+    """A source's place in SOURCES, lower is better."""
+    return SOURCES.index(source) if source in SOURCES else SOURCES.index("otakaraou") - 0.5
 
 
 def system_of(serial):
