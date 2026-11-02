@@ -8,10 +8,10 @@ import photos, serials
 # its region, if gb-game-list lacks that), whether or not its fit works. Releases with photos from otakaraou alone are
 # listed apart: they are worth replacing. The emumovies and launchbox-abeezy1388 images aren't photos but fakes, labels
 # made from box art on a rendered cartridge: they don't count, so releases with only those are listed as without a
-# photo (marked "fake only"). Releases sold only through Nintendo Power, written to its flash cartridge at a kiosk, are
-# listed apart too: No-Intro tags their ROMs (NP), and these are the games whose every Japanese No-Intro ROM has it, so
-# there's no ordinary Japanese cartridge of them (as far as No-Intro knows); Batman Beyond had one in the USA alone. Nintendo Power was Japanese, so they're searched as Japanese
-# releases. Their cartridge's label is Nintendo Power's (DMG-MMSA-JPN), so they're listed whether or not gb-game-list
+# photo (marked "fake only"). Releases sold through Nintendo Power, written to its flash cartridge at a kiosk, are
+# listed apart too: No-Intro tags their ROMs (NP), and these are the releases whose every No-Intro ROM has it. Some are
+# games that also had an ordinary cartridge, listed as a release of their own; the Nintendo Power one's serial is from
+# its ROM's header, printed on no label. Nintendo Power was Japanese, so they're searched as Japanese releases. Their cartridge's label is Nintendo Power's (DMG-MMSA-JPN), so they're listed whether or not gb-game-list
 # has a serial for them; releases.json lists some twice, so they're listed once per title. The cartridge's own menu
 # (GB-Memory Multi Menu) is no game, and left out. Their titles are kept whole: the Loppi Puzzle Magazine issues differ
 # only in their subtitles.
@@ -36,7 +36,7 @@ WESTERN_EBAY_SELLERS = (("ASANOSHOP", "thorgans1", "asanoshop", "www.ebay.fr"),)
 
 
 def short(title, release=None):
-    """The title before its subtitle, if that leaves enough to search by (whole for a release sold only on Nintendo Power)."""
+    """The title before its subtitle, if that leaves enough to search by (whole for a release sold on Nintendo Power)."""
     t = unicodedata.normalize("NFKC", title).strip()
     if release and release["id"] in nintendo_power:
         return t
@@ -54,16 +54,11 @@ def no_intro_game(label):
 
 
 def nintendo_power_only(all_releases):
-    """The ids of the releases whose every No-Intro ROM, and every other Japanese ROM of their game, is tagged (NP).
-    Nintendo Power was Japanese, so the game's ROMs from elsewhere (Batman Beyond's from the USA) don't count."""
+    """The ids of the releases whose every No-Intro ROM is tagged (NP): the game may have had an ordinary cartridge too
+    (Mr. Driller's CGB-BMDJ-JPN), but this release's serial is only in the ROM's header (CGB-BV3J-JPN), on no label."""
     no_intro = lambda r: [l["label"] for l in r.get("links", []) if l["source"] == "no-intro.org"]
-    tagged = {}
-    for r in all_releases:
-        for label in no_intro(r):
-            if "(Japan" in label:
-                tagged.setdefault(no_intro_game(label), []).append("(NP)" in label)
     return {r["id"] for r in all_releases
-            if r["system"] in SYSTEMS and no_intro(r) and all("(NP)" in l and all(tagged[no_intro_game(l)]) for l in no_intro(r))
+            if r["system"] in SYSTEMS and no_intro(r) and all("(NP)" in l for l in no_intro(r))
             and r["title"] != "GB-Memory Multi Menu"}
 
 
@@ -122,7 +117,8 @@ np_covered = {r["title"] for r in releases if r["id"] in nintendo_power and r no
 np_missing = {}
 for r in missing:
     if r["id"] in nintendo_power and r["title"] not in np_covered:
-        np_missing.setdefault(r["title"], dict(r, cartridgeSerials=[]))["cartridgeSerials"] += r["cartridgeSerials"]
+        merged = np_missing.setdefault(r["title"], dict(r, cartridgeSerials=[]))["cartridgeSerials"]
+        merged += [s for s in r["cartridgeSerials"] if s not in merged]
 np_missing = list(np_missing.values())
 missing = [r for r in missing if r["id"] not in nintendo_power]
 fake_only = sum(r["id"] in fake for r in missing)
@@ -130,7 +126,7 @@ fake_only = sum(r["id"] in fake for r in missing)
 groups = [(f"{system_name}: {label}", [r for r in missing if r["system"] == system and japanese(r) == ja])
           for system, system_name in (("dmg", "Game Boy"), ("cgb", "Game Boy Color"))
           for ja, label in ((True, "Japanese releases"), (False, "Other releases"))]
-groups.append(("Only on Nintendo Power", np_missing))
+groups.append(("On Nintendo Power", np_missing))
 groups.append(("Only from otakaraou: worth replacing", replace))
 sections = []
 for heading, group in groups:
@@ -149,11 +145,11 @@ td{{padding:3px 8px;white-space:nowrap}}tr:nth-child(odd){{background:#fff}}smal
 <h1>Photo searches</h1>
 <p>{len(missing)} Game Boy and Game Boy Color releases without a cartridge photo in gb-game-list or in photos/ ({fake_only} of them
 with only fakes made from box art, from emumovies or launchbox-abeezy1388),
-{len(np_missing)} sold only on Nintendo Power (their cartridge's label reads DMG-MMSA-JPN), and
+{len(np_missing)} sold on Nintendo Power (their cartridge's label reads DMG-MMSA-JPN; the serials are from the ROMs' headers), and
 {len(replace)} with photos from otakaraou alone. Save the photos found in a subfolder of save-new-images-here/ named after where they came from, and file them with
 make add-photos.</p>
 {''.join(sections)}
 </body></html>"""
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 open(OUT, "w").write(page)
-print(f"{len(missing)} releases to search ({fake_only} with fakes alone), {len(np_missing)} only on Nintendo Power, {len(replace)} from otakaraou alone -> {pathlib.Path(OUT).resolve().as_uri()}")
+print(f"{len(missing)} releases to search ({fake_only} with fakes alone), {len(np_missing)} on Nintendo Power, {len(replace)} from otakaraou alone -> {pathlib.Path(OUT).resolve().as_uri()}")
