@@ -22,6 +22,9 @@
 #   make render-carts
 #   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
+#   make label-page
+#   A page of every DMG-shell release's label (from make render-labels) on an empty gray or black cartridge (templates/): black if gb-game-list marks it Game Boy Color enhanced, but for exceptions listed in the code; those whose cartridge image (make render-carts) looks the other color marked, into generated/label-page/index.html, to open as a file (src/label_page.py).
+#
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
 #
@@ -47,7 +50,7 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label render-labels clean-render-labels render-carts clean-render-carts learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -87,6 +90,9 @@ render-carts:
 
 clean-render-carts:
 	rm -rf generated/render-carts
+
+label-page:
+	$(PYTHON) src/label_page.py
 
 learn-choice:
 	$(PYTHON) src/learn_choice.py
