@@ -8,6 +8,23 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "2b5b6b4ee4e77d167c8b7f2b9c6f2f3ceb6c0a97"
  },
+ "DMG-A7CJ-JPN_5.jpg": {
+  "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/products/20220123_131224.jpg?v=1643275221",
+  "page_url": "https://www.retros.ae/products/parts",
+  "title_on_page": "Parts (Japanese Edition)",
+  "original_name": "parts__20220123_131224.jpg",
+  "serial_on_label": "DMG-A7GJ-JPN",
+  "note": "named by nothing: no serial read",
+  "sha1": "f129bfc43335d8c5f1913c08ac7f4758bb640ad4"
+ },
+ "DMG-ABBP-EUR.jpg": {
+  "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/files/20260902-203423.jpg?v=1788367042",
+  "page_url": "https://www.retros.ae/products/busy-ii-pal-region",
+  "title_on_page": "Busy II - PAL Region",
+  "original_name": "busy-ii-pal-region__20260902-203423.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "c19e3443cc872a8b24116cf2ef0362cf596326de"
+ },
  "DMG-AG6J-JPN_2.jpg": {
   "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/files/20231126-132316.jpg?v=1701172758",
   "page_url": "https://www.retros.ae/products/koukou-nyuushidero-jun",
@@ -25,6 +42,15 @@
   "serial_on_label": "DMG-AKSJ-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "2a24b22d9946ff32e3a0d82ca1ad37cdfad896c0"
+ },
+ "DMG-AP9P-EUR_2.jpg": {
+  "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/files/rn-image_picker_lib_temp_7ce5b325-e38b-44ad-87ad-33a661e865de.jpg?v=1745679355",
+  "page_url": "https://www.retros.ae/products/muppets",
+  "title_on_page": "Muppets (PAL Edition)",
+  "original_name": "muppets__rn-image_picker_lib_temp_7ce5b325-e38b-44ad-87ad-33a661e865de.jpg",
+  "serial_on_label": "CGB-CART",
+  "note": "named by nothing: no serial read",
+  "sha1": "cb002fb490ad1d7f0425b425509fe731ba032a2b"
  },
  "DMG-AT2J-JPN_2.jpg": {
   "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/files/20231126-132415.jpg?v=1701167519",

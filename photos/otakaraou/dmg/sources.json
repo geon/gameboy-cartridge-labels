@@ -2260,6 +2260,15 @@
   "sha1": "5bbc8cd8f69dad3ee75509df1da0ee09ace5a721",
   "original_name": "otakaraou-7934.jpg"
  },
+ "DMG-R6J_2.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/108.jpg",
+  "page_url": "https://www.otakaraou.com/product/7731",
+  "title_on_page": "仮面ライダーSD 走れ!マイティライダーズ ゲームボーイソフト",
+  "serial_on_label": "DMG-RE",
+  "original_sha1": "a0c0a8a33af2bd7f1c8938433f1ea03c2362677d",
+  "sha1": "819a984c170bdc9351994420c11db05d484e97b0",
+  "original_name": "otakaraou-7731.jpg"
+ },
  "DMG-R9J.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_5249.jpg",
   "page_url": "https://www.otakaraou.com/product/7866",
@@ -2268,15 +2277,6 @@
   "original_sha1": "d236710c9df15a592a6424660d64295d77d77ae8",
   "sha1": "d911ddc9032a3ce3ae1a77f4b4ab1466b0f650c2",
   "original_name": "otakaraou-7866.jpg"
- },
- "DMG-RE.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/108.jpg",
-  "page_url": "https://www.otakaraou.com/product/7731",
-  "title_on_page": "仮面ライダーSD 走れ!マイティライダーズ ゲームボーイソフト",
-  "serial_on_label": "DMG-RE",
-  "original_sha1": "a0c0a8a33af2bd7f1c8938433f1ea03c2362677d",
-  "sha1": "819a984c170bdc9351994420c11db05d484e97b0",
-  "original_name": "otakaraou-7731.jpg"
  },
  "DMG-RL.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/733.jpg",

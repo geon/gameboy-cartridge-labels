@@ -814,11 +814,6 @@
   "sha1": "e9fc7187673e9a8648e60d048f43b5afd6c9f75c",
   "original_name": "IMG_7500.HEIC"
  },
- "DMG-S6J.heic": {
-  "serial_on_label": "DMG-S6J",
-  "sha1": "6bffe3a471aca25bed85d3ce5a2c0a9470595cad",
-  "original_name": "IMG_7402.HEIC"
- },
  "DMG-S6J_2.heic": {
   "serial_on_label": "DMG-S6J",
   "sha1": "a3e6c8dbf3dbe400398ab6bbff7ec12a8f632fb9",
@@ -894,12 +889,12 @@
   "sha1": "90a441998270e33d3d73b4359adaca4029d10580",
   "original_name": "IMG_7348.HEIC"
  },
- "DMG-TRA_4.heic": {
+ "DMG-TRA(MINUET).heic": {
   "serial_on_label": "DMG-TRA",
   "sha1": "26187214f3d1301ea470db6e70aa94354d77439b",
   "original_name": "IMG_7443.HEIC"
  },
- "DMG-UB-NOE-1.heic": {
+ "DMG-UB-NOE-1(EUROPEAN).heic": {
   "serial_on_label": "DMG-UB-NOE-1",
   "sha1": "de1ef57785ed8aa80efde467cf5acf27c0724727",
   "original_name": "IMG_7366.HEIC"
@@ -983,11 +978,6 @@
   "serial_on_label": "DMG-XRJ",
   "sha1": "717115faaf3346bb3f555749f3f7e26312d0087f",
   "original_name": "IMG_7493.HEIC"
- },
- "DMG-XRJ_2.heic": {
-  "serial_on_label": "DMG-XRJ",
-  "sha1": "c0112e24498e015e3331208c2f802624e1bd73b1",
-  "original_name": "IMG_7494.HEIC"
  },
  "DMG-YO-EUR.heic": {
   "serial_on_label": "DMG-YO-EUR",

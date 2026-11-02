@@ -652,7 +652,7 @@
   "sha1": "79db61fd7b6a425456c1e8dcbe19b7b69f306659",
   "original_name": "s-l1600 (42).webp"
  },
- "DMG-MMA_4.jpg": {
+ "DMG-MMSA.jpg": {
   "serial_on_label": "DMG-MMA-JPN",
   "original_sha1": "9bb9f2c31be9321843e14340f58ab7a5bfa5f116",
   "sha1": "9f75d767749b9ecdc1e241c3d362b884bbc08488",
@@ -848,12 +848,6 @@
   "sha1": "eca838b9d90c393fd76e938796c355e70cdbd940",
   "original_name": "s-l1600 (77).webp"
  },
- "DMG-RSA_2.jpg": {
-  "serial_on_label": "DMG-RSA",
-  "original_sha1": "dde92e4f90ea850c7b8dffe2ac40d0475e3d6055",
-  "sha1": "7ba13c6e9b79aa002d167877440615e12535e4c6",
-  "original_name": "s-l1600 - 2026-10-24T195155.808.webp"
- },
  "DMG-RSA_3.jpg": {
   "serial_on_label": "DMG-RSA",
   "original_sha1": "f4bc35373743d46d49525dc2e4ddb9be17c8b5f6",
@@ -914,17 +908,17 @@
   "sha1": "0da8f1637dd0be558a2f48301995d7fe13ea59fe",
   "original_name": "s-l1600 - 2026-10-24T194832.686.webp"
  },
- "DMG-UAJ_3.jpg": {
-  "serial_on_label": "DMG-UAJ",
-  "original_sha1": "15296b33b62fede11fc73433ca5b613cfb5044b0",
-  "sha1": "7d73da9fad1e605566bb17e209292832648f8bea",
-  "original_name": "s-l1600 - 2026-10-24T200103.969.webp"
- },
  "DMG-UKJ_2.jpg": {
   "serial_on_label": "DMG-UKJ",
   "original_sha1": "342bd342e58d6f72e370abf2a80f06955701b726",
   "sha1": "051eb17dab28ee3b94b748b09651cd87b21d2b54",
   "original_name": "s-l1600 (38).webp"
+ },
+ "DMG-UOJ_3.jpg": {
+  "serial_on_label": "DMG-UAJ",
+  "original_sha1": "15296b33b62fede11fc73433ca5b613cfb5044b0",
+  "sha1": "7d73da9fad1e605566bb17e209292832648f8bea",
+  "original_name": "s-l1600 - 2026-10-24T200103.969.webp"
  },
  "DMG-UUJ_2.jpg": {
   "serial_on_label": "DMG-UUJ",

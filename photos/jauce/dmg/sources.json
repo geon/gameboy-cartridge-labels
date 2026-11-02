@@ -485,6 +485,12 @@
   "note": "named by nothing: no serial read",
   "sha1": "fde22499905b7a073d3764f93ddd7dad9b247c15"
  },
+ "DMG-HOJ_2.jpg": {
+  "original_name": "i-img1200x1200-17880578782762av6ih284980.jpg",
+  "serial_on_label": "DMG-LOJ",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "7916e4c04da6a3b69010bead77b72bd64a17ffca"
+ },
  "DMG-HZJ.jpg": {
   "original_name": "i-img964x1200-16832251602fdyfc437285.jpg",
   "serial_on_label": "DMG-HZJ",
@@ -559,12 +565,6 @@
   "serial_on_label": "DMG-KTJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "d298e152e989639ee127a195970b749662ee36e2"
- },
- "DMG-LOJ_2.jpg": {
-  "original_name": "i-img1200x1200-17880578782762av6ih284980.jpg",
-  "serial_on_label": "DMG-LOJ",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "7916e4c04da6a3b69010bead77b72bd64a17ffca"
  },
  "DMG-MQJ.jpg": {
   "original_name": "i-img1200x900-1787818729972031el8as58.jpg",
@@ -643,12 +643,6 @@
   "note": "automatic: query 'らんま１／２ ゲームボーイ', first photo of the listing",
   "sha1": "6b79a3025a5d78f4cc6cbd4f2db75d1ffbb5b1d1"
  },
- "DMG-RTJ.jpg": {
-  "original_name": "i-img1080x1080-16507935481jfv4i733199.jpg",
-  "serial_on_label": "DMG-RTJ",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "89a90ccf37e195c083bfd9311ddac1726fa03602"
- },
  "DMG-RTJ_2.jpg": {
   "original_name": "i-img900x1200-1730690657ai7zem6.jpg",
   "serial_on_label": "DMG-RTJ",
@@ -666,12 +660,6 @@
   "serial_on_label": "DMG-SEJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "5f5089824743a37b8276da048a961c08bbeb7de0"
- },
- "DMG-SEJ_2.jpg": {
-  "original_name": "i-img1200x901-1779776385259886siy6mn8.jpg",
-  "serial_on_label": "DMG-SEJ",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "94c6b906e807af0c2ef45d703248089cbf75621b"
  },
  "DMG-SFJ.jpg": {
   "original_name": "i-img1200x901-1789786080648600qb9tzs8.jpg",
@@ -741,7 +729,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9fa8401f02e00a0d6bf670a6299d6a8e04169a94"
  },
- "DMG-ZEJ_4.jpg": {
+ "DMG-XDJ_2.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0108/user/d451ba56b45602e5cf768ef26b967d7bd211e97747488133d40d235e3a206bc0/i-img1200x1200-17565482218260uyt01q34.jpg",
   "page_url": "https://www.jauce.com/auction/q1198280685",
   "title_on_page": "GBソフト XERD!!ザードの伝説2 ソフトのみ ゲームボーイ",
