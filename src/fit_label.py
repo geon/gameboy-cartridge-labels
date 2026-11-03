@@ -18,11 +18,12 @@ from fit_cartridge import load
 # made from). Files of photos without a good plastic fit are removed.
 # Usage: fit_label.py
 OUT = "generated/fit-label"
-# Label widths, mm: on the DMG's shell 41.7 to 42.5 mm in 20 hand-placed labels (median about 42.15), on the CGB's 42.84
-# to 43.15 in 11; with 0.1 mm to spare for the plastic fit's error in scale. Heights vary much less (36.8 to 37.2).
-WIDTHS = {"dmg": (41.6, 42.7), "cgb": (42.7, 43.3)}
+# Label widths, mm: on the DMG's shell 41.7 to 42.5 mm in 20 hand-placed labels (median about 42.15), on the CGB's 41.40
+# to 41.70 in 11 (median 41.45; placed as 42.84 to 43.15 with the recess taken 44.5 wide, scaled to its 43 mm as in
+# cartridge.py); with 0.1 mm to spare for the plastic fit's error in scale. Heights vary much less (36.8 to 37.2).
+WIDTHS = {"dmg": (41.6, 42.7), "cgb": (41.3, 41.8)}
 MAX_SHIFT = 1.5
-MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 42.9}
+MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 41.45}
 MAX_ANGLE = 2.0
 
 
