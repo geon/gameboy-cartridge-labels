@@ -15,7 +15,7 @@ from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bev
 # release's only photo) and the shell, as the tool starts. A photo starts from its current fit
 # (else its latest rejected one, else the model in the box fit-cartridge cropped to, else in the middle), with its label
 # (else its latest rejected one on that plastic, else the model's). The handles (green squares) sit on the recess's
-# corners and are dragged onto the photo's; the dots in the middle of its sides slide one side through the perspective. Once "Label placed" is
+# corners and are dragged onto the photo's (the photo shown as it is, or straightened: STRAIGHT); the dots in the middle of its sides slide one side through the perspective. Once "Label placed" is
 # ticked, the label (cyan) shows: a rectangle in the recess, moving with it: its corners turn it about its center, the
 # dots in its sides move one side, the cross moves it. A magnifier shows 6 mm around the handle held. Saving makes the
 # placement the photo's current fit, placed by hand (the steps keep it), with the label once it's placed (else the
@@ -23,6 +23,13 @@ from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bev
 # rejected ones. Saved again in the same run, a photo's placement replaces the one saved before.
 # Usage: fit_by_hand.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8769
+# Straightened (a toggle, P; on as a photo with a current plastic fit opens): the photo shown with the perspective of
+# its plastic fit (else its latest rejected one) taken out, as if seen straight on, the cartridge's front and
+# STRAIGHT_MARGIN mm around it; the placement is still made and saved in the photo's pixels, only the view changes, and
+# it stays as the photo opened while the handles move. Its scale: the photo's at the cartridge's middle, within
+# STRAIGHT_PX_PER_MM.
+STRAIGHT_MARGIN = 10.0
+STRAIGHT_PX_PER_MM = (4.0, 40.0)
 
 
 def homography(src, dst):
@@ -116,6 +123,37 @@ class Hand:
                 self.cache.pop(next(iter(self.cache)))
         return image
 
+    def straight(self, name):
+        """The straightened view of the photo, from its current plastic fit (else its latest rejected one): (view -> photo
+        homography, the view's size in px), or None if it has none."""
+        e = self.entries[name]
+        part = e["fit"].get("plastic") or (e["rejected"][-1]["plastic"] if e["rejected"] else None)
+        if part is None:
+            return None
+        V, (w, h), m = np.asarray(part["mm_to_photo"], np.float64), self.shell(name).body, STRAIGHT_MARGIN
+        c = project(V, [[w / 2, h / 2], [w / 2 + 1, h / 2], [w / 2, h / 2 + 1]])
+        ppm = float(np.clip((np.hypot(*(c[1] - c[0])) + np.hypot(*(c[2] - c[0]))) / 2, *STRAIGHT_PX_PER_MM))
+        to_mm = np.array([[1 / ppm, 0, -m], [0, 1 / ppm, -m], [0, 0, 1]])
+        return V @ to_mm, (round((w + 2 * m) * ppm), round((h + 2 * m) * ppm))
+
+    def straight_image(self, name):
+        """The straightened photo (straight()), as JPEG bytes, or None."""
+        view = self.straight(name)
+        if view is None:
+            return None
+        M, size = view
+        key = (name, M.tobytes())
+        with self.lock:
+            if key in self.cache:
+                return self.cache[key]
+        warped = cv2.warpPerspective(load(self.paths[name]), M, size, flags=cv2.INTER_AREA | cv2.WARP_INVERSE_MAP, borderValue=(51, 51, 51))
+        image = cv2.imencode(".jpg", warped, [cv2.IMWRITE_JPEG_QUALITY, 92])[1].tobytes()
+        with self.lock:
+            self.cache[key] = image
+            while len(self.cache) > 8:
+                self.cache.pop(next(iter(self.cache)))
+        return image
+
     def item(self, name):
         """Where a photo starts: the handles' corners (anchor) in the photo's pixels (None: in the middle of the photo), the
         label's corners in mm, if placed, and notes on its fits."""
@@ -150,8 +188,11 @@ class Hand:
                 notes.append(f"label from {'the current fit (' + about(found) + ')' if on is not None else 'the latest rejected label'}")
         if e["rejected"]:
             notes.append(f'{len(e["rejected"])} fit{"s" * (len(e["rejected"]) != 1)} rejected before')
+        view = self.straight(name)
+        straight = None if view is None else {"view_to_photo": (view[0] / view[0][2, 2]).tolist(),
+                                              "photo_to_view": (np.linalg.inv(view[0]) / np.linalg.inv(view[0])[2, 2]).tolist()}
         return {"name": name, "path": self.paths[name], "shell": shell.name, "anchor": None if H is None else project(H, anchor(shell)).tolist(),
-                "label": label_mm, "notes": notes}
+                "label": label_mm, "notes": notes, "straight": straight, "fitted": "plastic" in e["fit"]}
 
     def save(self, name, corners, label_mm):
         """Makes a placement the photo's current fit, placed by hand: the handles' corners (anchor) in the photo's pixels, and the
@@ -213,17 +254,21 @@ button#save{background:#070;color:#fff}
 <div id="side"><div id="filters"></div><span id="summary"></span><canvas id="loupe" width="240" height="240"></canvas><div id="list"></div></div>
 <div id="main"><header>
 <button id="prev">← prev</button><span id="position"></span><button id="next">next →</button>
-<h2 id="title"></h2><button id="reset">Reset (R)</button><label><input type="checkbox" id="labelplaced"> Label placed (L)</label>
+<h2 id="title"></h2><button id="reset">Reset (R)</button><label><input type="checkbox" id="labelplaced"> Label placed (L)</label><label><input type="checkbox" id="straighten"> Straightened (P)</label>
 <button id="save">Save as great (S)</button><span id="status"></span>
 <p id="notes"></p>
-<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side, the cross moves it. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; S: save and go to the next photo.</p>
+<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side, the cross moves it. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo.</p>
 </header><div id="stage"><canvas id="c"></canvas></div></div>
 <script>
 const $ = id => document.getElementById(id);
 const c = $("c"), ctx = c.getContext("2d"), lctx = $("loupe").getContext("2d");
-let models, list = [], i = 0, item = null, img = new Image();
+let models, list = [], i = 0, item = null, img = new Image(), photo = img, straight = null;
 let corners = null, rect = null, sel = 0, drag = -1, grab = null, startCorners = null, startRect = null, pan = null;
 let scale = 1, ox = 0, oy = 0;
+// The view: the image shown (the photo, or straightened), and the homographies between the photo's pixels, where the
+// placement is made, and the image's.
+const I3 = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+let W = I3, Wi = I3;
 const apply = (H, [x, y]) => { const w = H[2][0] * x + H[2][1] * y + H[2][2]; return [(H[0][0] * x + H[0][1] * y + H[0][2]) / w, (H[1][0] * x + H[1][1] * y + H[1][2]) / w]; };
 // The homography taking four points to four others.
 function homography(src, dst) {
@@ -341,13 +386,17 @@ async function show() {
   item = await (await fetch("/item/" + encodeURIComponent(name))).json();
   $("title").title = item.path;
   $("notes").textContent = item.notes.join(" · ");
-  const next = new Image();
-  next.onload = () => { if (item.name !== name) return; img = next; frame(); reset(); };
-  next.src = "/image/" + encodeURIComponent(name);
+  const loaded = src => new Promise(done => { const im = new Image(); im.onload = () => done(im); im.src = src; });
+  const [p, s] = await Promise.all([loaded("/image/" + encodeURIComponent(name)), item.straight ? loaded("/straight/" + encodeURIComponent(name)) : null]);
+  if (item.name !== name) return;
+  photo = p; straight = s;
+  $("straighten").disabled = !s;
+  $("straighten").checked = !!s && item.fitted;
+  setView(); reset();
 }
 function reset() {
-  const W = img.width, H = img.height, R = model().anchor;
-  corners = item.anchor ? item.anchor.map(q => q.slice()) : R.map(([x, y]) => [W / 2 + (x - 28.5) * W / 120, H / 2 + (y - 37.5) * W / 120]);
+  const w = photo.width, h = photo.height, R = model().anchor;
+  corners = item.anchor ? item.anchor.map(q => q.slice()) : R.map(([x, y]) => [w / 2 + (x - 28.5) * w / 120, h / 2 + (y - 37.5) * w / 120]);
   rect = rectFrom(item.label || model().label);
   $("labelplaced").checked = !!item.label;
   sel = 0;
@@ -360,13 +409,21 @@ function frame() {
   scale = Math.min(c.width / img.width, c.height / img.height) * 0.95;
   ox = (c.width - img.width * scale) / 2; oy = (c.height - img.height * scale) / 2;
 }
-const toScreen = q => [ox + q[0] * scale, oy + q[1] * scale], toImage = (x, y) => [(x - ox) / scale, (y - oy) / scale];
+const toView = q => apply(W, q), fromView = p => apply(Wi, p);
+const toScreen = q => { const p = toView(q); return [ox + p[0] * scale, oy + p[1] * scale]; }, viewAt = (x, y) => [(x - ox) / scale, (y - oy) / scale];
+// Shows the photo straightened (if it can be) or as it is.
+function setView() {
+  const on = $("straighten").checked && straight;
+  img = on ? straight : photo;
+  [W, Wi] = on ? [item.straight.photo_to_view, item.straight.view_to_photo] : [I3, I3];
+  frame();
+}
 // The model's lines and, if placed, the label in the photo's pixels: [points, color, dashed, closed].
 // The camera, in mm on the front face (x, y, height above it), that sees it as H shows it, the center of its view at
 // the photo's center: as cartridge.camera_of.
 function cameraOf(H) {
   H = H.map(r => r.map(v => v / H[2][2]));
-  const cx = img.width / 2, cy = img.height / 2;
+  const cx = photo.width / 2, cy = photo.height / 2;
     const A = [H[0][0] - cx * H[2][0], H[1][0] - cy * H[2][0]], B = [H[0][1] - cx * H[2][1], H[1][1] - cy * H[2][1]];
   const rows = [[A[0] * B[0] + A[1] * B[1], -H[2][0] * H[2][1]], [A[0] ** 2 + A[1] ** 2 - B[0] ** 2 - B[1] ** 2, H[2][1] ** 2 - H[2][0] ** 2]];
   const num = rows.reduce((t, [a, b]) => t + a * b, 0), den = rows.reduce((t, [a]) => t + a * a, 0), g = den > 0 ? num / den : 0;
@@ -424,13 +481,13 @@ function draw() {
   });
   loupe(handles()[sel]);
 }
-// The magnifier: 6 x 6 mm around the handle, at the photo's scale along the anchor's top side.
+// The magnifier: 6 x 6 mm around the handle, at the image's scale along the anchor's top side.
 function loupe(q) {
-  const R = anchorMm(), pxPerMm = Math.hypot(corners[1][0] - corners[0][0], corners[1][1] - corners[0][1]) / (R[1][0] - R[0][0]);
-  const r = 3 * pxPerMm, z = 120 / r, at = p => [120 + (p[0] - q[0]) * z, 120 + (p[1] - q[1]) * z];
+  const R = anchorMm(), [a, b] = [toView(corners[0]), toView(corners[1])], pxPerMm = Math.hypot(b[0] - a[0], b[1] - a[1]) / (R[1][0] - R[0][0]);
+  const v = toView(q), r = 3 * pxPerMm, z = 120 / r, at = p => { const u = toView(p); return [120 + (u[0] - v[0]) * z, 120 + (u[1] - v[1]) * z]; };
   lctx.imageSmoothingEnabled = false;
   lctx.fillStyle = "#000"; lctx.fillRect(0, 0, 240, 240);
-  lctx.drawImage(img, q[0] - r, q[1] - r, 2 * r, 2 * r, 0, 0, 240, 240);
+  lctx.drawImage(img, v[0] - r, v[1] - r, 2 * r, 2 * r, 0, 0, 240, 240);
   for (const [pts, col, dash, closed] of shapes()) { lctx.strokeStyle = col; lctx.setLineDash(dash ? [5, 4] : []); stroke(lctx, pts, closed, at); }
   lctx.setLineDash([]);
   lctx.strokeStyle = "#ff0"; lctx.strokeRect(117, 117, 6, 6);
@@ -442,15 +499,15 @@ c.onmousedown = e => {
   if (best < 0) { pan = [e.offsetX - ox, e.offsetY - oy]; return; }
   drag = sel = best;
   startCorners = corners.map(q => q.slice()); startRect = copy(rect);
-  const h = handles()[best], m = toImage(e.offsetX, e.offsetY);
-  grab = [h[0] - m[0], h[1] - m[1]];
+  const h = toView(handles()[best]), m = viewAt(e.offsetX, e.offsetY);
+  grab = [h[0] - m[0], h[1] - m[1]];  // in the image's pixels
   draw();
 };
 c.onmousemove = e => {
   if (pan) { ox = e.offsetX - pan[0]; oy = e.offsetY - pan[1]; return draw(); }
   if (drag < 0) return;
-  const m = toImage(e.offsetX, e.offsetY);
-  move(drag, [m[0] + grab[0], m[1] + grab[1]], startCorners, startRect);
+  const m = viewAt(e.offsetX, e.offsetY);
+  move(drag, fromView([m[0] + grab[0], m[1] + grab[1]]), startCorners, startRect);
   draw();
 };
 window.onmouseup = () => { drag = -1; pan = null; };
@@ -475,12 +532,13 @@ $("next").onclick = () => go(i + 1);
 $("reset").onclick = () => reset();
 $("save").onclick = save;
 $("labelplaced").onchange = e => setPlaced(e.target.checked);
+$("straighten").onchange = () => { setView(); draw(); };
 document.onkeydown = e => {
   if (e.target.tagName === "SELECT" || !corners) return;
   const step = e.shiftKey ? 10 : 1, d = {ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step]}[e.key];
   if (d) {
-    const h = handles()[sel];
-    move(sel, [h[0] + d[0], h[1] + d[1]], corners.map(q => q.slice()), copy(rect));
+    const h = toView(handles()[sel]);
+    move(sel, fromView([h[0] + d[0], h[1] + d[1]]), corners.map(q => q.slice()), copy(rect));
     draw(); e.preventDefault();
   } else if (e.key === "Tab") {
     // Round each rectangle: a corner, the middle of the side after it, the next corner...; the label's cross last.
@@ -490,6 +548,7 @@ document.onkeydown = e => {
   else if (e.key === "s" || e.key === "S") save();
   else if (e.key === "r" || e.key === "R") reset();
   else if (e.key === "l" || e.key === "L") setPlaced(!placed());
+  else if ((e.key === "p" || e.key === "P") && straight) { $("straighten").checked = !$("straighten").checked; setView(); draw(); }
 };
 window.onresize = () => { if (img.width) { frame(); draw(); } };
 start();
@@ -520,6 +579,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send(hand.item(parts[1]))
         elif len(parts) == 2 and parts[0] == "image" and parts[1] in hand.entries:
             self.send(hand.image(parts[1]), "image/jpeg")
+        elif len(parts) == 2 and parts[0] == "straight" and parts[1] in hand.entries and (image := hand.straight_image(parts[1])) is not None:
+            self.send(image, "image/jpeg")
         else:
             self.send_error(404)
 
