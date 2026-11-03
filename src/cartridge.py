@@ -5,12 +5,16 @@ import csv, re, warnings, cv2, numpy as np
 # normals for the strongest change, and the model's pose (mm -> photo pixels) is fitted to them. Two shells (Shell): the Game Boy's (DMG), which
 # Game Boy Color games that also play on a Game Boy came in too, and the clear Game Boy Color only cartridge's (CGB,
 # serials CGB-...). In millimetres on the cartridge's front (origin top left of the body, x right, y down): the DMG's
-# body 57 x 65, recess 44 x 39 inset 6.5 from the sides and 18 from the top, label 42.5 x 37 centered in the recess.
+# body 57 x 65, recess 44 x 39 inset 6.5 from the sides and 18 from the top, label 42.5 x 37 (a canonical size, LABEL)
+# centered in the recess.
 # Only the plastic's pose is fitted: labels are stuck on a little shifted and turned, so their edges only help to get
 # close.
 
 BODY = (57.0, 65.0)
 RECESS = (6.5, 18.0, 50.5, 57.0)
+# The label: a canonical size, as the labels all differ (on 20 hand-placed ones 41.7 to 42.5 wide, median about 42.15,
+# and 36.8 to 37.2 high): 42.5 x 37, round numbers, centered in the recess, 0.75 from its sides and 1 from its top and
+# bottom.
 LABEL = (7.25, 19.0, 49.75, 56.0)
 # The recess's corners' radius: an arc and two straight sides fitted to the wall at each corner, warped to mm through a
 # good fit (IMG_7477: 0.95 to 1.15 mm).
@@ -298,7 +302,7 @@ def build_samples(recess=RECESS, label=LABEL, arrow_edges=ARROW_EDGES, pill=True
 # (widths 42.84 to 43.15; wider than DMG labels), centered in the recess within 0.4 mm and 0.5 degrees. Its "GAME BOY
 # COLOR" down the left edge lies within about 0.8 mm of CGB_COLOR_TEXT on all of them. Both were found through fits
 # made with the recess 44.5 wide, so their widths are scaled to the 43 mm recess (x 43 / 44.5 about the middle: the
-# label 41.45 wide); the top corners' radius below too, but it's left as found.
+# labels 41.40 to 41.70 wide, median 41.45); the top corners' radius below too, but it's left as found.
 # The shell's other features aren't measured (see the arrow below).
 CGB_BODY = (57.0, 65.0)
 CGB_BODY_CORNER_DROP = 0.8
@@ -317,7 +321,9 @@ CGB_BEVEL_SIDE = 2.0
 CGB_BEVEL_TOP = 3.0  # not drawn either: the inner edge didn't help to judge fits by eye
 CGB_RECESS = (7.0, 21.5, 50.0, 60.0)
 CGB_OLD_TO_43 = 43.0 / 44.5  # the label's and its text's widths, found with the recess 44.5 wide
-CGB_LABEL = (28.5 - 21.45 * CGB_OLD_TO_43, 22.25, 28.5 + 21.45 * CGB_OLD_TO_43, 59.25)
+# The label: a canonical size, as on the DMG (LABEL), as the labels differ: 41.5 x 37, round numbers within the
+# scaled widths above (0.05 from their median), centered in the recess, 0.75 from all its sides.
+CGB_LABEL = (7.75, 22.25, 49.25, 59.25)
 # "GAME BOY COLOR" on the label: its box (top left, top right, bottom right, bottom left as it reads), median.
 CGB_COLOR_TEXT = np.array([[8.18, 56.69], [8.32, 24.5], [12.85, 25.05], [12.33, 56.99]]) * [CGB_OLD_TO_43, 1] + [28.5 * (1 - CGB_OLD_TO_43), 0]
 # The arrow below the recess, smaller and flatter than the DMG's. Measured with calipers (2026-11-01): its visible
