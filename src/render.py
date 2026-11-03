@@ -8,8 +8,9 @@ from fit_cartridge import load
 
 # render-labels and render-carts: one image per release, straightened (perspective removed through its fits) and with
 # its colors evened out (src/color.py, as the steps read photos), as AVIF:
-#   labels: generated/render-labels/<release>.avif, the label alone, stretched to LABEL_MM (the labels' size varies a
-#     few tenths of a mm: their fits' model corners are mapped to the image's corners);
+#   labels: generated/render-labels/<release>.avif, the label alone, stretched to its shell's canonical label
+#     size at LABEL_PX_PER_MM (the labels' size varies a few tenths of a mm: their fits' model corners are mapped to the
+#     image's corners);
 #   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at
 #     CART_PX_PER_MM: meant as the canonical images of the cartridges; where the margin runs off the photo, transparent.
 # The release's photo: its preferred one (preferred.json, chosen in find-doubles) if the fit the image needs (the label
@@ -19,10 +20,12 @@ from fit_cartridge import load
 # SHA-1, the fits, this code's version); an image is made again when any of it changes, and those of releases no
 # longer rendered are removed.
 # Usage: render.py labels|carts
-LABEL_PX_PER_MM = 5
-# The labels' size, mm: the median of the accepted and hand-placed label fits (2026-11-02): DMG 42.0 x 37.0 (1956),
-# CGB 41.5 x 37.0 (107). 210 x 185 px.
-LABEL_MM = (42.0, 37.0)
+# The labels' scale: 4.7 px per mm, the same for both shells, so that their images keep the labels' sizes to each other.
+# Each label is rendered at its shell's canonical label size (cartridge.LABEL, CGB_LABEL), rounded to whole pixels:
+# DMG 42.5 x 37 mm -> 200 x 174 px (199.75 x 173.9), CGB 41.5 x 37 -> 195 x 174 (195.05 x 173.9). Chosen to put the
+# DMG's at 200 px wide with little rounding: no scale near it gives both shells whole pixels (only even px per mm do:
+# 4, 170 x 148 and 166 x 148, too small; 6, 255 x 222, too big).
+LABEL_PX_PER_MM = 4.7
 CART_MARGIN = 5.0
 # The cartridge images' scale: 20 px per mm, 1340 x 1500 px. Measured on the photos render-carts uses (1402,
 # 2026-11-03): the cartridge is seen at a median 18 px per mm (Hit-Japan 20, jnlgame 19, my own 43, otakaraou 10);
@@ -89,7 +92,7 @@ def rendered(photo, M, size, supersample, alpha=False):
 
 def label_image(photo, shell, label_H):
     model = SHELLS[shell].label
-    size = (round(LABEL_MM[0] * LABEL_PX_PER_MM), round(LABEL_MM[1] * LABEL_PX_PER_MM))
+    size = (round((model[2] - model[0]) * LABEL_PX_PER_MM), round((model[3] - model[1]) * LABEL_PX_PER_MM))
     return rendered(photo, frame(label_H, model, size, SUPERSAMPLE["labels"]), size, SUPERSAMPLE["labels"])
 
 
