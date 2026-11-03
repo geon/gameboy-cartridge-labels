@@ -25,7 +25,7 @@ BLACK_BELOW = 80
 # Releases whose shell isn't the color gb-game-list implies: release id -> "gray" or "black".
 EXCEPTIONS = {}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
-PX_PER_MM = 5  # on the page
+CART_WIDTH = 200  # px, on the page
 
 
 def lightness(release):
@@ -45,6 +45,8 @@ def main():
     rel = lambda p: os.path.relpath(p, here)
     w, h = render.LABEL_MM
     left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
+    pct = lambda part, whole: f"{100 * part / whole:.4g}%"  # of the cartridge's width or height (the label's, for its corners)
+    mm = CART_WIDTH / BODY[0]  # px per mm, for the shadow
     cards, counts, doubts = [], {"gray": 0, "black": 0}, 0
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
         info = releases.get(release, {})
@@ -62,17 +64,16 @@ def main():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DMG labels</title>
 <style>
-:root {{ --mm: {PX_PER_MM}px; }}
 body {{ margin: 0; padding: 16px; background: #e8e6e1; font: 13px/1.3 system-ui, sans-serif; color: #222; }}
 h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
 p {{ margin: 0 0 16px; color: #555; }}
 main {{ display: flex; flex-wrap: wrap; gap: 20px; }}
-figure {{ margin: 0; width: calc({BODY[0]} * var(--mm)); }}
-.cart {{ position: relative; width: calc({BODY[0]} * var(--mm)); height: calc({BODY[1]} * var(--mm)); background: center / 100% 100% no-repeat; }}
+figure {{ margin: 0; width: {CART_WIDTH}px; }}
+.cart {{ position: relative; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; width: {CART_WIDTH}px; background: center / 100% 100% no-repeat; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
 .black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
-.cart img {{ position: absolute; left: calc({left} * var(--mm)); top: calc({top} * var(--mm)); width: calc({w} * var(--mm)); height: calc({h} * var(--mm));
-  border-radius: calc({LABEL_RADIUS} * var(--mm)); box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35); }}
+.cart img {{ position: absolute; left: {pct(left, BODY[0])}; top: {pct(top, BODY[1])}; width: {pct(w, BODY[0])}; height: {pct(h, BODY[1])};
+  border-radius: {pct(LABEL_RADIUS, w)} / {pct(LABEL_RADIUS, h)}; box-shadow: 0 {0.15 * mm:.2f}px {0.5 * mm:.2f}px rgba(0, 0, 0, 0.35); }}
 figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
 .doubt {{ display: block; color: #b4400a; }}
 </style></head><body>
