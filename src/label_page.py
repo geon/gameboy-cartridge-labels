@@ -13,9 +13,9 @@ import render
 # templates/cgb.png (framed the same way).
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
 # those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
-# on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. The releases whose
-# photo looked the other color (2026-11-04: the plastic's lightness in their cartridge images) are in shell-colors.tsv,
-# to research.
+# on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. A few releases whose
+# photo looked the other color (2026-11-04, the plastic's lightness in their cartridge images; the rest were wrong) are
+# in shell-colors.tsv, to research.
 # Usage: label_page.py
 OUT = "generated/label-page/index.html"
 TEMPLATES = {"gray": "templates/dmg-gray.png", "black": "templates/dmg-black.png", "cgb": "templates/cgb.png"}
