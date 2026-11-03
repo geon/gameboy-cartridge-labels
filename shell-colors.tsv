@@ -1,0 +1,22 @@
+# The color of DMG cartridges' shells where it isn't what gb-game-list implies (src/label_page.py): black for the
+# releases it marks Game Boy Color enhanced, gray for the others. Per release: its id, or the start of its serial
+# (DMG-MMSA: DMG-MMSA, DMG-MMSA-JPN), and with a note in square brackets for a release told apart by one
+# (DMG-ATAJ[PINK]; photos.py); where several rows match, the longest. Colors: gray, black, white, pink, yellow, red,
+# dark-blue, bright-blue, dark-gray: the front half's (the Japanese Pokémon Gold and Silver have backs of the other
+# one's color, never seen here). The source: what the color is known from.
+# Edit it by hand.
+release	color	source	title
+DMG-ATAJ	white	known (2026-11-03)	Game de Hakken!! Tamagotchi
+DMG-ATAJ[PINK]	pink	known (2026-11-03): bundled with a pink Game Boy Pocket	Game de Hakken!! Tamagotchi
+DMG-MMSA	white	known (2026-11-03)	Nintendo Power
+DMG-APPJ	white	known (2026-11-03)	Purikura Pocket - Fukanzen Joshikousei Manual
+DMG-A2PJ	white	known (2026-11-03)	Purikura Pocket 2 - Kareshi Kaizou Daisakusen
+DMG-AAUJ	dark-blue	known (2026-11-03): the front; the back dark gray	Pocket Monsters Kin
+DMG-AAXJ	dark-gray	known (2026-11-03): the front; the back dark blue	Pocket Monsters Gin
+DMG-ADDJ	yellow	web (Mario Wiki, Old School Gamer Magazine), and its photo	Donkey Kong Land
+DMG-YT	yellow	web, and its photo	Donkey Kong Land
+DMG-YTJ	yellow	its photo	Super Donkey Kong GB
+DMG-ADDE	yellow	web	Donkey Kong Land 2
+DMG-ADDP	yellow	web, and its photo	Donkey Kong Land 2
+DMG-AD3E	yellow	web, and its photo	Donkey Kong Land III
+DMG-AD3P	yellow	web	Donkey Kong Land III
