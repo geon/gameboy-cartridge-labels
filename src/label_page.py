@@ -1,4 +1,4 @@
-import html, json, os, re, sys, cv2, numpy as np
+import csv, html, json, os, re, sys, cv2, numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -12,9 +12,10 @@ import render
 # card's background image; the label is an element of its own on it, placed straight and centered in the recess, with
 # rounded corners and a drop shadow.
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
-# those in EXCEPTIONS. As a check, the plastic's lightness in the release's cartridge image (make render-carts; the
+# those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
+# on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. As a check, the plastic's lightness in the release's cartridge image (make render-carts; the
 # median at points beside and below the recess, PLASTIC) is measured: a release looking black (below BLACK_BELOW) but
-# given gray, or the other way round, is marked on the page. Measured on 1084 releases (2026-11-03, OpenCV's L, 0-255):
+# given gray, or the other way round, is marked on the page (not those in shell-colors.tsv). Measured on 1084 releases (2026-11-03, OpenCV's L, 0-255):
 # gray shells 120 to 200, black ones mostly below 60, few between 73 and 85; 18 disagreed with gb-game-list.
 # Usage: label_page.py
 OUT = "generated/label-page/index.html"
@@ -22,8 +23,10 @@ TEMPLATES = {"gray": "templates/dmg-gray.png", "black": "templates/dmg-black.png
 PLASTIC = np.array([[x, y] for x in (2.5, 3.5, 4.5, 52.5, 53.5, 54.5) for y in np.linspace(22, 54, 9)]
                    + [[x, y] for x in np.linspace(12, 45, 12) for y in (59.0, 60.5)], np.float64)
 BLACK_BELOW = 80
-# Releases whose shell isn't the color gb-game-list implies: release id -> "gray" or "black".
-EXCEPTIONS = {}
+COLORS = "shell-colors.tsv"
+# The template each color is shown on.
+TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray", "yellow": "gray", "red": "gray",
+               "bright-blue": "gray", "dark-blue": "black", "dark-gray": "black"}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
 CART_WIDTH = 200  # px, on the page
 # Releases shown twice as high, spanning two rows of the grid, the others flowing around them: for the special carts
@@ -41,6 +44,22 @@ def lightness(release):
     return float(np.median(cv2.cvtColor(image[xy[:, 1], xy[:, 0]][None], cv2.COLOR_BGR2Lab)[0, :, 0]))
 
 
+def colors():
+    """shell-colors.tsv: [(release id or start of a serial, color)], longest first."""
+    rows = csv.DictReader((l for l in open(COLORS) if not l.startswith("#")), delimiter="\t")
+    found = [(r["release"], r["color"]) for r in rows]
+    unknown = {c for _, c in found} - set(TEMPLATE_OF)
+    if unknown:
+        sys.exit(f"{COLORS}: unknown colors {sorted(unknown)}")
+    return sorted(found, key=lambda r: -len(r[0]))
+
+
+def color_of(release, listed):
+    """The release's color in shell-colors.tsv (listed: colors()), or None: the longest row its id starts with, up to
+    a "-", a note's "[" or its end; a row with a note matches only that note's release."""
+    return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|$)", release) and ("[" in code or "[" not in release)), None)
+
+
 def main():
     made = json.load(open(os.path.join(render.OUT["labels"], "made.json")))
     releases = {r["id"]: r for r in json.load(open(serials.RELEASES))}
@@ -50,18 +69,23 @@ def main():
     left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
     pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height (the label's, for its corners)
     px = lambda mm: f"calc({mm:g} * {CART_WIDTH}px / {BODY[0]:g})"  # mm on the page
-    cards, counts, doubts = [], {"gray": 0, "black": 0}, 0
+    listed = colors()
+    cards, counts, doubts = [], {}, 0
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
         info = releases.get(re.sub(r"\[[^]]*\]$", "", release), {})  # a release with a note (DMG-ATAJ[PINK]): its title
-        color = EXCEPTIONS.get(release, "black" if info.get("gameBoyColorEnhanced") else "gray")
-        counts[color] += 1
+        given = color_of(release, listed)
+        color = given or ("black" if info.get("gameBoyColorEnhanced") else "gray")
+        counts[color] = counts.get(color, 0) + 1
+        template = TEMPLATE_OF[color]
         title = info.get("title", "")
         L = lightness(release)
         looks = None if L is None else "black" if L < BLACK_BELOW else "gray"
-        doubt = looks is not None and looks != color and release not in EXCEPTIONS
+        doubt = looks is not None and looks != color and given is None
         doubts += doubt
         note = f' <span class="doubt">photo looks {looks} (L {L:.0f})</span>' if doubt else ""
-        cards.append(f'<figure class="{color}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
+        if color != template:
+            note += f' <span class="color">{color.replace("-", " ")} shell</span>'
+        cards.append(f'<figure class="{template}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
                      f'loading="lazy" alt=""></div><figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption></figure>')
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,9 +105,10 @@ figure {{ margin: 0; width: {CART_WIDTH}px; }}
   border-radius: {pct(LABEL_RADIUS, w)} / {pct(LABEL_RADIUS, h)}; box-shadow: 0 {px(0.15)} {px(0.5)} rgba(0, 0, 0, 0.35); }}
 figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
 .doubt {{ display: block; color: #b4400a; }}
+.color {{ display: block; color: #555; font-style: italic; }}
 </style></head><body>
 <h1>DMG labels</h1>
-<p>{len(cards)} releases: {counts["gray"]} on gray shells, {counts["black"]} on black (black: Game Boy Color enhanced in gb-game-list, but for {len(EXCEPTIONS)} exceptions). {doubts} whose photo looks the other color are marked.</p>
+<p>{len(cards)} releases: {", ".join(f"{n} {c.replace('-', ' ')}" for c, n in sorted(counts.items(), key=lambda x: -x[1]))} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell). {doubts} whose photo looks the other color are marked.</p>
 <main>
 {chr(10).join(cards)}
 </main>
@@ -91,7 +116,7 @@ figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
 """
     os.makedirs(here, exist_ok=True)
     open(OUT, "w").write(page)
-    print(f"{len(cards)} labels ({counts['gray']} gray, {counts['black']} black; {doubts} whose photo looks the other color) into {OUT}")
+    print(f"{len(cards)} labels ({', '.join(f'{n} {c}' for c, n in sorted(counts.items(), key=lambda x: -x[1]))}; {doubts} whose photo looks the other color) into {OUT}")
 
 
 if __name__ == "__main__":
