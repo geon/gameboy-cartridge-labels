@@ -26,6 +26,8 @@ BLACK_BELOW = 80
 EXCEPTIONS = {}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
 CART_WIDTH = 200  # px, on the page
+# A test: releases shown twice as high, spanning two rows of the grid, the others flowing around them.
+TALL = {"DMG-A3PJ"}
 
 
 def lightness(release):
@@ -58,7 +60,7 @@ def main():
         doubt = looks is not None and looks != color and release not in EXCEPTIONS
         doubts += doubt
         note = f' <span class="doubt">photo looks {looks} (L {L:.0f})</span>' if doubt else ""
-        cards.append(f'<figure class="{color}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
+        cards.append(f'<figure class="{color}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
                      f'loading="lazy" alt=""></div><figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption></figure>')
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,9 +69,11 @@ def main():
 body {{ margin: 0; padding: 16px; background: #e8e6e1; font: 13px/1.3 system-ui, sans-serif; color: #222; }}
 h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
 p {{ margin: 0 0 16px; color: #555; }}
-main {{ display: flex; flex-wrap: wrap; gap: 20px; }}
+main {{ display: grid; grid-template-columns: repeat(auto-fill, {CART_WIDTH}px); grid-auto-flow: dense; gap: 20px; }}
 figure {{ margin: 0; width: {CART_WIDTH}px; }}
 .cart {{ position: relative; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; width: {CART_WIDTH}px; background: center / 100% 100% no-repeat; }}
+.tall {{ grid-row: span 2; }}
+.tall .cart {{ aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g}; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
 .black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
 .cart img {{ position: absolute; left: {pct(left, BODY[0])}; top: {pct(top, BODY[1])}; width: {pct(w, BODY[0])}; height: {pct(h, BODY[1])};
