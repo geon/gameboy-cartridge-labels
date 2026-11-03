@@ -102,8 +102,8 @@ body {{ margin: 0; padding: 16px; background: #e8e6e1; font: 13px/1.3 system-ui,
 h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
 p {{ margin: 0 0 16px; color: #555; }}
 main {{ display: grid; grid-template-columns: repeat(auto-fill, {CART_WIDTH}px); grid-auto-flow: dense; gap: 20px; }}
-figure {{ margin: 0; width: {CART_WIDTH}px; }}
-.cart {{ position: relative; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; width: {CART_WIDTH}px; background: center / 100% 100% no-repeat; }}
+figure {{ margin: 0; }}
+.cart {{ position: relative; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
 .tall {{ grid-row: span 2; }}
 .tall .cart {{ aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g}; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
