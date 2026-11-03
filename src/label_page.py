@@ -72,7 +72,6 @@ def main():
     w, h = render.LABEL_MM
     left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
     pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height
-    px = lambda mm: f"calc({mm:g} / {BODY[0]:g} * 100cqw)"  # mm on the page, inside a .cart
     listed = colors()
     cards, counts, doubts, cgb_cards = [], {}, 0, []
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
@@ -105,14 +104,14 @@ h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
 p {{ margin: 0 0 16px; color: #555; }}
 main {{ display: grid; grid-template-columns: repeat(auto-fill, minmax({CART_MIN}px, 1fr)); grid-auto-flow: dense; gap: 20px; }}
 figure {{ margin: 0; }}
-.cart {{ position: relative; container-type: inline-size; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
+.cart {{ position: relative; container-type: inline-size; --mm: calc(100cqw / {BODY[0]:g}); aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
 .tall {{ grid-row: span 2; }}
 .tall .cart {{ aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g}; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
 .black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
 .cgb .cart {{ background-image: url("{rel(TEMPLATES["cgb"])}"); }}
 .cart img {{ position: absolute; left: {pct(left, BODY[0])}; top: {pct(top, BODY[1])}; width: {pct(w, BODY[0])}; height: {pct(h, BODY[1])};
-  border-radius: {px(LABEL_RADIUS)}; box-shadow: 0 {px(0.15)} {px(0.5)} rgba(0, 0, 0, 0.35); }}
+  border-radius: calc({LABEL_RADIUS:g} * var(--mm)); box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35); }}
 .cgb .cart img {{ left: {pct(cl, BODY[0])}; top: {pct(ct, BODY[1])}; width: {pct(cr - cl, BODY[0])}; height: {pct(cb - ct, BODY[1])}; }}
 h1 + p + main + h1 {{ margin-top: 32px; }}
 figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
