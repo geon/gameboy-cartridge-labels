@@ -26,7 +26,8 @@ BLACK_BELOW = 80
 COLORS = "shell-colors.tsv"
 # The template each color is shown on.
 TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray", "yellow": "gray", "red": "gray",
-               "bright-blue": "gray", "blue": "black", "dark-blue": "black", "dark-gray": "black"}
+               "bright-blue": "gray", "blue": "black", "dark-blue": "black", "dark-gray": "black",
+               "gold": "gray", "silver": "gray"}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
 CART_WIDTH = 200  # px, on the page
 # Releases shown twice as high, spanning two rows of the grid, the others flowing around them: for the special carts
