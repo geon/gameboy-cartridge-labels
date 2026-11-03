@@ -10,8 +10,8 @@ import render
 # color, into generated/label-page/index.html (open it as a file). The empty cartridges are templates/dmg-gray.png and
 # templates/dmg-black.png (from the collection-pipeline branch; 994 x 1132 px, framed on the 57 x 65 mm body), each a
 # card's background image; the label is an element of its own on it, placed straight and centered in the recess, with
-# rounded corners and a drop shadow. The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
-# templates/cgb.png (framed the same way), each label on the shell's label rectangle (cartridge.CGB_LABEL).
+# rounded corners and a drop shadow, on its shell's label rectangle (cartridge.LABEL, CGB_LABEL). The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
+# templates/cgb.png (framed the same way).
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
 # those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
 # on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. As a check, the plastic's lightness in the release's cartridge image (make render-carts; the
@@ -69,8 +69,6 @@ def main():
     releases = {r["id"]: r for r in json.load(open(serials.RELEASES))}
     here = os.path.dirname(OUT)
     rel = lambda p: os.path.relpath(p, here)
-    w, h = render.LABEL_MM
-    left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
     pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height
     listed = colors()
     cards, counts, doubts, cgb_cards = [], {}, 0, []
@@ -88,9 +86,8 @@ def main():
         note = f' <span class="doubt">photo looks {looks} (L {L:.0f})</span>' if doubt else ""
         if color != template:
             note += f' <span class="color">{color.replace("-", " ")} shell</span>'
-        cards.append(f'<figure class="{template}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
+        cards.append(f'<figure class="dmg {template}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
                      f'loading="lazy" alt=""></div><figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption></figure>')
-    cl, ct, cr, cb = SHELLS["cgb"].label
     for release in sorted(r for r, m in made.items() if m["shell"] == "cgb"):
         title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
         cgb_cards.append(f'<figure class="cgb"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
@@ -110,9 +107,9 @@ figure {{ margin: 0; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
 .black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
 .cgb .cart {{ background-image: url("{rel(TEMPLATES["cgb"])}"); }}
-.cart img {{ position: absolute; left: {pct(left, BODY[0])}; top: {pct(top, BODY[1])}; width: {pct(w, BODY[0])}; height: {pct(h, BODY[1])};
+.cart img {{ position: absolute;
   border-radius: calc({LABEL_RADIUS:g} * var(--mm)); box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35); }}
-.cgb .cart img {{ left: {pct(cl, BODY[0])}; top: {pct(ct, BODY[1])}; width: {pct(cr - cl, BODY[0])}; height: {pct(cb - ct, BODY[1])}; }}
+{chr(10).join(f".{name} .cart img {{ left: {pct(l, BODY[0])}; top: {pct(t, BODY[1])}; width: {pct(r - l, BODY[0])}; height: {pct(b - t, BODY[1])}; }}" for name, (l, t, r, b) in ((n, s.label) for n, s in SHELLS.items()))}
 h1 + p + main + h1 {{ margin-top: 32px; }}
 figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
 .doubt {{ display: block; color: #b4400a; }}
