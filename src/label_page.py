@@ -64,6 +64,15 @@ def color_of(release, listed):
     return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|$)", release) and ("[" in code or "[" not in release)), None)
 
 
+def card(classes, release, title, note=""):
+    """A release's figure on the page: its label on the empty cartridge, its id and title under it."""
+    src = html.escape(os.path.relpath(os.path.join(render.OUT["labels"], render.file_of(release)), os.path.dirname(OUT)))
+    return f"""    <figure class="{classes}">
+      <div class="cart"><img src="{src}" loading="lazy" alt=""></div>
+      <figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption>
+    </figure>"""
+
+
 def main():
     made = json.load(open(os.path.join(render.OUT["labels"], "made.json")))
     releases = {r["id"]: r for r in json.load(open(serials.RELEASES))}
@@ -86,46 +95,108 @@ def main():
         note = f' <span class="doubt">photo looks {looks} (L {L:.0f})</span>' if doubt else ""
         if color != template:
             note += f' <span class="color">{color.replace("-", " ")} shell</span>'
-        cards.append(f'<figure class="dmg {template}{" tall" if release in TALL else ""}"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
-                     f'loading="lazy" alt=""></div><figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption></figure>')
+        cards.append(card(f'dmg {template}{" tall" if release in TALL else ""}', release, title, note))
     for release in sorted(r for r, m in made.items() if m["shell"] == "cgb"):
         title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
-        cgb_cards.append(f'<figure class="cgb"><div class="cart"><img src="{html.escape(rel(os.path.join(render.OUT["labels"], render.file_of(release))))}" '
-                         f'loading="lazy" alt=""></div><figcaption><b>{html.escape(release)}</b> {html.escape(title)}</figcaption></figure>')
+        cgb_cards.append(card("cgb", release, title))
+    places = "".join(f"""
+    .{name} .cart img {{
+      left: {pct(l, BODY[0])};
+      top: {pct(t, BODY[1])};
+      width: {pct(r - l, BODY[0])};
+      height: {pct(b - t, BODY[1])};
+    }}""" for name, (l, t, r, b) in ((n, s.label) for n, s in SHELLS.items()))
+    summary = ", ".join(f"{n} {c.replace('-', ' ')}" for c, n in sorted(counts.items(), key=lambda x: -x[1]))
     page = f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Game Boy labels</title>
-<style>
-body {{ margin: 0; padding: 16px; background: #e8e6e1; font: 13px/1.3 system-ui, sans-serif; color: #222; }}
-h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
-p {{ margin: 0 0 16px; color: #555; }}
-main {{ display: grid; grid-template-columns: repeat(auto-fill, minmax({CART_MIN}px, 1fr)); grid-auto-flow: dense; gap: 20px; }}
-figure {{ margin: 0; }}
-.cart {{ position: relative; container-type: inline-size; --mm: calc(100cqw / {BODY[0]:g}); aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
-.tall {{ grid-row: span 2; }}
-.tall .cart {{ aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g}; }}
-.gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
-.black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
-.cgb .cart {{ background-image: url("{rel(TEMPLATES["cgb"])}"); }}
-.cart img {{ position: absolute;
-  border-radius: calc({LABEL_RADIUS:g} * var(--mm)); box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35); }}
-{chr(10).join(f".{name} .cart img {{ left: {pct(l, BODY[0])}; top: {pct(t, BODY[1])}; width: {pct(r - l, BODY[0])}; height: {pct(b - t, BODY[1])}; }}" for name, (l, t, r, b) in ((n, s.label) for n, s in SHELLS.items()))}
-h1 + p + main + h1 {{ margin-top: 32px; }}
-figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
-.doubt {{ display: block; color: #b4400a; }}
-.color {{ display: block; color: #555; font-style: italic; }}
-</style></head><body>
-<h1>DMG labels</h1>
-<p>{len(cards)} releases: {", ".join(f"{n} {c.replace('-', ' ')}" for c, n in sorted(counts.items(), key=lambda x: -x[1]))} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell). {doubts} whose photo looks the other color are marked.</p>
-<main>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Boy labels</title>
+  <style>
+    body {{
+      margin: 0;
+      padding: 16px;
+      background: #e8e6e1;
+      font: 13px/1.3 system-ui, sans-serif;
+      color: #222;
+    }}
+    h1 {{
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }}
+    h1 + p + main + h1 {{
+      margin-top: 32px;
+    }}
+    p {{
+      margin: 0 0 16px;
+      color: #555;
+    }}
+    main {{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax({CART_MIN}px, 1fr));
+      grid-auto-flow: dense;
+      gap: 20px;
+    }}
+    figure {{
+      margin: 0;
+    }}
+    .cart {{
+      position: relative;
+      container-type: inline-size;
+      --mm: calc(100cqw / {BODY[0]:g});
+      aspect-ratio: {BODY[0]:g} / {BODY[1]:g};
+      background: center / 100% 100% no-repeat;
+    }}
+    .tall {{
+      grid-row: span 2;
+    }}
+    .tall .cart {{
+      aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g};
+    }}
+    .gray .cart {{
+      background-image: url("{rel(TEMPLATES["gray"])}");
+    }}
+    .black .cart {{
+      background-image: url("{rel(TEMPLATES["black"])}");
+    }}
+    .cgb .cart {{
+      background-image: url("{rel(TEMPLATES["cgb"])}");
+    }}
+    .cart img {{
+      position: absolute;
+      border-radius: calc({LABEL_RADIUS:g} * var(--mm));
+      box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35);
+    }}{places}
+    figcaption {{
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+    }}
+    .doubt {{
+      display: block;
+      color: #b4400a;
+    }}
+    .color {{
+      display: block;
+      color: #555;
+      font-style: italic;
+    }}
+  </style>
+</head>
+<body>
+  <h1>DMG labels</h1>
+  <p>{len(cards)} releases: {summary} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell). {doubts} whose photo looks the other color are marked.</p>
+  <main>
 {chr(10).join(cards)}
-</main>
-<h1>CGB labels</h1>
-<p>{len(cgb_cards)} releases in the clear Game Boy Color only shell.</p>
-<main>
+  </main>
+  <h1>CGB labels</h1>
+  <p>{len(cgb_cards)} releases in the clear Game Boy Color only shell.</p>
+  <main>
 {chr(10).join(cgb_cards)}
-</main>
-</body></html>
+  </main>
+</body>
+</html>
 """
     os.makedirs(here, exist_ok=True)
     open(OUT, "w").write(page)
