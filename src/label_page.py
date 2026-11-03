@@ -78,7 +78,6 @@ def main():
     releases = {r["id"]: r for r in json.load(open(serials.RELEASES))}
     here = os.path.dirname(OUT)
     rel = lambda p: os.path.relpath(p, here)
-    pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height
     listed = colors()
     cards, counts, doubts, cgb_cards = [], {}, 0, []
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
@@ -101,10 +100,10 @@ def main():
         cgb_cards.append(card("cgb", release, title))
     places = "".join(f"""
     .{name} .cart img {{
-      left: {pct(l, BODY[0])};
-      top: {pct(t, BODY[1])};
-      width: {pct(r - l, BODY[0])};
-      height: {pct(b - t, BODY[1])};
+      left: calc({l:g} * var(--mm));
+      top: calc({t:g} * var(--mm));
+      width: calc({r - l:g} * var(--mm));
+      height: calc({b - t:g} * var(--mm));
     }}""" for name, (l, t, r, b) in ((n, s.label) for n, s in SHELLS.items()))
     summary = ", ".join(f"{n} {c.replace('-', ' ')}" for c, n in sorted(counts.items(), key=lambda x: -x[1]))
     page = f"""<!doctype html>
