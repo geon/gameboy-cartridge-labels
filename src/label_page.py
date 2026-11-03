@@ -69,7 +69,7 @@ def main():
     rel = lambda p: os.path.relpath(p, here)
     w, h = render.LABEL_MM
     left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
-    pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height (the label's, for its corners)
+    pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height
     px = lambda mm: f"calc({mm:g} * {CART_WIDTH}px / {BODY[0]:g})"  # mm on the page
     listed = colors()
     cards, counts, doubts, cgb_cards = [], {}, 0, []
@@ -110,9 +110,8 @@ figure {{ margin: 0; width: {CART_WIDTH}px; }}
 .black .cart {{ background-image: url("{rel(TEMPLATES["black"])}"); }}
 .cgb .cart {{ background-image: url("{rel(TEMPLATES["cgb"])}"); }}
 .cart img {{ position: absolute; left: {pct(left, BODY[0])}; top: {pct(top, BODY[1])}; width: {pct(w, BODY[0])}; height: {pct(h, BODY[1])};
-  border-radius: {pct(LABEL_RADIUS, w)} / {pct(LABEL_RADIUS, h)}; box-shadow: 0 {px(0.15)} {px(0.5)} rgba(0, 0, 0, 0.35); }}
-.cgb .cart img {{ left: {pct(cl, BODY[0])}; top: {pct(ct, BODY[1])}; width: {pct(cr - cl, BODY[0])}; height: {pct(cb - ct, BODY[1])};
-  border-radius: {pct(LABEL_RADIUS, cr - cl)} / {pct(LABEL_RADIUS, cb - ct)}; }}
+  border-radius: {px(LABEL_RADIUS)}; box-shadow: 0 {px(0.15)} {px(0.5)} rgba(0, 0, 0, 0.35); }}
+.cgb .cart img {{ left: {pct(cl, BODY[0])}; top: {pct(ct, BODY[1])}; width: {pct(cr - cl, BODY[0])}; height: {pct(cb - ct, BODY[1])}; }}
 h1 + p + main + h1 {{ margin-top: 32px; }}
 figcaption {{ margin-top: 4px; overflow-wrap: anywhere; }}
 .doubt {{ display: block; color: #b4400a; }}
