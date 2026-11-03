@@ -2,7 +2,7 @@
 # releases it marks Game Boy Color enhanced, gray for the others. Per release: its id, or the start of its serial
 # (DMG-MMSA: DMG-MMSA, DMG-MMSA-JPN), and with a note in square brackets for a release told apart by one
 # (DMG-ATAJ[PINK]; photos.py); where several rows match, the longest. Colors: gray, black, white, pink, yellow, red,
-# blue, dark-blue, bright-blue, dark-gray: the front half's (the Japanese Pokémon Gold and Silver have backs of the other
+# blue, dark-blue, bright-blue, dark-gray, gold, silver (sparkly, the western Pokémon Gold and Silver): the front half's (the Japanese Pokémon Gold and Silver have backs of the other
 # one's color, never seen here). The source: what the color is known from.
 # Edit it by hand.
 release	color	source	title
@@ -38,3 +38,15 @@ DMG-APSD	yellow	web	Pokemon - Gelbe Edition - Special Pikachu Edition
 DMG-APSS	yellow	web	Pokemon - Edicion Amarilla - Edicion Especial Pikachu
 DMG-APSF	yellow	web	Pokemon - Version Jaune - Edition Speciale Pikachu
 DMG-APSI	yellow	web	Pokemon - Versione Gialla - Speciale Edizione Pikachu
+DMG-AAUE	gold	known (2026-11-03): sparkly	Pokemon - Gold Version
+DMG-AAUP	gold	known (2026-11-03): sparkly	Pokemon - Gold Version
+DMG-AAUD	gold	known (2026-11-03): sparkly	Pokemon - Goldene Edition
+DMG-AAUS	gold	known (2026-11-03): sparkly	Pokemon - Edicion Oro
+DMG-AAUF	gold	known (2026-11-03): sparkly	Pokemon - Version Or
+DMG-AAUI	gold	known (2026-11-03): sparkly	Pokemon - Versione Oro
+DMG-AAXE	silver	known (2026-11-03): sparkly	Pokemon - Silver Version
+DMG-AAXP	silver	known (2026-11-03): sparkly	Pokemon - Silver Version
+DMG-AAXD	silver	known (2026-11-03): sparkly	Pokemon - Silberne Edition
+DMG-AAXS	silver	known (2026-11-03): sparkly	Pokemon - Edicion Plata
+DMG-AAXF	silver	known (2026-11-03): sparkly	Pokemon - Version Argent
+DMG-AAXI	silver	known (2026-11-03): sparkly	Pokemon - Versione Argento
