@@ -38,9 +38,7 @@ def rows():
     for source, system, name, entry in photos.all_sources():
         if source in photos.FAKES:
             continue
-        serial = photos.serial_of(name)
-        release = serials.release_of_serial(serial, release_of)
-        key = release["id"] if release else serial
+        key, release = serials.release_key(name, release_of)
         row = found.setdefault(key, {"release": key, "title": release["title"] if release else "(not in gb-game-list)", "photos": []})
         fit = fits.of(known, photos.stem(name), entry.get("sha1"))["fit"]
         fitted = "label" if fits.good(fit.get("label")) else "plastic" if fits.good(fit.get("plastic")) else None

@@ -1,6 +1,8 @@
 import glob, json, os, re, unicodedata
 from difflib import SequenceMatcher
 
+import photos
+
 # The serial on each photo's label, for add-photos: the serial-like strings in its text (src/text.py)
 # matched against gb-game-list's serials: "exact", "near" (one character off, e.g. DMG-UKJ for DMG-HKJ, with a single
 # closest serial), or "unknown" (a serial-like read that matches nothing: a misread, or a serial missing from the list);
@@ -32,6 +34,15 @@ def releases_by_serial():
         for r in releases:
             release_of.setdefault(r[key], r)
     return release_of
+
+
+def release_key(name, release_of):
+    """A photo's release (release_of: releases_by_serial()), by its name: (the release's id, else its serial, with its
+    note if it has one, as DMG-ATAJ[PINK]: a release of its own; the release in gb-game-list, or None)."""
+    serial, note = photos.serial_of(name), photos.note_of(name)
+    release = release_of_serial(serial, release_of)
+    key = release["id"] if release else serial
+    return (f"{key}[{note}]" if note is not None else key), release
 
 
 def release_of_serial(serial, release_of):

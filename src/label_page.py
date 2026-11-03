@@ -1,4 +1,4 @@
-import html, json, os, sys, cv2, numpy as np
+import html, json, os, re, sys, cv2, numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -52,7 +52,7 @@ def main():
     px = lambda mm: f"calc({mm:g} * {CART_WIDTH}px / {BODY[0]:g})"  # mm on the page
     cards, counts, doubts = [], {"gray": 0, "black": 0}, 0
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
-        info = releases.get(release, {})
+        info = releases.get(re.sub(r"\[[^]]*\]$", "", release), {})  # a release with a note (DMG-ATAJ[PINK]): its title
         color = EXCEPTIONS.get(release, "black" if info.get("gameBoyColorEnhanced") else "gray")
         counts[color] += 1
         title = info.get("title", "")

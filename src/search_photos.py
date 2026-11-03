@@ -100,8 +100,8 @@ releases = [r for r in all_releases if r["system"] in SYSTEMS and (r["cartridgeS
 release_of = serials.releases_by_serial()
 covered, otakaraou, fake = set(), {}, set()  # otakaraou: release -> the URL of its otakaraou photo
 for source, _, name, entry in photos.all_sources():
-    serial = photos.serial_of(name)
-    release = (serials.release_of_serial(serial, release_of) or {}).get("id")
+    key, found = serials.release_key(name, release_of)
+    release = found["id"] if found and key == found["id"] else None  # a photo with a note is of another release
     if release:
         if source == "otakaraou":
             otakaraou.setdefault(release, entry["image_url"])

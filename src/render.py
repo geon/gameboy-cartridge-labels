@@ -55,7 +55,7 @@ def chosen(kind):
         if not fits.good(fit.get("plastic")) or kind == "labels" and not fits.good(fit.get("label")):
             continue
         serial = photos.serial_of(name)
-        release = (serials.release_of_serial(serial, release_of) or {}).get("id", serial)
+        release = serials.release_key(name, release_of)[0]
         candidates.setdefault(release, []).append((preferred.get(release) != sha1, photos.rank(source), name, stem,
                                                    os.path.join(photos.ROOT, source, system, name), sha1, shell_of(serial).name,
                                                    fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind == "labels" else None))
@@ -112,7 +112,7 @@ def render(kind, release, path, shell, plastic_H, label_H, out):
 
 
 def file_of(release):
-    return re.sub(r"[^A-Za-z0-9._()-]", "_", release) + ".avif"
+    return re.sub(r"[^A-Za-z0-9._()\[\]-]", "_", release) + ".avif"
 
 
 def main(kind):

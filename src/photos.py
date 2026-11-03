@@ -1,15 +1,19 @@
 import glob, hashlib, json, os, re, shutil, sys
 
-# photos/: every photo of a cartridge, wherever it came from, in photos/<source>/<system>/<serial>[_<n>].<ext>,
+# photos/: every photo of a cartridge, wherever it came from, in photos/<source>/<system>/<serial>[<note>][_<n>].<ext>,
 # with one sources.json per folder (file name -> where it came from, and the file's "sha1").
 # - source: where the photos came from (my-collection: my own; google: saved from Google image searches; the others
 #   named after a site or seller), the subfolder of save-new-images-here/ they were dropped off in (src/add_photos.py).
 # - system: dmg, cgb, agb, or unknown, from the serial.
 # - serial: the serial printed on the label (DMG-ADQJ-JPN), else the release id it's known by (DMG-ADQJ), or UNKNOWN;
-#   a number only when several photos have the same serial: the first has none, the next ones _2, _3...
+#   parentheses only where the label prints them (AGB-U3IJ-JPN(A));
+# - note: what sets the release apart but isn't printed on the label, in square brackets (DMG-ATAJ-JPN[PINK]: the pink
+#   cartridge bundled with a pink Game Boy Pocket; DMG-TRA[MINUET]); a photo with a note is a release of its own
+#   (serials.release_key);
+# - a number only when several photos have the same serial and note: the first has none, the next ones _2, _3...
 # - ext: the format the photo came in (jpg, png, webp, avif, heic), never re-encoded.
 # The file names are the truth: to identify a photo, or correct one, rename it (e.g. UNKNOWN_5.jpg -> DMG-A8-JPN.jpg),
-# in whichever folder of its source; spaces become "-" (parentheses are kept), and lower-case serials upper case. reconcile() (run by
+# in whichever folder of its source; spaces become "-" (parentheses and square brackets are kept), and lower-case serials upper case. reconcile() (run by
 # add-photos, or as photos.py reconcile) then finds its entry by its SHA-1, moves it to its system's folder, and numbers
 # it if its name is taken.
 # Usage: photos.py reconcile
@@ -54,20 +58,31 @@ def stem(name):
 
 
 def tidy(name):
-    """A photo's name without awkward characters, and serials as written: anything but letters, digits, "-", "_" and
-    parentheses (AGB-U3IJ-JPN(A): a label's serial may have them) becomes "-", a lower-case serial (dmg-a8-ukv) upper case; release ids without a serial (agb-0014, digits after the system) stay as they are."""
+    """A photo's name without awkward characters, and serials as written: anything but letters, digits, "-", "_",
+    parentheses (AGB-U3IJ-JPN(A): a label's serial may have them) and square brackets (a note) becomes "-", a lower-case serial (dmg-a8-ukv) upper case; release ids without a serial (agb-0014, digits after the system) stay as they are."""
     s, ext = os.path.splitext(name.strip())
-    s = re.sub(r"-{2,}", "-", re.sub(r"[^A-Za-z0-9_()-]+", "-", s)).strip("-")
-    s = re.sub(r"-_", "_", re.sub(r"-\(", "(", s))  # AGB-U3IJ-JPN (A): no space before the parenthesis on a label
+    s = re.sub(r"-{2,}", "-", re.sub(r"[^A-Za-z0-9_()\[\]-]+", "-", s)).strip("-")
+    s = re.sub(r"-_", "_", re.sub(r"-([(\[])", r"\1", s))  # AGB-U3IJ-JPN (A): no space before the parenthesis on a label
     head, sep, tail = s.rpartition("_") if re.search(r"_\d+$", s) else (s, "", "")
-    if re.match(r"(dmg|cgb|agb)-(?!\d+$)[a-z0-9()-]+$", head, re.I):
+    if re.match(r"(dmg|cgb|agb)-(?!\d+$)[a-z0-9()\[\]-]+$", head, re.I):
         head = head.upper()
     return f"{head}{sep}{tail}{ext.lower()}"
 
 
-def serial_of(name):
-    """The serial a photo's name files it under: its stem without the number."""
+def base_of(name):
+    """A photo's name without the number and the extension: its serial and note (DMG-ATAJ-JPN[PINK])."""
     return re.sub(r"_\d+$", "", stem(name))
+
+
+def serial_of(name):
+    """The serial printed on a photo's label, as its name has it: without the note and the number."""
+    return re.sub(r"\[[^]]*\]$", "", base_of(name))
+
+
+def note_of(name):
+    """The note in a photo's name (PINK for DMG-ATAJ-JPN[PINK]_2.jpg), else None."""
+    found = re.search(r"\[([^]]*)\]$", base_of(name))
+    return found.group(1) if found else None
 
 
 def folder(source, system):
@@ -145,10 +160,11 @@ def rename(path, name):
     system's folder within its source, with its entry; returns its new path."""
     source, system, old = path.split(os.sep)[-3:]
     ext = os.path.splitext(old)[1]
-    serial = serial_of(tidy(name.replace(".", "-")))
+    base = base_of(tidy(name.replace(".", "-")))
+    serial = serial_of(base)
     if not serial:
         raise ValueError(f"not a name: {name!r}")
-    new = free_name(serial, ext, taken_stems() - {stem(old).lower()})
+    new = free_name(base, ext, taken_stems() - {stem(old).lower()})
     new_path = os.path.join(folder(source, system_of(serial)), new)
     shutil.move(path, new_path)
     entries = sources(source, system)
@@ -185,7 +201,7 @@ def reconcile(verbose=True):
             changes += 1
         new_name = tidy(name)
         if stem(new_name).lower() in taken:
-            new_name = free_name(serial_of(new_name), os.path.splitext(new_name)[1], taken)
+            new_name = free_name(base_of(new_name), os.path.splitext(new_name)[1], taken)
         target = (source, system_of(serial_of(new_name)))
         taken.add(stem(new_name).lower())
         if target != (source, system) or new_name != name:
