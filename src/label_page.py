@@ -1,5 +1,4 @@
-import csv, html, json, os, re, sys, cv2, numpy as np
-from PIL import Image
+import csv, html, json, os, re, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import serials
@@ -14,16 +13,12 @@ import render
 # templates/cgb.png (framed the same way).
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
 # those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
-# on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. As a check, the plastic's lightness in the release's cartridge image (make render-carts; the
-# median at points beside and below the recess, PLASTIC) is measured: a release looking black (below BLACK_BELOW) but
-# given gray, or the other way round, is marked on the page (not those in shell-colors.tsv). Measured on 1084 releases (2026-11-03, OpenCV's L, 0-255):
-# gray shells 120 to 200, black ones mostly below 60, few between 73 and 85; 18 disagreed with gb-game-list.
+# on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. The releases whose
+# photo looked the other color (2026-11-04: the plastic's lightness in their cartridge images) are in shell-colors.tsv,
+# to research.
 # Usage: label_page.py
 OUT = "generated/label-page/index.html"
 TEMPLATES = {"gray": "templates/dmg-gray.png", "black": "templates/dmg-black.png", "cgb": "templates/cgb.png"}
-PLASTIC = np.array([[x, y] for x in (2.5, 3.5, 4.5, 52.5, 53.5, 54.5) for y in np.linspace(22, 54, 9)]
-                   + [[x, y] for x in np.linspace(12, 45, 12) for y in (59.0, 60.5)], np.float64)
-BLACK_BELOW = 80
 COLORS = "shell-colors.tsv"
 # The template each color is shown on.
 TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray", "yellow": "gray", "red": "gray",
@@ -36,16 +31,6 @@ CART_MIN = 160
 # Releases shown twice as high, spanning two rows of the grid, the others flowing around them: for the special carts
 # (none yet).
 TALL = set()
-
-
-def lightness(release):
-    """The plastic's median lightness (0-255) in the release's cartridge image, None if it has none."""
-    path = os.path.join(render.OUT["carts"], render.file_of(release))
-    if not os.path.exists(path):
-        return None
-    image = np.array(Image.open(path).convert("RGB"))[..., ::-1]
-    xy = ((PLASTIC + render.CART_MARGIN) * render.CART_PX_PER_MM).round().astype(int)
-    return float(np.median(cv2.cvtColor(image[xy[:, 1], xy[:, 0]][None], cv2.COLOR_BGR2Lab)[0, :, 0]))
 
 
 def colors():
@@ -79,21 +64,16 @@ def main():
     here = os.path.dirname(OUT)
     rel = lambda p: os.path.relpath(p, here)
     listed = colors()
-    cards, counts, doubts, cgb_cards = [], {}, 0, []
+    cards, counts, cgb_cards = [], {}, []
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
         info = releases.get(re.sub(r"\[[^]]*\]$", "", release), {})  # a release with a note (DMG-ATAJ[PINK]): its title
-        given = color_of(release, listed)
-        color = given or ("black" if info.get("gameBoyColorEnhanced") else "gray")
+        color = color_of(release, listed) or ("black" if info.get("gameBoyColorEnhanced") else "gray")
         counts[color] = counts.get(color, 0) + 1
         template = TEMPLATE_OF[color]
         title = info.get("title", "")
-        L = lightness(release)
-        looks = None if L is None else "black" if L < BLACK_BELOW else "gray"
-        doubt = looks is not None and looks != color and given is None
-        doubts += doubt
-        note = f' <span class="doubt">photo looks {looks} (L {L:.0f})</span>' if doubt else ""
+        note = ""
         if color != template:
-            note += f' <span class="color">{color.replace("-", " ")} shell</span>'
+            note = f' <span class="color">{color.replace("-", " ")} shell</span>'
         cards.append(card(f'dmg {template}{" tall" if release in TALL else ""}', release, title, note))
     for release in sorted(r for r, m in made.items() if m["shell"] == "cgb"):
         title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
@@ -173,10 +153,6 @@ def main():
       margin-top: 4px;
       overflow-wrap: anywhere;
     }}
-    .doubt {{
-      display: block;
-      color: #b4400a;
-    }}
     .color {{
       display: block;
       color: #555;
@@ -186,7 +162,7 @@ def main():
 </head>
 <body>
   <h1>DMG labels</h1>
-  <p>{len(cards)} releases: {summary} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell). {doubts} whose photo looks the other color are marked.</p>
+  <p>{len(cards)} releases: {summary} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell).</p>
   <main>
 {chr(10).join(cards)}
   </main>
@@ -200,7 +176,7 @@ def main():
 """
     os.makedirs(here, exist_ok=True)
     open(OUT, "w").write(page)
-    print(f"{len(cards)} DMG labels ({', '.join(f'{n} {c}' for c, n in sorted(counts.items(), key=lambda x: -x[1]))}; {doubts} whose photo looks the other color) and {len(cgb_cards)} CGB labels into {OUT}")
+    print(f"{len(cards)} DMG labels ({', '.join(f'{n} {c}' for c, n in sorted(counts.items(), key=lambda x: -x[1]))}) and {len(cgb_cards)} CGB labels into {OUT}")
 
 
 if __name__ == "__main__":
