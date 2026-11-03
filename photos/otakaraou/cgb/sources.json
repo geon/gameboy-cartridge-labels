@@ -148,15 +148,6 @@
   "sha1": "608ac73fa9884202fbc62d2972536a93aa5073a7",
   "original_name": "otakaraou-8475.jpg"
  },
- "CGB-ASOJ-JPN.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/945.jpg",
-  "page_url": "https://www.otakaraou.com/product/8568",
-  "title_on_page": "スパイ アンド スパイ ゲームボーイカラーソフト",
-  "serial_on_label": "CGB-AO4J",
-  "original_sha1": "789682256825001d9cc299b2016fbe4410d1803c",
-  "sha1": "a6d8565488ad7b701617af7e3ecdcf9dc965fd38",
-  "original_name": "otakaraou-8568.jpg"
- },
  "CGB-AZ7J.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_7235.jpg",
   "page_url": "https://www.otakaraou.com/product/8576",
@@ -747,15 +738,6 @@
   "sha1": "b5a1e70131730b95bf04a61d50cad8df81274bf7",
   "original_name": "otakaraou-8781.jpg"
  },
- "CGB-BPNU.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20231128_e3a034.jpg",
-  "page_url": "https://www.otakaraou.com/product/8778",
-  "title_on_page": "ポケモンでパネポン ゲームボーイカラーソフト",
-  "serial_on_label": "CGB-BPNU",
-  "original_sha1": "4aefba0796fa2a9ba24abb63cb56dea53b7f7e66",
-  "sha1": "a377841c3758ef40383d96a7954836e812de2c97",
-  "original_name": "otakaraou-8778.jpg"
- },
  "CGB-BPPJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20231103_68548e.jpg",
   "page_url": "https://www.otakaraou.com/product/8831",
@@ -862,7 +844,7 @@
   "sha1": "336c526ca640272096239e69b317d747618c381e",
   "original_name": "otakaraou-8587.jpg"
  },
- "CGB-BT8J.jpg": {
+ "CGB-BT8J-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/928.jpg",
   "page_url": "https://www.otakaraou.com/product/8551",
   "title_on_page": "真・女神転生トレーディングカード カードサマナー ゲームボーイカラーソフト",
@@ -879,7 +861,7 @@
   "sha1": "424d4ca09f2e2b583ef30bb5dfcf46ab749a193e",
   "original_name": "otakaraou-8611.jpg"
  },
- "CGB-BTMJ.jpg": {
+ "CGB-BTMJ-JPN_2.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/1188.jpg",
   "page_url": "https://www.otakaraou.com/product/8811",
   "title_on_page": "メタモード ゲームボーイカラーソフト",
@@ -888,7 +870,7 @@
   "sha1": "8da8fe2a915e33b787a3520d85b72d901d2c3a70",
   "original_name": "otakaraou-8811.jpg"
  },
- "CGB-BUDJ.jpg": {
+ "CGB-BUDJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/1015.jpg",
   "page_url": "https://www.otakaraou.com/product/8638",
   "title_on_page": "ドナルドダック デイジーを救え! ゲームボーイカラーソフト",
@@ -897,7 +879,7 @@
   "sha1": "cde9680378a4167d0cd8819f95adb84e3872e82e",
   "original_name": "otakaraou-8638.jpg"
  },
- "CGB-BUGJ.jpg": {
+ "CGB-BUGJ-JPN_2.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/855.jpg",
   "page_url": "https://www.otakaraou.com/product/8478",
   "title_on_page": "グリンチ ゲームボーイカラーソフト",
@@ -960,7 +942,7 @@
   "sha1": "03c9a63f7b5e5472d192e638ccc60d6f66dc32c4",
   "original_name": "otakaraou-8491.jpg"
  },
- "CGB-BXAP.jpg": {
+ "CGB-BXAJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/801.jpg",
   "page_url": "https://www.otakaraou.com/product/8424",
   "title_on_page": "X-MEN MUTANT ACADEMY ゲームボーイカラーソフト",
@@ -1049,7 +1031,7 @@
   "sha1": "89dd2a1cfd62f216ff43207f52e592c497574a88",
   "original_name": "otakaraou-8767.jpg"
  },
- "CGB-KCEJ.jpg": {
+ "CGB-KCEJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/876.jpg",
   "page_url": "https://www.otakaraou.com/product/8499",
   "title_on_page": "コマンドマスター ゲームボーイカラーソフト",
