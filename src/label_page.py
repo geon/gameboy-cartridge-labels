@@ -30,7 +30,9 @@ TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray"
                "bright-blue": "gray", "blue": "black", "dark-blue": "black", "dark-gray": "black",
                "gold": "gray", "silver": "gray"}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
-CART_WIDTH = 200  # px, on the page
+# The cards' width on the page: the columns fill it, each at least CART_MIN px wide, so under 2 * CART_MIN + the gap
+# (else one more column would fit).
+CART_MIN = 160
 # Releases shown twice as high, spanning two rows of the grid, the others flowing around them: for the special carts
 # (none yet).
 TALL = set()
@@ -70,7 +72,7 @@ def main():
     w, h = render.LABEL_MM
     left, top = BODY[0] / 2 - w / 2, 37.5 - h / 2  # the recess's middle (cartridge.RECESS)
     pct = lambda part, whole: f"calc({part:g} / {whole:g} * 100%)"  # mm of the cartridge's width or height
-    px = lambda mm: f"calc({mm:g} * {CART_WIDTH}px / {BODY[0]:g})"  # mm on the page
+    px = lambda mm: f"calc({mm:g} / {BODY[0]:g} * 100cqw)"  # mm on the page, inside a .cart
     listed = colors()
     cards, counts, doubts, cgb_cards = [], {}, 0, []
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
@@ -101,9 +103,9 @@ def main():
 body {{ margin: 0; padding: 16px; background: #e8e6e1; font: 13px/1.3 system-ui, sans-serif; color: #222; }}
 h1 {{ font-size: 18px; font-weight: 600; margin: 0 0 4px; }}
 p {{ margin: 0 0 16px; color: #555; }}
-main {{ display: grid; grid-template-columns: repeat(auto-fill, {CART_WIDTH}px); grid-auto-flow: dense; gap: 20px; }}
+main {{ display: grid; grid-template-columns: repeat(auto-fill, minmax({CART_MIN}px, 1fr)); grid-auto-flow: dense; gap: 20px; }}
 figure {{ margin: 0; }}
-.cart {{ position: relative; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
+.cart {{ position: relative; container-type: inline-size; aspect-ratio: {BODY[0]:g} / {BODY[1]:g}; background: center / 100% 100% no-repeat; }}
 .tall {{ grid-row: span 2; }}
 .tall .cart {{ aspect-ratio: {BODY[0]:g} / {2 * BODY[1]:g}; }}
 .gray .cart {{ background-image: url("{rel(TEMPLATES["gray"])}"); }}
