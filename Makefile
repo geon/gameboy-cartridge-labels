@@ -17,7 +17,7 @@
 #   Fits the label in the recess of every photo whose plastic is accepted or placed by hand, into fits.json: its pose, as a homography from the label's model to the photo's pixels, not yet reviewed; its shift, turn and width into generated/fit-label/<photo>.json; a fit sticking out of the recess is rejected; a label accepted or placed by hand is kept (src/fit_label.py).
 #
 #   make render-labels
-#   Renders each release's label, straightened and its colors evened out, stretched to 42.0 x 37.0 mm at 5 px per mm (210 x 185 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
+#   Renders each release's label, straightened and its colors evened out, stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
 #   make render-carts
 #   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
