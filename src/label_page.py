@@ -166,8 +166,9 @@ def main():
     .cart img {{
       position: absolute;
       border-radius: calc({LABEL_RADIUS:g} * var(--mm));
-      box-shadow: 0 calc(0.15 * var(--mm)) calc(0.5 * var(--mm)) rgba(0, 0, 0, 0.35);
-    }}{places}
+      box-shadow: 0 calc(0.2 * var(--mm)) calc(0.1 * var(--mm)) rgba(0, 0, 0, 0.4);
+    }}
+    {places}
     figcaption {{
       margin-top: 4px;
       overflow-wrap: anywhere;
