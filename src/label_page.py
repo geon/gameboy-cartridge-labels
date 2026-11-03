@@ -26,8 +26,9 @@ BLACK_BELOW = 80
 EXCEPTIONS = {}
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
 CART_WIDTH = 200  # px, on the page
-# A test: releases shown twice as high, spanning two rows of the grid, the others flowing around them.
-TALL = {"DMG-A3PJ"}
+# Releases shown twice as high, spanning two rows of the grid, the others flowing around them: for the special carts
+# (none yet).
+TALL = set()
 
 
 def lightness(release):
