@@ -2,7 +2,7 @@
 # releases it marks Game Boy Color enhanced, gray for the others. Per release: its id, or the start of its serial
 # (DMG-MMSA: DMG-MMSA, DMG-MMSA-JPN), and with a note in square brackets for a release told apart by one
 # (DMG-ATAJ[PINK]; photos.py); where several rows match, the longest. Colors: gray, black, white, pink, yellow, red,
-# dark-blue, bright-blue, dark-gray: the front half's (the Japanese Pokémon Gold and Silver have backs of the other
+# blue, dark-blue, bright-blue, dark-gray: the front half's (the Japanese Pokémon Gold and Silver have backs of the other
 # one's color, never seen here). The source: what the color is known from.
 # Edit it by hand.
 release	color	source	title
@@ -20,3 +20,21 @@ DMG-ADDE	yellow	web	Donkey Kong Land 2
 DMG-ADDP	yellow	web, and its photo	Donkey Kong Land 2
 DMG-AD3E	yellow	web, and its photo	Donkey Kong Land III
 DMG-AD3P	yellow	web	Donkey Kong Land III
+DMG-APAE	red	web (Old School Gamer Magazine: not in Japan)	Pokemon - Red Version
+DMG-APAU	red	web	Pokemon - Red Version
+DMG-APAD	red	web	Pokemon - Rote Edition
+DMG-APAS	red	web	Pokemon - Edicion Roja
+DMG-APAF	red	web	Pokemon - Version Rouge
+DMG-APAI	red	web	Pokemon - Versione Rossa
+DMG-APEE	blue	known (2026-11-03)	Pokemon - Blue Version
+DMG-APEU	blue	known (2026-11-03)	Pokemon - Blue Version
+DMG-APED	blue	known (2026-11-03)	Pokemon - Blaue Edition
+DMG-APES	blue	known (2026-11-03)	Pokemon - Edicion Azul
+DMG-APEF	blue	known (2026-11-03)	Pokemon - Version Bleue
+DMG-APEI	blue	known (2026-11-03)	Pokemon - Versione Blu
+DMG-APSE	yellow	web	Pokemon - Yellow Version - Special Pikachu Edition
+DMG-APSU	yellow	web	Pokemon - Yellow Version - Special Pikachu Edition
+DMG-APSD	yellow	web	Pokemon - Gelbe Edition - Special Pikachu Edition
+DMG-APSS	yellow	web	Pokemon - Edicion Amarilla - Edicion Especial Pikachu
+DMG-APSF	yellow	web	Pokemon - Version Jaune - Edition Speciale Pikachu
+DMG-APSI	yellow	web	Pokemon - Versione Gialla - Speciale Edizione Pikachu
