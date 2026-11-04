@@ -2,14 +2,14 @@
 
 Measured by hand (2026-11-04); checked on photos below. The model is in src/cartridge.py. All sizes in mm.
 
-The "shoulder" is an extra bit sticking out to the sides right at the top. The body width should be the same as the
-DMG and CGB cartridges (57).
+The "shoulder" is an extra bit sticking out to the sides right at the top. The body width is the same as the
+DMG and CGB cartridges (56.8, remeasured on all three).
 
 ## Overall case size
 
 - height: 34.5
-- width body: 57
-- width shoulder: 60 (1.5 out on each side)
+- width body: 57 (remeasured: 56.8, as the DMG's and CGB's)
+- width shoulder: 60 (1.6 out on each side, remeasured: 60.0)
 - shoulder height: 7
 
 ## Recess
@@ -52,14 +52,14 @@ Between the 2 creases and the top of the recess is the "GAME BOY ADVANCE" logo. 
 Measured on 51 photos whose recess was placed by hand (fit-by-hand), in that recess's frame (medians; the middle half of
 the photos within about 0.1 mm):
 
-- The outline looks 1.5 % smaller than 57 x 34.5 (56.06 x 34.0). It lies at the back of the 2 mm bevel, behind the
+- The outline looks 1.3 to 1.5 % smaller than 56.8 x 34.5 (56.06 x 34.0). It lies at the back of the 2 mm bevel, behind the
   front face, so it looks smaller from a camera about 13 cm away (37 of the photos are otakaraou's close-ups). On the
   DMG, whose face runs to its edge, the same measurement was within 0.4 % on 60 photos.
 - Recess top 7.65 below the shell's top, its bottom 3.85 above the shell's bottom (made 1.5 % larger about the middle;
   as seen 7.43 and 3.57). 7.65 + 23 + 3.85 = 34.5.
-- Shoulders: 1.6 out on each side (59.3 as seen, about 60), their undersides 6.7 below the top.
+- Shoulders: 1.6 out on each side (59.3 as seen; by calipers 1.6 and 60.0), their undersides 6.7 below the top.
 - Label: 42.8 x 21.8 (taken as 43 x 22), centered across, 0.5 below the recess's top and 0.7 above its bottom.
 - Creases (rough): their tops about 1.8 and 2.9 below the shell's top, meeting 2.4 above the recess's top. A straight
   line also runs across about 1.45 below the top, maybe the top bevel's inner edge.
 
-The model (src/cartridge.py) uses these, with the outline fitted at the size it's seen (98.5 %).
+The model (src/cartridge.py) uses these, with the outline fitted at the size it's seen (98.7 %).
