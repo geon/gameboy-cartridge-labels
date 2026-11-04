@@ -146,6 +146,47 @@ def colors_of(colors, name, sha1):
     return entry["colors"] if entry and entry.get("sha1") == sha1 else None
 
 
+# The settings learned from those placed by hand (fit-colors, LEARNED): a linear model (ridge regression, LEARNED_ALPHA,
+# on standardized features) from what the label's image looks like as photographed, its levels at PERCENTILES of each
+# channel and of its brightness (label_features), to the five settings. Tried against the 144 placed by hand
+# (2026-11-04, each predicted by a model learned without it; levels off the hand settings' result, mean over the
+# label's pixels): 9.5 (9.0 on the 23 photos from sources without settings of their own), against 12.4 (17.5) by
+# source, background and paper; whole histograms (32 bins) 10.4, the nearest 5 labels 10.6, a small neural network
+# 12.5 to 15, and one trained on Hit-Japan labels washed out and tinted by hand settings' inverses 12.6 (mixed with the
+# real ones 10.1).
+PERCENTILES = (1, 5, 25, 50, 75, 95, 99)
+LEARNED_ALPHA = 10.0
+
+
+def label_features(label):
+    """What the learned settings see of a label image (BGR, 8-bit sRGB, as photographed): its levels at PERCENTILES of
+    each channel and of its brightness, 0-1."""
+    pixels = label.reshape(-1, 3).astype(np.float32)
+    y = pixels @ np.array([0.114, 0.587, 0.299], np.float32)
+    return np.r_[np.percentile(pixels, PERCENTILES, axis=0).T.ravel(), np.percentile(y, PERCENTILES)] / 255
+
+
+def learn_settings(features, settings):
+    """The linear model from label_features to the settings (rows in SETTINGS' order): (mean, sd, weights, intercept)."""
+    X, Y = np.asarray(features, np.float64), np.asarray(settings, np.float64)
+    mean, sd = X.mean(0), X.std(0) + 1e-6
+    Z = (X - mean) / sd
+    intercept = Y.mean(0)
+    weights = np.linalg.solve(Z.T @ Z + LEARNED_ALPHA * np.eye(Z.shape[1]), Z.T @ (Y - intercept))
+    return mean, sd, weights, intercept
+
+
+def learned_settings(model, features):
+    """The settings the model gives a label, kept usable: black 0 to 120, white at least 20 above it and at most 255,
+    midtones 0.4 to 2.5."""
+    mean, sd, weights, intercept = model
+    s = dict(zip(SETTINGS, ((np.asarray(features) - mean) / sd @ weights + intercept).tolist()))
+    s["black"] = float(np.clip(s["black"], 0, 120))
+    s["white"] = float(np.clip(s["white"], s["black"] + 20, 255))
+    s["midtones"] = float(np.clip(s["midtones"], 0.4, 2.5))
+    return s
+
+
 # White paper on a label, for the settings fit-colors makes (src/fit_colors.py): of the label's brightest pixels
 # (PAPER_TOP share) where it's flat (brightness changing less than PAPER_FLAT across 3 px), the connected regions;
 # in each, the pixels within PAPER_TOLERANCE (stops, any channel) of its median color; the region with the most of

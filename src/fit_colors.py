@@ -6,7 +6,9 @@ from cartridge import shell_of
 
 # fit-colors: each photo's own color settings (src/color.py: black, white, midtones, temperature, tint) into
 # colors.json, auto-generated; settings placed by hand (make adjust-colors) are kept. For every photo but the fakes
-# whose plastic is accepted or placed by hand:
+# whose plastic is accepted or placed by hand: if LEARNED and its label is accepted or placed by hand, the settings
+# learned from those placed by hand (color.learn_settings, learned afresh on each run, from their labels' images:
+# color.label_features); else, as before:
 #   - my own photos and jnlgame's (color.BORDERS): temperature, tint and the white level making their background's white
 #     white (color.white, color.whitening);
 #   - Hit-Japan's, yugiyahirano's and elrocinante's: their source's settings (color.SOURCE_SETTINGS);
@@ -25,6 +27,7 @@ LABELS = os.path.join(OUT, "labels")
 CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
                              for f in ("fit_colors.py", "render.py"))).hexdigest()
 WHITES = os.path.join(OUT, "whites.json")
+LEARNED = True
 
 
 def candidates():
@@ -124,6 +127,14 @@ if __name__ == "__main__":
     white_of = whites(found)
     print(f"{len(found)} photos with a good plastic fit, {len(labels)} with a good label, white paper found on "
           f"{sum(p is not None for p in paper_of.values())}")
+    features = {stem: color.label_features(label) for stem, label in labels.items()}
+    model = None
+    if LEARNED:
+        colors = color.load_colors()
+        hand = [(features[s], [c[k] for k in color.SETTINGS]) for s, (_, _, sha1, _, _) in found.items() if s in features
+                and (c := color.colors_of(colors, s, sha1)) and c.get("source") == "hand-placed"]
+        model = color.learn_settings(*zip(*hand)) if len(hand) >= 20 else None
+        print(f"settings learned from {len(hand)} placed by hand" if model else f"only {len(hand)} settings placed by hand: none learned")
     kept = changed = 0
     with color.editing_colors() as colors:
         for stem in list(colors):
@@ -134,7 +145,8 @@ if __name__ == "__main__":
             if current and current.get("source") == "hand-placed":
                 kept += 1
                 continue
-            settings = {k: round(v, 4) for k, v in auto(source, paper_of.get(stem), white_of.get(stem)).items()} | {"source": "auto-generated"}
+            made = color.learned_settings(model, features[stem]) if model and stem in features else auto(source, paper_of.get(stem), white_of.get(stem))
+            settings = {k: round(v, 4) for k, v in made.items()} | {"source": "auto-generated"}
             changed += current != settings
             colors[stem] = {"sha1": sha1, "colors": settings}
     print(f"{kept} placed by hand, kept; {changed} auto-generated settings changed, into {color.FILE}")
