@@ -20,7 +20,10 @@ from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bev
 # dots in its sides move one side, the cross moves it. A magnifier shows 6 mm around the handle held. Saving makes the
 # placement the photo's current fit, placed by hand (the steps keep it), with the label once it's placed (else the
 # current label stays if the plastic wasn't moved, or fit-label fits one); an almost fit it replaces goes to the
-# rejected ones. Saved again in the same run, a photo's placement replaces the one saved before.
+# rejected ones. Saved again in the same run, a photo's placement replaces the one saved before. "Save for refit" saves
+# the plastic's placement as a rough start instead (fits.json's "start"), leaving the fit as it is: make fit-cartridge
+# fits the photo from it alone, and its fit is reviewed as usual (make review-fits). A photo with a start and no current
+# fit opens on its start.
 # Usage: fit_by_hand.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8769
 # Straightened (a toggle, P; on as a photo with a current plastic fit opens): the photo shown with the perspective of
@@ -164,6 +167,8 @@ class Hand:
         notes = []
         if plastic is not None:
             H, start = plastic["mm_to_photo"], f"the current fit ({about(plastic)})"
+        elif e.get("start"):
+            H, start = e["start"]["mm_to_photo"], "the rough fit saved for refit"
         elif e["rejected"]:
             plastic = e["rejected"][-1]["plastic"]
             H, start = plastic["mm_to_photo"], "the latest rejected fit"
@@ -186,6 +191,8 @@ class Hand:
                 found = on if on is not None else rejected[-1]
                 label_mm = project(np.linalg.inv(H), project(found["mm_to_photo"], label)).tolist()
                 notes.append(f"label from {'the current fit (' + about(found) + ')' if on is not None else 'the latest rejected label'}")
+        if e.get("start"):
+            notes.append("saved for refit (make fit-cartridge)")
         if e["rejected"]:
             notes.append(f'{len(e["rejected"])} fit{"s" * (len(e["rejected"]) != 1)} rejected before')
         view = self.straight(name)
@@ -215,6 +222,15 @@ class Hand:
                 e["rejected"].append({"plastic": fits.bare(old["plastic"]), "label": fits.bare(old["label"])})
             fits.unreject(e, H)
             e["fit"] = new
+            self.entries[name] = e
+
+    def save_start(self, name, corners):
+        """Saves a rough placement of the plastic (the handles' corners in the photo's pixels) as the photo's start for
+        fit-cartridge; its fit stays as it is."""
+        H = homography(anchor(self.shell(name)), corners)
+        with fits.editing() as known:
+            e = fits.entry(known, name, self.sha1s[name])
+            e["start"] = {"mm_to_photo": np.asarray(H, np.float64).tolist()}
             self.entries[name] = e
 
     def placed(self, name):
@@ -248,16 +264,16 @@ h2{font-size:14px;margin:0;width:22ch;overflow:hidden;text-overflow:ellipsis;whi
 #stage{flex:1;position:relative;overflow:hidden;background:#333}
 canvas#c{position:absolute;left:0;top:0}
 button{font:inherit;padding:4px 10px;border:none;border-radius:0.3em}
-button#save{background:#070;color:#fff}
+button#save{background:#070;color:#fff}button#refit{background:#06c;color:#fff}
 #status{display:inline-block;width:10ch;color:#070}
 </style>
 <div id="side"><div id="filters"></div><span id="summary"></span><canvas id="loupe" width="240" height="240"></canvas><div id="list"></div></div>
 <div id="main"><header>
 <button id="prev">← prev</button><span id="position"></span><button id="next">next →</button>
 <h2 id="title"></h2><button id="reset">Reset (R)</button><label><input type="checkbox" id="labelplaced"> Label placed (L)</label><label><input type="checkbox" id="straighten"> Straightened (P)</label>
-<button id="save">Save as great (S)</button><span id="status"></span>
+<button id="save">Save as great (S)</button><button id="refit">Save for refit (F)</button><span id="status"></span>
 <p id="notes"></p>
-<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side, the cross moves it. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo.</p>
+<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side, the cross moves it. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo; F: save the plastic as a rough fit for make fit-cartridge to fit from, and go to the next.</p>
 </header><div id="stage"><canvas id="c"></canvas></div></div>
 <script>
 const $ = id => document.getElementById(id);
@@ -517,20 +533,21 @@ c.onwheel = e => {
   ox = x - (x - ox) * f; oy = y - (y - oy) * f; scale *= f;
   draw();
 };
-async function save() {
+async function save(forRefit) {
   if (!corners) return;
-  const body = {name: item.name, anchor: corners, label: placed() ? rectCorners(rect) : null, filters: chosenFilters()};
+  const body = {name: item.name, anchor: corners, label: placed() && !forRefit ? rectCorners(rect) : null, filters: chosenFilters(), refit: !!forRefit};
   const response = await fetch("/save", {method: "POST", body: JSON.stringify(body)});
   if (!response.ok) return alert("Not saved: " + response.status);
   showSummary(await response.json());
-  list[i].placed = true;
+  if (!forRefit) list[i].placed = true;
   if (i + 1 < list.length) go(i + 1); else { showNames(); $("status").textContent = "saved"; }
 }
 const go = k => { if (k >= 0 && k < list.length) { i = k; show(); } };
 $("prev").onclick = () => go(i - 1);
 $("next").onclick = () => go(i + 1);
 $("reset").onclick = () => reset();
-$("save").onclick = save;
+$("save").onclick = () => save(false);
+$("refit").onclick = () => save(true);
 $("labelplaced").onchange = e => setPlaced(e.target.checked);
 $("straighten").onchange = () => { setView(); draw(); };
 document.onkeydown = e => {
@@ -545,7 +562,8 @@ document.onkeydown = e => {
     const order = [0, 4, 1, 5, 2, 6, 3, 7, 8, 12, 9, 13, 10, 14, 11, 15, 16].slice(0, handles().length), n = order.length;
     sel = order[(order.indexOf(sel) + (e.shiftKey ? n - 1 : 1)) % n]; draw(); e.preventDefault();
   }
-  else if (e.key === "s" || e.key === "S") save();
+  else if (e.key === "s" || e.key === "S") save(false);
+  else if (e.key === "f" || e.key === "F") save(true);
   else if (e.key === "r" || e.key === "R") reset();
   else if (e.key === "l" || e.key === "L") setPlaced(!placed());
   else if ((e.key === "p" || e.key === "P") && straight) { $("straighten").checked = !$("straighten").checked; setView(); draw(); }
@@ -590,7 +608,10 @@ class Handler(BaseHTTPRequestHandler):
         data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         if data["name"] not in hand.entries or np.shape(data["anchor"]) != (4, 2) or data["label"] is not None and np.shape(data["label"]) != (4, 2):
             return self.send_error(400)
-        hand.save(data["name"], data["anchor"], data["label"])
+        if data.get("refit"):
+            hand.save_start(data["name"], data["anchor"])
+        else:
+            hand.save(data["name"], data["anchor"], data["label"])
         self.send(hand.summary(data["filters"]))
 
     def log_message(self, *args):

@@ -7,7 +7,8 @@ import photos
 # stem:
 #   {"sha1": the photo's SHA-1,
 #    "fit": {"plastic": part, "label": part}  (the current fit; either part may be missing),
-#    "rejected": [{"plastic": part}, {"plastic": part, "label": part}...]}
+#    "rejected": [{"plastic": part}, {"plastic": part, "label": part}...],
+#    "start": {"mm_to_photo": homography}  (optional: a rough plastic placed by hand for fit-cartridge to fit from)}
 # A part is {"mm_to_photo": homography, "source": "auto-generated" or "hand-placed", "accepted": true or "almost"}:
 # the plastic's homography maps mm on the cartridge's front to the photo's pixels, the label's maps mm on the label's
 # model (cartridge's shell.label) to them; "accepted" is missing until it's reviewed (a part placed by hand is
@@ -15,7 +16,8 @@ import photos
 # entry is the one found wrong: a plastic alone, or a label on that plastic. A fit equal to a rejected one isn't made
 # current again, so no fit is reviewed twice. An entry whose SHA-1 isn't its photo's is of another photo once under the
 # same name: it doesn't count, and is replaced. Entries follow their photos by SHA-1 (renamed by hand, say), and go with
-# them when they're deleted.
+# them when they're deleted. A start is no fit: fit-cartridge fits the photo from it alone, and its fit is reviewed as
+# any other.
 # Steps and tools change it through editing(), which holds a lock and reads it afresh, so they can run side by side.
 FILE = "fits.json"
 SOURCES = ("auto-generated", "hand-placed")
@@ -27,7 +29,7 @@ def load():
 
 def save(fits):
     """One line per photo, so that the file's history reads as fits changed; entries with nothing in them are left out."""
-    lines = [f"{json.dumps(name)}: {json.dumps(entry, ensure_ascii=False)}" for name, entry in sorted(fits.items()) if entry["fit"] or entry["rejected"]]
+    lines = [f"{json.dumps(name)}: {json.dumps(entry, ensure_ascii=False)}" for name, entry in sorted(fits.items()) if entry["fit"] or entry["rejected"] or entry.get("start")]
     open(FILE + ".tmp", "w").write("{\n" + ",\n".join(lines) + "\n}\n" if lines else "{}\n")
     os.replace(FILE + ".tmp", FILE)
 

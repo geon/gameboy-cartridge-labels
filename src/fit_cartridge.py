@@ -7,7 +7,8 @@ from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, came
 # fit-cartridge: fits the model of the cartridge's shell (src/cartridge.py: the Game Boy's, or the Game Boy Color
 # only cartridge's for CGB- serials) to every photo in photos/ but Game Boy Advance ones (no model) and those of
 # cartridges with another shell (special-shells.tsv: rumble, tilt sensor...), started from its text in
-# generated/read-text/ (make read-text) and from the outlines in the photo (the label, the recess or the body), the fit
+# generated/read-text/ (make read-text) and from the outlines in the photo (the label, the recess or the body), or
+# from a rough fit placed by hand alone (fits.json's start: fit-by-hand's Save for refit; fitted again when it changes), the fit
 # chosen among those found by a score learned from the fits judged right (src/choice.json, make learn-choice). The fit,
 # the plastic's pose as a homography from mm on the cartridge's front to the photo's pixels, goes into fits.json (src/fits.py) as the photo's current plastic, not yet reviewed; what this step
 # found on the way goes into generated/fit-cartridge/<photo>.json: the shell, the fit, the camera's distance from the
@@ -84,6 +85,10 @@ def recess_plausible(H, recess):
 # strongest recess line's, the earlier choice: 170; the text's starts alone 158), CGB 131 of 200 (56; 78).
 CHOICE = "src/choice.json"
 RIVAL = 0.3
+# A rough fit placed by hand is close: searched from 1.4 mm, not 3, so the fit doesn't slide off to another edge. On 6
+# photos placed by hand, from starts 0.9 and 1.85 mm off (2026-11-04): within 0.5 mm of the hand fit 5 of 6 each, against
+# 2 with the usual bands; from 3.7 mm off, none either way. So "rough" means within about 2 mm.
+HAND_START_BANDS = (1.4, 1.0, 0.7, 0.5, 0.4, 0.4)
 FEATURES = ["from_outline"] + [f"{kind}_{m}" for kind in ("recess", "label", "face", "arrow", "pill", "groove") for m in ("near", "str", "offset")] + \
     ["recess_strength", "band_line", "quality", "cont_min", "cont_mean", "inconsistency", "tilt", "support"]
 DERIVED = ("rs_rel", "rs_top", "dscale", "possible", "clear", "log_inc")
@@ -120,22 +125,26 @@ def same_place(a, b, recess):
     return float(np.linalg.norm(project(np.linalg.inv(b), project(a, corners_of(recess))) - corners_of(recess), axis=1).mean())
 
 
-def candidates_of(photo, lines, shell):
+def candidates_of(photo, lines, shell, start=None):
     """Every plausible fit of the photo, with what the choice weighs, and the groups of starts they came from: the
     text's, in the box of the cartridge it shows (crop), and the outlines', each quadrilateral taken for the label,
     recess or body in the box it implies (fits from those kept upright, as their starts don't tell up from down).
     Returns (candidates, groups); a candidate's "H" is in the photo's pixels, its "group" an index into groups, each
-    (fitter, shift from the crop to the photo, box, starts in the crop, found_by)."""
+    (fitter, shift from the crop to the photo, box, starts in the crop, found_by). With start (a rough fit placed by hand,
+    mm -> the photo's pixels), from it alone."""
     size = (photo.shape[1], photo.shape[0])
     groups = []
-    found = crop(photo, lines, shell)
+    if start is not None:
+        start = np.asarray(start, np.float64)
+        groups.append((box_of(start, shell, size), [start], "hand start"))
+    found = crop(photo, lines, shell) if start is None else None
     if found is not None:
         box, line = found
         shift = np.array([[1, 0, box[0]], [0, 1, box[1]], [0, 0, 1]], np.float64)
         in_crop = [dict(l, quad=(np.array(l["quad"]) - box[:2]).tolist()) for l in lines]
         groups.append((box, [shift @ H0 for H0 in text_starts(in_crop, shell)], line["text"]))
     by_outline = {}
-    for H0, i, what in outline_starts(outline_quads(photo), shell, size):
+    for H0, i, what in outline_starts(outline_quads(photo), shell, size) if start is None else ():
         by_outline.setdefault((i, what), []).append(H0)
     groups += [(box_of(group[0], shell, size), group, "outline") for group in by_outline.values()]
     candidates, fitters = [], []
@@ -144,10 +153,11 @@ def candidates_of(photo, lines, shell):
         shift = np.array([[1, 0, x0], [0, 1, y0], [0, 0, 1]], np.float64)
         fitters.append((fitter, shift, (x0, y0, x1, y1), [np.linalg.inv(shift) @ H0 for H0 in starts], found_by))
         for H0 in fitters[-1][3]:
-            H, _ = fitter.fit(H0)
+            H, _ = fitter.fit(H0, bands=HAND_START_BANDS) if found_by == "hand start" else fitter.fit(H0)
             Hp = shift @ H
             Hp /= Hp[2, 2]
-            if recess_plausible(H, shell.recess) and (found_by != "outline" or abs(tilt(Hp)) <= MAX_TILT):
+            # A rough fit placed by hand is trusted to be roughly right: photos too slanted for these checks are what it's for.
+            if found_by == "hand start" or recess_plausible(H, shell.recess) and (found_by != "outline" or abs(tilt(Hp)) <= MAX_TILT):
                 candidates.append({"H": Hp, "group": len(fitters) - 1, "from_outline": float(found_by == "outline"), **fitter.features(H),
                                    "inconsistency": float(camera_distance(Hp, size)[0]), "tilt": abs(tilt(Hp)),
                                    "px_per_mm": float(np.sqrt(abs(np.linalg.det(Hp[:2, :2]))))})
@@ -156,8 +166,8 @@ def candidates_of(photo, lines, shell):
     return candidates, fitters
 
 
-def fit(photo_path, text_path):
-    """The fit of one photo, as written to its file."""
+def fit(photo_path, text_path, start=None):
+    """The fit of one photo, as written to its file; from start alone if given (fits.json's: a rough fit placed by hand)."""
     cv2.setNumThreads(1)
     photo = load(photo_path)
     if photo is None:
@@ -167,7 +177,7 @@ def fit(photo_path, text_path):
     size = (photo.shape[1], photo.shape[0])
     recess = shell.recess
     possible = lambda H: camera_distance(H, size)[0] <= DISTANCE_TOLERANCE
-    candidates, groups = candidates_of(photo, lines, shell)
+    candidates, groups = candidates_of(photo, lines, shell, start)
     if not candidates:
         return {"error": "no plausible fit" if groups else "no text or outline to start from"}
     score = scores(candidates)
@@ -204,7 +214,7 @@ def fit(photo_path, text_path):
                 quality = fitter.quality(H)
     Hp = shift @ H
     Hp = Hp / Hp[2, 2]
-    if not possible(Hp):
+    if not possible(Hp) and start is None:
         return {"error": "no fit a camera 20 to 100 cm away could have seen", "crop": [x0, y0, x1, y1], "found_by": found_by}
     return {"shell": shell.name, "mm_to_photo": Hp.tolist(), "photo_size": list(size), "distance_mm": camera_distance(Hp, size)[1],
             "crop": [x0, y0, x1, y1], "found_by": found_by, "quality": quality, "recess_strength": best["recess_strength"], "score": float(score[k]),
@@ -214,13 +224,14 @@ def fit(photo_path, text_path):
                             "possible": c["inconsistency"] <= DISTANCE_TOLERANCE, "found_by": groups[c["group"]][4]} for c, s in zip(candidates, score)]}
 
 
-def fit_into(stem, photo_path, text_path, sha1):
+def fit_into(stem, photo_path, text_path, sha1, start=None):
     out = os.path.join(OUT, stem + ".json")
     try:
-        result = fit(photo_path, text_path)
+        result = fit(photo_path, text_path, start)
     except Exception as e:
         result = {"error": f"{type(e).__name__}: {e}"}
     result["sha1"] = sha1
+    result["start"] = start
     json.dump(result, open(out, "w"))
     return stem, result
 
@@ -258,15 +269,18 @@ if __name__ == "__main__":
     known = fits.load()
     todo, no_text, kept = [], [], set()
     for stem, path in sorted(paths.items()):
-        if fits.good(fits.of(known, stem, sha1s[stem])["fit"].get("plastic")):
+        e = fits.of(known, stem, sha1s[stem])
+        if fits.good(e["fit"].get("plastic")):
             kept.add(stem)
             continue
+        start = (e.get("start") or {}).get("mm_to_photo")
         text = os.path.join(TEXT, stem + ".json")
         out = os.path.join(OUT, stem + ".json")
         if not os.path.exists(text):
             no_text.append(stem)
-        elif not os.path.exists(out) or json.load(open(out)).get("sha1") != sha1s[stem] or os.path.getmtime(out) < max(os.path.getmtime(path), os.path.getmtime(text), code):
-            todo.append((stem, path, text, sha1s[stem]))
+        elif not os.path.exists(out) or (made := json.load(open(out))).get("sha1") != sha1s[stem] or os.path.getmtime(out) < max(os.path.getmtime(path), os.path.getmtime(text), code) \
+                or made.get("start") != start:
+            todo.append((stem, path, text, sha1s[stem], start))
     print(f"{len(paths)} photos ({len(special)} of cartridges with another shell left out, {SPECIAL_SHELLS}), {len(kept)} with their plastic accepted or placed by hand, kept; {len(todo)} to fit" + (f"; {len(no_text)} without their text (make read-text): {' '.join(no_text)}" if no_text else ""))
     with concurrent.futures.ProcessPoolExecutor() as pool:
         for done, (stem, result) in enumerate(pool.map(fit_into, *zip(*todo)) if todo else (), 1):
