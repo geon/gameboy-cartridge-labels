@@ -2,9 +2,9 @@ import csv, re, warnings, cv2, numpy as np
 
 # The models of the Game Boy cartridges' shells, and fitting one to a photo, for fit-cartridge (src/fit_cartridge.py):
 # started from the text read on the photo (or from the outlines in it), points on the model's edges look along their
-# normals for the strongest change, and the model's pose (mm -> photo pixels) is fitted to them. Two shells (Shell): the Game Boy's (DMG), which
-# Game Boy Color games that also play on a Game Boy came in too, and the clear Game Boy Color only cartridge's (CGB,
-# serials CGB-...). In millimetres on the cartridge's front (origin top left of the body, x right, y down): the DMG's
+# normals for the strongest change, and the model's pose (mm -> photo pixels) is fitted to them. Three shells (Shell): the Game Boy's (DMG), which
+# Game Boy Color games that also play on a Game Boy came in too, the clear Game Boy Color only cartridge's (CGB,
+# serials CGB-...), and the Game Boy Advance's (AGB, serials AGB-...). In millimetres on the cartridge's front (origin top left of the body, x right, y down): the DMG's
 # body 57 x 65, recess 44 x 39 inset 6.5 from the sides and 18 from the top, label 42.5 x 37 (a canonical size, LABEL)
 # centered in the recess.
 # Only the plastic's pose is fitted: labels are stuck on a little shifted and turned, so their edges only help to get
@@ -152,7 +152,10 @@ def text_starts(lines, shell, scales=(0.92, 1.0, 1.08), dys=(-0.5, 0.0, 0.5)):
     good fits as ambiguous: on my photos 111 -> 113 unflagged, on those found online 41 -> 41, and the excellent
     DMG-CJ_2 lost. A strip text's start is dropped when it turns the cartridge over 45 degrees from upright: read
     upside down, or "MADE IN JAPAN" standing level on a Japanese label. On the CGB's shell only "GAME BOY COLOR", where
-    it lies on that shell's label: the others aren't measured there."""
+    it lies on that shell's label: the others aren't measured there. On the AGB's the embossed "GAME BOY ADVANCE" (the
+    few lines most like it), at wider scales and shifts, as its size and place are rough."""
+    if shell.name == "agb":
+        return [agb_logo_start(l, s, d) for l in agb_logo_lines(lines)[:3] for s in (0.85, 1.0, 1.15) for d in (-1.0, 0.0, 1.0)]
     if shell.name == "cgb":
         return [color_start(l, s, d, a, shell.color_text) for l in color_lines(lines) for s in scales for d in dys for a in (-6, -3, 0, 3, 6)]
     emboss = emboss_lines(lines)
@@ -553,13 +556,81 @@ CGB_RIDGE_DEPTH = CGB_WALL
 RECESS_DEPTH = 0.2
 
 
+# The Game Boy Advance (AGB) cartridge, as measured by hand on 2026-11-04 (agb-shell.md; to be checked on fitted photos):
+# the body 57 wide (as the DMG's and CGB's) and 34.5 high, with a shoulder sticking out 1.5 on each side along its top
+# 7 mm (60 wide there: x from -1.5 to 58.5, the origin still at the body's top left). The recess 44 x 23, centered,
+# its bottom 3.5 above the body's bottom (so its top 8 below the body's top; the top was also measured as "looks like
+# 7.5", which doesn't add up with the rest: 7.5 + 23 + 3.5 = 34). The label (hard to measure) 43 x 22, centered in the
+# recess. The grip above the recess: two creases bowing upward, taken as circular arcs, meeting in sharp points 2 mm
+# above the recess's top, straight above its sides; the lower one's top 2.5 below the body's top, the upper one's 2.
+# The embossed "GAME BOY ADVANCE" logo between the creases and the recess, about 28 wide. Not measured: the corners'
+# radii, the logo's height and place (AGB_LOGO).
+AGB_BODY = (57.0, 34.5)
+AGB_SHOULDER = 1.5
+AGB_SHOULDER_HEIGHT = 7.0
+AGB_RECESS = (6.5, 8.0, 50.5, 31.0)
+AGB_LABEL = (7.0, 8.5, 50.0, 30.5)
+AGB_CREASE_END = AGB_RECESS[1] - 2.0
+AGB_CREASE_TOPS = (2.0, 2.5)  # the upper crease's, the lower one's
+# The logo as macOS's text recognition boxes it: 28 wide, as high as the boxes of its reads with 12 or more letters
+# (width over height 8.4, median of 92 reads on AGB photos, 2026-11-04: 3.33 mm), its middle taken halfway between the
+# lower crease (3.9 mm down at the logo's ends) and the recess: a guess, which the starts allow for (agb_logo_start).
+AGB_LOGO = (28.5 - 14.0, 5.9 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.9 + 28.0 / 8.4 / 2)
+
+
+def agb_outline():
+    """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom (corners sharp:
+    their radii aren't measured)."""
+    w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
+    return np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64)
+
+
+def agb_crease(top, count=48):
+    """One crease in mm, left to right: the circular arc from the left point to the right one through (28.5, top)."""
+    half, sag = (AGB_RECESS[2] - AGB_RECESS[0]) / 2, AGB_CREASE_END - top
+    r = (half * half + sag * sag) / (2 * sag)
+    xs = np.linspace(AGB_RECESS[0], AGB_RECESS[2], count)
+    return np.c_[xs, top + r - np.sqrt(r * r - (xs - 28.5) ** 2)]
+
+
+def agb_face_runs():
+    """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top, the shoulders' sides,
+    the body's sides below them and the bottom. The shoulders' undersides (1.5 mm) are left out. The creases aren't
+    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4."""
+    w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
+    return [((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
+            ((w + s, 1.0), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
+            ((w - 2.0, h), (2.0, h), (0, 1)),
+            ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 1.0), (-1, 0))]
+
+
+def agb_logo_lines(lines):
+    """Of the OCR's lines, those reading "GAME BOY ADVANCE" whole enough to place: 12 or more letters, mostly alike
+    (read garbled, as "CAMEBOYADVANEE"), best first. "FOR GAME BOY ADVANCE" is left out: printed on labels."""
+    import difflib, re
+    letters = lambda t: re.sub(r"[^A-Za-z]", "", t).upper()
+    score = lambda t: difflib.SequenceMatcher(None, letters(t), "GAMEBOYADVANCE").ratio()
+    found = [l for l in lines if len(letters(l["text"])) >= 12 and score(l["text"]) >= 0.6 and not letters(l["text"]).startswith("FOR")]
+    return sorted(found, key=lambda l: -score(l["text"]))
+
+
+def agb_logo_start(line, scale=1.0, dy=0.0):
+    """A start for the fit from the logo's line: the similarity taking AGB_LOGO's corners, scaled by scale about its
+    middle and shifted dy mm down, to its quadrilateral."""
+    mm = corners_of(AGB_LOGO)
+    c = mm.mean(axis=0)
+    return similarity(c + (mm - c) * scale - [0, dy], line["quad"])
+
+
 class Shell:
     """A cartridge's front, as the fitter sees it: the body (w, h), the recess and the label (x1, y1, x2, y2), the
     samples, the plain band below the recess for Fitter.band_line (the recess's bottom line's rows, the band's rows, and
-    its columns beside the arrow), and where "GAME BOY COLOR" lies on the label (its box's corners)."""
+    its columns beside the arrow), where "GAME BOY COLOR" lies on the label (its box's corners; None: not measured), and
+    the box around the whole front (x1, y1, x2, y2; the body's unless given: the AGB's shoulders stick out)."""
 
-    def __init__(self, name, body, recess, label, samples, recess_line_rows, band_rows, band_columns, color_text):
+    def __init__(self, name, body, recess, label, samples, recess_line_rows, band_rows, band_columns, color_text, box=None):
         self.name, self.body, self.recess, self.label = name, body, recess, label
+        self.box = box or (0.0, 0.0) + tuple(body)
         self.points, self.normals, self.kinds = samples
         self.recess_line_rows, self.band_rows, self.band_columns, self.color_text = recess_line_rows, band_rows, band_columns, color_text
 
@@ -572,12 +643,18 @@ CGB = Shell("cgb", CGB_BODY, CGB_RECESS, CGB_LABEL,
             build_samples(CGB_RECESS, CGB_LABEL, cgb_arrow_edges(), pill=False, grooves=False, face_runs=cgb_face_runs(),
                           face_points=cgb_face_points(), recess_radius=None),
             (59.5, 60.5), (60.6, 64.6), np.r_[np.arange(5.0, 24.0, 0.25), np.arange(33.0, 52.0, 0.25)], CGB_COLOR_TEXT)
-SHELLS = {"dmg": DMG, "cgb": CGB}
+# No arrow on its front: the band below the recess runs across the whole recess. No "GAME BOY COLOR" on its labels.
+AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL,
+            build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None),
+            (30.5, 31.5), (31.7, 33.8), np.arange(7.0, 50.0, 0.25), None, box=(-AGB_SHOULDER, 0.0, AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
+SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 
 def shell_of(serial):
-    """The shell of the cartridge with this serial or release id: CGB- ones are Game Boy Color only."""
-    return CGB if serial.startswith("CGB-") else DMG
+    """The shell of the cartridge with this serial or release id: CGB- ones are Game Boy Color only, AGB- ones (and
+    release ids like agb-0014) Game Boy Advance."""
+    prefix = serial[:4].upper()
+    return CGB if prefix == "CGB-" else AGB if prefix == "AGB-" else DMG
 
 
 def project(H, pts):
@@ -737,16 +814,17 @@ def outline_quads(photo, max_side=1000):
 
 
 def outline_starts(quads, shell, size, tolerance=0.15):
-    """Starts for the fit from outline_quads: each quadrilateral taken for the label, the recess or the body, in each of
+    """Starts for the fit from outline_quads: each quadrilateral taken for the label, the recess or the body (its box,
+    with the AGB's shoulders), in each of
     its four turns whose proportions are within tolerance (log of the ratio) of that rectangle's and that keep the
     cartridge within MAX_TILT of upright; a start putting the body partly outside the photo (by over 10 % of its size)
     or covering under 3 % of it is left out. As (homography, quad index, what)."""
     w, h = size
     sides = lambda q: np.linalg.norm(np.roll(q, -1, axis=0) - q, axis=1)
-    body = corners_of((0, 0) + tuple(shell.body))
+    body = corners_of(shell.box)
     starts = []
     for i, q in enumerate(quads):
-        for what, rect in (("label", shell.label), ("recess", shell.recess), ("body", (0, 0) + tuple(shell.body))):
+        for what, rect in (("label", shell.label), ("recess", shell.recess), ("body", shell.box)):
             mm = corners_of(rect)
             ms = sides(mm)
             for k in range(4):
