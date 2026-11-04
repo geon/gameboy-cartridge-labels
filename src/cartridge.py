@@ -307,7 +307,11 @@ def build_samples(recess=RECESS, label=LABEL, arrow_edges=ARROW_EDGES, pill=True
 # made with the recess 44.5 wide, so their widths are scaled to the 43 mm recess (x 43 / 44.5 about the middle: the
 # labels 41.40 to 41.70 wide, median 41.45); the top corners' radius below too, but it's left as found.
 # The shell's other features aren't measured (see the arrow below).
-CGB_BODY = (57.0, 65.0)
+# The body is 56.8 wide (calipers, 2026-11-04, on all three shells: 57 before), its middle at 28.5 as the recess's: its
+# sides at CGB_LEFT and CGB_LEFT + 56.8. On the 209 CGB photos placed by hand, fit-cartridge's fit within 0.3 / 0.5 mm of
+# the hand fit: 28 / 100 with the sides 57 apart, 47 / 111 at 56.8.
+CGB_BODY = (56.8, 65.0)
+CGB_LEFT = 28.5 - CGB_BODY[0] / 2
 CGB_BODY_CORNER_DROP = 0.8
 # The top corners' radius: 2.7 mm, the median of 66 corners on 33 photos whose fit was accepted or placed by hand
 # (2026-10-29; middle half 2.6 to 2.8): a rounded corner fitted to the shell's edge against the background. The fitting
@@ -360,36 +364,36 @@ def cgb_top(xs):
     (sharp) top corners."""
     w, drop = CGB_BODY[0], CGB_BODY_CORNER_DROP
     r = ((w / 2) ** 2 + drop ** 2) / (2 * drop)
-    return np.c_[xs, r - np.sqrt(r * r - (np.asarray(xs) - w / 2) ** 2)]
+    return np.c_[xs, r - np.sqrt(r * r - (np.asarray(xs) - 28.5) ** 2)]
 
 
 def cgb_corner():
     """The CGB body's top left corner's arc: its center (mm) and its angles from the side to the top (radians, y down),
     tangent to the side and to the top's tangent at the corner. The top right one is its mirror image."""
     r = CGB_TOP_CORNER_RADIUS
-    slope = (cgb_top([0.0])[0, 1] - cgb_top([0.01])[0, 1]) / 0.01  # the top rises toward the middle
-    center = np.array([r, CGB_BODY_CORNER_DROP - slope * r + r * np.hypot(1, slope)])  # r from the side and the top
+    slope = (cgb_top([CGB_LEFT])[0, 1] - cgb_top([CGB_LEFT + 0.01])[0, 1]) / 0.01  # the top rises toward the middle
+    center = np.array([CGB_LEFT + r, CGB_BODY_CORNER_DROP - slope * r + r * np.hypot(1, slope)])  # r from the side and the top
     return center, np.pi, np.arctan2(-1, -slope) + 2 * np.pi
 
 
 def cgb_body_outline(per_top=24, per_corner=8):
     """The CGB body's outline in mm, clockwise from the top left: the bowed top, its corners rounded to
     CGB_TOP_CORNER_RADIUS (cgb_corner), the sides and the bottom straight."""
-    w, h, r = CGB_BODY[0], CGB_BODY[1], CGB_TOP_CORNER_RADIUS
+    w, h, r, l = CGB_BODY[0], CGB_BODY[1], CGB_TOP_CORNER_RADIUS, CGB_LEFT
     center, a0, a1 = cgb_corner()
     left = [center + r * np.array([np.cos(t), np.sin(t)]) for t in np.linspace(a0, a1, per_corner)]
-    right = [(w - x, y) for x, y in left[::-1]]
-    return np.vstack([left, cgb_top(np.linspace(left[-1][0], w - left[-1][0], per_top)), right, [[w, h], [0, h]]])
+    right = [(57.0 - x, y) for x, y in left[::-1]]  # mirrored about the middle, 28.5
+    return np.vstack([left, cgb_top(np.linspace(left[-1][0], 57.0 - left[-1][0], per_top)), right, [[l + w, h], [l, h]]])
 
 
 def cgb_outline_points():
     """The CGB body's outline, closed, in mm, and each point's depth behind the face: its top and sides
     (cgb_body_outline) CGB_BEVEL_DEPTH behind it; its bottom edge in it, CGB_BEVEL_SIDE in from the sides (the bevels
     end there), joined to the sides' bottom ends."""
-    w, h = CGB_BODY
+    (w, h), l = CGB_BODY, CGB_LEFT
     outline = cgb_body_outline()[:-2]  # from the left side's top round to the right side's top: without the bottom
-    back = dense_line(np.vstack([[[0.0, h]], outline, [[w, h]]]))
-    bottom = dense_line([[w - CGB_BEVEL_SIDE, h], [CGB_BEVEL_SIDE, h]])
+    back = dense_line(np.vstack([[[l, h]], outline, [[l + w, h]]]))
+    bottom = dense_line([[l + w - CGB_BEVEL_SIDE, h], [l + CGB_BEVEL_SIDE, h]])
     return np.vstack([back, bottom]), np.r_[np.full(len(back), CGB_BEVEL_DEPTH), np.zeros(len(bottom))]
 
 
@@ -422,11 +426,11 @@ def cgb_corner_samples(count=5, clear=np.radians(15)):
     """Points on the CGB body's rounded top corners (mm) and their outward normals, as on the pill's ends: along the
     arc, clear of its ends, where the side and the top have samples of their own."""
     center, a0, a1 = cgb_corner()
-    r, w = CGB_TOP_CORNER_RADIUS, CGB_BODY[0]
+    r = CGB_TOP_CORNER_RADIUS
     points, normals = [], []
     for t in np.linspace(a0 + clear, a1 - clear, count):
         n = np.array([np.cos(t), np.sin(t)])
-        points += [center + r * n, [w - (center + r * n)[0], (center + r * n)[1]]]
+        points += [center + r * n, [57.0 - (center + r * n)[0], (center + r * n)[1]]]
         normals += [n, [-n[0], n[1]]]
     return np.array(points), np.array(normals)
 
@@ -497,9 +501,9 @@ def cgb_face_points():
 
 def cgb_face_runs():
     """The CGB body's edges as runs for sampling: the straight sides and bottom, and the bowed top as short chords."""
-    w, h = CGB_BODY
-    runs = [((w, 8.0), (w, 58.0), (1, 0)), ((3.0, h), (w - 3.0, h), (0, 1)), ((0.0, 58.0), (0.0, 8.0), (-1, 0))]
-    top = cgb_top(np.linspace(0, w, 9))
+    (w, h), l = CGB_BODY, CGB_LEFT
+    runs = [((l + w, 8.0), (l + w, 58.0), (1, 0)), ((l + 3.0, h), (l + w - 3.0, h), (0, 1)), ((l, 58.0), (l, 8.0), (-1, 0))]
+    top = cgb_top(np.linspace(l, l + w, 9))
     runs += [(tuple(a), tuple(b), (0, -1)) for a, b in zip(top[1:-2], top[2:-1])]
     return runs
 
@@ -556,18 +560,20 @@ CGB_RIDGE_DEPTH = CGB_WALL
 RECESS_DEPTH = 0.2
 
 
-# The Game Boy Advance (AGB) cartridge (agb-shell.md), by hand with calipers (2026-11-04): the body 57 wide (as the
-# DMG's and CGB's) and 34.5 high, with a shoulder sticking out 1.5 on each side along its top (60 wide there: x from -1.5
-# to 58.5, the origin still at the body's top left); its top, sides and shoulders bevelled, 2 mm (AGB_BEVEL). The
+# The Game Boy Advance (AGB) cartridge (agb-shell.md), by hand with calipers (2026-11-04): the body 56.8 wide (as the
+# DMG's and CGB's) and 34.5 high, with a shoulder sticking out 1.6 on each side along its top (60.0 wide there: x from
+# -1.5 to 58.5; the body's middle at 28.5, as the recess's, so its sides at 0.1 and 56.9: AGB_LEFT); its top, sides and shoulders bevelled, 2 mm (AGB_BEVEL). The
 # recess 44 x 23 (calipers at 44.5 don't fit in, 44.0 and 23 are a bit tight, 22.5 has room), centered. The rest
 # measured on 51 photos whose recess I placed by hand (2026-11-04; edges in the photos straightened through that fit,
 # medians; the middle half of the photos within about 0.1 mm), in the recess's frame:
-#   - the outline (behind the face, at the bevel's back) looks 1.5 % smaller than 57 x 34.5 (middle half 1.2 to 1.7;
-#     the same 0.4 % on the DMG's, whose face runs to its edge, on 60 photos placed by hand): seen from about 13 cm
-#     (2 mm deep), as 37 of them are otakaraou's close-ups. Fitted at that size (AGB_OUTLINE_SEEN): on the 51, 39 fits
-#     within 0.3 mm of the hand fit (median 0.14), against 8 at full size (0.39) and 4 without the outline;
+#   - the outline (behind the face, at the bevel's back) looks 1.3 to 1.5 % smaller than 56.8 x 34.5 and 60 at the
+#     shoulders (56.06 x 34.0, 59.30; the DMG's, whose face runs to its edge, 56.78 x 64.71 on 60 photos placed by
+#     hand): seen from about 13 to 15 cm (2 mm deep), as 37 of them are otakaraou's close-ups. Fitted at that size
+#     (AGB_OUTLINE_SEEN, 0.987, their mean): on the 51, 42 fits within 0.3 mm of the hand fit (median 0.14), against
+#     15 at full size (0.34) and 4 without the outline (with 57 wide and 1.5 shoulders: 39 at 0.985);
 #   - the recess's top 7.65 below the body's top, its bottom 3.85 above its bottom (7.43 and 3.57 to the outline as
 #     seen, made 1.5 % larger about the body's middle; by hand: "looks like 7.5", and 3.5);
+#   - the shoulders 1.6 out on each side (by hand too);
 #   - the shoulders' undersides 6.7 below the top (by hand 7);
 #   - the label 43 x 22 (42.8 x 21.8 measured; by hand 43 x 22), centered across, 0.4 below the recess's top and 0.6
 #     above its bottom (measured 0.48 and 0.72);
@@ -577,11 +583,12 @@ RECESS_DEPTH = 0.2
 #     too, maybe the top bevel's inner edge).
 # The embossed "GAME BOY ADVANCE" logo between the creases and the recess, about 28 wide. Not measured: the corners'
 # radii, the logo's height and place (AGB_LOGO).
-AGB_BODY = (57.0, 34.5)
-AGB_SHOULDER = 1.5
+AGB_BODY = (56.8, 34.5)
+AGB_LEFT = 28.5 - AGB_BODY[0] / 2  # the body's left side: its middle at 28.5, as the recess's and the other shells'
+AGB_SHOULDER = 1.6
 AGB_SHOULDER_HEIGHT = 6.7
 AGB_BEVEL = 2.0
-AGB_OUTLINE_SEEN = 0.985  # the outline's size as fitted, about the body's middle
+AGB_OUTLINE_SEEN = 0.987  # the outline's size as fitted, about the body's middle
 AGB_RECESS = (6.5, 7.65, 50.5, 30.65)
 AGB_LABEL = (7.0, 8.05, 50.0, 30.05)
 AGB_CREASE_END = AGB_RECESS[1] - 2.4
@@ -595,9 +602,9 @@ AGB_LOGO = (28.5 - 14.0, 5.55 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.55 + 28.0 / 8.4 /
 def agb_outline(scale=1.0):
     """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom (corners sharp:
     their radii aren't measured); scaled about the body's middle (AGB_OUTLINE_SEEN: as fitted and seen)."""
-    w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
-    points = np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64)
-    return (w / 2, h / 2) + (points - (w / 2, h / 2)) * scale
+    w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
+    points = np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64) + (l, 0)
+    return (28.5, h / 2) + (points - (28.5, h / 2)) * scale
 
 
 def agb_crease(top, count=48):
@@ -610,12 +617,12 @@ def agb_crease(top, count=48):
 
 def agb_face_runs():
     """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top, the shoulders' sides,
-    the body's sides below them and the bottom. The shoulders' undersides (1.5 mm) are left out. The creases aren't
+    the body's sides below them and the bottom. The shoulders' undersides (1.6 mm) are left out. The creases aren't
     sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4. At the outline's size as seen
     (AGB_OUTLINE_SEEN)."""
-    w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
+    w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
     k = AGB_OUTLINE_SEEN
-    seen = lambda p: (w / 2 + (p[0] - w / 2) * k, h / 2 + (p[1] - h / 2) * k)
+    seen = lambda p: (28.5 + (p[0] + l - 28.5) * k, h / 2 + (p[1] - h / 2) * k)
     return [(seen(a), seen(b), n) for a, b, n in (((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
             ((w + s, 1.0), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
             ((w - 2.0, h), (2.0, h), (0, 1)),
@@ -660,11 +667,12 @@ DMG = Shell("dmg", BODY, RECESS, LABEL, build_samples(), (56.5, 57.5), (58.2, 63
 CGB = Shell("cgb", CGB_BODY, CGB_RECESS, CGB_LABEL,
             build_samples(CGB_RECESS, CGB_LABEL, cgb_arrow_edges(), pill=False, grooves=False, face_runs=cgb_face_runs(),
                           face_points=cgb_face_points(), recess_radius=None),
-            (59.5, 60.5), (60.6, 64.6), np.r_[np.arange(5.0, 24.0, 0.25), np.arange(33.0, 52.0, 0.25)], CGB_COLOR_TEXT)
+            (59.5, 60.5), (60.6, 64.6), np.r_[np.arange(5.0, 24.0, 0.25), np.arange(33.0, 52.0, 0.25)], CGB_COLOR_TEXT,
+            box=(CGB_LEFT, 0.0, CGB_LEFT + CGB_BODY[0], CGB_BODY[1]))
 # No arrow on its front: the band below the recess runs across the whole recess. No "GAME BOY COLOR" on its labels.
 AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL,
             build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None),
-            (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(-AGB_SHOULDER, 0.0, AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
+            (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(AGB_LEFT - AGB_SHOULDER, 0.0, AGB_LEFT + AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
 SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 

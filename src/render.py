@@ -105,8 +105,10 @@ def label_image(photo, shell, label_H):
 
 
 def cart_image(photo, shell, plastic_H):
+    # Framed on the shell's box, at least 0 to 57 mm across (the bodies are 56.8 wide, centered at 28.5), so that the DMG's
+    # and CGB's images are all one size.
     x1, y1, x2, y2 = SHELLS[shell].box
-    box = (x1 - CART_MARGIN, y1 - CART_MARGIN, x2 + CART_MARGIN, y2 + CART_MARGIN)
+    box = (min(x1, 0.0) - CART_MARGIN, y1 - CART_MARGIN, max(x2, 57.0) + CART_MARGIN, y2 + CART_MARGIN)
     size = (round((box[2] - box[0]) * CART_PX_PER_MM), round((box[3] - box[1]) * CART_PX_PER_MM))
     return rendered(photo, frame(plastic_H, box, size, SUPERSAMPLE["carts"]), size, SUPERSAMPLE["carts"], alpha=True)
 
