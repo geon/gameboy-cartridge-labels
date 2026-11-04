@@ -55,11 +55,14 @@
 #   make compare-labels
 #   A tool, not a step: finds the photos whose labels look alike but which are of different releases with different serials, DMG only against DMG, CGB against CGB, AGB against AGB: their label images from make fit-colors (the label alone), compared in gray with the lighting evened out, shrunk to about 1.2 px per mm, by their correlation, the best of shifts up to about 1.7 mm; the scores kept by the photos' SHA-1s in generated/compare-labels/scores.json, so that a new photo is only compared with those already there; the pairs scoring at least 0.7, by score, into generated/compare-labels/matches.tsv, to review (src/compare_labels.py).
 #
+#   make review-matches
+#   A tool, not a step: a local page of the pairs make compare-labels found alike, of different releases with different serials as the photos are named now, by score, their labels side by side; each photo can be renamed to a corrected serial, its fits following it; a pair can be confirmed as one cluster of labels alike (clicked again, unconfirmed), saved in label-clusters.json as pairs of SHA-1s; the confirmed pairs, and those joined through them, can be hidden (src/review_matches.py).
+#
 # Plain make lists these.
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles compare-labels
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles compare-labels review-matches
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -135,6 +138,9 @@ find-doubles:
 
 compare-labels:
 	$(PYTHON) src/compare_labels.py
+
+review-matches:
+	$(PYTHON) src/review_matches.py
 
 # The text recognition tool, built when missing (macOS).
 src/ocr: src/ocr.swift
