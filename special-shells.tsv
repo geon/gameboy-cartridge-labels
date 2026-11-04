@@ -1,8 +1,9 @@
-# Cartridges whose shell isn't the Game Boy cartridge's (src/cartridge.py): fit-cartridge leaves their photos out.
+# Cartridges whose shell isn't their system's usual one (src/cartridge.py): fit-cartridge leaves their photos out.
 # Per game: its code, the system and the game's three letters, for every region (DMG-VPH: DMG-VPHJ-JPN, DMG-VPHE-USA...),
 # or a whole serial where a game's don't follow that; what is special about the shell; the title. The Rumble Pak games
 # are those whose four-letter code starts with V: all 22 Wikipedia lists ("Cartridge feature", List of Game Boy Color
-# games), and CGB-VVJ, which it doesn't.
+# games), and CGB-VVJ, which it doesn't. The Game Boy Advance ones (taller shells, with a sensor or a rumble motor):
+# the Boktai games (a solar sensor), the tilt and gyro sensor games, and Drill Dozer (rumble).
 # Edit it by hand.
 code	shell	title
 CGB-VP9	rumble	10-Pin Bowling
@@ -40,3 +41,10 @@ GBD-PCA	camera	Pocket Camera (Game Boy Camera)
 GBD-PCB	camera	Game Boy Camera Gold
 GBD-EUR	camera	Game Boy Camera
 MGB-006	camera	Game Boy Camera Gold
+AGB-U3I	solar	Boktai: The Sun Is in Your Hand (Bokura no Taiyou)
+AGB-U32	solar	Boktai 2: Solar Boy Django (Zoku Bokura no Taiyou)
+AGB-U33	solar	Shin Bokura no Taiyou: Gyakushuu no Sabata
+AGB-KHP	tilt	Koro Koro Puzzle Happy Panechu!
+AGB-KYG	tilt	Yoshi Topsy-Turvy (Yoshi no Banyuu Inryoku)
+AGB-RZW	gyro, rumble	WarioWare: Twisted! (Mawaru Made in Wario)
+AGB-V49	rumble	Drill Dozer (Screw Breaker)
