@@ -1,6 +1,6 @@
 # AGB shell measurements
 
-Measured by hand (2026-11-04), to be checked on fitted photos; not yet used by any tool (the shell models are in src/cartridge.py). All sizes in mm.
+Measured by hand (2026-11-04); checked on photos below. The model is in src/cartridge.py. All sizes in mm.
 
 The "shoulder" is an extra bit sticking out to the sides right at the top. The body width should be the same as the
 DMG and CGB cartridges (57).
@@ -42,3 +42,24 @@ The arc points are 2 above the recess top: 5.5 from the top of the shell (6 if t
 ## Logo
 
 Between the 2 creases and the top of the recess is the "GAME BOY ADVANCE" logo. The logo is about 28 mm wide.
+
+## Checked with calipers and on photos (2026-11-04)
+
+- Bevel: 2 mm on the sides, the top and the shoulders.
+- Recess: calipers set at 44.5 don't fit in it, 44.0 is a bit tight; 23 high is a tad tight, 22.5 has room. Taken as
+  44 x 23.
+
+Measured on 51 photos whose recess was placed by hand (fit-by-hand), in that recess's frame (medians; the middle half of
+the photos within about 0.1 mm):
+
+- The outline looks 1.5 % smaller than 57 x 34.5 (56.06 x 34.0). It lies at the back of the 2 mm bevel, behind the
+  front face, so it looks smaller from a camera about 13 cm away (37 of the photos are otakaraou's close-ups). On the
+  DMG, whose face runs to its edge, the same measurement was within 0.4 % on 60 photos.
+- Recess top 7.65 below the shell's top, its bottom 3.85 above the shell's bottom (made 1.5 % larger about the middle;
+  as seen 7.43 and 3.57). 7.65 + 23 + 3.85 = 34.5.
+- Shoulders: 1.6 out on each side (59.3 as seen, about 60), their undersides 6.7 below the top.
+- Label: 42.8 x 21.8 (taken as 43 x 22), centered across, 0.5 below the recess's top and 0.7 above its bottom.
+- Creases (rough): their tops about 1.8 and 2.9 below the shell's top, meeting 2.4 above the recess's top. A straight
+  line also runs across about 1.45 below the top, maybe the top bevel's inner edge.
+
+The model (src/cartridge.py) uses these, with the outline fitted at the size it's seen (98.5 %).
