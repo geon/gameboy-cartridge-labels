@@ -93,9 +93,10 @@ class Hand:
             self.details[name] = details if details is not None and details.get("sha1") == self.sha1s[name] else None
         self.order = sorted(self.entries)
         # Each release's preferred photo, and the photo of a release with only one (releases as find-doubles groups them).
-        releases = [[(photos.stem(os.path.basename(p["path"])), p["preferred"]) for p in row["photos"]] for row in rows()]
-        preferred = {n for photos_of in releases for n, chosen in photos_of if chosen}
-        only = {photos_of[0][0] for photos_of in releases if len(photos_of) == 1}
+        # A release with one photo and one from otakaraou counts as having one (photos.only).
+        releases = [[(photos.stem(os.path.basename(p["path"])), p["preferred"], p["source"]) for p in row["photos"]] for row in rows()]
+        preferred = {n for photos_of in releases for n, chosen, _ in photos_of if chosen}
+        only = {photos_of[i][0] for photos_of in releases if (i := photos.only([s for _, _, s in photos_of])) is not None}
         state = lambda part: STATE_NAMES["hand-placed" if part["source"] == "hand-placed" else part.get("accepted")]
 
         def plastic(n):

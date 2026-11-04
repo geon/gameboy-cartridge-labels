@@ -46,6 +46,17 @@ def rank(source):
     return SOURCES.index(source) if source in SOURCES else SOURCES.index("otakaraou") - 0.5
 
 
+def only(sources):
+    """Of a release's photos' sources (fakes left out), the index of the photo that counts as its only one, or None: the
+    one there is, or of exactly two, the one not from otakaraou when the other is (otakaraou is kept only for want of
+    another). Such a release counts as having one photo, in every filter."""
+    if len(sources) == 1:
+        return 0
+    if len(sources) == 2 and sources.count("otakaraou") == 1:
+        return 1 - sources.index("otakaraou")
+    return None
+
+
 def system_of(serial):
     """The folder of a serial or release id: its system's prefix (DMG-, CGB-, AGB-, LRG-, or agb-1314 for releases
     without a serial), else unknown."""

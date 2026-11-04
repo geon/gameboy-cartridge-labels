@@ -39,7 +39,9 @@ class Adjust:
                        for s in sorted(set(self.source.values()), key=photos.rank)},
             "reference": {"with a reference": {r for r in self.order if any(self.source[p] in color.REFERENCES for p in self.photos[r])},
                           "without": {r for r in self.order if not any(self.source[p] in color.REFERENCES for p in self.photos[r])}},
-            "photos": {"several": {r for r in self.order if len(self.photos[r]) > 1}, "one": {r for r in self.order if len(self.photos[r]) == 1}},
+            # One photo and one from otakaraou count as one (photos.only).
+            "photos": {"several": {r for r in self.order if photos.only([self.source[p] for p in self.photos[r]]) is None},
+                       "one": {r for r in self.order if photos.only([self.source[p] for p in self.photos[r]]) is not None}},
         }
         hand = {r for r in self.order if any((color.colors_of(colors, p, self.sha1[p]) or {}).get("source") == "hand-placed" for p in self.photos[r])}
         self.facets["by hand"] = {"some": hand, "none": set(self.order) - hand}

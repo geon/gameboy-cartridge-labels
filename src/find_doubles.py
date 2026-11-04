@@ -14,7 +14,7 @@ from fit_cartridge import load
 # preferred.json: release id -> the photo's SHA-1, so a renamed photo stays preferred; an entry whose photo is no longer
 # in its release (deleted, or renamed to another serial) is dropped on the next save. The fakes (photos.FAKES) are left
 # out: never worth preferring. The preferred photo comes first.
-# The rows can be narrowed to the releases with several photos, and to those with no preferred photo (a release given
+# The rows can be narrowed to the releases with several photos (one and one from otakaraou count as one: photos.only), and to those with no preferred photo (a release given
 # one stays shown until the rows are drawn again).
 # Usage: find_doubles.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
@@ -30,8 +30,8 @@ def image(path, longest):
 
 
 def rows():
-    """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred"}]}],
-    by release, the preferred photo first, then by source."""
+    """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred"}],
+    "single": whether it counts as having one photo (photos.only)}], by release, the preferred photo first, then by source."""
     release_of = serials.releases_by_serial()
     known, preferred = fits.load(), photos.load_preferred()
     found = {}
@@ -46,6 +46,7 @@ def rows():
                               "fitted": fitted, "preferred": preferred.get(key) == entry.get("sha1")})
     for row in found.values():
         row["photos"].sort(key=lambda p: (not p["preferred"], photos.rank(p["source"]), p["path"]))
+        row["single"] = photos.only([p["source"] for p in row["photos"]]) is not None
     return [found[k] for k in sorted(found)]
 
 
@@ -93,7 +94,7 @@ const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
 let rows = [];
 function render() {
-  const shown = rows.filter(r => (!$("doubles").checked || r.photos.length > 1) && (!$("unpreferred").checked || !r.photos.some(p => p.preferred)));
+  const shown = rows.filter(r => (!$("doubles").checked || !r.single) && (!$("unpreferred").checked || !r.photos.some(p => p.preferred)));
   $("count").textContent = `${shown.length} releases, ${shown.reduce((n, r) => n + r.photos.length, 0)} photos`;
   $("rows").innerHTML = shown.map(r => `<div class="row" data-release="${esc(r.release)}"><div class="release"><b>${esc(r.release)}</b><span>${esc(r.title)}</span></div><div class="photos">` +
     r.photos.map(p => `<figure data-path="${esc(p.path)}"${p.preferred ? ' class="preferred"' : ""}>${p.fitted ? `<span class="check ${p.fitted}" title="${p.fitted} fitted">✓</span>` : ""}` +
@@ -108,8 +109,7 @@ $("rows").onclick = async e => {
   if (action !== "delete" || !confirm(`Delete ${path} from photos/?`)) return;
   const response = await fetch("/delete", {method: "POST", body: JSON.stringify({path})});
   if (!response.ok) return alert("Not deleted: " + await response.text());
-  for (const r of rows) r.photos = r.photos.filter(p => p.path !== path);
-  rows = rows.filter(r => r.photos.length);
+  rows = await (await fetch("/rows")).json();  // afresh: a deletion can make a release count as having one photo
   render();
 };
 async function prefer(path) {
