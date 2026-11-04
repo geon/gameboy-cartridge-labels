@@ -711,6 +711,11 @@
   "sha1": "27c894c471d6108c77f20e2aeda89e64487f1370",
   "original_name": "IMG_7520.HEIC"
  },
+ "DMG-PGJ_2.heic": {
+  "serial_on_label": "DMG-RGJ",
+  "sha1": "693fbea459c6eee033edaf2781c197b9d5ef0a72",
+  "original_name": "IMG_7476.HEIC"
+ },
  "DMG-PHJ.heic": {
   "serial_on_label": "DMG-PHJ",
   "sha1": "bbcc3fc3b9bd8570a743f27fd6fc3363d93e9787",
@@ -778,11 +783,6 @@
   "serial_on_label": "DMG-R4J",
   "sha1": "8466b0f0f1e6473c47b3cf248a1b850a0e4621ec",
   "original_name": "IMG_7462.HEIC"
- },
- "DMG-RGJ.heic": {
-  "serial_on_label": "DMG-RGJ",
-  "sha1": "693fbea459c6eee033edaf2781c197b9d5ef0a72",
-  "original_name": "IMG_7476.HEIC"
  },
  "DMG-RJJ.heic": {
   "serial_on_label": "DMG-RJJ",

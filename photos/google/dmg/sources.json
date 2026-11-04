@@ -1070,6 +1070,12 @@
   "sha1": "c7a2d3b29d2eba3de6e1fdfd4f2451cac0258f32",
   "original_name": "s-l1200.png"
  },
+ "DMG-DIJ_4.jpg": {
+  "serial_on_label": "DMG-DUJ",
+  "original_sha1": "cee8928d158e9a6460d8cec52cbd331840d1605a",
+  "sha1": "2ecbf44d9aa6781b43a8b27c39b60432088be0e1",
+  "original_name": "51UeB12MBoL._AC_UF1000,1000_QL80_.jpg"
+ },
  "DMG-DL.jpg": {
   "serial_on_label": "DMG-DL-USA",
   "original_sha1": "42dbcd44da0e309c8f88977f8f7872e2723386a9",
@@ -1093,12 +1099,6 @@
   "original_sha1": "1c82bfa8a5a338f6d5b0620594ca5122dd9a38c3",
   "sha1": "32aa53ee124c434aa40766d935372dca8d54adf0",
   "original_name": "s-l1200 (16).jpg"
- },
- "DMG-DUJ_5.jpg": {
-  "serial_on_label": "DMG-DUJ",
-  "original_sha1": "cee8928d158e9a6460d8cec52cbd331840d1605a",
-  "sha1": "2ecbf44d9aa6781b43a8b27c39b60432088be0e1",
-  "original_name": "51UeB12MBoL._AC_UF1000,1000_QL80_.jpg"
  },
  "DMG-E2-USA.jpg": {
   "serial_on_label": "DMG-E2-USA",
@@ -1600,12 +1600,6 @@
   "sha1": "26bb5cf8dd2dfefd32a6b65edb74a8bb21920b38",
   "original_name": "$_32.jpeg"
  },
- "DMG-UGJ.jpg": {
-  "serial_on_label": "DMG-UGJ",
-  "original_sha1": "4e6cf6de02621358c6d5ec535c66725fb9c1e434",
-  "sha1": "d7a10adb0e26cdc7cf4c23783ecb4bfb0de2ca3a",
-  "original_name": "2922723577.jpg"
- },
  "DMG-UOJ_2.jpg": {
   "original_name": "m85023444632_9.jpg",
   "serial_on_label": "DMG-UOJ",
@@ -1617,6 +1611,12 @@
   "original_sha1": "9f98a8f6afd90579b44a388d4956cd3e8c191d56",
   "sha1": "4310790f6153a929261fa575a911d35ddfd5a8b6",
   "original_name": "0910114515_66dfb2bb628c1.jpg"
+ },
+ "DMG-UQJ_3.jpg": {
+  "serial_on_label": "DMG-UGJ",
+  "original_sha1": "4e6cf6de02621358c6d5ec535c66725fb9c1e434",
+  "sha1": "d7a10adb0e26cdc7cf4c23783ecb4bfb0de2ca3a",
+  "original_name": "2922723577.jpg"
  },
  "DMG-VGA.webp": {
   "original_name": "vattle-giuce-gb-used-loose-en.webp",

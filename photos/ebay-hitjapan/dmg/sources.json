@@ -1222,6 +1222,11 @@
   "sha1": "fe0c9dbfd38121a8b68c8d7aeb1be9444f97a5d2",
   "original_name": "s-l1600 (23).webp"
  },
+ "DMG-H1J_3.jpg": {
+  "original_sha1": "534fb499633a74ab6f0deae8150eba189d1a1596",
+  "sha1": "97ac7a136e7d5cdcf582a1705e4ea1e066aac72c",
+  "original_name": "s-l1600 - 2026-10-24T145238.342.webp"
+ },
  "DMG-HDJ_2.jpg": {
   "serial_on_label": "DMG-HDJ",
   "original_sha1": "43df3ac135c3916cbb5759596e24c23bd30920b9",
@@ -1239,11 +1244,6 @@
   "original_sha1": "6fb1e9896bfa4351357d7dd7785b466fa2da90c8",
   "sha1": "90ac0a5b68595fc22d482a7fa18244884aca3df8",
   "original_name": "s-l1600 - 2026-10-24T145058.974.webp"
- },
- "DMG-HIJ.jpg": {
-  "original_sha1": "534fb499633a74ab6f0deae8150eba189d1a1596",
-  "sha1": "97ac7a136e7d5cdcf582a1705e4ea1e066aac72c",
-  "original_name": "s-l1600 - 2026-10-24T145238.342.webp"
  },
  "DMG-HLA_5.jpg": {
   "serial_on_label": "DMG-HLA",

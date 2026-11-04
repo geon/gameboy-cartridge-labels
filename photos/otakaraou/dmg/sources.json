@@ -222,6 +222,15 @@
   "sha1": "fae531439df907eede8bb4d8226b61807b200458",
   "original_name": "otakaraou-7812.jpg"
  },
+ "DMG-ADBJ-JPN_4.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20231111_60ef73.jpg",
+  "page_url": "https://www.otakaraou.com/product/8063",
+  "title_on_page": "ドラゴンボールZ 悟空飛翔伝 ゲームボーイソフト",
+  "serial_on_label": "DMG-ADRJ-JPN",
+  "original_sha1": "6b44f7c2b0e7ef3dc8f80bfd0ddc2773672b6d4c",
+  "sha1": "879b576bbefde1c2b89a02a3e67cda65c2a9002c",
+  "original_name": "otakaraou-8063.jpg"
+ },
  "DMG-ADPJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240207_46611c.jpg",
   "page_url": "https://www.otakaraou.com/product/8055",
@@ -239,15 +248,6 @@
   "original_sha1": "7503b2abbff6a0d4cdb5e07796eef6b0a3220d89",
   "sha1": "5b9a4479ef1cc89cc6ce9d02794598ec6b05e839",
   "original_name": "otakaraou-8054.jpg"
- },
- "DMG-ADRJ-JPN_2.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20231111_60ef73.jpg",
-  "page_url": "https://www.otakaraou.com/product/8063",
-  "title_on_page": "ドラゴンボールZ 悟空飛翔伝 ゲームボーイソフト",
-  "serial_on_label": "DMG-ADRJ-JPN",
-  "original_sha1": "6b44f7c2b0e7ef3dc8f80bfd0ddc2773672b6d4c",
-  "sha1": "879b576bbefde1c2b89a02a3e67cda65c2a9002c",
-  "original_name": "otakaraou-8063.jpg"
  },
  "DMG-AE2J-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/pa1cmIMG_2181.jpg",
@@ -834,7 +834,7 @@
   "sha1": "81c9b362d5193bf89744c4b780b3bd28abddb814",
   "original_name": "otakaraou-8451.jpg"
  },
- "DMG-AOUJ-JPN.jpg": {
+ "DMG-AOYJ-JPN_2.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/878.jpg",
   "page_url": "https://www.otakaraou.com/product/8501",
   "title_on_page": "コラムスGB 手塚治虫キャラクターズ ゲームボーイカラーソフト",
@@ -1655,6 +1655,14 @@
   "sha1": "727750c363f60943e804a1c042b0b47ec4619165",
   "original_name": "otakaraou-8748.jpg"
  },
+ "DMG-BMKJ-JPN_5.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_7030.jpg",
+  "page_url": "https://www.otakaraou.com/product/8547",
+  "title_on_page": "シルバニアメロディー  森のなかまと踊りましょ! ゲームボーイカラーソフト",
+  "original_sha1": "164bcb13c1b586ba6fa8a6cf7cc0c5593540de2f",
+  "sha1": "0d062eb3c9be6739ab911a85aa3fc46637f558ad",
+  "original_name": "otakaraou-8547.jpg"
+ },
  "DMG-BMNJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240322_7089c5.jpg",
   "page_url": "https://www.otakaraou.com/product/8453",
@@ -1758,7 +1766,7 @@
   "sha1": "c8b73b91397b95ffdec71cc628fec2f7e08d7095",
   "original_name": "otakaraou-8574.jpg"
  },
- "DMG-BW.jpg": {
+ "DMG-BVJ_2.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/542.jpg",
   "page_url": "https://www.otakaraou.com/product/8165",
   "title_on_page": "バトルトード ゲームボーイソフト",
@@ -1828,14 +1836,6 @@
   "original_sha1": "f16ab6d3ab4cff4fa12870d3b1264436713c3902",
   "sha1": "7583f184ad6a7939eba3517b5923bb772a93461f",
   "original_name": "otakaraou-7986.jpg"
- },
- "DMG-DMKJ-JPN.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_7030.jpg",
-  "page_url": "https://www.otakaraou.com/product/8547",
-  "title_on_page": "シルバニアメロディー  森のなかまと踊りましょ! ゲームボーイカラーソフト",
-  "original_sha1": "164bcb13c1b586ba6fa8a6cf7cc0c5593540de2f",
-  "sha1": "0d062eb3c9be6739ab911a85aa3fc46637f558ad",
-  "original_name": "otakaraou-8547.jpg"
  },
  "DMG-F1A_3.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240207_badabd.jpg",
@@ -2155,7 +2155,7 @@
   "sha1": "8fc950c2a7fbcdc3dcc0cbc7f897d8d2db930504",
   "original_name": "otakaraou-8017.jpg"
  },
- "DMG-NY.jpg": {
+ "DMG-NYJ_4.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240510_e137eb.jpg",
   "page_url": "https://www.otakaraou.com/product/8111",
   "title_on_page": "信長の野望 ゲームボーイ版 ゲームボーイソフト",
@@ -2270,7 +2270,7 @@
   "sha1": "d911ddc9032a3ce3ae1a77f4b4ab1466b0f650c2",
   "original_name": "otakaraou-7866.jpg"
  },
- "DMG-RL.jpg": {
+ "DMG-RLJ_2.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/733.jpg",
   "page_url": "https://www.otakaraou.com/product/8356",
   "title_on_page": "妖精物語 ロッド・ランド ゲームボーイソフト",

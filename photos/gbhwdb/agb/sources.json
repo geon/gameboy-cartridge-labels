@@ -49,12 +49,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-A7HJ-0/hdr-1_01_front.jpg",
   "sha1": "165a606bf05b98963e4f5cfabc41bdfaf20b31ce"
  },
- "AGB-A7KE.jpg": {
+ "AGB-A7KE-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-A7KE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-A7KE-0/echelonprime-1_01_front.jpg",
   "sha1": "4e13bc8cd67318ab2d719a239b52e905dde5a626"
  },
- "AGB-A7KP.jpg": {
+ "AGB-A7KP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-A7KP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-A7KP-0/3615retro-1_01_front.jpg",
   "sha1": "2b7fd2a5496c398ab0d89ba161408f21fdceba44"
@@ -564,7 +564,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXIP-0/ikk5-1_01_front.jpg",
   "sha1": "a4450ad194903561502092158b508c9499e5f34f"
  },
- "AGB-AXPE.jpg": {
+ "AGB-AXPE-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-AXPE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXPE-0/fexcollects-1_01_front.jpg",
   "sha1": "f17fd2a907b2a8275377e9857b72328db133156e"
@@ -584,7 +584,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXPJ-0/fexcollects-1_01_front.jpg",
   "sha1": "213709785b04b726b6208784abfaa1bafd75c162"
  },
- "AGB-AXPS.jpg": {
+ "AGB-AXPS-ESP.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-AXPS-1/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXPS-1/fexcollects-1_01_front.jpg",
   "sha1": "4995ea01139fccdd4861f9439d4e8e17f207fb26"
@@ -599,7 +599,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXSP-0/ikk5-1_01_front.jpg",
   "sha1": "50b6bf6002c12b2a2446cbd5ac1cb761a8879dc4"
  },
- "AGB-AXVE.jpg": {
+ "AGB-AXVE-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-AXVE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXVE-0/fexcollects-1_01_front.jpg",
   "sha1": "2cd5a91a1162dce909d8324ba9438cd5cbdcc55b"
@@ -619,7 +619,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXVJ-0/fexcollects-1_01_front.jpg",
   "sha1": "d2ab19bc693663fee4a2cccdd5667411a4f18d0c"
  },
- "AGB-AXVS.jpg": {
+ "AGB-AXVS-ESP.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-AXVS-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-AXVS-0/fexcollects-1_01_front.jpg",
   "sha1": "b0087d57608d1c0b54999f3347f70ed53d81ee46"
@@ -1414,12 +1414,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-BSIP-0/ikk5-1_01_front.jpg",
   "sha1": "d4ebbb86c8fb0f5b53723d74304b6a72b6ab566c"
  },
- "AGB-BSPI.jpg": {
+ "AGB-BSPI-ITA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-BSPI-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-BSPI-0/granmastro-1_01_front.jpg",
   "sha1": "d3db06adf630f3de0c9e8cafd4e5750da7b2fd2c"
  },
- "AGB-BSPP.jpg": {
+ "AGB-BSPP-UKV.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/AGB-BSPP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/AGB-BSPP-0/ikk5-1_01_front.jpg",
   "sha1": "93e70bc139405e4d4ef6a764e66b8913ee7411e8"

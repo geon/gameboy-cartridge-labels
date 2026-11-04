@@ -318,13 +318,6 @@
   "note": "automatic: query 'おじゃる丸 ～月夜が池のたからもの～ ゲームボーイ', first photo of the listing",
   "sha1": "df3ef26c9546a9b3f8e7f66398ddb50fb500343e"
  },
- "DMG-BORJ-JPN_3.jpg": {
-  "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0103/user/af698f92d336464798f0afe21a695d3b2b9608946381f1615fb3145fe9d5bc76/i-img1200x1200-17418273005025iflvus45033.jpg",
-  "page_url": "https://www.jauce.com/auction/s1176814087",
-  "title_on_page": "●即決　GB　おじゃる丸 ～月夜が池のたからもの～　F-1スピリット　レターパックライトFC8本までGB30本までGBA30本以上同梱可能●",
-  "note": "automatic: query 'おじゃる丸 ～月夜が池のたからもの～ ゲームボーイ', first photo of the listing",
-  "sha1": "31355bf4ba9230909df95bc1b9014ecaab88d016"
- },
  "DMG-BORJ.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0502/users/742b0ffea5bc1d72a55e1464eaed2401e5420e09/i-img1200x675-1707847841yjvt8u8.jpg",
   "page_url": "https://www.jauce.com/auction/n1124880008",
@@ -412,6 +405,13 @@
   "serial_on_label": "DMG-FQJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "b0be187f066a651ac6d6ff03671453b03b006934"
+ },
+ "DMG-FZJ_3.jpg": {
+  "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0103/user/af698f92d336464798f0afe21a695d3b2b9608946381f1615fb3145fe9d5bc76/i-img1200x1200-17418273005025iflvus45033.jpg",
+  "page_url": "https://www.jauce.com/auction/s1176814087",
+  "title_on_page": "●即決　GB　おじゃる丸 ～月夜が池のたからもの～　F-1スピリット　レターパックライトFC8本までGB30本までGBA30本以上同梱可能●",
+  "note": "automatic: query 'おじゃる丸 ～月夜が池のたからもの～ ゲームボーイ', first photo of the listing",
+  "sha1": "31355bf4ba9230909df95bc1b9014ecaab88d016"
  },
  "DMG-G3J_2.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0208/user/17ace05dc806d3acec46fc1b3d7717c650f9f239c99a0a6c87c8b7c10c0060b0/i-img1200x1200-17858473015902wyyyih81378.jpg",
@@ -510,25 +510,25 @@
   "note": "automatic: query '三國志・ゲームボーイ版 ゲームボーイ', first photo of the listing",
   "sha1": "60b57b10fedd81355e8445eba78c2732224177cd"
  },
- "DMG-JAJ.jpg": {
-  "original_name": "i-img1200x900-1776210543720094f0dcrh8.jpg",
-  "serial_on_label": "DMG-JAJ",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "4a28b0fd855e66793f51b6f62b4125c98e63860a"
- },
- "DMG-JFJ_2.jpg": {
+ "DMG-J4J_2.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0508/user/291672dedaf984e72b69b146db3cf10009303c0dc171fb97ab77baddabd9bb41/i-img1200x1200-1723269233925774q47b70945.jpg",
   "page_url": "https://www.jauce.com/auction/p1148211904",
   "title_on_page": "◆◆ GB 雀四郎2 箱説無し　◆◆ ゲームボーイ ソフトのみ",
   "note": "automatic: query '雀四郎 ゲームボーイ', first photo of the listing",
   "sha1": "f57c7c9446dcd8081a96942987d32c6698449059"
  },
- "DMG-JFJ_3.jpg": {
+ "DMG-J4J_3.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0205/user/7b7a3101e10c353297402696c143fdf160ae5103a8355b09b066e17db4c32adb/i-img600x450-17795269999913z4kxjz35.jpg",
   "page_url": "https://www.jauce.com/auction/k1230935760",
   "title_on_page": "■■ 即決!! GB 雀四郎2 JANSHIRO Ⅱ／ゲームボーイ GAME BOY■■",
   "note": "automatic: query '雀四郎 ゲームボーイ', first photo of the listing",
   "sha1": "ce5cda5b1d8a9fe2b8a160bbb421e67b72ef22e0"
+ },
+ "DMG-JAJ.jpg": {
+  "original_name": "i-img1200x900-1776210543720094f0dcrh8.jpg",
+  "serial_on_label": "DMG-JAJ",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "4a28b0fd855e66793f51b6f62b4125c98e63860a"
  },
  "DMG-KBJ.jpg": {
   "original_name": "i-img756x825-17796035012521fmo0gc42419.jpg",

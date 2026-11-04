@@ -2277,6 +2277,14 @@
   "sha1": "9d7eb2e6ec4fcb288edc4caac60ede667d815f15",
   "original_name": "otakaraou-8956.jpg"
  },
+ "AGB-AZ9J-JPN_2.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230508_e0dd6f.jpg",
+  "page_url": "https://www.otakaraou.com/product/15514",
+  "title_on_page": "SIMPLE2960 ともだちシリーズVol.2 THEブロックくずし ゲームボーイアドバンスソフト",
+  "original_sha1": "69b46f4121965384c6cd3acab245115c40ad213c",
+  "sha1": "88a224446579bdcc9c52ad92c63166e74b0fa8a1",
+  "original_name": "otakaraou-15514.jpg"
+ },
  "AGB-AZAJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/1250.jpg",
   "page_url": "https://www.otakaraou.com/product/8873",
@@ -2312,14 +2320,6 @@
   "original_sha1": "afb0fb47c3de81afaeb6c567cda40fee39e43343",
   "sha1": "234285a6f334d8682b1f8e0b46cfdf75e2c797cb",
   "original_name": "otakaraou-8868.jpg"
- },
- "AGB-AZKJ-JPN.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230508_e0dd6f.jpg",
-  "page_url": "https://www.otakaraou.com/product/15514",
-  "title_on_page": "SIMPLE2960 ともだちシリーズVol.2 THEブロックくずし ゲームボーイアドバンスソフト",
-  "original_sha1": "69b46f4121965384c6cd3acab245115c40ad213c",
-  "sha1": "88a224446579bdcc9c52ad92c63166e74b0fa8a1",
-  "original_name": "otakaraou-15514.jpg"
  },
  "AGB-AZLJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230909_7d72b2.jpg",
@@ -2470,6 +2470,15 @@
   "original_sha1": "7d6eb228800a2ae80ae930369112fd50f5d27740",
   "sha1": "f0a924f03050c51339f835d5c8d3c27110904499",
   "original_name": "otakaraou-8973.jpg"
+ },
+ "AGB-B43J-JPN.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20250224_5be9d7.jpg",
+  "page_url": "https://www.otakaraou.com/product/9091",
+  "title_on_page": "シナモロール ここにいるよ ゲームボーイアドバンスソフト",
+  "serial_on_label": "AGB-848J-JPN",
+  "original_sha1": "489ed42593b9f915605de4cd099e8c121bd1200c",
+  "sha1": "7f5dbb6ce79f432139e338abd34367c403582ae2",
+  "original_name": "otakaraou-9091.jpg"
  },
  "AGB-B43J.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_1934.jpg",
@@ -3147,6 +3156,15 @@
   "sha1": "38c5879852133b73c4f2e1784e7778bb57303465",
   "original_name": "otakaraou-14566.jpg"
  },
+ "AGB-BIKJ-JPN.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230527_b170df.jpg",
+  "page_url": "https://www.otakaraou.com/product/15517",
+  "title_on_page": "お茶犬くるりん ゲームボーイアドバンスソフト",
+  "serial_on_label": "AGB-BIRK",
+  "original_sha1": "157c06f6352071f3dcf74c3f48ada2a26df27547",
+  "sha1": "dd158ee2f9df6cc7665cc6d5f38628725e95f3c8",
+  "original_name": "otakaraou-15517.jpg"
+ },
  "AGB-BIPJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20260203_1d9cbc.jpeg",
   "page_url": "https://www.otakaraou.com/product/9658",
@@ -3155,15 +3173,6 @@
   "original_sha1": "6474d03f92e21e7c96b3f87a41d9535428a6a460",
   "sha1": "7891728afbb8a726819aa21d6615f0bb518407c6",
   "original_name": "otakaraou-9658.jpg"
- },
- "AGB-BIRK.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230527_b170df.jpg",
-  "page_url": "https://www.otakaraou.com/product/15517",
-  "title_on_page": "お茶犬くるりん ゲームボーイアドバンスソフト",
-  "serial_on_label": "AGB-BIRK",
-  "original_sha1": "157c06f6352071f3dcf74c3f48ada2a26df27547",
-  "sha1": "dd158ee2f9df6cc7665cc6d5f38628725e95f3c8",
-  "original_name": "otakaraou-15517.jpg"
  },
  "AGB-BISJ.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240904_6b6a8c.jpg",
@@ -3696,15 +3705,6 @@
   "original_sha1": "45185aef02bebf4d2809f607343cb05b19ea6659",
   "sha1": "a6e8a66e3494f7699157f601726840b6912fa32e",
   "original_name": "otakaraou-9485.jpg"
- },
- "AGB-BPSJ.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20250224_5be9d7.jpg",
-  "page_url": "https://www.otakaraou.com/product/9091",
-  "title_on_page": "シナモロール ここにいるよ ゲームボーイアドバンスソフト",
-  "serial_on_label": "AGB-848J-JPN",
-  "original_sha1": "489ed42593b9f915605de4cd099e8c121bd1200c",
-  "sha1": "7f5dbb6ce79f432139e338abd34367c403582ae2",
-  "original_name": "otakaraou-9091.jpg"
  },
  "AGB-BQAJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/img_79370003.jpg",
