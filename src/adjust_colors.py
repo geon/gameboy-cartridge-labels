@@ -8,7 +8,7 @@ from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: black, white,
 # midtones, temperature, tint), release by release, its photos' labels side by side, so that they can be made to match; the
-# reference sources' (color.REFERENCES: lit alike, what the others are matched to) outlined, the release's preferred
+# reference sources' (color.REFERENCES: lit alike, what the others are matched to) with a blue border, the release's preferred
 # photo (preferred.json, chosen in find-doubles: the one render-labels uses if its label is good) first, with a check
 # mark, the others by their source's rank. Each label is shown as
 # render-labels makes it (its image from make fit-colors, with its settings applied as color.adjusted does), and
@@ -83,8 +83,8 @@ header{position:sticky;top:0;background:#fff;padding:8px 16px;border-bottom:1px 
 main{padding:12px 16px;display:flex;flex-direction:column;gap:16px}
 .release h2{font-size:14px;margin:0 0 6px}
 .row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px}
-section{background:#fff;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:4px;flex:none;width:400px}
-section.reference{outline:2px solid #07a}
+section{background:#fff;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:4px;flex:none;width:422px;box-sizing:border-box;border:3px solid transparent}
+section.reference{border-color:#07a}
 .top{display:flex;gap:6px;align-items:center}
 h3{flex:1;font-size:13px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .preferred{flex:none;color:#07a;font-weight:bold}
@@ -98,7 +98,7 @@ button{font:inherit;padding:4px 10px;border:none;border-radius:0.3em}
 <header>
 <span id="filters"></span><span id="count"></span>
 <button id="prev">← prev</button><span id="position"></span><button id="next">next →</button>
-<span style="color:#555">Blue outline: a reference source. <span class="preferred">✓</span> the release's preferred photo.</span>
+<span style="color:#555">Blue border: a reference source. <span class="preferred">✓</span> the release's preferred photo.</span>
 </header>
 <main id="entries"></main>
 <script>
