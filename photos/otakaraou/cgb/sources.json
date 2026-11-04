@@ -523,6 +523,15 @@
   "sha1": "0245a10a869025463d5513af37a0844a831d1fce",
   "original_name": "otakaraou-8794.jpg"
  },
+ "CGB-BIOJ-JPN.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240129_52a7c7.jpg",
+  "page_url": "https://www.otakaraou.com/product/8678",
+  "title_on_page": "BIOHAZARD GAIDEN (バイオハザード外伝) ゲームボーイカラーソフト",
+  "serial_on_label": "CGB-BIOJ-JPN",
+  "original_sha1": "54eed0c73f6e871fa7f1b6deb96e9aeb88dd1d58",
+  "sha1": "b0b88a1368ebdc40ff3260d2a300a2657c870e7e",
+  "original_name": "otakaraou-8678.jpg"
+ },
  "CGB-BJFJ.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240916_90a337.jpg",
   "page_url": "https://www.otakaraou.com/product/8579",
@@ -1074,14 +1083,5 @@
   "original_sha1": "65ec80f5e4c3fbf4b3ad7eff991759881a7aceb3",
   "sha1": "b080b42b925e7ae1b6c3a26dcae741248b50a5cf",
   "original_name": "otakaraou-8671.jpg"
- },
- "cgb-0121.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240129_52a7c7.jpg",
-  "page_url": "https://www.otakaraou.com/product/8678",
-  "title_on_page": "BIOHAZARD GAIDEN (バイオハザード外伝) ゲームボーイカラーソフト",
-  "serial_on_label": "CGB-BIOJ-JPN",
-  "original_sha1": "54eed0c73f6e871fa7f1b6deb96e9aeb88dd1d58",
-  "sha1": "b0b88a1368ebdc40ff3260d2a300a2657c870e7e",
-  "original_name": "otakaraou-8678.jpg"
  }
 }

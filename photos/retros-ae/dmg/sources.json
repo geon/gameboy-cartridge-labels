@@ -69,5 +69,14 @@
   "serial_on_label": "DMG-H9J",
   "note": "named by the serial read on it (exact)",
   "sha1": "fb8ecdded33fca31d806d7f450dd55caaa2b45ce"
+ },
+ "DMG-NYJ_3.jpg": {
+  "image_url": "https://cdn.shopify.com/s/files/1/0589/9983/2785/files/20231126-131904.jpg?v=1701251331",
+  "page_url": "https://www.retros.ae/products/nobinagas-ambition",
+  "title_on_page": "Nobunaga's Ambition (Japanese Edition)",
+  "original_name": "nobinagas-ambition__20231126-131904.jpg",
+  "serial_on_label": "DMG-NYJMA",
+  "note": "named by nothing: no serial read",
+  "sha1": "c594aacc400d894faeb6d6eae0fe2f2341129882"
  }
 }

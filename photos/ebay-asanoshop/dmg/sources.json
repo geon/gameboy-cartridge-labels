@@ -1,0 +1,19 @@
+{
+ "DMG-AXOP-FAH_2.webp": {
+  "original_name": "s-l1600 (1).webp",
+  "serial_on_label": "DMG-AXOP-FAH",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "480026485ee9530a9222cc1b22a2f0d601df6571"
+ },
+ "DMG-AXOP-FAH_3.webp": {
+  "original_name": "s-l1600 (2).webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "92471f98ce9c0ef8bab6cc09112f10006ec0d2cb"
+ },
+ "DMG-BAOP.webp": {
+  "original_name": "s-l1600.webp",
+  "serial_on_label": "DMG-BAOP",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "7a6ddd2a568e12af72cd63db3a6219c9be199d32"
+ }
+}
