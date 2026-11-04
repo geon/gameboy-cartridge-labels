@@ -12,8 +12,8 @@ from fit_cartridge import load
 # the label's model (the shell's label: cartridge.LABEL, CGB_LABEL) to the photo's pixels; what this step found on the
 # way (the shift in mm, the turn in degrees, the width in mm, the plastic it was fitted on) goes into
 # generated/fit-label/<photo>.json. A label accepted or placed by hand isn't fitted; one judged almost is, and a
-# different fit takes its place (the almost one goes to the rejected fits); a fit equal to a rejected one, or sticking
-# out of the recess, isn't made current. A photo is fitted again when its file is missing, older than this step's code,
+# different fit takes its place (the almost one goes to the rejected fits); a fit equal to a rejected one isn't made current.
+# The label is kept inside the recess as it's fitted (CONTAIN). A photo is fitted again when its file is missing, older than this step's code,
 # made on another plastic fit, or from another photo under the same name (the file has the SHA-1 of the photo it was
 # made from). Files of photos without a good plastic fit are removed.
 # Usage: fit_label.py
@@ -24,6 +24,11 @@ OUT = "generated/fit-label"
 WIDTHS = {"dmg": (41.6, 42.7), "cgb": (41.3, 41.8)}
 MAX_SHIFT = 1.5
 MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 41.45}
+# The label kept inside the recess while it's fitted (its shift held within the room the recess leaves it), rather than
+# fitted freely and rejected when it sticks out: no label placed by hand sticks out (641, 2026-11-04). Against the 285
+# labels placed by hand on real photos, within 0.5 / 1 mm: DMG 159 / 200 -> 161 / 204, CGB 55 / 64 -> 57 / 70; of the
+# 10 the free fit rejected, about 9 then lie within 1 mm (4 within 0.5); the 166 it rejected all get a label.
+CONTAIN = True
 MAX_ANGLE = 2.0
 
 
@@ -128,10 +133,14 @@ def fit_label(fitter, H, shell, widths=None, bands=(1.5, 1.0, 0.7, 0.5, 0.4, 0.4
             dy = float(np.clip(dy + s * delta[0] + c * delta[1], -MAX_SHIFT, MAX_SHIFT))
             angle = float(np.clip(angle + delta[2], -np.radians(MAX_ANGLE), np.radians(MAX_ANGLE)))
             width = float(np.clip(width * (1 + delta[3]), *widths))
+            if CONTAIN:
+                extent = np.abs([[np.cos(angle), np.sin(angle)], [np.sin(angle), np.cos(angle)]]) @ [width, label[3] - label[1]]
+                half = np.maximum(0.0, (np.array(recess[2:]) - recess[:2] - extent) / 2)
+                dx, dy = float(np.clip(dx, -half[0], half[0])), float(np.clip(dy, -half[1], half[1]))
     # The label, a rectangle, must lie within the recess, another: its turned extent, shifted, inside the recess's.
     extent = np.abs([[np.cos(angle), np.sin(angle)], [np.sin(angle), np.cos(angle)]]) @ [width, label[3] - label[1]]
     room = np.array(recess[2:]) - recess[:2] - extent
-    protrudes = bool(np.any(np.abs([dx, dy]) > room / 2))
+    protrudes = bool(np.any(np.abs([dx, dy]) > room / 2 + 1e-9))
     return (dx, dy, float(np.degrees(angle)), width, protrudes), H @ label_pose(dx, dy, angle, width, label)
 
 
