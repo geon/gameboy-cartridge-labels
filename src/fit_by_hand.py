@@ -17,7 +17,7 @@ from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bev
 # (else its latest rejected one on that plastic, else the model's). The handles (green squares) sit on the recess's
 # corners and are dragged onto the photo's (the photo shown as it is, or straightened: STRAIGHT); the dots in the middle of its sides slide one side through the perspective. Once "Label placed" is
 # ticked, the label (cyan) shows: a rectangle in the recess, moving with it: its corners turn it about its center, the
-# dots in its sides move one side, the cross moves it. A magnifier shows 6 mm around the handle held. Saving makes the
+# dots in its sides move one side. A magnifier shows 6 mm around the handle held. Saving makes the
 # placement the photo's current fit, placed by hand (the steps keep it), with the label once it's placed (else the
 # current label stays if the plastic wasn't moved, or fit-label fits one); an almost fit it replaces goes to the
 # rejected ones. Saved again in the same run, a photo's placement replaces the one saved before. "Save for refit" saves
@@ -279,7 +279,7 @@ button#save{background:#070;color:#fff}button#refit{background:#06c;color:#fff}
 <h2 id="title"></h2><button id="reset">Reset (R)</button><label><input type="checkbox" id="labelplaced"> Label placed (L)</label><label><input type="checkbox" id="straighten"> Straightened (P)</label>
 <button id="save">Save as great (S)</button><button id="refit">Save for refit (F)</button><span id="status"></span>
 <p id="notes"></p>
-<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side, the cross moves it. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo; F: save the plastic as a rough fit for make fit-cartridge to fit from, and go to the next.</p>
+<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo; F: save the plastic as a rough fit for make fit-cartridge to fit from, and go to the next.</p>
 </header><div id="stage"><canvas id="c"></canvas></div></div>
 <script>
 const $ = id => document.getElementById(id);
@@ -336,11 +336,11 @@ function rectFrom(q) {
 }
 const placed = () => $("labelplaced").checked;
 // Handles, in the photo's pixels: 0-3 the anchor's corners (the recess's), 4-7 the middle of its sides (top, right, bottom, left),
-// and with the label placed, 8-11 the label's corners, 12-15 the middle of its sides, 16 its center.
+// and with the label placed, 8-11 the label's corners, 12-15 the middle of its sides.
 function handles() {
   const H = toPhoto(), R = anchorMm(), L = rectCorners(rect);
   const recess = corners.concat([0, 1, 2, 3].map(k => apply(H, mid(R[k], R[(k + 1) % 4]))));
-  return placed() ? recess.concat(L.map(q => apply(H, q)), [0, 1, 2, 3].map(k => apply(H, mid(L[k], L[(k + 1) % 4]))), [apply(H, rect.c)]) : recess;
+  return placed() ? recess.concat(L.map(q => apply(H, q)), [0, 1, 2, 3].map(k => apply(H, mid(L[k], L[(k + 1) % 4])))) : recess;
 }
 // Ticks or unticks Label placed; unticked, the label's handles are gone.
 function setPlaced(on) {
@@ -355,19 +355,19 @@ function slide(k, q, start) {
   corners = start.map(p => p.slice());
   for (const j of [k, (k + 1) % 4]) corners[j] = apply(Hs, [R[j][0] + d * n[0], R[j][1] + d * n[1]]);
 }
-// Moves the label by handle h (0-8 from its first) to the photo's point q, from where it was at the start.
+// Moves the label by handle h (0-7 from its first) to the photo's point q, from where it was at the start.
 function moveLabel(h, q, s) {
   const m = apply(toMm(), q);
   rect = copy(s);
   if (h < 4) {
     const corner = rectCorners(s)[h];
     rect.a = s.a + Math.atan2(m[1] - s.c[1], m[0] - s.c[0]) - Math.atan2(corner[1] - s.c[1], corner[0] - s.c[0]);
-  } else if (h < 8) {
+  } else {
     const k = h - 4, n = rot(s.a, NORMALS[k]), L = rectCorners(s), e = mid(L[k], L[(k + 1) % 4]);
     const d = (m[0] - e[0]) * n[0] + (m[1] - e[1]) * n[1];
     if (k % 2) rect.w = s.w + d; else rect.h = s.h + d;
     rect.c = [s.c[0] + n[0] * d / 2, s.c[1] + n[1] * d / 2];
-  } else rect.c = m;
+  }
 }
 function move(h, q, startC, startR) {
   if (h < 4) corners[h] = q;
@@ -506,8 +506,7 @@ function draw() {
   handles().forEach((q, k) => {
     const [x, y] = toScreen(q);
     ctx.fillStyle = ctx.strokeStyle = k === sel ? "#ff0" : k >= 8 ? "#3cf" : "#3d3";
-    if (k === 16) { ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x + 8, y); ctx.moveTo(x, y - 8); ctx.lineTo(x, y + 8); ctx.stroke(); }
-    else if (k % 8 < 4) ctx.fillRect(x - 4, y - 4, 8, 8);
+    if (k % 8 < 4) ctx.fillRect(x - 4, y - 4, 8, 8);
     else { ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); }
   });
   loupe(handles()[sel]);
@@ -573,8 +572,8 @@ document.onkeydown = e => {
     move(sel, fromView([h[0] + d[0], h[1] + d[1]]), corners.map(q => q.slice()), copy(rect));
     draw(); e.preventDefault();
   } else if (e.key === "Tab") {
-    // Round each rectangle: a corner, the middle of the side after it, the next corner...; the label's cross last.
-    const order = [0, 4, 1, 5, 2, 6, 3, 7, 8, 12, 9, 13, 10, 14, 11, 15, 16].slice(0, handles().length), n = order.length;
+    // Round each rectangle: a corner, the middle of the side after it, the next corner...
+    const order = [0, 4, 1, 5, 2, 6, 3, 7, 8, 12, 9, 13, 10, 14, 11, 15].slice(0, handles().length), n = order.length;
     sel = order[(order.indexOf(sel) + (e.shiftKey ? n - 1 : 1)) % n]; draw(); e.preventDefault();
   }
   else if (e.key === "s" || e.key === "S") save(false);
