@@ -1,6 +1,6 @@
 # AGB shell measurements
 
-Measured by hand (2026-11-04), not yet used by any tool (the shell models are in src/cartridge.py). All sizes in mm.
+Measured by hand (2026-11-04), to be checked on fitted photos; not yet used by any tool (the shell models are in src/cartridge.py). All sizes in mm.
 
 The "shoulder" is an extra bit sticking out to the sides right at the top. The body width should be the same as the
 DMG and CGB cartridges (57).
