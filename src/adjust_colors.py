@@ -8,7 +8,9 @@ from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: black, white,
 # midtones, temperature, tint), release by release, its photos' labels side by side, so that they can be made to match; the
-# reference sources' (color.REFERENCES: lit alike, what the others are matched to) marked. Each label is shown as
+# reference sources' (color.REFERENCES: lit alike, what the others are matched to) outlined, the release's preferred
+# photo (preferred.json, chosen in find-doubles: the one render-labels uses if its label is good) first, with a check
+# mark, the others by their source's rank. Each label is shown as
 # render-labels makes it (its image from make fit-colors, with its settings applied as color.adjusted does), and
 # changes as its sliders move; let go of one, and the photo's settings are saved to colors.json as placed by hand,
 # which fit-colors keeps. "Auto" puts back the settings fit-colors would make. Releases with the most photos first.
@@ -51,8 +53,10 @@ class Adjust:
     def page(self, filters, number):
         chosen = matching(self.order, self.facets, filters)
         colors = color.load_colors()
+        preferred = photos.load_preferred()  # read afresh: find-doubles may change it meanwhile
         releases = [{"release": r, "photos": [{"name": p, "source": self.source[p], "reference": self.source[p] in color.REFERENCES,
-                                               "settings": self.settings(colors, p)} for p in self.photos[r]]}
+                                               "preferred": preferred.get(r) == self.sha1[p], "settings": self.settings(colors, p)}
+                                              for p in sorted(self.photos[r], key=lambda p: preferred.get(r) != self.sha1[p])]}
                     for r in chosen[number * PER_PAGE:(number + 1) * PER_PAGE]]
         return {"releases": releases, "pages": max(1, -(-len(chosen) // PER_PAGE)), "count": len(chosen)}
 
@@ -83,6 +87,7 @@ section{background:#fff;border-radius:6px;padding:8px;display:flex;flex-directio
 section.reference{outline:2px solid #07a}
 .top{display:flex;gap:6px;align-items:center}
 h3{flex:1;font-size:13px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preferred{flex:none;color:#07a;font-weight:bold}
 .state{width:9ch;font-size:12px;color:#555;text-align:right}.state.hand{color:#070}
 canvas{width:400px;height:348px;display:block;background:#eee}
 label.slider{display:grid;grid-template-columns:11ch 1fr 7ch;align-items:center;font-size:12px;gap:6px}
@@ -93,7 +98,7 @@ button{font:inherit;padding:4px 10px;border:none;border-radius:0.3em}
 <header>
 <span id="filters"></span><span id="count"></span>
 <button id="prev">← prev</button><span id="position"></span><button id="next">next →</button>
-<span style="color:#555">Blue outline: a reference source.</span>
+<span style="color:#555">Blue outline: a reference source. <span class="preferred">✓</span> the release's preferred photo.</span>
 </header>
 <main id="entries"></main>
 <script>
@@ -147,7 +152,7 @@ async function show() {
   $("position").textContent = `page ${page + 1} / ${pages}`;
   $("entries").innerHTML = data.releases.map(r => `<div class="release"><h2>${esc(r.release)}</h2><div class="row">` + r.photos.map(p => `
     <section data-name="${esc(p.name)}" class="${p.reference ? "reference" : ""}">
-      <div class="top"><h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="auto">Auto</button></div>
+      <div class="top">${p.preferred ? `<span class="preferred" title="the release's preferred photo">✓</span>` : ""}<h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="auto">Auto</button></div>
       <canvas width="200" height="174"></canvas>
       ${NAMES.map(n => `<label class="slider"><span>${n}</span><input type="range" name="${n}" min="${RANGES[n][0]}" max="${RANGES[n][1]}" step="${RANGES[n][2]}"><span data-value="${n}"></span></label>`).join("")}
     </section>`).join("") + "</div></div>").join("");
