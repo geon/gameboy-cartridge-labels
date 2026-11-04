@@ -10,5 +10,7 @@ save-new-images-here/*
 !save-new-images-here/README.md
 # The lock steps and tools take on fits.json (src/fits.py).
 fits.json.lock
+# The lock on colors.json (src/color.py).
+colors.json.lock
 # macOS Finder metadata.
 .DS_Store

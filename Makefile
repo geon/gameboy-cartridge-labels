@@ -16,6 +16,9 @@
 #   make fit-label
 #   Fits the label in the recess of every photo whose plastic is accepted or placed by hand, into fits.json: its pose, as a homography from the label's model to the photo's pixels, not yet reviewed; its shift, turn and width into generated/fit-label/<photo>.json; a fit sticking out of the recess is rejected; a label accepted or placed by hand is kept (src/fit_label.py).
 #
+#   make fit-colors
+#   Sets each photo's own colors (brightness, contrast, temperature, tint; src/color.py) into colors.json, for every photo but the fakes whose plastic is accepted or placed by hand: its source's settings (src/source-colors.json, from make learn-colors), and for a source whose photos aren't lit alike, its label's white paper made neutral, as bright as the reference sources' (my own, Hit-Japan's, elrocinante's); settings placed by hand are kept. Its label images, straightened, into generated/fit-colors/labels/<photo>.png (src/fit_colors.py).
+#
 #   make render-labels
 #   Renders each release's label, straightened and its colors evened out, stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
@@ -27,6 +30,12 @@
 #
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
+#
+#   make learn-colors
+#   A tool, not a step: learns each source's color settings from the labels of releases photographed both by it and by a reference source (my own, Hit-Japan's, elrocinante's), into src/source-colors.json (committed; fit-colors reads it), and prints how near each source's labels come to the references' (src/learn_colors.py).
+#
+#   make adjust-colors
+#   A tool, not a step: a local page for setting each photo's colors by hand, release by release, its photos' labels side by side, the reference sources' marked: brightness, contrast, temperature and tint sliders, saved to colors.json as placed by hand when let go; Auto puts back fit-colors' settings (src/adjust_colors.py).
 #
 #   make review-fits
 #   A tool, not a step: a local page for judging the plastic's fits by eye, each drawn on its photo, flagged ones first; your verdicts are saved to fits.json (src/review_fits.py).
@@ -50,7 +59,7 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors learn-colors adjust-colors render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -79,6 +88,12 @@ fit-label:
 clean-fit-label:
 	rm -rf generated/fit-label
 
+fit-colors:
+	$(PYTHON) src/fit_colors.py
+
+clean-fit-colors:
+	rm -rf generated/fit-colors
+
 render-labels:
 	$(PYTHON) src/render.py labels
 
@@ -96,6 +111,12 @@ label-page:
 
 learn-choice:
 	$(PYTHON) src/learn_choice.py
+
+learn-colors:
+	$(PYTHON) src/learn_colors.py
+
+adjust-colors:
+	$(PYTHON) src/adjust_colors.py
 
 review-fits:
 	$(PYTHON) src/review_fits.py

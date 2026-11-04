@@ -14,6 +14,8 @@ Run `make setup` once: it creates the Python environment, `.venv/`, with the pac
   saying where each photo came from. A photo is named by the serial printed on its label; to correct one, rename it.
 - `special-shells.tsv`: the cartridges whose shell isn't the usual one (rumble, tilt sensor, infrared…), left out of the
   fitting. Edited by hand.
+- `colors.json`: each photo's own color settings (brightness, contrast, temperature, tint), made by `make fit-colors`,
+  or set by hand in `make adjust-colors`; `src/source-colors.json`: each source's, learned by `make learn-colors`.
 - `src/`: the scripts.
 - `reviews/fits.json`: my verdicts on the fits (`make review-fits`), each with the fit it judged.
 - `generated/`: everything made from the photos (not committed).

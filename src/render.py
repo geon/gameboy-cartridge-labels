@@ -2,12 +2,13 @@ import concurrent.futures, hashlib, io, json, os, re, sys, cv2, numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import fits, photos, serials
+import color, fits, photos, serials
 from cartridge import SHELLS, project, shell_of
 from fit_cartridge import load
 
 # render-labels and render-carts: one image per release, straightened (perspective removed through its fits) and with
-# its colors evened out (src/color.py, as the steps read photos), as AVIF:
+# its colors evened out (src/color.py, as the steps read photos) and then set by its own settings (colors.json, make
+# fit-colors, make adjust-colors), as AVIF:
 #   labels: generated/render-labels/<release>.avif, the label alone, stretched to its shell's canonical label
 #     size at LABEL_PX_PER_MM (the labels' size varies a few tenths of a mm: their fits' model corners are mapped to the
 #     image's corners);
@@ -17,7 +18,7 @@ from fit_cartridge import load
 # for labels, the plastic for carts) is accepted or placed by hand, else the best one by source (photos.SOURCES) whose
 # fit is; the fakes (photos.FAKES) never. A release with no such photo gets no image. So a release's label and cart
 # come from different photos while its preferred photo's label isn't accepted. Each step's made.json records what each image was made from (the photo's
-# SHA-1, the fits, this code's version); an image is made again when any of it changes, and those of releases no
+# SHA-1, the fits, its color settings, this code's version); an image is made again when any of it changes, and those of releases no
 # longer rendered are removed.
 # Usage: render.py labels|carts
 # The labels' scale: 4.7 px per mm, the same for both shells, so that their images keep the labels' sizes to each other.
@@ -48,7 +49,7 @@ CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(_
 def chosen(kind):
     """Each release's photo to render for kind (labels or carts): release id -> (stem, path, sha1, shell name, plastic and
     label homographies; the label None for carts)."""
-    release_of, known, preferred = serials.releases_by_serial(), fits.load(), photos.load_preferred()
+    release_of, known, preferred, colors = serials.releases_by_serial(), fits.load(), photos.load_preferred(), color.load_colors()
     candidates = {}
     for source, system, name, entry in photos.all_sources():
         if source in photos.FAKES:
@@ -61,8 +62,15 @@ def chosen(kind):
         release = serials.release_key(name, release_of)[0]
         candidates.setdefault(release, []).append((preferred.get(release) != sha1, photos.rank(source), name, stem,
                                                    os.path.join(photos.ROOT, source, system, name), sha1, shell_of(serial).name,
-                                                   fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind == "labels" else None))
+                                                   fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind == "labels" else None,
+                                                   settings_of(colors, stem, sha1)))
     return {release: min(c)[3:] for release, c in candidates.items()}
+
+
+def settings_of(colors, stem, sha1):
+    """A photo's color settings (without their source), or None."""
+    found = color.colors_of(colors, stem, sha1)
+    return {k: found[k] for k in color.SETTINGS} if found else None
 
 
 def frame(H, box, size, supersample):
@@ -103,8 +111,8 @@ def cart_image(photo, shell, plastic_H):
     return rendered(photo, frame(plastic_H, box, size, SUPERSAMPLE["carts"]), size, SUPERSAMPLE["carts"], alpha=True)
 
 
-def render(kind, release, path, shell, plastic_H, label_H, out):
-    photo = load(path)
+def render(kind, release, path, shell, plastic_H, label_H, settings, out):
+    photo = color.adjusted(load(path), settings)
     image = label_image(photo, shell, label_H) if kind == "labels" else cart_image(photo, shell, plastic_H)
     data = io.BytesIO()
     Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA if image.shape[2] == 4 else cv2.COLOR_BGR2RGB)).save(
@@ -124,8 +132,8 @@ def main(kind):
     made_path = os.path.join(folder, "made.json")
     made = json.load(open(made_path)) if os.path.exists(made_path) else {}
     photo_of = chosen(kind)
-    want = {release: {"photo": stem, "sha1": sha1, "shell": shell, "pose": plastic_H if kind == "carts" else label_H, "code": CODE}
-            for release, (stem, path, sha1, shell, plastic_H, label_H) in photo_of.items()}
+    want = {release: {"photo": stem, "sha1": sha1, "shell": shell, "pose": plastic_H if kind == "carts" else label_H, "colors": settings, "code": CODE}
+            for release, (stem, path, sha1, shell, plastic_H, label_H, settings) in photo_of.items()}
     for release in set(made) - set(want):
         if os.path.exists(os.path.join(folder, file_of(release))):
             os.remove(os.path.join(folder, file_of(release)))
