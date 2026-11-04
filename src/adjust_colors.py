@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color, photos, serials
-from fit_colors import LABELS, auto, candidates
+from fit_colors import LABELS, WHITES, auto, candidates
 from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: brightness, contrast,
@@ -64,7 +64,10 @@ class Adjust:
 
     def auto(self, stem):
         label = cv2.imread(os.path.join(LABELS, stem + ".png"))
-        return self.save(stem, auto(self.source[stem], color.paper(label)), "auto-generated")
+        white = json.load(open(WHITES)).get(stem, {}).get("white") if os.path.exists(WHITES) else None
+        if self.source[stem] in color.BORDERS and white is None:
+            raise ValueError("its background's white isn't measured yet: run make fit-colors")
+        return self.save(stem, auto(self.source[stem], color.paper(label), white), "auto-generated")
 
 
 PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adjust colors</title>
@@ -230,7 +233,10 @@ class Handler(BaseHTTPRequestHandler):
         if data.get("name") not in adjust.source:
             return self.send_error(400)
         if self.path == "/auto":
-            return self.send(adjust.auto(data["name"]))
+            try:
+                return self.send(adjust.auto(data["name"]))
+            except ValueError as e:
+                return self.send_error(409, str(e))
         settings = data.get("settings", {})
         if any(not isinstance(settings.get(k), (int, float)) or not RANGES[k][0] <= settings[k] <= RANGES[k][1] for k in color.SETTINGS):
             return self.send_error(400)

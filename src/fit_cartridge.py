@@ -1,7 +1,7 @@
 import concurrent.futures, glob, json, os, subprocess, sys, tempfile, cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import color, fits, photos
+import fits, photos
 from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, camera_distance, color_lines, color_start, corners_of, emboss_lines, emboss_start, outline_quads, outline_starts, project, shell_of, special_shell, text_starts, tilt
 
 # fit-cartridge: fits the model of the cartridge's shell (src/cartridge.py: the Game Boy's, or the Game Boy Color
@@ -28,16 +28,17 @@ SYSTEMS = ("dmg", "cgb", "lrg", "unknown")  # lrg: Limited Run Games' cartridges
 SIDES = ("top", "right", "bottom", "left")
 
 
-def load(path, even_colors=True):
+def load(path):
     """The photo, upright (OpenCV applies the EXIF orientation, as the text recognition does); formats OpenCV can't
-    read (HEIC) through a JPEG copy made by sips. Its colors evened out (src/color.py) unless even_colors is False."""
+    read (HEIC) through a JPEG copy made by sips. Its colors as they are (its color settings are applied when it's
+    rendered: src/color.py)."""
     photo = cv2.imread(path)
     if photo is None:
         with tempfile.TemporaryDirectory() as tmp:
             copy = os.path.join(tmp, "photo.jpg")
             subprocess.run(["sips", "-s", "format", "jpeg", "-s", "formatOptions", "95", path, "--out", copy], check=True, capture_output=True)
             photo = cv2.imread(copy)
-    return color.corrected(photo, path) if photo is not None and even_colors else photo
+    return photo
 
 
 def crop(photo, lines, shell):

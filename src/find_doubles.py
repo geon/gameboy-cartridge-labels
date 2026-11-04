@@ -23,7 +23,7 @@ lock = threading.Lock()
 
 def image(path, longest):
     """The photo, its longest side at most longest px, as JPEG bytes."""
-    photo = load(path, even_colors=False)
+    photo = load(path)
     scale = min(1, longest / max(photo.shape[:2]))
     small = cv2.resize(photo, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
     return cv2.imencode(".jpg", small, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()

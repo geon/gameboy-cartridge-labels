@@ -27,8 +27,10 @@ search-photos, name-photos.
 
 ## Open work
 
-- **Check fit-colors and adjust-colors** (built 2026-11-04, awaiting my check). fit-colors makes each label's white
-  paper neutral, for the sources not lit alike. Settings learned per source were dropped: only a source lit alike
+- **Check fit-colors and adjust-colors** (built 2026-11-04, awaiting my check). fit-colors sets all color correction
+  now (src/color.py's correction as photos are read is gone): my photos' and jnlgame's background made white,
+  Hit-Japan's and yugiyahirano's settings by source, and the others' label paper made neutral. Without a roll-off
+  above white, a median 8 % of my photos' labels clip (they're brighter than the background): kept, fixed by hand. Settings learned per source were dropped: only a source lit alike
   could have one, and those are the references and jnlgame.
 - **Check fit-label and review-labels** (built, awaiting my check).
 - **Depth layers for the CGB shell**: built (cartridge.camera_of, seen_at; 2026-11-01) and tried; no clear gain

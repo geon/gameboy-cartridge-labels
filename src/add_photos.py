@@ -24,7 +24,7 @@ SAME_PICTURE = 2.0
 
 def look(path):
     """A photo, small and grey (64 x 64), with its width over its height; None if it can't be read."""
-    photo = load(path, even_colors=False)  # as a new photo, not yet in photos/, is read: compared alike
+    photo = load(path)
     if photo is None:
         return None
     return photo.shape[1] / photo.shape[0], cv2.resize(cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY), (64, 64), interpolation=cv2.INTER_AREA)

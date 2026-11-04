@@ -7,8 +7,7 @@ from cartridge import SHELLS, project, shell_of
 from fit_cartridge import load
 
 # render-labels and render-carts: one image per release, straightened (perspective removed through its fits) and with
-# its colors evened out (src/color.py, as the steps read photos) and then set by its own settings (colors.json, make
-# fit-colors, make adjust-colors), as AVIF:
+# its colors set by its own settings (src/color.py; colors.json, make fit-colors, make adjust-colors), as AVIF:
 #   labels: generated/render-labels/<release>.avif, the label alone, stretched to its shell's canonical label
 #     size at LABEL_PX_PER_MM (the labels' size varies a few tenths of a mm: their fits' model corners are mapped to the
 #     image's corners);

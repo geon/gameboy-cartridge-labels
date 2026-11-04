@@ -1,40 +1,37 @@
 import contextlib, fcntl, json, os, cv2, numpy as np
 
-import photos
-
-# The photos' colors, evened out as they're read (fit_cartridge.load), for the sources that photograph every cartridge
+# Each source's colors, as fit-colors sets them (src/fit_colors.py), for the sources that photograph every cartridge
 # alike: my own photos and jnlgame's, on a plain white background, have it made white (that sets their exposure and
-# white balance alike, as my hand correction of IMG_7324 did); Hit-Japan's (eBay), washed out, get the contrast of my
-# hand corrections of nine of them. Other sources' photos are left as they are: elrocinante's background isn't white,
-# and one setting for all its photos made them no nearer mine of the same releases. Judged by eye on the labels of all
-# these sources' photos (2026-10-30).
+# white balance alike, as my hand correction of IMG_7324 did): brightness, temperature and tint undoing its white
+# (background_settings); Hit-Japan's (eBay), washed out, get the contrast of my hand corrections of nine of them
+# (HITJAPAN); yugiyahirano's, likely one photographer's, the settings that brought them nearest the reference sources'
+# labels of the same releases (YUGIYAHIRANO). Elrocinante's are left as they are: its background isn't white, and one
+# setting for all its photos made them no nearer mine of the same releases. Judged by eye on the labels of all these
+# sources' photos (2026-10-30).
 
 # Where the background's white is measured: the frame's outer share on my photos (the cartridge photographed fills the
 # middle, neighbouring ones the edges), the whole frame on jnlgame's. Against the band 2-6 mm around the fitted
 # cartridge, the white measured so was within 3 % in brightness and 1.3 % in color on half my 187 photos, 10 % and
 # 2.6 % on nine in ten; jnlgame's within 4.5 % and 2.1 % on half.
 BORDERS = {"my-collection": 0.12, "jnlgame": None}
-# What goes above white is rolled off rather than clipped: a pixel's brightest channel, in linear light, compressed
-# above KNEE so that TOP times the white comes out white, its channels scaled alike (its hue kept).
-KNEE, TOP = 0.8, 1.6
-# My hand corrections of nine Hit-Japan photos (2026-10-30), averaged: one tone curve, the same on the three channels,
-# sRGB in (the middle of 32 equal steps) to out, 0-255. It darkens the shadows (a black point near 30) and lifts the
-# highlights a little; it brought them within ΔE 3.7 of my corrections (median, each left out of the average in turn).
-HITJAPAN_CURVE = [7, 7, 8, 8, 10, 15, 22, 30, 39, 49, 60, 70, 81, 92, 102, 113, 124, 134, 145, 155, 165, 176, 187, 197, 208, 219, 229, 239, 246,
-                  250, 252, 252]
-HITJAPAN = np.interp(np.arange(256), (np.arange(32) + 0.5) * 8, HITJAPAN_CURVE).round().astype(np.uint8)
+# My hand corrections of nine Hit-Japan photos (2026-10-30) averaged into one tone curve, the same on the three
+# channels, brought them within ΔE 3.7 of my corrections (median, each left out of the average in turn); these settings
+# come nearest that curve, weighted by how often each level is seen on Hit-Japan's labels: within 3.7 levels of 255 on
+# average, 11 at most, in the shadows (the curve kept black at 7 and flat up to 32; these take black to 0, and 64 to 42
+# where the curve had 34). On the labels, 10 levels on average (the brightest channel at most 29 in 99 %), mostly
+# where a bright, colored pixel goes above white: the curve clipped each channel, these keep its hue (2026-11-04).
+HITJAPAN = {"brightness": 0.5, "contrast": 1.38, "temperature": 0.0, "tint": 0.0}
+# Fitted on 122 of yugiyahirano's labels against the reference sources' of the same releases (the median of each
+# photo's best settings; 2026-11-04): it took them from ΔE 18.8 to 12.1 (median, each release's photos with settings
+# learned without them).
+YUGIYAHIRANO = {"brightness": 0.47, "contrast": 0.88, "temperature": 0.19, "tint": -0.04}
+SOURCE_SETTINGS = {"ebay-hitjapan": HITJAPAN, "yugiyahirano": YUGIYAHIRANO}
 
 _v = np.arange(256) / 255
 LINEAR = np.where(_v <= 0.04045, _v / 12.92, ((_v + 0.055) / 1.055) ** 2.4).astype(np.float32)
 _v = np.arange(4096) / 4095
 SRGB = (255 * np.where(_v <= 0.0031308, 12.92 * _v, 1.055 * _v ** (1 / 2.4) - 0.055)).round().astype(np.uint8)
 LUMINANCE = np.array([0.0722, 0.7152, 0.2126], np.float32)  # B, G, R
-
-
-def source_of(path):
-    """The source of a photo in photos/, from its path; None for one elsewhere."""
-    rel = os.path.relpath(path, photos.ROOT)
-    return None if rel.startswith("..") else rel.split(os.sep)[0]
 
 
 def white(photo, border=None):
@@ -51,40 +48,21 @@ def white(photo, border=None):
     return np.median(pixels[y >= np.median(y)], 0)
 
 
-def through(photo, curves, roll_off=True, rows=512):
+def through(photo, curves, rows=512):
     """The photo through per-channel curves (3 x 256: an 8-bit sRGB value -> linear light, B, G, R), back to 8-bit sRGB;
-    what goes above white rolled off from KNEE (roll_off) or else scaled down to white, its hue kept either way; a few
-    rows at a time (a photo is large)."""
+    a pixel going above white scaled down to it, its hue kept; a few rows at a time (a photo is large)."""
     out = np.empty_like(photo)
-    T = (TOP - KNEE) / (1 - KNEE)
     curves = np.asarray(curves, np.float32)
     for r in range(0, photo.shape[0], rows):
         p = photo[r:r + rows]
         x = np.stack([curves[c][p[..., c]] for c in range(3)], -1)
-        m = np.maximum(x.max(2, keepdims=True), 1e-6)
-        t = np.maximum(m - KNEE, 0) / (1 - KNEE)
-        rolled = np.where(m > KNEE, KNEE + (1 - KNEE) * t * (1 + t / T ** 2) / (1 + t), m) if roll_off else m
-        out[r:r + rows] = SRGB[np.clip(x * (np.minimum(rolled, 1) / m) * 4095 + 0.5, 0, 4095).astype(np.int32)]
+        m = np.maximum(x.max(2, keepdims=True), 1)
+        out[r:r + rows] = SRGB[np.clip(x / m * 4095 + 0.5, 0, 4095).astype(np.int32)]
     return out
 
 
-def made_white(photo, white):
-    """The photo with its white made white, what goes above it rolled off."""
-    return through(photo, LINEAR[None, :] / np.asarray(white, np.float32)[:, None])
-
-
-def corrected(photo, path):
-    """The photo (as read from path) with its colors evened out, if its source is one of those above."""
-    source = source_of(path)
-    if source in BORDERS:
-        return made_white(photo, white(photo, BORDERS[source]))
-    if source == "ebay-hitjapan":
-        return cv2.LUT(photo, HITJAPAN)
-    return photo
-
-
-# Each photo's own colors (colors.json), applied after its source's evening out above, by render-labels and
-# render-carts: four settings, in plain terms:
+# Each photo's own colors (colors.json), applied by render-labels and render-carts to the photo as it is: four
+# settings, in plain terms:
 #   brightness: how much brighter white comes out, in stops (+1: twice as bright, in linear light);
 #   contrast: the power on linear light, pivoted at white (1: unchanged; 1.2: a gray at half of white's brightness comes
 #     out at 0.5^1.2 = 0.44 of it): above 1 darkens the shadows and leaves white as it is;
@@ -96,16 +74,23 @@ def corrected(photo, path):
 # "hand-placed"}}; settings made by make fit-colors (auto-generated) or set in make adjust-colors (hand-placed, which
 # fit-colors keeps). An entry whose SHA-1 isn't its photo's is of another photo once under the same name: ignored.
 FILE = "colors.json"
-# The reference sources: photos lit alike within each (after the evening out above), what the others are matched to.
+# The reference sources: photos lit alike within each (with their source's settings above), what the others are
+# matched to.
 # And the sources whose photos are lit alike, whose labels' white paper isn't used to set their colors (fit-colors):
-# the references, and jnlgame (on which it made the match with the references worse, ΔE 11.5 -> 15.7, 2026-11-04).
+# the references, jnlgame (on which it made the match with the references worse, ΔE 11.5 -> 15.7, 2026-11-04), and
+# yugiyahirano (one photographer, likely).
 # The reference sources' paper, as bright as fit-colors makes a photo's: the median of their labels' (color.paper),
-# 0.85 of white, in linear light (2026-11-04).
+# 0.88 of white, in linear light, with their settings (2026-11-04).
 REFERENCES = ("my-collection", "ebay-hitjapan", "ebay-elrocinante")
-LIT_ALIKE = REFERENCES + ("jnlgame",)
-PAPER_BRIGHTNESS = 0.85
+LIT_ALIKE = REFERENCES + ("jnlgame", "yugiyahirano")
+PAPER_BRIGHTNESS = 0.88
 SETTINGS = ("brightness", "contrast", "temperature", "tint")
 NEUTRAL = {"brightness": 0.0, "contrast": 1.0, "temperature": 0.0, "tint": 0.0}
+
+
+def background_settings(white):
+    """The settings that make a background's white (linear, B, G, R) white."""
+    return settings_of(-np.log2(np.asarray(white, np.float64)), 1.0)
 
 
 def gains_of(settings):
@@ -129,10 +114,10 @@ def curves_of(settings):
 
 
 def adjusted(photo, settings):
-    """The photo (already evened out by its source) with its own settings applied."""
+    """The photo with its own settings applied."""
     if settings is None or all(settings[k] == NEUTRAL[k] for k in SETTINGS):
         return photo
-    return through(photo, curves_of(settings), roll_off=False)
+    return through(photo, curves_of(settings))
 
 
 def load_colors():

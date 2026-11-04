@@ -6,18 +6,23 @@ from cartridge import shell_of
 
 # fit-colors: each photo's own color settings (src/color.py: brightness, contrast, temperature, tint) into
 # colors.json, auto-generated; settings placed by hand (make adjust-colors) are kept. For every photo but the fakes
-# whose plastic is accepted or placed by hand: for a source whose photos aren't all lit alike (not in
-# color.LIT_ALIKE), if its label is accepted or placed by hand and white paper is found on it (color.paper),
-# brightness, temperature and tint set so that the paper comes out neutral, as bright as the reference sources' paper
-# (color.PAPER_BRIGHTNESS); otherwise none (neutral).
+# whose plastic is accepted or placed by hand:
+#   - my own photos and jnlgame's (color.BORDERS): brightness, temperature and tint making their background's white
+#     white (color.white, color.background_settings);
+#   - Hit-Japan's and yugiyahirano's: their source's settings (color.SOURCE_SETTINGS);
+#   - a source whose photos aren't all lit alike (not in color.LIT_ALIKE), if its label is accepted or placed by hand
+#     and white paper is found on it (color.paper): brightness, temperature and tint set so that the paper comes out
+#     neutral, as bright as the reference sources' paper (color.PAPER_BRIGHTNESS);
+#   - otherwise none (neutral).
 # The labels are read from their images in generated/fit-colors/labels/<photo>.png: straightened, at render-labels'
-# size, evened out by their source (color.corrected) but without their own settings; made again when the photo, its
-# label's fit or the code changed (made.json).
+# size, the photo's colors as they are; made again when the photo, its label's fit or the code changed (made.json).
+# The backgrounds' whites are kept in generated/fit-colors/whites.json, by photo, with its SHA-1.
 # Usage: fit_colors.py
 OUT = "generated/fit-colors"
 LABELS = os.path.join(OUT, "labels")
 CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
-                             for f in ("fit_colors.py", "color.py", "render.py"))).hexdigest()
+                             for f in ("fit_colors.py", "render.py"))).hexdigest()
+WHITES = os.path.join(OUT, "whites.json")
 
 
 def candidates():
@@ -66,6 +71,29 @@ def label_images(found):
     return {stem: cv2.imread(os.path.join(LABELS, stem + ".png")) for stem in want}
 
 
+def measure_white(path, source):
+    from fit_cartridge import load
+    cv2.setNumThreads(1)
+    return color.white(load(path), color.BORDERS[source]).tolist()
+
+
+def whites(found):
+    """The background's white (linear, B, G, R) of each photo of a source in color.BORDERS: stem -> white, measured
+    where missing or of another photo."""
+    os.makedirs(OUT, exist_ok=True)
+    known = json.load(open(WHITES)) if os.path.exists(WHITES) else {}
+    want = {stem: f for stem, f in found.items() if f[0] in color.BORDERS}
+    todo = [s for s in sorted(want) if known.get(s, {}).get("sha1") != want[s][2]]
+    if todo:
+        print(f"{len(todo)} backgrounds' whites to measure")
+        with concurrent.futures.ProcessPoolExecutor() as pool:
+            for stem, white in zip(todo, pool.map(measure_white, [want[s][1] for s in todo], [want[s][0] for s in todo])):
+                known[stem] = {"sha1": want[stem][2], "white": white}
+    known = {s: known[s] for s in want}
+    json.dump(known, open(WHITES, "w"))
+    return {s: known[s]["white"] for s in want}
+
+
 def papers(labels):
     """White paper's color on each label (color.paper), stem -> linear BGR or None."""
     stems = sorted(labels)
@@ -73,9 +101,13 @@ def papers(labels):
         return dict(zip(stems, pool.map(color.paper, [labels[s] for s in stems], chunksize=16)))
 
 
-def auto(source, paper):
-    """A photo's auto-generated settings: its paper made neutral at the reference sources' paper brightness, if its
-    source isn't lit alike and paper was found; else neutral."""
+def auto(source, paper, white=None):
+    """A photo's auto-generated settings: by its source (see above), from its label's white paper, or its background's
+    white."""
+    if source in color.BORDERS:
+        return color.background_settings(white)
+    if source in color.SOURCE_SETTINGS:
+        return dict(color.SOURCE_SETTINGS[source])
     if source in color.LIT_ALIKE or paper is None:
         return dict(color.NEUTRAL)
     paper = np.asarray(paper, np.float64)
@@ -87,6 +119,7 @@ if __name__ == "__main__":
     found = candidates()
     labels = label_images(found)
     paper_of = papers(labels)
+    white_of = whites(found)
     print(f"{len(found)} photos with a good plastic fit, {len(labels)} with a good label, white paper found on "
           f"{sum(p is not None for p in paper_of.values())}")
     kept = changed = 0
@@ -99,7 +132,7 @@ if __name__ == "__main__":
             if current and current.get("source") == "hand-placed":
                 kept += 1
                 continue
-            settings = {k: round(v, 4) for k, v in auto(source, paper_of.get(stem)).items()} | {"source": "auto-generated"}
+            settings = {k: round(v, 4) for k, v in auto(source, paper_of.get(stem), white_of.get(stem)).items()} | {"source": "auto-generated"}
             changed += current != settings
             colors[stem] = {"sha1": sha1, "colors": settings}
     print(f"{kept} placed by hand, kept; {changed} auto-generated settings changed, into {color.FILE}")
