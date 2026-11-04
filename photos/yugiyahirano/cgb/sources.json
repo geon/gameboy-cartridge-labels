@@ -160,6 +160,11 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4ef504a54d863ede0ea283fcc387833db3ef0f92"
  },
+ "CGB-BP7J-JPN.jpg": {
+  "original_name": "yugiyahirano-38826.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "c38e17b59f6b65bee17bf551dc36a91367bb17b1"
+ },
  "CGB-BPHJ-JPN_2.jpg": {
   "original_name": "yugiyahirano-40411.jpg",
   "serial_on_label": "CGB-BPHJ-JPN",

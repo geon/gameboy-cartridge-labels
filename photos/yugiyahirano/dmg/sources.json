@@ -789,11 +789,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "16687e940f3a22e26b628e97a9f4e8a65ef524e4"
  },
- "DMG-BP7J-JPN.jpg": {
-  "original_name": "yugiyahirano-38826.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "c38e17b59f6b65bee17bf551dc36a91367bb17b1"
- },
  "DMG-BPWJ-JPN_2.jpg": {
   "original_name": "yugiyahirano-42258.jpg",
   "serial_on_label": "DMG-BPWJ-JPN",
