@@ -88,6 +88,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9fbcaaa8b734c72576c8c90a4818d14050768838"
  },
+ "AGB-A5NJ-JPN.webp": {
+  "original_name": "362848803227-s-l1600.webp",
+  "serial_on_label": "AGB-ASNJ-JPN",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "eff0511df750e9cd0f6a3113086958bc35c3a0fe"
+ },
  "AGB-A62J-JPN.webp": {
   "original_name": "316062282119-s-l1600.webp",
   "note": "named by nothing: no serial read",
@@ -225,6 +231,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "03ff06fe8eb5556ffd8082f7ab462e2330c1926f"
  },
+ "AGB-ACLJ-JPN.webp": {
+  "original_name": "364724866117-s-l1600.webp",
+  "serial_on_label": "AGB-AGLJ-JPN",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "46ba7a884e1c45e4d20c45cc6a719356936bc847"
+ },
  "AGB-ACOJ.webp": {
   "original_name": "365495577927-s-l1600.webp",
   "serial_on_label": "AGB-ACOJ",
@@ -242,11 +254,6 @@
   "serial_on_label": "AGB-AD2J-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "968f6bbfc704ed1f2051fd827893bf6086087310"
- },
- "AGB-AD2J-JPN_2.webp": {
-  "original_name": "s-l1600 (1).webp",
-  "note": "named by nothing: no serial read",
-  "sha1": "1e98a9d6558f57e6b3ed97f0fc980359cc6508d8"
  },
  "AGB-ADEJ.webp": {
   "original_name": "306617796954-s-l1600.webp",
@@ -347,12 +354,6 @@
   "serial_on_label": "AGB-AGLJ-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "727f952c573a76c54af2d3007f307654ef36dfeb"
- },
- "AGB-AGLJ-JPN_2.webp": {
-  "original_name": "364724866117-s-l1600.webp",
-  "serial_on_label": "AGB-AGLJ-JPN",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "46ba7a884e1c45e4d20c45cc6a719356936bc847"
  },
  "AGB-AGSJ-JPN_2.webp": {
   "original_name": "860102319133-s-l1600.webp",
@@ -585,12 +586,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "3b98182a296b661496c1a95196c32e236a2bdfc4"
  },
- "AGB-ANSJ_2.webp": {
-  "original_name": "316047308303-s-l1600.webp",
-  "serial_on_label": "AGB-ANSJ",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "7b683c07a635c5dd93055904b352bead84328883"
- },
  "AGB-ANVJ-JPN_2.webp": {
   "original_name": "305984040329-s-l1600.webp",
   "note": "named by nothing: no serial read",
@@ -679,12 +674,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "aa21e11b13eee65f92b8b6a8277dbd0fe5c4f090"
  },
- "AGB-ASNJ-JPN_2.webp": {
-  "original_name": "362848803227-s-l1600.webp",
-  "serial_on_label": "AGB-ASNJ-JPN",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "eff0511df750e9cd0f6a3113086958bc35c3a0fe"
- },
  "AGB-ASNJ-JPN_3.webp": {
   "original_name": "860102773244-s-l1600.webp",
   "serial_on_label": "AGB-ASNJ-JPN",
@@ -696,12 +685,6 @@
   "serial_on_label": "AGB-ASOJ-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "e7d03c0a6195c52eb4759d73485398a599278313"
- },
- "AGB-ASTJ-JPN_2.webp": {
-  "original_name": "317758345672-s-l1600.webp",
-  "serial_on_label": "AGB-ASTJ-JPN",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "bc2b9cddc0190f43167051c9c3639361ec5c62dc"
  },
  "AGB-ASTJ-JPN_3.webp": {
   "original_name": "366775595436-s-l1600.webp",
@@ -786,12 +769,6 @@
   "serial_on_label": "AGB-AXBJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "ccec264c927b8bcb358af1509c67eff6fc669ce6"
- },
- "AGB-AXPJ-JPN.webp": {
-  "original_name": "366775594337-s-l1600.webp",
-  "serial_on_label": "AGB-AXPJ-JPN",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "13a6a06e887f3fe6217aca36339412daaddb0b34"
  },
  "AGB-AXRJ-JPN.webp": {
   "original_name": "316355234017-s-l1600.webp",
@@ -1307,17 +1284,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "37aa5e2ee2a9c4a606e19bf70f4c4e1a255bd073"
  },
+ "AGB-FEBJ-JPN.webp": {
+  "original_name": "305972710001-s-l1600.webp",
+  "serial_on_label": "AGB-FLBJ-JPN",
+  "note": "named by the serial read on it (near)",
+  "sha1": "6d388b7998d224a2d3f5f41ef60d92605f94a92f"
+ },
  "AGB-FGGJ_2.webp": {
   "original_name": "366571960067-s-l1600.webp",
   "serial_on_label": "AGB-FGGJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "1e93f5aa86420e02594c29f2527be4b6a077b451"
- },
- "AGB-FLBJ-JPN.webp": {
-  "original_name": "305972710001-s-l1600.webp",
-  "serial_on_label": "AGB-FLBJ-JPN",
-  "note": "named by the serial read on it (near)",
-  "sha1": "6d388b7998d224a2d3f5f41ef60d92605f94a92f"
  },
  "AGB-FMKJ-JPN_2.webp": {
   "original_name": "s-l1600 (10).webp",
