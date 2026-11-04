@@ -2,7 +2,7 @@ import concurrent.futures, glob, json, os, random, sys, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import shell_of
+from cartridge import SHELLS, shell_of
 from fit_cartridge import CHOICE, DERIVED, FEATURES, candidates_of, choice_rows, load, same_place
 
 # learn-choice: a tool, not a step. Learns fit-cartridge's choice among a photo's fits (src/fit_cartridge.py, scores)
@@ -65,12 +65,12 @@ if __name__ == "__main__":
         stem = photos.stem(name)
         plastic = fits.of(known, stem, sha1s[stem])["fit"].get("plastic")
         text = os.path.join("generated/read-text", stem + ".json")
-        if source not in photos.FAKES and system in ("dmg", "cgb") and fits.good(plastic) and os.path.exists(text):
+        if source not in photos.FAKES and system in ("dmg", "cgb", "agb") and fits.good(plastic) and os.path.exists(text):
             good.append((stem, os.path.join(photos.ROOT, source, system, name), text, sha1s[stem], plastic["mm_to_photo"]))
     if per_shell:
         random.seed(0)
         random.shuffle(good)
-        good = [g for shell in ("DMG", "CGB") for g in [g for g in good if g[0].startswith("CGB-") == (shell == "CGB")][:per_shell]]
+        good = [g for shell in SHELLS for g in [g for g in good if shell_of(photos.serial_of(g[0])).name == shell][:per_shell]]
     code = max(os.path.getmtime(p) for p in ("src/cartridge.py", "src/fit_cartridge.py"))
     todo = []
     for stem, path, text, sha1, plastic in good:
@@ -96,8 +96,10 @@ if __name__ == "__main__":
         for i, (_, _, candidates, rows, _) in enumerate(data):
             if fold[i] == k:
                 learned[i] = candidates[int(np.argmax((rows - mean) / sd @ w))]["error_mm"]
-    for shell in ("dmg", "cgb"):
+    for shell in SHELLS:
         idx = [i for i, d in enumerate(data) if d[1] == shell]
+        if not idx:
+            continue
         within = lambda errors, t: sum(e < t for e in errors)
         before = [strongest(data[i][2])["error_mm"] for i in idx]
         after = [learned[i] for i in idx]

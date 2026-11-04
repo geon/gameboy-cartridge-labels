@@ -2,10 +2,10 @@ import concurrent.futures, glob, json, os, subprocess, sys, tempfile, cv2, numpy
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, camera_distance, color_lines, color_start, corners_of, emboss_lines, emboss_start, outline_quads, outline_starts, project, shell_of, special_shell, text_starts, tilt
+from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, agb_logo_lines, agb_logo_start, camera_distance, color_lines, color_start, corners_of, emboss_lines, emboss_start, outline_quads, outline_starts, project, shell_of, special_shell, text_starts, tilt
 
-# fit-cartridge: fits the model of the cartridge's shell (src/cartridge.py: the Game Boy's, or the Game Boy Color
-# only cartridge's for CGB- serials) to every photo in photos/ but Game Boy Advance ones (no model) and those of
+# fit-cartridge: fits the model of the cartridge's shell (src/cartridge.py: the Game Boy's, the Game Boy Color
+# only cartridge's for CGB- serials, or the Game Boy Advance's for AGB- ones) to every photo in photos/ but those of
 # cartridges with another shell (special-shells.tsv: rumble, tilt sensor...), started from its text in
 # generated/read-text/ (make read-text) and from the outlines in the photo (the label, the recess or the body), or
 # from a rough fit placed by hand alone (fits.json's start: fit-by-hand's Save for refit; fitted again when it changes), the fit
@@ -24,7 +24,7 @@ from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, came
 # Usage: fit_cartridge.py
 TEXT = "generated/read-text"
 OUT = "generated/fit-cartridge"
-SYSTEMS = ("dmg", "cgb", "lrg", "unknown")  # lrg: Limited Run Games' cartridges, fitted as DMG shells
+SYSTEMS = ("dmg", "cgb", "agb", "lrg", "unknown")  # lrg: Limited Run Games' cartridges, fitted as DMG shells
 SIDES = ("top", "right", "bottom", "left")
 
 
@@ -48,10 +48,10 @@ def crop(photo, lines, shell):
     cartridges at the edges. Without any, a "GAME BOY COLOR" on the label (cartridge.color_start), likewise nearest the
     center. Without the crop, the fitter (which works at about 900 px across) saw a cartridge filling 60 % of a phone
     photo at about 10 px/mm, and nearly every fit had a broken recess line. The CGB's shell has no such embossing: by its
-    "GAME BOY COLOR" alone. Returns the box and the line, or None."""
+    "GAME BOY COLOR" alone; the AGB's by its embossed "GAME BOY ADVANCE" alone. Returns the box and the line, or None."""
     h, w = photo.shape[:2]
-    candidates, start = (emboss_lines(lines, count=10), emboss_start) if shell.name == "dmg" else ([], None)
-    if not candidates:
+    candidates, start = (emboss_lines(lines, count=10), emboss_start) if shell.name == "dmg" else (agb_logo_lines(lines)[:10], agb_logo_start) if shell.name == "agb" else ([], None)
+    if not candidates and shell.color_text is not None:
         candidates, start = color_lines(lines), lambda line: color_start(line, text=shell.color_text)
     if not candidates:
         return None
@@ -61,9 +61,9 @@ def crop(photo, lines, shell):
 
 
 def box_of(H, shell, size):
-    """The box (x0, y0, x1, y1) of the body H (mm -> the photo's pixels) puts in the photo, with a margin of 12 % of its
-    size for the start's error in scale and place, within the photo."""
-    body = project(H, corners_of((0, 0) + tuple(shell.body)))
+    """The box (x0, y0, x1, y1) of the body H (mm -> the photo's pixels) puts in the photo (its box: with the AGB's
+    shoulders), with a margin of 12 % of its size for the start's error in scale and place, within the photo."""
+    body = project(H, corners_of(shell.box))
     margin = 0.12 * (body.max(axis=0) - body.min(axis=0))
     x0, y0 = np.maximum(np.floor(body.min(axis=0) - margin).astype(int), 0)
     x1, y1 = np.minimum(np.ceil(body.max(axis=0) + margin).astype(int), list(size))

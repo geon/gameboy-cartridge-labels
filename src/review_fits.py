@@ -3,14 +3,14 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import (ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
+from cartridge import (AGB_CREASE_TOPS, AGB_RECESS, agb_crease, agb_outline, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
                        PILL_RADIUS, RECESS, RECESS_RADIUS, camera_of, cgb_outline_seen, cgb_ridge_lines, corners_of, groove_edges, project, seen_at, shell_of)
 from fit_cartridge import OUT as DETAILS, load
 
 # review-fits: a local page for judging the plastic's fits (fits.json, src/fits.py; make fit-cartridge) by eye, a page
 # of photos at a time, each with its current fit drawn on it (red: the front face with its notch, and the bevels' inner
-# edges, or the Game Boy Color only cartridge's bowed outline; green: the recess; orange: the arrow, the pill and the
-# grooves, or the CGB's smaller arrow); a photo without one shows its latest rejected fit. Fits flagged by fit-cartridge
+# edges, or the Game Boy Color only cartridge's bowed outline, or the Game Boy Advance's with its shoulders; green: the recess; orange: the arrow, the pill and the
+# grooves, or the CGB's smaller arrow, or the AGB's creases); a photo without one shows its latest rejected fit. Fits flagged by fit-cartridge
 # (generated/fit-cartridge/: ambiguous, broken recess line) first, then the lowest quality first; photos it couldn't fit
 # are listed with why. A verdict (reject, almost, accept; clicked again, it's taken back; or for all the page's photos
 # not yet judged at once) changes the fit shown in fits.json (fits.judge_plastic): accepted or almost, it's the current
@@ -84,7 +84,7 @@ GIVEN = {"accepted": True, "almost": "almost", "rejected": "rejected", None: Non
 PER_PAGE = 24
 # fits.state -> its name in the filters.
 STATE_NAMES = {None: "not judged", "rejected": "rejected", "almost": "almost", True: "accepted", "hand-placed": "placed by hand"}
-SHELL_NAMES = {"dmg": "Game Boy", "cgb": "Game Boy Color only"}
+SHELL_NAMES = {"dmg": "Game Boy", "cgb": "Game Boy Color only", "agb": "Game Boy Advance"}
 
 
 def facet(names, key, values):
@@ -152,6 +152,10 @@ def render(path, fit, width=800):
             # The internal ridges, 1.4 mm behind the face, seen through the clear front wall (refracted).
             cv2.polylines(photo, [P(seen_at(dense(line, False), CGB_RIDGE_DEPTH, camera)) for line in cgb_ridge_lines()], False, (255, 200, 0), max(1, t // 2), cv2.LINE_AA)
             recess = CGB_RECESS
+        elif fit["shell"] == "agb":
+            cv2.polylines(photo, [P(dense(agb_outline()))], True, (0, 0, 255), t, cv2.LINE_AA)
+            cv2.polylines(photo, [P(agb_crease(top)) for top in AGB_CREASE_TOPS], False, (0, 150, 255), max(1, t // 2), cv2.LINE_AA)
+            recess = AGB_RECESS
         else:
             cv2.polylines(photo, [P(dense(face_outline()))], True, (0, 0, 255), t, cv2.LINE_AA)
             cv2.polylines(photo, [P(dense(line, False)) for line in bevel_lines()], False, (0, 0, 180), max(1, t // 2), cv2.LINE_AA)
@@ -196,7 +200,7 @@ class Review:
             details = json.load(open(path)) if os.path.exists(path) else None
             e = fits.of(known, name, sha1s[name])
             if details is None and not e["fit"] and not e["rejected"]:
-                continue  # never fitted (Game Boy Advance, another shell)
+                continue  # never fitted (another shell)
             self.entries[name] = e
             plastic = e["fit"].get("plastic") or (e["rejected"][-1]["plastic"] if e["rejected"] else None)
             self.shown[name] = plastic and plastic["mm_to_photo"]

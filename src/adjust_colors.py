@@ -89,7 +89,7 @@ section.reference{border-color:#07a}
 h3{flex:1;font-size:13px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .preferred{flex:none;color:#07a;font-weight:bold}
 .state{width:9ch;font-size:12px;color:#555;text-align:right}.state.hand{color:#070}
-canvas{width:400px;height:348px;display:block;background:#eee}
+canvas{width:400px;height:auto;display:block;background:#eee}
 label.slider{display:grid;grid-template-columns:11ch 1fr 7ch;align-items:center;font-size:12px;gap:6px}
 label.slider span:last-child{text-align:right;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%}
@@ -162,6 +162,7 @@ async function show() {
     setSettings(section, p.settings);
     const image = new Image();
     image.onload = () => {
+      const shown = section.querySelector("canvas"); shown.width = image.width; shown.height = image.height;  // the shell's label size
       const c = document.createElement("canvas"); c.width = image.width; c.height = image.height;
       const ctx = c.getContext("2d"); ctx.drawImage(image, 0, 0);
       originals[p.name] = ctx.getImageData(0, 0, image.width, image.height);

@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
+from cartridge import AGB_CREASE_TOPS, agb_crease, agb_outline, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
 from fit_cartridge import OUT as DETAILS, load
 from find_doubles import rows
 from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bevel_lines, dense, face_outline, facet, facet_counts, filters_of, matching, pill_outline, rounded_outline
@@ -62,6 +62,8 @@ def model(shell):
         arrow = arrow_outline(CGB_ARROW_TOP_RADIUS, CGB_ARROW_TIP_RADIUS, top=CGB_ARROW_TOP, half_width=half, half_angle=np.arctan2(half, CGB_ARROW_HEIGHT))
         outline, depths = cgb_outline_points()
         lines += [[outline, "#f33", False, True, depths], [arrow, "#f90", False, True], *[[dense(l, False), "#0cf", False, False, np.full(len(dense(l, False)), CGB_RIDGE_DEPTH), CGB_WALL] for l in cgb_ridge_lines()]]
+    elif shell.name == "agb":
+        lines += [[dense(agb_outline()), "#f33", False, True], *[[agb_crease(top), "#f90", False, False] for top in AGB_CREASE_TOPS]]
     else:
         lines += [[dense(face_outline()), "#f33", False, True], *[[dense(l, False), "#f33", True, False] for l in bevel_lines()],
                   [arrow_outline(), "#f90", False, True], [pill_outline(), "#f90", False, True], *[[np.array(e), "#f90", False, False] for e in groove_edges()]]
@@ -83,7 +85,7 @@ class Hand:
             details = json.load(open(path)) if os.path.exists(path) else None
             e = fits.of(known, name, self.sha1s[name])
             if details is None and not e["fit"] and not e["rejected"]:
-                continue  # never fitted (Game Boy Advance, another shell)
+                continue  # never fitted (another shell)
             self.entries[name] = e
             self.details[name] = details if details is not None and details.get("sha1") == self.sha1s[name] else None
         self.order = sorted(self.entries)

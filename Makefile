@@ -11,7 +11,7 @@
 #   Reads the text on every photo in photos/ into generated/read-text/<photo>.json: every line of text found, and where it is (src/read_text.py).
 #
 #   make fit-cartridge
-#   Fits the cartridge's model to every photo but Game Boy Advance ones and those listed in special-shells.tsv, started from its text and from the outlines in the photo, the fit chosen by a score learned from your verdicts (make learn-choice), into fits.json: the pose of its plastic (the label is left for a later step), not yet reviewed; what it found on the way, with flags for review, into generated/fit-cartridge/<photo>.json; a plastic fit accepted or placed by hand is kept, not fitted again (src/fit_cartridge.py, src/cartridge.py, src/fits.py).
+#   Fits the cartridge's model (Game Boy, Game Boy Color only, Game Boy Advance) to every photo but those listed in special-shells.tsv, started from its text and from the outlines in the photo, the fit chosen by a score learned from your verdicts (make learn-choice), into fits.json: the pose of its plastic (the label is left for a later step), not yet reviewed; what it found on the way, with flags for review, into generated/fit-cartridge/<photo>.json; a plastic fit accepted or placed by hand is kept, not fitted again (src/fit_cartridge.py, src/cartridge.py, src/fits.py).
 #
 #   make fit-label
 #   Fits the label in the recess of every photo whose plastic is accepted or placed by hand, into fits.json: its pose, as a homography from the label's model to the photo's pixels, not yet reviewed; its shift, turn and width into generated/fit-label/<photo>.json; a fit sticking out of the recess is rejected; a label accepted or placed by hand is kept (src/fit_label.py).
@@ -20,13 +20,13 @@
 #   Sets each photo's own colors (black, white, midtones, temperature, tint; src/color.py) into colors.json, for every photo but the fakes whose plastic is accepted or placed by hand: my own photos' and jnlgame's background made white, Hit-Japan's, yugiyahirano's and elrocinante's set by source, and for a source whose photos aren't lit alike, its label's white paper made neutral, as bright as the reference sources' (my own, Hit-Japan's, elrocinante's); settings placed by hand are kept. Its label images, straightened, into generated/fit-colors/labels/<photo>.png (src/fit_colors.py).
 #
 #   make render-labels
-#   Renders each release's label, straightened and its colors set (colors.json, make fit-colors), stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
+#   Renders each release's label, straightened and its colors set (colors.json, make fit-colors), stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px; AGB 43 x 22 mm, 202 x 103 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
 #   make render-carts
-#   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
+#   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px, the AGB's 1400 x 890; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
 #   make label-page
-#   A page of every release's label (from make render-labels) on an empty cartridge (templates/), the DMG ones on a gray or black one: black if gb-game-list marks it Game Boy Color enhanced, but for those in shell-colors.tsv; then the CGB ones on the clear CGB cartridge, into generated/label-page/index.html, to open as a file (src/label_page.py).
+#   A page of every release's label (from make render-labels) on an empty cartridge (templates/), the DMG ones on a gray or black one: black if gb-game-list marks it Game Boy Color enhanced, but for those in shell-colors.tsv; then the CGB ones on the clear CGB cartridge, and the AGB ones on a gray AGB cartridge drawn from its model, into generated/label-page/index.html, to open as a file (src/label_page.py).
 #
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
@@ -44,7 +44,7 @@
 #   A tool, not a step: a local page for placing the plastic and the label by hand where the fit is off, one photo at a time, those judged almost first: drag the recess's corners and the label into place; saved to fits.json as the photo's fit, placed by hand, which the steps keep (src/fit_by_hand.py).
 #
 #   make search-photos
-#   A tool, not a step: a local page of searches (Google; for Japanese releases the eBay sellers elrocinante and Hit-Japan, and Jauce; for the others the eBay seller ASANOSHOP and GameStop; and Google Lens with the release's cartridge photo from game-boy-database.com or otakaraou photo) for photos of the Game Boy and Game Boy Color releases not in photos/, or there only as fakes from emumovies or launchbox-abeezy1388 (those sold on Nintendo Power, and those from otakaraou alone, apart), into generated/search-photos/index.html (src/search_photos.py).
+#   A tool, not a step: a local page of searches (Google; for Japanese releases the eBay sellers elrocinante and Hit-Japan, and Jauce; for the others the eBay seller ASANOSHOP and GameStop; and Google Lens with the release's cartridge photo from game-boy-database.com or otakaraou photo) for photos of the Game Boy, Game Boy Color and Game Boy Advance releases not in photos/, or there only as fakes from emumovies or launchbox-abeezy1388 (those sold on Nintendo Power, and those from otakaraou alone, apart), into generated/search-photos/index.html (src/search_photos.py).
 #
 #   make name-photos
 #   A tool, not a step: a local page for naming the photos whose serial isn't known, one at a time: type the serial on its label and press enter; the photo is renamed in photos/, its fits in fits.json with it; or delete it (src/name_photos.py).

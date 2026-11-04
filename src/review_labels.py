@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import CGB_RECESS, RECESS, SHELLS, project, shell_of
+from cartridge import AGB_RECESS, CGB_RECESS, RECESS, SHELLS, project, shell_of
 from fit_cartridge import load
 from fit_label import OUT as DETAILS, label_pose
 from review_fits import BUTTONS, FILTERS_JS, GIVEN, SHELL_NAMES, SHOWN, STATE_NAMES, VERDICTS_GIVEN, dense, facet, facet_counts, filters_of, matching, rounded_outline
@@ -20,11 +20,11 @@ from review_fits import BUTTONS, FILTERS_JS, GIVEN, SHELL_NAMES, SHOWN, STATE_NA
 # Usage: review_labels.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
 PER_PAGE = 24
-# The straightened view: px per mm, and the margin around the recess (mm). Framed alike on both shells, around the
-# recess's middle, as wide and high as the larger recess.
+# The straightened view: px per mm, and the margin around the recess (mm). Framed alike on every shell, around the
+# recess's middle, as wide and high as the largest recess.
 SCALE = 12
 MARGIN = 5.0
-FRAME = (max(r[2] - r[0] for r in (RECESS, CGB_RECESS)) + 2 * MARGIN, max(r[3] - r[1] for r in (RECESS, CGB_RECESS)) + 2 * MARGIN)
+FRAME = (max(r[2] - r[0] for r in (RECESS, CGB_RECESS, AGB_RECESS)) + 2 * MARGIN, max(r[3] - r[1] for r in (RECESS, CGB_RECESS, AGB_RECESS)) + 2 * MARGIN)
 LABEL_RADIUS = 1.4
 
 
@@ -37,7 +37,8 @@ def straightened(path, fit):
     left, top = (recess[0] + recess[2] - FRAME[0]) / 2, (recess[1] + recess[3] - FRAME[1]) / 2
     to_mm = np.array([[1 / SCALE, 0, left], [0, 1 / SCALE, top], [0, 0, 1]])
     # Shrunk first to about twice the view's scale, so that a large photo isn't sampled sparsely (aliased).
-    c = project(H, [[28.5, 37.5], [29.5, 37.5], [28.5, 38.5]])
+    mx, my = (recess[0] + recess[2]) / 2, (recess[1] + recess[3]) / 2
+    c = project(H, [[mx, my], [mx + 1, my], [mx, my + 1]])
     (ax, ay), (bx, by) = c[1] - c[0], c[2] - c[0]
     px_per_mm = np.sqrt(abs(ax * by - ay * bx))
     shrink = min(1.0, 2 * SCALE / px_per_mm)

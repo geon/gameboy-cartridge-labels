@@ -1,8 +1,8 @@
-import csv, html, json, os, re, sys
+import csv, html, json, os, re, sys, urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import serials
-from cartridge import BODY, SHELLS
+from cartridge import AGB, AGB_CREASE_TOPS, BODY, SHELLS, agb_crease, agb_outline
 import render
 
 # label-page: a page of every DMG-shell release's label (make render-labels) laid on an empty cartridge of its shell's
@@ -10,7 +10,8 @@ import render
 # templates/dmg-black.png (from the collection-pipeline branch; 994 x 1132 px, framed on the 57 x 65 mm body), each a
 # card's background image; the label is an element of its own on it, placed straight and centered in the recess, with
 # rounded corners and a drop shadow, on its shell's label rectangle (cartridge.LABEL, CGB_LABEL). The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
-# templates/cgb.png (framed the same way).
+# templates/cgb.png (framed the same way). Then the AGB-shell releases (Game Boy Advance), on a plain gray cartridge
+# drawn from its model (agb_template: there's no photo of an empty one yet), framed on its box with the shoulders.
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
 # those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
 # on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. A few releases whose
@@ -49,6 +50,20 @@ def color_of(release, listed):
     return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|$)", release) and ("[" in code or "[" not in release)), None)
 
 
+def agb_template():
+    """The AGB's empty cartridge as an SVG data URL, in mm on its box: the outline with the shoulders, the recess and
+    the creases."""
+    x1, y1, x2, y2 = AGB.box
+    path = lambda pts: " ".join(f"{x:.2f},{y:.2f}" for x, y in pts)
+    r = AGB.recess
+    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x1:g} {y1:g} {x2 - x1:g} {y2 - y1:g}">'
+           f'<polygon points="{path(agb_outline())}" fill="#77777c"/>'
+           f'<rect x="{r[0]:g}" y="{r[1]:g}" width="{r[2] - r[0]:g}" height="{r[3] - r[1]:g}" rx="1" fill="#6c6c71" stroke="#55555a" stroke-width="0.25"/>'
+           + "".join(f'<polyline points="{path(agb_crease(top))}" fill="none" stroke="#5c5c61" stroke-width="0.25"/>' for top in AGB_CREASE_TOPS)
+           + "</svg>")
+    return "data:image/svg+xml," + urllib.parse.quote(svg)
+
+
 def card(classes, release, title, note=""):
     """A release's figure on the page: its label on the empty cartridge, its id and title under it."""
     src = html.escape(os.path.relpath(os.path.join(render.OUT["labels"], render.file_of(release)), os.path.dirname(OUT)))
@@ -78,13 +93,17 @@ def main():
     for release in sorted(r for r, m in made.items() if m["shell"] == "cgb"):
         title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
         cgb_cards.append(card("cgb", release, title))
+    agb_cards = []
+    for release in sorted(r for r, m in made.items() if m["shell"] == "agb"):
+        title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
+        agb_cards.append(card("agb", release, title))
     places = "".join(f"""
     .{name} .cart img {{
-      left: calc({l:g} * var(--mm));
-      top: calc({t:g} * var(--mm));
+      left: calc({l - box[0]:g} * var(--mm));
+      top: calc({t - box[1]:g} * var(--mm));
       width: calc({r - l:g} * var(--mm));
       height: calc({b - t:g} * var(--mm));
-    }}""" for name, (l, t, r, b) in ((n, s.label) for n, s in SHELLS.items()))
+    }}""" for name, (l, t, r, b), box in ((n, s.label, s.box) for n, s in SHELLS.items()))
     summary = ", ".join(f"{n} {c.replace('-', ' ')}" for c, n in sorted(counts.items(), key=lambda x: -x[1]))
     page = f"""<!doctype html>
 <html lang="en">
@@ -143,6 +162,11 @@ def main():
     .cgb .cart {{
       background-image: url("{rel(TEMPLATES["cgb"])}");
     }}
+    .agb .cart {{
+      --mm: calc(100cqw / {AGB.box[2] - AGB.box[0]:g});
+      aspect-ratio: {AGB.box[2] - AGB.box[0]:g} / {AGB.box[3] - AGB.box[1]:g};
+      background-image: url("{agb_template()}");
+    }}
     .cart img {{
       position: absolute;
       border-radius: calc({LABEL_RADIUS:g} * var(--mm));
@@ -171,12 +195,17 @@ def main():
   <main>
 {chr(10).join(cgb_cards)}
   </main>
+  <h1>AGB labels</h1>
+  <p>{len(agb_cards)} releases in the Game Boy Advance shell (drawn from its model, cartridge.py).</p>
+  <main>
+{chr(10).join(agb_cards)}
+  </main>
 </body>
 </html>
 """
     os.makedirs(here, exist_ok=True)
     open(OUT, "w").write(page)
-    print(f"{len(cards)} DMG labels ({', '.join(f'{n} {c}' for c, n in sorted(counts.items(), key=lambda x: -x[1]))}) and {len(cgb_cards)} CGB labels into {OUT}")
+    print(f"{len(cards)} DMG labels ({', '.join(f'{n} {c}' for c, n in sorted(counts.items(), key=lambda x: -x[1]))}), {len(cgb_cards)} CGB labels and {len(agb_cards)} AGB labels into {OUT}")
 
 
 if __name__ == "__main__":

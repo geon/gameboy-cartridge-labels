@@ -21,13 +21,14 @@ from fit_cartridge import load
 # longer rendered are removed.
 # Usage: render.py labels|carts
 # The labels' scale: 4.7 px per mm, the same for both shells, so that their images keep the labels' sizes to each other.
-# Each label is rendered at its shell's canonical label size (cartridge.LABEL, CGB_LABEL), rounded to whole pixels:
-# DMG 42.5 x 37 mm -> 200 x 174 px (199.75 x 173.9), CGB 41.5 x 37 -> 195 x 174 (195.05 x 173.9). Chosen to put the
+# Each label is rendered at its shell's canonical label size (cartridge.LABEL, CGB_LABEL, AGB_LABEL), rounded to whole
+# pixels: DMG 42.5 x 37 mm -> 200 x 174 px (199.75 x 173.9), CGB 41.5 x 37 -> 195 x 174 (195.05 x 173.9), AGB 43 x 22
+# -> 202 x 103 (202.1 x 103.4). Chosen to put the
 # DMG's at 200 px wide with little rounding: no scale near it gives both shells whole pixels (only even px per mm do:
 # 4, 170 x 148 and 166 x 148, too small; 6, 255 x 222, too big).
 LABEL_PX_PER_MM = 4.7
 CART_MARGIN = 5.0
-# The cartridge images' scale: 20 px per mm, 1340 x 1500 px. Measured on the photos render-carts uses (1402,
+# The cartridge images' scale: 20 px per mm, 1340 x 1500 px (the AGB's, with its shoulders, 1400 x 890). Measured on the photos render-carts uses (1402,
 # 2026-11-03): the cartridge is seen at a median 18 px per mm (Hit-Japan 20, jnlgame 19, my own 43, otakaraou 10);
 # 33 % have 20 or more, 61 % 15, 82 % 10. So the best sources keep their detail; the others are enlarged.
 CART_PX_PER_MM = 20
@@ -104,8 +105,8 @@ def label_image(photo, shell, label_H):
 
 
 def cart_image(photo, shell, plastic_H):
-    w, h = SHELLS[shell].body
-    box = (-CART_MARGIN, -CART_MARGIN, w + CART_MARGIN, h + CART_MARGIN)
+    x1, y1, x2, y2 = SHELLS[shell].box
+    box = (x1 - CART_MARGIN, y1 - CART_MARGIN, x2 + CART_MARGIN, y2 + CART_MARGIN)
     size = (round((box[2] - box[0]) * CART_PX_PER_MM), round((box[3] - box[1]) * CART_PX_PER_MM))
     return rendered(photo, frame(plastic_H, box, size, SUPERSAMPLE["carts"]), size, SUPERSAMPLE["carts"], alpha=True)
 

@@ -9,7 +9,7 @@ from fit_cartridge import load
 # src/fits.py; make fit-cartridge, make review-fits, make fit-by-hand), as that fit's label, not yet reviewed. Labels are
 # stuck on a little shifted and turned, and cut a few tenths of a mm narrower or wider, so with the plastic's pose fixed,
 # the label's is fitted on its own: a shift and a turn in the recess, and its width. Its pose is a homography from mm on
-# the label's model (the shell's label: cartridge.LABEL, CGB_LABEL) to the photo's pixels; what this step found on the
+# the label's model (the shell's label: cartridge.LABEL, CGB_LABEL, AGB_LABEL) to the photo's pixels; what this step found on the
 # way (the shift in mm, the turn in degrees, the width in mm, the plastic it was fitted on) goes into
 # generated/fit-label/<photo>.json. A label accepted or placed by hand isn't fitted; one judged almost is, and a
 # different fit takes its place (the almost one goes to the rejected fits); a fit equal to a rejected one isn't made current.
@@ -20,10 +20,12 @@ from fit_cartridge import load
 OUT = "generated/fit-label"
 # Label widths, mm: on the DMG's shell 41.7 to 42.5 mm in 20 hand-placed labels (median about 42.15), on the CGB's 41.40
 # to 41.70 in 11 (median 41.45; placed as 42.84 to 43.15 with the recess taken 44.5 wide, scaled to its 43 mm as in
-# cartridge.py); with 0.1 mm to spare for the plastic fit's error in scale. Heights vary much less (36.8 to 37.2).
-WIDTHS = {"dmg": (41.6, 42.7), "cgb": (41.3, 41.8)}
+# cartridge.py); with 0.1 mm to spare for the plastic fit's error in scale. Heights vary much less (36.8 to 37.2). On the
+# AGB's, only measured by hand on one (about 43 mm, hard to measure): from 42.5 to as wide as the 44 mm recess leaves
+# room for (room_to_recess's 0.3 mm each side), 43 the median until labels are placed by hand.
+WIDTHS = {"dmg": (41.6, 42.7), "cgb": (41.3, 41.8), "agb": (42.5, 43.4)}
 MAX_SHIFT = 1.5
-MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 41.45}
+MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 41.45, "agb": 43.0}
 # The label kept inside the recess while it's fitted (its shift held within the room the recess leaves it), rather than
 # fitted freely and rejected when it sticks out: no label placed by hand sticks out (641, 2026-11-04). Against the 285
 # labels placed by hand on real photos, within 0.5 / 1 mm: DMG 159 / 200 -> 161 / 204, CGB 55 / 64 -> 57 / 70; of the
@@ -152,8 +154,8 @@ def fit(photo_path, plastic):
         return {"error": "the photo can't be read"}
     shell = SHELLS[plastic["shell"]]
     H = np.asarray(plastic["mm_to_photo"], np.float64)
-    # Fitted in a crop around the cartridge's body, with a margin of 10 % of its size.
-    body = project(H, corners_of((0, 0) + shell.body))
+    # Fitted in a crop around the cartridge's front (its box), with a margin of 10 % of its size.
+    body = project(H, corners_of(shell.box))
     margin = 0.1 * (body.max(axis=0) - body.min(axis=0))
     x0, y0 = np.maximum(np.floor(body.min(axis=0) - margin).astype(int), 0)
     x1, y1 = np.minimum(np.ceil(body.max(axis=0) + margin).astype(int), [photo.shape[1], photo.shape[0]])

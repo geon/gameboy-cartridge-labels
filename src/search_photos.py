@@ -3,7 +3,8 @@ import html, json, os, pathlib, re, sys, unicodedata, urllib.parse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials
 
-# search-photos: a local page of searches for photos of the Game Boy and Game Boy Color releases still without one: no
+# search-photos: a local page of searches for photos of the Game Boy, Game Boy Color and Game Boy Advance releases still
+# without one (gb-game-list lists about half the Game Boy Advance ones): no
 # cartridge photo in gb-game-list, and no photo in photos/ (a photo's release from its name, or from its name without
 # its region, if gb-game-list lacks that), whether or not its fit works. Releases with photos from otakaraou alone are
 # listed apart: they are worth replacing. The emumovies and launchbox-abeezy1388 images aren't photos but fakes, labels
@@ -18,16 +19,18 @@ import photos, serials
 # A table, one row per release, with a column per place to search:
 # Google's image search; for Japanese releases, the stores of the eBay sellers elrocinante and Hit-Japan and Yahoo!
 # Auctions through Jauce; for the others, the store of the eBay seller ASANOSHOP and GameStop (each sells the one kind
-# alone, nearly). Japanese releases are searched by their Japanese title, with ゲームボーイ and カセット on
+# alone, nearly). Japanese releases are searched by their Japanese title, with ゲームボーイ (ゲームボーイアドバンス) and カセット on
 # the image search (listings there are titled in Japanese, rarely with the serial), the others by their English title,
-# with "game boy" and cartridge; the eBay sellers title their listings in English, so they get the English title alone. Each serial links to Google's image search for it, quoted. Long titles are cut at their subtitle. Last, Google Lens
+# with "game boy" ("game boy advance") and cartridge; the eBay sellers title their listings in English, so they get the English title alone. Each serial links to Google's image search for it, quoted. Long titles are cut at their subtitle. Last, Google Lens
 # searches by image: with the release's cartridge photo from game-boy-database.com, and with its otakaraou photo (by the
 # URLs they're found at, so Lens can fetch them). gb-game-list has only the box photos from game-boy-database.com; the
 # cartridge's is next to it, by the same number (vizu/3741.jpg, cartridges/3741.jpg), for most games.
 # Usage: search_photos.py
 RELEASES = serials.RELEASES
 OUT = "generated/search-photos/index.html"
-SYSTEMS = ("dmg", "cgb")
+SYSTEMS = ("dmg", "cgb", "agb")
+# The console's name in the searches, Japanese and English.
+CONSOLE = {"dmg": ("ゲームボーイ", "game boy"), "cgb": ("ゲームボーイ", "game boy"), "agb": ("ゲームボーイアドバンス", "game boy advance")}
 LENS = "https://lens.google.com/uploadbyurl?url="
 # eBay's sellers, of Japanese releases and of the others: name shown, seller id, store name, eBay's site.
 JAPANESE_EBAY_SELLERS = (("elrocinante", "elrocinante119", "elrocinantesecondhandshop", "www.ebay.com"),
@@ -71,16 +74,16 @@ def links(release):
     q = lambda s: urllib.parse.quote(s)
     if japanese(release):
         title = japanese_title(release)
-        image_query = f'"{title}" ゲームボーイ カセット'
+        image_query = f'"{title}" {CONSOLE[release["system"]][0]} カセット'
     else:
         title = short(release["title"], release)
-        image_query = f'"{title}" "game boy" cartridge'
+        image_query = f'"{title}" "{CONSOLE[release["system"]][1]}" cartridge'
     found = [("Google", "https://www.google.com/search?udm=2&q=" + q(image_query))]
     found += [(f"eBay {name}", f"https://{site}/sch/i.html?" + urllib.parse.urlencode({"_ssn": seller, "store_name": store, "_nkw": short(release["title"], release)}))
               if japanese(release) == of_japanese else None
               for sellers, of_japanese in ((JAPANESE_EBAY_SELLERS, True), (WESTERN_EBAY_SELLERS, False)) for name, seller, store, site in sellers]
     found.append(("GameStop", "https://www.gamestop.com/search-new/?" + urllib.parse.urlencode({"q": short(release["title"], release)})) if not japanese(release) else None)
-    found.append(("Jauce", "https://www.jauce.com/search/" + urllib.parse.quote(f"{title} ゲームボーイ", safe="")) if japanese(release) else None)
+    found.append(("Jauce", "https://www.jauce.com/search/" + urllib.parse.quote(f"{title} {CONSOLE[release['system']][0]}", safe="")) if japanese(release) else None)
     box = next((i["url"] for i in release["images"] if i["kind"] == "box"), None)
     found.append(("Lens game-boy-database", LENS + q(box.replace("/vizu/", "/cartridges/"))) if box else None)
     found.append(("Lens otakaraou", LENS + q(otakaraou[release["id"]])) if release["id"] in otakaraou else None)
@@ -124,7 +127,7 @@ missing = [r for r in missing if r["id"] not in nintendo_power]
 fake_only = sum(r["id"] in fake for r in missing)
 
 groups = [(f"{system_name}: {label}", [r for r in missing if r["system"] == system and japanese(r) == ja])
-          for system, system_name in (("dmg", "Game Boy"), ("cgb", "Game Boy Color"))
+          for system, system_name in (("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy Advance"))
           for ja, label in ((True, "Japanese releases"), (False, "Other releases"))]
 groups.append(("On Nintendo Power", np_missing))
 groups.append(("Only from otakaraou: worth replacing", replace))
@@ -143,7 +146,7 @@ page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 <style>body{{font:14px system-ui;margin:16px;background:#f4f4f4;color:#222}}table{{border-collapse:collapse}}
 td{{padding:3px 8px;white-space:nowrap}}tr:nth-child(odd){{background:#fff}}small{{color:#888}}</style></head><body>
 <h1>Photo searches</h1>
-<p>{len(missing)} Game Boy and Game Boy Color releases without a cartridge photo in gb-game-list or in photos/ ({fake_only} of them
+<p>{len(missing)} Game Boy, Game Boy Color and Game Boy Advance releases without a cartridge photo in gb-game-list or in photos/ ({fake_only} of them
 with only fakes made from box art, from emumovies or launchbox-abeezy1388),
 {len(np_missing)} sold on Nintendo Power (their cartridge's label reads DMG-MMSA-JPN; the serials are from the ROMs' headers), and
 {len(replace)} with photos from otakaraou alone. Save the photos found in a subfolder of save-new-images-here/ named after where they came from, and file them with
