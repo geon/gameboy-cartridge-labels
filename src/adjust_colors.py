@@ -6,8 +6,8 @@ import color, photos, serials
 from fit_colors import LABELS, WHITES, auto, candidates
 from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
-# adjust-colors: a local page for setting each photo's colors by hand (src/color.py: brightness, contrast,
-# temperature, tint), release by release, its photos' labels side by side, so that they can be made to match; the
+# adjust-colors: a local page for setting each photo's colors by hand (src/color.py: black, white,
+# midtones, temperature, tint), release by release, its photos' labels side by side, so that they can be made to match; the
 # reference sources' (color.REFERENCES: lit alike, what the others are matched to) marked. Each label is shown as
 # render-labels makes it (its image from make fit-colors, with its settings applied as color.adjusted does), and
 # changes as its sliders move; let go of one, and the photo's settings are saved to colors.json as placed by hand,
@@ -17,7 +17,7 @@ from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8771
 PER_PAGE = 8
 # The sliders' ranges and steps, by setting.
-RANGES = {"brightness": (-1.5, 1.5, 0.01), "contrast": (0.5, 2.0, 0.01), "temperature": (-1.0, 1.0, 0.01), "tint": (-0.5, 0.5, 0.01)}
+RANGES = {"black": (0, 254, 1), "white": (1, 255, 1), "midtones": (0.3, 3.0, 0.01), "temperature": (-1.0, 1.0, 0.01), "tint": (-0.5, 0.5, 0.01)}
 
 
 class Adjust:
@@ -103,10 +103,11 @@ const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 %FILTERS_JS%
 const LIN = Array.from({length: 256}, (_, i) => { const v = i / 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
-const SRGB = Array.from({length: 4096}, (_, i) => { const v = i / 4095; return Math.round(255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055)); });
-// As color.gains_of and color.adjusted: per channel (B, G, R) 2^k * x^contrast; above white scaled down, its hue kept.
+const encode = x => x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055;
+// As color.gains_of and color.curves_of: per channel (B, G, R), its gain 2^k in linear light, then its level s (sRGB,
+// 0-255) through ((s - black) / (white - black)) ^ (1 / midtones), clipped.
 function gains(s) {
-  const a = s.brightness - LUM[1] * s.tint - (LUM[2] - LUM[0]) * s.temperature / 2;
+  const a = -LUM[1] * s.tint - (LUM[2] - LUM[0]) * s.temperature / 2;
   return [a - s.temperature / 2, a + s.tint, a + s.temperature / 2];
 }
 const originals = {};
@@ -114,18 +115,16 @@ function draw(section) {
   const canvas = section.querySelector("canvas"), source = originals[section.dataset.name];
   if (!source) return;
   const s = settingsOf(section), k = gains(s);
-  const curves = [2, 1, 0].map(c => LIN.map(x => 2 ** k[c] * x ** s.contrast));  // R, G, B (canvas order)
+  const white = Math.max(s.white, s.black + 1);
+  const curves = [2, 1, 0].map(c => LIN.map(x => Math.round(255 * Math.min(1, Math.max(0, (255 * encode(2 ** k[c] * x) - s.black) / (white - s.black))) ** (1 / s.midtones))));  // R, G, B (canvas order)
   const out = new ImageData(source.width, source.height), a = source.data, b = out.data;
   for (let i = 0; i < a.length; i += 4) {
-    let r = curves[0][a[i]], g = curves[1][a[i + 1]], bl = curves[2][a[i + 2]];
-    const m = Math.max(r, g, bl);
-    if (m > 1) { r /= m; g /= m; bl /= m; }
-    b[i] = SRGB[Math.round(r * 4095)]; b[i + 1] = SRGB[Math.round(g * 4095)]; b[i + 2] = SRGB[Math.round(bl * 4095)]; b[i + 3] = 255;
+    b[i] = curves[0][a[i]]; b[i + 1] = curves[1][a[i + 1]]; b[i + 2] = curves[2][a[i + 2]]; b[i + 3] = 255;
   }
   canvas.getContext("2d").putImageData(out, 0, 0);
 }
 const settingsOf = section => Object.fromEntries(NAMES.map(n => [n, parseFloat(section.querySelector(`input[name=${n}]`).value)]));
-const shown = (name, v) => name === "contrast" ? v.toFixed(2) : (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2);
+const shown = (name, v) => name === "black" || name === "white" ? v.toFixed(0) : name === "midtones" ? v.toFixed(2) : (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2);
 function setSettings(section, s) {
   for (const n of NAMES) { section.querySelector(`input[name=${n}]`).value = s[n]; section.querySelector(`[data-value=${n}]`).textContent = shown(n, s[n]); }
   const state = section.querySelector(".state");
@@ -238,7 +237,7 @@ class Handler(BaseHTTPRequestHandler):
             except ValueError as e:
                 return self.send_error(409, str(e))
         settings = data.get("settings", {})
-        if any(not isinstance(settings.get(k), (int, float)) or not RANGES[k][0] <= settings[k] <= RANGES[k][1] for k in color.SETTINGS):
+        if any(not isinstance(settings.get(k), (int, float)) or not RANGES[k][0] <= settings[k] <= RANGES[k][1] for k in color.SETTINGS) or settings["black"] >= settings["white"]:
             return self.send_error(400)
         self.send(adjust.save(data["name"], settings, "hand-placed"))
 

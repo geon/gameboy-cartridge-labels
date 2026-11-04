@@ -2,8 +2,8 @@ import contextlib, fcntl, json, os, cv2, numpy as np
 
 # Each source's colors, as fit-colors sets them (src/fit_colors.py), for the sources that photograph every cartridge
 # alike: my own photos and jnlgame's, on a plain white background, have it made white (that sets their exposure and
-# white balance alike, as my hand correction of IMG_7324 did): brightness, temperature and tint undoing its white
-# (background_settings); Hit-Japan's (eBay), washed out, get the contrast of my hand corrections of nine of them
+# white balance alike, as my hand correction of IMG_7324 did): settings making its white white (whitening); Hit-Japan's (eBay), washed out, get the levels of my hand corrections
+# of nine of them
 # (HITJAPAN); yugiyahirano's, likely one photographer's, the settings that brought them nearest the reference sources'
 # labels of the same releases (YUGIYAHIRANO). Elrocinante's are left as they are: its background isn't white, and one
 # setting for all its photos made them no nearer mine of the same releases. Judged by eye on the labels of all these
@@ -16,21 +16,17 @@ import contextlib, fcntl, json, os, cv2, numpy as np
 BORDERS = {"my-collection": 0.12, "jnlgame": None}
 # My hand corrections of nine Hit-Japan photos (2026-10-30) averaged into one tone curve, the same on the three
 # channels, brought them within ΔE 3.7 of my corrections (median, each left out of the average in turn); these settings
-# come nearest that curve, weighted by how often each level is seen on Hit-Japan's labels: within 3.7 levels of 255 on
-# average, 11 at most, in the shadows (the curve kept black at 7 and flat up to 32; these take black to 0, and 64 to 42
-# where the curve had 34). On the labels, 10 levels on average (the brightest channel at most 29 in 99 %), mostly
-# where a bright, colored pixel goes above white: the curve clipped each channel, these keep its hue (2026-11-04).
-HITJAPAN = {"brightness": 0.5, "contrast": 1.38, "temperature": 0.0, "tint": 0.0}
+# come nearest that curve, weighted by how often each level is seen on Hit-Japan's labels: within 1.2 levels of 255 on
+# average (2026-11-04).
+HITJAPAN = {"black": 36.6, "white": 231.7, "midtones": 0.98, "temperature": 0, "tint": 0}
 # Fitted on 122 of yugiyahirano's labels against the reference sources' of the same releases (the median of each
 # photo's best settings; 2026-11-04): it took them from ΔE 18.8 to 12.1 (median, each release's photos with settings
-# learned without them).
-YUGIYAHIRANO = {"brightness": 0.47, "contrast": 0.88, "temperature": 0.19, "tint": -0.04}
+# learned without them). Fitted as exposure and contrast; these levels come within 0.7 of 255 of them on average.
+YUGIYAHIRANO = {"black": 0.0, "white": 217.2, "midtones": 1.17, "temperature": 0.22, "tint": -0.04}
 SOURCE_SETTINGS = {"ebay-hitjapan": HITJAPAN, "yugiyahirano": YUGIYAHIRANO}
 
 _v = np.arange(256) / 255
 LINEAR = np.where(_v <= 0.04045, _v / 12.92, ((_v + 0.055) / 1.055) ** 2.4).astype(np.float32)
-_v = np.arange(4096) / 4095
-SRGB = (255 * np.where(_v <= 0.0031308, 12.92 * _v, 1.055 * _v ** (1 / 2.4) - 0.055)).round().astype(np.uint8)
 LUMINANCE = np.array([0.0722, 0.7152, 0.2126], np.float32)  # B, G, R
 
 
@@ -48,28 +44,16 @@ def white(photo, border=None):
     return np.median(pixels[y >= np.median(y)], 0)
 
 
-def through(photo, curves, rows=512):
-    """The photo through per-channel curves (3 x 256: an 8-bit sRGB value -> linear light, B, G, R), back to 8-bit sRGB;
-    a pixel going above white scaled down to it, its hue kept; a few rows at a time (a photo is large)."""
-    out = np.empty_like(photo)
-    curves = np.asarray(curves, np.float32)
-    for r in range(0, photo.shape[0], rows):
-        p = photo[r:r + rows]
-        x = np.stack([curves[c][p[..., c]] for c in range(3)], -1)
-        m = np.maximum(x.max(2, keepdims=True), 1)
-        out[r:r + rows] = SRGB[np.clip(x / m * 4095 + 0.5, 0, 4095).astype(np.int32)]
-    return out
-
-
-# Each photo's own colors (colors.json), applied by render-labels and render-carts to the photo as it is: four
-# settings, in plain terms:
-#   brightness: how much brighter white comes out, in stops (+1: twice as bright, in linear light);
-#   contrast: the power on linear light, pivoted at white (1: unchanged; 1.2: a gray at half of white's brightness comes
-#     out at 0.5^1.2 = 0.44 of it): above 1 darkens the shadows and leaves white as it is;
+# Each photo's own colors (colors.json), applied by render-labels and render-carts to the photo as it is: five
+# settings, as in photo editors' Levels, with white balance before:
 #   temperature: how much redder than blue white comes out, in stops (+: warmer);
-#   tint: how much greener than red and blue's mean white comes out, in stops (+: greener, -: more magenta).
-# A pixel's channel c (linear light, 0-1) comes out as 2^k_c * x^contrast, k the channel's gain in stops at white, set
-# by brightness, temperature and tint (gains_of); a pixel going above white is scaled down to it, its hue kept.
+#   tint: how much greener than red and blue's mean white comes out, in stops (+: greener, -: more magenta);
+#   black: the level (0-255) that becomes black, and all below it;
+#   white: the level (0-255) that becomes white, and all above it;
+#   midtones: the levels between bent (1: straight; above 1 lighter, below darker), black and white kept.
+# A pixel's channel c comes out as ((s - black) / (white - black)) ^ (1 / midtones), clipped to black and white, where
+# s is the channel's level (sRGB, 0-255) after its gain in linear light, 2^k_c, set by temperature and tint (gains_of:
+# their gains keep the brightness of a gray). So each channel goes through a curve of its own (curves_of).
 # colors.json: by the photo's stem, {"sha1": its SHA-1, "colors": settings + {"source": "auto-generated" or
 # "hand-placed"}}; settings made by make fit-colors (auto-generated) or set in make adjust-colors (hand-placed, which
 # fit-colors keeps). An entry whose SHA-1 isn't its photo's is of another photo once under the same name: ignored.
@@ -84,40 +68,47 @@ FILE = "colors.json"
 REFERENCES = ("my-collection", "ebay-hitjapan", "ebay-elrocinante")
 LIT_ALIKE = REFERENCES + ("jnlgame", "yugiyahirano")
 PAPER_BRIGHTNESS = 0.88
-SETTINGS = ("brightness", "contrast", "temperature", "tint")
-NEUTRAL = {"brightness": 0.0, "contrast": 1.0, "temperature": 0.0, "tint": 0.0}
+SETTINGS = ("black", "white", "midtones", "temperature", "tint")
+NEUTRAL = {"black": 0.0, "white": 255.0, "midtones": 1.0, "temperature": 0.0, "tint": 0.0}
 
 
-def background_settings(white):
-    """The settings that make a background's white (linear, B, G, R) white."""
-    return settings_of(-np.log2(np.asarray(white, np.float64)), 1.0)
+def encode(linear):
+    """sRGB (0-1) of linear light, carried on above 1 by the same formula."""
+    linear = np.asarray(linear, np.float64)
+    return np.where(linear <= 0.0031308, 12.92 * linear, 1.055 * np.maximum(linear, 0) ** (1 / 2.4) - 0.055)
 
 
 def gains_of(settings):
-    """The gains at white, in stops (B, G, R), of brightness, temperature and tint: the luminance-weighted mean is the
-    brightness, red minus blue the temperature, green minus the mean of red and blue the tint."""
-    b, t, n = settings["brightness"], settings["temperature"], settings["tint"]
-    a = b - LUMINANCE[1] * n - (LUMINANCE[2] - LUMINANCE[0]) * t / 2
+    """The gains of temperature and tint, in stops (B, G, R): red minus blue the temperature, green minus the mean of
+    red and blue the tint, their luminance-weighted mean 0 (a gray stays as bright)."""
+    t, n = settings["temperature"], settings["tint"]
+    a = -LUMINANCE[1] * n - (LUMINANCE[2] - LUMINANCE[0]) * t / 2
     return np.array([a - t / 2, a + n, a + t / 2])
 
 
-def settings_of(gains, contrast):
-    """The settings of gains at white (stops, B, G, R) and a contrast: gains_of's inverse."""
-    k = np.asarray(gains, np.float64)
-    return {"brightness": float(k @ LUMINANCE), "contrast": float(contrast), "temperature": float(k[2] - k[0]),
-            "tint": float(k[1] - (k[0] + k[2]) / 2)}
-
-
 def curves_of(settings):
-    """The per-channel curves (3 x 256, sRGB -> linear) of a photo's settings."""
-    return (2.0 ** gains_of(settings))[:, None] * LINEAR[None, :] ** settings["contrast"]
+    """The per-channel curves (3 x 256, 8-bit sRGB in and out, B, G, R) of a photo's settings."""
+    level = 255 * encode((2.0 ** gains_of(settings))[:, None] * LINEAR[None, :])
+    black, white = settings["black"], max(settings["white"], settings["black"] + 1)
+    out = np.clip((level - black) / (white - black), 0, 1) ** (1 / settings["midtones"])
+    return (out * 255).round().astype(np.uint8)
 
 
 def adjusted(photo, settings):
     """The photo with its own settings applied."""
     if settings is None or all(settings[k] == NEUTRAL[k] for k in SETTINGS):
         return photo
-    return through(photo, curves_of(settings))
+    curves = curves_of(settings)
+    return np.dstack([cv2.LUT(photo[..., c], curves[c]) for c in range(3)])
+
+
+def whitening(color, target=1.0):
+    """The settings that make a color (linear, B, G, R) a neutral gray as bright as target (linear; 1: white), black
+    kept black: temperature and tint making it neutral, then the white level set so that it comes out at target."""
+    k = -np.log2(np.asarray(color, np.float64))
+    settings = {"temperature": float(k[2] - k[0]), "tint": float(k[1] - (k[0] + k[2]) / 2)}
+    seen = float(encode(color[1] * 2.0 ** gains_of(settings)[1]))  # all three channels alike now
+    return settings | {"black": 0.0, "white": float(min(255, 255 * seen / float(encode(target)))), "midtones": 1.0}
 
 
 def load_colors():

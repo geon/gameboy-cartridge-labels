@@ -4,14 +4,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color, fits, photos
 from cartridge import shell_of
 
-# fit-colors: each photo's own color settings (src/color.py: brightness, contrast, temperature, tint) into
+# fit-colors: each photo's own color settings (src/color.py: black, white, midtones, temperature, tint) into
 # colors.json, auto-generated; settings placed by hand (make adjust-colors) are kept. For every photo but the fakes
 # whose plastic is accepted or placed by hand:
-#   - my own photos and jnlgame's (color.BORDERS): brightness, temperature and tint making their background's white
-#     white (color.white, color.background_settings);
+#   - my own photos and jnlgame's (color.BORDERS): temperature, tint and the white level making their background's white
+#     white (color.white, color.whitening);
 #   - Hit-Japan's and yugiyahirano's: their source's settings (color.SOURCE_SETTINGS);
 #   - a source whose photos aren't all lit alike (not in color.LIT_ALIKE), if its label is accepted or placed by hand
-#     and white paper is found on it (color.paper): brightness, temperature and tint set so that the paper comes out
+#     and white paper is found on it (color.paper): temperature, tint and the white level set so that the paper comes out
 #     neutral, as bright as the reference sources' paper (color.PAPER_BRIGHTNESS);
 #   - otherwise none (neutral).
 # The labels are read from their images in generated/fit-colors/labels/<photo>.png: straightened, at render-labels'
@@ -105,14 +105,12 @@ def auto(source, paper, white=None):
     """A photo's auto-generated settings: by its source (see above), from its label's white paper, or its background's
     white."""
     if source in color.BORDERS:
-        return color.background_settings(white)
+        return color.whitening(white)
     if source in color.SOURCE_SETTINGS:
         return dict(color.SOURCE_SETTINGS[source])
     if source in color.LIT_ALIKE or paper is None:
         return dict(color.NEUTRAL)
-    paper = np.asarray(paper, np.float64)
-    y = float(paper @ color.LUMINANCE)
-    return color.settings_of(np.log2(color.PAPER_BRIGHTNESS / y) - np.log2(paper / y), 1.0)
+    return color.whitening(paper, color.PAPER_BRIGHTNESS)
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@
 #   Fits the label in the recess of every photo whose plastic is accepted or placed by hand, into fits.json: its pose, as a homography from the label's model to the photo's pixels, not yet reviewed; its shift, turn and width into generated/fit-label/<photo>.json; a fit sticking out of the recess is rejected; a label accepted or placed by hand is kept (src/fit_label.py).
 #
 #   make fit-colors
-#   Sets each photo's own colors (brightness, contrast, temperature, tint; src/color.py) into colors.json, for every photo but the fakes whose plastic is accepted or placed by hand: my own photos' and jnlgame's background made white, Hit-Japan's and yugiyahirano's set by source, and for a source whose photos aren't lit alike, its label's white paper made neutral, as bright as the reference sources' (my own, Hit-Japan's, elrocinante's); settings placed by hand are kept. Its label images, straightened, into generated/fit-colors/labels/<photo>.png (src/fit_colors.py).
+#   Sets each photo's own colors (black, white, midtones, temperature, tint; src/color.py) into colors.json, for every photo but the fakes whose plastic is accepted or placed by hand: my own photos' and jnlgame's background made white, Hit-Japan's and yugiyahirano's set by source, and for a source whose photos aren't lit alike, its label's white paper made neutral, as bright as the reference sources' (my own, Hit-Japan's, elrocinante's); settings placed by hand are kept. Its label images, straightened, into generated/fit-colors/labels/<photo>.png (src/fit_colors.py).
 #
 #   make render-labels
 #   Renders each release's label, straightened and its colors set (colors.json, make fit-colors), stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
@@ -32,7 +32,7 @@
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
 #
 #   make adjust-colors
-#   A tool, not a step: a local page for setting each photo's colors by hand, release by release, its photos' labels side by side, the reference sources' marked: brightness, contrast, temperature and tint sliders, saved to colors.json as placed by hand when let go; Auto puts back fit-colors' settings (src/adjust_colors.py).
+#   A tool, not a step: a local page for setting each photo's colors by hand, release by release, its photos' labels side by side, the reference sources' marked: black, white, midtones, temperature and tint sliders, saved to colors.json as placed by hand when let go; Auto puts back fit-colors' settings (src/adjust_colors.py).
 #
 #   make review-fits
 #   A tool, not a step: a local page for judging the plastic's fits by eye, each drawn on its photo, flagged ones first; your verdicts are saved to fits.json (src/review_fits.py).
