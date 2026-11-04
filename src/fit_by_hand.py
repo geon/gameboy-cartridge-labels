@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import AGB_CAMERA_HEIGHT, agb_creases, agb_outline_points, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
+from cartridge import DEFAULT_CAMERA_HEIGHT, body_box, RELIABLE_PERSPECTIVE, agb_creases, agb_outline_points, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
 from fit_cartridge import OUT as DETAILS, load
 from find_doubles import rows
 from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bevel_lines, dense, face_outline, facet, facet_counts, filters_of, matching, pill_outline, rounded_outline
@@ -53,9 +53,8 @@ def anchor(shell):
 def model(shell):
     """A shell's model as the page draws it, in mm: the handles' rectangle's corners (anchor), the label's corners,
     and the lines [points, color, dashed, closed, depths, wall] (as review-fits draws them; depths: each point's depth
-    behind the face in mm, negative in front of it, or null: in it; the page sees them from the camera it estimates
-    from the placement, as cartridge.camera_of does, or with camera_height (the AGB's) from that height over the
-    photo's center, as cartridge.agb_camera does; through the front wall (wall mm thick, or null: none; refractive
+    behind the face in mm, negative in front of it, or null: in it; the page sees them from the camera
+    cartridge.camera_for takes (the placement's where it shows perspective, else a set height), through the front wall (wall mm thick, or null: none; refractive
     index n), as cartridge.seen_at does)."""
     lines = [[dense(rounded_outline(shell.recess, RECESS_RADIUS)), "#3d3", False, True]]
     if shell.name == "cgb":
@@ -70,7 +69,8 @@ def model(shell):
         lines += [[dense(face_outline()), "#f33", False, True], *[[dense(l, False), "#f33", True, False] for l in bevel_lines()],
                   [arrow_outline(), "#f90", False, True], [pill_outline(), "#f90", False, True], *[[np.array(e), "#f90", False, False] for e in groove_edges()]]
     return {"anchor": anchor(shell).tolist(), "label": corners_of(shell.label).tolist(), "n": CGB_REFRACTIVE_INDEX,
-            "camera_height": AGB_CAMERA_HEIGHT if shell.name == "agb" else None,
+            "box": corners_of(body_box(shell.body)).tolist(),
+            "reliable_perspective": RELIABLE_PERSPECTIVE, "default_camera_height": DEFAULT_CAMERA_HEIGHT,
             "lines": [[np.round(l[0], 3).tolist(), *l[1:4], None if len(l) < 5 else np.round(l[4], 3).tolist(), l[5] if len(l) > 5 else None]
                       for l in lines]}
 
@@ -478,9 +478,15 @@ function seen(cam, [x, y], depth, wall, n) {
   return [cam[0] + ax * k, cam[1] + ay * k];
 }
 function shapes() {
-  // The camera: for the AGB at a set height over the photo's center (cartridge.agb_camera), else as the placement implies.
-  const H = toPhoto(), cam = model().camera_height ? [...apply(toMm(), [photo.width / 2, photo.height / 2]), model().camera_height]
-    : model().lines.some(l => l[4]) ? cameraOf(H) : null;
+  // The camera: as the placement implies where it shows the body in perspective (its scale changing by over
+  // reliable_perspective across the box), else default_camera_height over the photo's center (cartridge.camera_for).
+  const H = toPhoto(), m = model();
+  let cam = null;
+  if (m.lines.some(l => l[4])) {
+    const w = m.box.map(([x, y]) => Math.abs(H[2][0] * x + H[2][1] * y + H[2][2]));
+    cam = (Math.max(...w) / Math.min(...w)) ** 1.5 - 1 > m.reliable_perspective ? cameraOf(H) : null;
+    if (!cam || !isFinite(cam[2])) cam = [...apply(toMm(), [photo.width / 2, photo.height / 2]), m.default_camera_height];
+  }
   const lines = model().lines.map(([pts, col, dash, closed, depths, wall]) => [pts.map((q, k) => apply(H, depths && depths[k] ? seen(cam, q, depths[k], wall || 0, model().n) : q)), col, dash, closed]);
   return placed() ? lines.concat([[roundedOutline(rect).map(q => apply(H, q)), "#3cf", false, true]]) : lines;
 }

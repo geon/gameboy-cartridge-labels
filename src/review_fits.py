@@ -4,7 +4,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
 from cartridge import (AGB_RECESS, agb_camera, agb_creases, agb_outline_points, seen_straight, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
-                       PILL_RADIUS, RECESS, RECESS_RADIUS, camera_of, cgb_outline_seen, cgb_ridge_lines, corners_of, groove_edges, project, seen_at, shell_of)
+                       PILL_RADIUS, RECESS, RECESS_RADIUS, body_box, camera_for, CGB, cgb_outline_seen, cgb_ridge_lines, corners_of, groove_edges, project, seen_at, shell_of)
 from fit_cartridge import OUT as DETAILS, load
 
 # review-fits: a local page for judging the plastic's fits (fits.json, src/fits.py; make fit-cartridge) by eye, a page
@@ -143,9 +143,9 @@ def render(path, fit, width=800):
         if fit["shell"] == "cgb":
             # The CGB's arrow: its top corners barely rounded, the tip a little more.
             half = CGB_ARROW_WIDTH / 2
-            # Seen from the camera camera_of estimates from the fit (the photo's center taken as the view's): the outline,
+            # Seen from the camera camera_for takes (the fit's where it shows perspective, else a set height): the outline,
             # its top and sides 2 mm behind the face (the bevels), its bottom in it; the internal ridges below.
-            camera = camera_of(H, (photo.shape[1] / 2, photo.shape[0] / 2))
+            camera = camera_for(H, (photo.shape[1] / 2, photo.shape[0] / 2), body_box(CGB.body))
             cv2.polylines(photo, [P(cgb_outline_seen(camera))], True, (0, 0, 255), t, cv2.LINE_AA)
             arrow = arrow_outline(CGB_ARROW_TOP_RADIUS, CGB_ARROW_TIP_RADIUS, top=CGB_ARROW_TOP, half_width=half, half_angle=np.arctan2(half, CGB_ARROW_HEIGHT))
             cv2.polylines(photo, [P(arrow)], True, (0, 150, 255), t, cv2.LINE_AA)

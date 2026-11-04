@@ -569,7 +569,7 @@ RECESS_DEPTH = 0.2
 #   - the outline (behind the face, at the bevel's back) looks 1.3 to 1.5 % smaller than 56.8 x 34.5 and 60 at the
 #     shoulders (56.06 x 34.0, 59.30; the DMG's, whose face runs to its edge, 56.78 x 64.71 on 60 photos placed by
 #     hand): seen from about 13 to 15 cm (2 mm deep), as 37 of them are otakaraou's close-ups. Fitted at that size
-#     (0.987, their mean; now from its depth: AGB_CAMERA_HEIGHT): on the 51, 42 fits within 0.3 mm of the hand fit (median 0.14), against
+#     (0.987, their mean; since replaced by its depth): on the 51, 42 fits within 0.3 mm of the hand fit (median 0.14), against
 #     15 at full size (0.34) and 4 without the outline (with 57 wide and 1.5 shoulders: 39 at 0.985);
 #   - the recess's top 7.65 below the body's top, its bottom 3.85 above its bottom (7.43 and 3.57 to the outline as
 #     seen, made 1.5 % larger about the body's middle; by hand: "looks like 7.5", and 3.5);
@@ -594,16 +594,16 @@ AGB_LABEL = (7.0, 8.05, 50.0, 30.05)
 # front face (the bevel's back); its bottom, not bevelled, in the face. On the 56 photos placed by hand, fit-cartridge's
 # fit within 0.3 / 0.5 / 1 mm of the hand fit: 46 / 50 / 53 (median 0.19); the previous model (the whole outline 98.7 %
 # as large) 48 / 51 / 52 (0.14); the bottom taken 2 mm deep too 48 / 53 / 53 (0.14). The upper crease's top stands AGB_RAISE out of the face, toward the
-# camera (taken to fall to the face at the points, as the gap between the creases does), the lower crease lies in it.
-# Seen from a camera AGB_CAMERA_HEIGHT above the photo's center (agb_camera): the height that makes the outline look as
-# much smaller as on the 51 photos (1.3 %, 2 mm deep). It can't be told from a fit: on those photos camera_of put it
-# anywhere from 13 to 66 cm, unrelated to how much smaller the outline looked.
+# camera (falling to the face at the points as one period of a cosine across them), the lower crease lies in it.
+# Seen from the camera the fit implies (camera_of), as the CGB's.
 AGB_RAISE = 2.0
-AGB_CAMERA_HEIGHT = 150.0
-# The creases' points 1.9 above the recess's top (2.4 measured on the photos; 0.5 lower, judged on the refitted ones).
+AGB_TOP_CORNER_RADIUS = 2.2  # the top corners (the shoulders'), judged on the refitted photos
+# The creases' points 1.9 above the recess's top (2.4 measured on the photos; 0.5 lower, judged on the refitted ones),
+# and 0.5 in from above the recess's sides (judged so too).
 # Their tops: the upper one's 2.0 below the body's top (1.8 as seen on the photos, flat; 2.0 once raised, as by hand),
 # the lower one's 2.9.
 AGB_CREASE_END = AGB_RECESS[1] - 1.9
+AGB_CREASE_X = (AGB_RECESS[0] + 0.5, AGB_RECESS[2] - 0.5)  # the points' x
 AGB_CREASE_TOPS = (2.0, 2.9)  # the upper crease's, the lower one's
 # The logo as macOS's text recognition boxes it: 28 wide, as high as the boxes of its reads with 12 or more letters
 # (width over height 8.4, median of 92 reads on AGB photos, 2026-11-04: 3.33 mm), its middle taken halfway between the
@@ -611,11 +611,13 @@ AGB_CREASE_TOPS = (2.0, 2.9)  # the upper crease's, the lower one's
 AGB_LOGO = (28.5 - 14.0, 5.55 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.55 + 28.0 / 8.4 / 2)
 
 
-def agb_outline():
-    """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom (corners sharp:
-    their radii aren't measured)."""
-    w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
-    return np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64) + (l, 0)
+def agb_outline(per_corner=8):
+    """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom; the top
+    corners rounded to AGB_TOP_CORNER_RADIUS, the others sharp (their radii aren't measured)."""
+    w, h, s, sh, l, r = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT, AGB_TOP_CORNER_RADIUS
+    arc = lambda cx, cy, a0, a1: [(cx + r * np.cos(t), cy + r * np.sin(t)) for t in np.linspace(a0, a1, per_corner)]
+    points = arc(-s + r, r, np.pi, 1.5 * np.pi) + arc(w + s - r, r, 1.5 * np.pi, 2 * np.pi) + [(w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)]
+    return np.array(points, np.float64) + (l, 0)
 
 
 def agb_outline_points():
@@ -623,7 +625,7 @@ def agb_outline_points():
     AGB_BEVEL behind it; its bottom edge in it, AGB_BEVEL in from the sides (the bevels end there), joined to the sides'
     bottom ends (as cgb_outline_points)."""
     o = agb_outline()
-    back = dense_line(np.vstack([o[5:], o[:5]]))  # from the bottom left round to the bottom right
+    back = dense_line(np.vstack([o[-3:], o[:-3]]))  # from the bottom left (agb_outline's third last) round to the bottom right
     l, (w, h) = AGB_LEFT, AGB_BODY
     bottom = dense_line([[l + w - AGB_BEVEL, h], [l + AGB_BEVEL, h]])
     return np.vstack([back, bottom]), np.r_[np.full(len(back), AGB_BEVEL), np.zeros(len(bottom))]
@@ -631,18 +633,16 @@ def agb_outline_points():
 
 def agb_creases(count=48):
     """The creases in mm, each (points left to right, their depths behind the face): the upper one raised out of the
-    face by AGB_RAISE at its top, falling to the face at the points as the gap between the creases does; the lower one
-    in the face."""
+    face by AGB_RAISE in the middle, falling to the face at the points as one period of a cosine across them; the lower
+    one in the face."""
     upper, lower = agb_crease(AGB_CREASE_TOPS[0], count), agb_crease(AGB_CREASE_TOPS[1], count)
-    gap = lower[:, 1] - upper[:, 1]
-    return [(upper, -AGB_RAISE * gap / gap.max()), (lower, np.zeros(count))]
+    t = (upper[:, 0] - AGB_CREASE_X[0]) / (AGB_CREASE_X[1] - AGB_CREASE_X[0])
+    return [(upper, -AGB_RAISE * (1 - np.cos(2 * np.pi * t)) / 2), (lower, np.zeros(count))]
 
 
 def agb_camera(H, center):
-    """The camera the AGB's depths are seen from: AGB_CAMERA_HEIGHT above the face, straight over where H (mm -> the
-    photo's pixels) puts the photo's center (pixel center): (x, y, height) in mm, as camera_of gives."""
-    foot = project(np.linalg.inv(np.asarray(H, np.float64)), [center])[0]
-    return np.array([foot[0], foot[1], AGB_CAMERA_HEIGHT])
+    """The camera the AGB's depths are seen from (camera_for)."""
+    return camera_for(H, center, body_box(AGB_BODY))
 
 
 def seen_straight(points, depths, camera):
@@ -657,9 +657,9 @@ def seen_straight(points, depths, camera):
 
 def agb_crease(top, count=48):
     """One crease in mm, left to right: the circular arc from the left point to the right one through (28.5, top)."""
-    half, sag = (AGB_RECESS[2] - AGB_RECESS[0]) / 2, AGB_CREASE_END - top
+    half, sag = (AGB_CREASE_X[1] - AGB_CREASE_X[0]) / 2, AGB_CREASE_END - top
     r = (half * half + sag * sag) / (2 * sag)
-    xs = np.linspace(AGB_RECESS[0], AGB_RECESS[2], count)
+    xs = np.linspace(*AGB_CREASE_X, count)
     return np.c_[xs, top + r - np.sqrt(r * r - (xs - 28.5) ** 2)]
 
 
@@ -670,10 +670,10 @@ def agb_face_runs():
     AGB_BEVEL behind the face (agb_depths)."""
     w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
     seen = lambda p: (p[0] + l, p[1])
-    return [(seen(a), seen(b), n) for a, b, n in (((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
-            ((w + s, 1.0), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
+    return [(seen(a), seen(b), n) for a, b, n in (((-s + 2.5, 0.0), (w + s - 2.5, 0.0), (0, -1)),
+            ((w + s, 2.5), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
             ((w - 2.0, h), (2.0, h), (0, 1)),
-            ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 1.0), (-1, 0)))]
+            ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 2.5), (-1, 0)))]
 
 
 def agb_depths(samples):
@@ -792,6 +792,40 @@ def camera_distance(H, size, steps=40, grid=9):
 # (DISTANCES only judge whether a fit fit-cartridge made is plausible). A fit without perspective (or with none a
 # camera could give) puts it infinitely far, straight in front: depth then shifts nothing. The line of sight bends
 # where it enters and leaves the front wall (Snell's law; see the depths above).
+
+
+# Where the fit shows the cartridge without much perspective, the camera's distance can't be told from it (a flat face
+# seen straight on looks the same from any distance): camera_of then puts it anywhere, or infinitely far. So the
+# camera is camera_of's only where the photo's scale changes by over RELIABLE_PERSPECTIVE across the body (head on,
+# placing the recess by hand gives about 1 to 2 %; 10 degrees from 20 cm, about 5 %); elsewhere DEFAULT_CAMERA_HEIGHT
+# straight over the photo's center.
+DEFAULT_CAMERA_HEIGHT = 200.0
+RELIABLE_PERSPECTIVE = 0.04
+
+
+def body_box(body):
+    """A body (w, h) as a box in mm, its middle at 28.5 across, as the recesses'."""
+    return (28.5 - body[0] / 2, 0.0, 28.5 + body[0] / 2, body[1])
+
+
+def perspective(H, box):
+    """How much the photo's scale changes across a box (mm) as H (mm -> pixels) shows it: the largest local scale at
+    its corners over the smallest, less 1 (a homography's local scale goes as its denominator to the -1.5)."""
+    H = np.asarray(H, np.float64)
+    w = np.abs(np.c_[corners_of(box), np.ones(4)] @ H[2])
+    return float((w.max() / w.min()) ** 1.5 - 1)
+
+
+def camera_for(H, center, box):
+    """The camera features at depth are seen from, (x, y, height) in mm as camera_of gives: camera_of's (the center of
+    its view at pixel center) where H (mm -> the photo's pixels) shows the body's box in perspective, else
+    DEFAULT_CAMERA_HEIGHT above the face, straight over where H puts pixel center."""
+    if perspective(H, box) > RELIABLE_PERSPECTIVE:
+        camera = camera_of(H, center)
+        if np.isfinite(camera[2]):
+            return camera
+    foot = project(np.linalg.inv(np.asarray(H, np.float64)), [center])[0]
+    return np.array([foot[0], foot[1], DEFAULT_CAMERA_HEIGHT])
 
 
 def camera_of(H, center):
