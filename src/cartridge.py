@@ -556,33 +556,48 @@ CGB_RIDGE_DEPTH = CGB_WALL
 RECESS_DEPTH = 0.2
 
 
-# The Game Boy Advance (AGB) cartridge, as measured by hand on 2026-11-04 (agb-shell.md; to be checked on fitted photos):
-# the body 57 wide (as the DMG's and CGB's) and 34.5 high, with a shoulder sticking out 1.5 on each side along its top
-# 7 mm (60 wide there: x from -1.5 to 58.5, the origin still at the body's top left). The recess 44 x 23, centered,
-# its bottom 3.5 above the body's bottom (so its top 8 below the body's top; the top was also measured as "looks like
-# 7.5", which doesn't add up with the rest: 7.5 + 23 + 3.5 = 34). The label (hard to measure) 43 x 22, centered in the
-# recess. The grip above the recess: two creases bowing upward, taken as circular arcs, meeting in sharp points 2 mm
-# above the recess's top, straight above its sides; the lower one's top 2.5 below the body's top, the upper one's 2.
+# The Game Boy Advance (AGB) cartridge (agb-shell.md), by hand with calipers (2026-11-04): the body 57 wide (as the
+# DMG's and CGB's) and 34.5 high, with a shoulder sticking out 1.5 on each side along its top (60 wide there: x from -1.5
+# to 58.5, the origin still at the body's top left); its top, sides and shoulders bevelled, 2 mm (AGB_BEVEL). The
+# recess 44 x 23 (calipers at 44.5 don't fit in, 44.0 and 23 are a bit tight, 22.5 has room), centered. The rest
+# measured on 51 photos whose recess I placed by hand (2026-11-04; edges in the photos straightened through that fit,
+# medians; the middle half of the photos within about 0.1 mm), in the recess's frame:
+#   - the outline (behind the face, at the bevel's back) looks 1.5 % smaller than 57 x 34.5 (middle half 1.2 to 1.7;
+#     the same 0.4 % on the DMG's, whose face runs to its edge, on 60 photos placed by hand): seen from about 13 cm
+#     (2 mm deep), as 37 of them are otakaraou's close-ups. Fitted at that size (AGB_OUTLINE_SEEN): on the 51, 39 fits
+#     within 0.3 mm of the hand fit (median 0.14), against 8 at full size (0.39) and 4 without the outline;
+#   - the recess's top 7.65 below the body's top, its bottom 3.85 above its bottom (7.43 and 3.57 to the outline as
+#     seen, made 1.5 % larger about the body's middle; by hand: "looks like 7.5", and 3.5);
+#   - the shoulders' undersides 6.7 below the top (by hand 7);
+#   - the label 43 x 22 (42.8 x 21.8 measured; by hand 43 x 22), centered across, 0.4 below the recess's top and 0.6
+#     above its bottom (measured 0.48 and 0.72);
+#   - the grip above the recess: two creases bowing upward, taken as circular arcs, meeting in sharp points 2.4 above
+#     the recess's top (by hand 2), straight above its sides; the upper one's top 1.8 below the body's top, the lower
+#     one's 2.9 (by hand 2 and 2.5; the strongest lines there, rough: a straight line 1.45 below the top runs across
+#     too, maybe the top bevel's inner edge).
 # The embossed "GAME BOY ADVANCE" logo between the creases and the recess, about 28 wide. Not measured: the corners'
 # radii, the logo's height and place (AGB_LOGO).
 AGB_BODY = (57.0, 34.5)
 AGB_SHOULDER = 1.5
-AGB_SHOULDER_HEIGHT = 7.0
-AGB_RECESS = (6.5, 8.0, 50.5, 31.0)
-AGB_LABEL = (7.0, 8.5, 50.0, 30.5)
-AGB_CREASE_END = AGB_RECESS[1] - 2.0
-AGB_CREASE_TOPS = (2.0, 2.5)  # the upper crease's, the lower one's
+AGB_SHOULDER_HEIGHT = 6.7
+AGB_BEVEL = 2.0
+AGB_OUTLINE_SEEN = 0.985  # the outline's size as fitted, about the body's middle
+AGB_RECESS = (6.5, 7.65, 50.5, 30.65)
+AGB_LABEL = (7.0, 8.05, 50.0, 30.05)
+AGB_CREASE_END = AGB_RECESS[1] - 2.4
+AGB_CREASE_TOPS = (1.8, 2.9)  # the upper crease's, the lower one's
 # The logo as macOS's text recognition boxes it: 28 wide, as high as the boxes of its reads with 12 or more letters
 # (width over height 8.4, median of 92 reads on AGB photos, 2026-11-04: 3.33 mm), its middle taken halfway between the
-# lower crease (3.9 mm down at the logo's ends) and the recess: a guess, which the starts allow for (agb_logo_start).
-AGB_LOGO = (28.5 - 14.0, 5.9 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.9 + 28.0 / 8.4 / 2)
+# lower crease (about 3.5 mm down at the logo's ends) and the recess: a guess, which the starts allow for (agb_logo_start).
+AGB_LOGO = (28.5 - 14.0, 5.55 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.55 + 28.0 / 8.4 / 2)
 
 
-def agb_outline():
+def agb_outline(scale=1.0):
     """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom (corners sharp:
-    their radii aren't measured)."""
+    their radii aren't measured); scaled about the body's middle (AGB_OUTLINE_SEEN: as fitted and seen)."""
     w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
-    return np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64)
+    points = np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64)
+    return (w / 2, h / 2) + (points - (w / 2, h / 2)) * scale
 
 
 def agb_crease(top, count=48):
@@ -596,12 +611,15 @@ def agb_crease(top, count=48):
 def agb_face_runs():
     """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top, the shoulders' sides,
     the body's sides below them and the bottom. The shoulders' undersides (1.5 mm) are left out. The creases aren't
-    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4."""
+    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4. At the outline's size as seen
+    (AGB_OUTLINE_SEEN)."""
     w, h, s, sh = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT
-    return [((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
+    k = AGB_OUTLINE_SEEN
+    seen = lambda p: (w / 2 + (p[0] - w / 2) * k, h / 2 + (p[1] - h / 2) * k)
+    return [(seen(a), seen(b), n) for a, b, n in (((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
             ((w + s, 1.0), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
             ((w - 2.0, h), (2.0, h), (0, 1)),
-            ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 1.0), (-1, 0))]
+            ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 1.0), (-1, 0)))]
 
 
 def agb_logo_lines(lines):
@@ -646,7 +664,7 @@ CGB = Shell("cgb", CGB_BODY, CGB_RECESS, CGB_LABEL,
 # No arrow on its front: the band below the recess runs across the whole recess. No "GAME BOY COLOR" on its labels.
 AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL,
             build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None),
-            (30.5, 31.5), (31.7, 33.8), np.arange(7.0, 50.0, 0.25), None, box=(-AGB_SHOULDER, 0.0, AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
+            (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(-AGB_SHOULDER, 0.0, AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
 SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 

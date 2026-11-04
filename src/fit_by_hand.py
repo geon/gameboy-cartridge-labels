@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import AGB_CREASE_TOPS, agb_crease, agb_outline, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
+from cartridge import AGB_CREASE_TOPS, AGB_OUTLINE_SEEN, agb_crease, agb_outline, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
 from fit_cartridge import OUT as DETAILS, load
 from find_doubles import rows
 from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bevel_lines, dense, face_outline, facet, facet_counts, filters_of, matching, pill_outline, rounded_outline
@@ -63,7 +63,7 @@ def model(shell):
         outline, depths = cgb_outline_points()
         lines += [[outline, "#f33", False, True, depths], [arrow, "#f90", False, True], *[[dense(l, False), "#0cf", False, False, np.full(len(dense(l, False)), CGB_RIDGE_DEPTH), CGB_WALL] for l in cgb_ridge_lines()]]
     elif shell.name == "agb":
-        lines += [[dense(agb_outline()), "#f33", False, True], *[[agb_crease(top), "#f90", False, False] for top in AGB_CREASE_TOPS]]
+        lines += [[dense(agb_outline(AGB_OUTLINE_SEEN)), "#f33", False, True], *[[agb_crease(top), "#f90", False, False] for top in AGB_CREASE_TOPS]]
     else:
         lines += [[dense(face_outline()), "#f33", False, True], *[[dense(l, False), "#f33", True, False] for l in bevel_lines()],
                   [arrow_outline(), "#f90", False, True], [pill_outline(), "#f90", False, True], *[[np.array(e), "#f90", False, False] for e in groove_edges()]]
