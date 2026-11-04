@@ -24,7 +24,7 @@ from cartridge import DISTANCE_TOLERANCE, MAX_TILT, SPECIAL_SHELLS, Fitter, came
 # Usage: fit_cartridge.py
 TEXT = "generated/read-text"
 OUT = "generated/fit-cartridge"
-SYSTEMS = ("dmg", "cgb", "unknown")
+SYSTEMS = ("dmg", "cgb", "lrg", "unknown")  # lrg: Limited Run Games' cartridges, fitted as DMG shells
 SIDES = ("top", "right", "bottom", "left")
 
 

@@ -4,7 +4,7 @@ import glob, hashlib, json, os, re, shutil, sys
 # with one sources.json per folder (file name -> where it came from, and the file's "sha1").
 # - source: where the photos came from (my-collection: my own; google: saved from Google image searches; the others
 #   named after a site or seller), the subfolder of save-new-images-here/ they were dropped off in (src/add_photos.py).
-# - system: dmg, cgb, agb, or unknown, from the serial.
+# - system: dmg, cgb, agb, lrg (Limited Run Games' unlicensed releases, LRG-AP-USA), or unknown, from the serial.
 # - serial: the serial printed on the label (DMG-ADQJ-JPN), else the release id it's known by (DMG-ADQJ), or UNKNOWN;
 #   parentheses only where the label prints them (AGB-U3IJ-JPN(A));
 # - note: what sets the release apart but isn't printed on the label, in square brackets (DMG-ATAJ-JPN[PINK]: the pink
@@ -18,7 +18,7 @@ import glob, hashlib, json, os, re, shutil, sys
 # it if its name is taken.
 # Usage: photos.py reconcile
 ROOT = "photos"
-SYSTEMS = ("dmg", "cgb", "agb", "unknown")
+SYSTEMS = ("dmg", "cgb", "agb", "lrg", "unknown")
 EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".avif", ".heic", ".heif")
 # The sources of fakes made from box art on a rendered cartridge: not photos.
 FAKES = ("emumovies", "launchbox-abeezy1388")
@@ -47,10 +47,10 @@ def rank(source):
 
 
 def system_of(serial):
-    """The folder of a serial or release id: its system's prefix (DMG-, CGB-, AGB-, or agb-1314 for releases without
-    a serial), else unknown."""
+    """The folder of a serial or release id: its system's prefix (DMG-, CGB-, AGB-, LRG-, or agb-1314 for releases
+    without a serial), else unknown."""
     prefix = serial.split("-")[0].lower()
-    return prefix if prefix in SYSTEMS[:3] else "unknown"
+    return prefix if prefix in SYSTEMS[:-1] else "unknown"
 
 
 def stem(name):
@@ -64,7 +64,7 @@ def tidy(name):
     s = re.sub(r"-{2,}", "-", re.sub(r"[^A-Za-z0-9_()\[\]-]+", "-", s)).strip("-")
     s = re.sub(r"-_", "_", re.sub(r"-([(\[])", r"\1", s))  # AGB-U3IJ-JPN (A): no space before the parenthesis on a label
     head, sep, tail = s.rpartition("_") if re.search(r"_\d+$", s) else (s, "", "")
-    if re.match(r"(dmg|cgb|agb)-(?!\d+$)[a-z0-9()\[\]-]+$", head, re.I):
+    if re.match(r"(dmg|cgb|agb|lrg)-(?!\d+$)[a-z0-9()\[\]-]+$", head, re.I):
         head = head.upper()
     return f"{head}{sep}{tail}{ext.lower()}"
 
