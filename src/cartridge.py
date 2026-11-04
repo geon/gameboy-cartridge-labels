@@ -569,7 +569,7 @@ RECESS_DEPTH = 0.2
 #   - the outline (behind the face, at the bevel's back) looks 1.3 to 1.5 % smaller than 56.8 x 34.5 and 60 at the
 #     shoulders (56.06 x 34.0, 59.30; the DMG's, whose face runs to its edge, 56.78 x 64.71 on 60 photos placed by
 #     hand): seen from about 13 to 15 cm (2 mm deep), as 37 of them are otakaraou's close-ups. Fitted at that size
-#     (AGB_OUTLINE_SEEN, 0.987, their mean): on the 51, 42 fits within 0.3 mm of the hand fit (median 0.14), against
+#     (0.987, their mean; now from its depth: AGB_CAMERA_HEIGHT): on the 51, 42 fits within 0.3 mm of the hand fit (median 0.14), against
 #     15 at full size (0.34) and 4 without the outline (with 57 wide and 1.5 shoulders: 39 at 0.985);
 #   - the recess's top 7.65 below the body's top, its bottom 3.85 above its bottom (7.43 and 3.57 to the outline as
 #     seen, made 1.5 % larger about the body's middle; by hand: "looks like 7.5", and 3.5);
@@ -588,23 +588,71 @@ AGB_LEFT = 28.5 - AGB_BODY[0] / 2  # the body's left side: its middle at 28.5, a
 AGB_SHOULDER = 1.6
 AGB_SHOULDER_HEIGHT = 6.7
 AGB_BEVEL = 2.0
-AGB_OUTLINE_SEEN = 0.987  # the outline's size as fitted, about the body's middle
 AGB_RECESS = (6.5, 7.65, 50.5, 30.65)
 AGB_LABEL = (7.0, 8.05, 50.0, 30.05)
-AGB_CREASE_END = AGB_RECESS[1] - 2.4
-AGB_CREASE_TOPS = (1.8, 2.9)  # the upper crease's, the lower one's
+# Depth (2026-11-04, from the fits refitted by hand): the outline's top, sides and shoulders lie AGB_BEVEL behind the
+# front face (the bevel's back); its bottom, not bevelled, in the face. On the 56 photos placed by hand, fit-cartridge's
+# fit within 0.3 / 0.5 / 1 mm of the hand fit: 46 / 50 / 53 (median 0.19); the previous model (the whole outline 98.7 %
+# as large) 48 / 51 / 52 (0.14); the bottom taken 2 mm deep too 48 / 53 / 53 (0.14). The upper crease's top stands AGB_RAISE out of the face, toward the
+# camera (taken to fall to the face at the points, as the gap between the creases does), the lower crease lies in it.
+# Seen from a camera AGB_CAMERA_HEIGHT above the photo's center (agb_camera): the height that makes the outline look as
+# much smaller as on the 51 photos (1.3 %, 2 mm deep). It can't be told from a fit: on those photos camera_of put it
+# anywhere from 13 to 66 cm, unrelated to how much smaller the outline looked.
+AGB_RAISE = 2.0
+AGB_CAMERA_HEIGHT = 150.0
+# The creases' points 1.9 above the recess's top (2.4 measured on the photos; 0.5 lower, judged on the refitted ones).
+# Their tops: the upper one's 2.0 below the body's top (1.8 as seen on the photos, flat; 2.0 once raised, as by hand),
+# the lower one's 2.9.
+AGB_CREASE_END = AGB_RECESS[1] - 1.9
+AGB_CREASE_TOPS = (2.0, 2.9)  # the upper crease's, the lower one's
 # The logo as macOS's text recognition boxes it: 28 wide, as high as the boxes of its reads with 12 or more letters
 # (width over height 8.4, median of 92 reads on AGB photos, 2026-11-04: 3.33 mm), its middle taken halfway between the
 # lower crease (about 3.5 mm down at the logo's ends) and the recess: a guess, which the starts allow for (agb_logo_start).
 AGB_LOGO = (28.5 - 14.0, 5.55 - 28.0 / 8.4 / 2, 28.5 + 14.0, 5.55 + 28.0 / 8.4 / 2)
 
 
-def agb_outline(scale=1.0):
+def agb_outline():
     """The AGB body's outline in mm, clockwise from the top left: the shoulders, the sides and the bottom (corners sharp:
-    their radii aren't measured); scaled about the body's middle (AGB_OUTLINE_SEEN: as fitted and seen)."""
+    their radii aren't measured)."""
     w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
-    points = np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64) + (l, 0)
-    return (28.5, h / 2) + (points - (28.5, h / 2)) * scale
+    return np.array([(-s, 0), (w + s, 0), (w + s, sh), (w, sh), (w, h), (0, h), (0, sh), (-s, sh)], np.float64) + (l, 0)
+
+
+def agb_outline_points():
+    """The AGB body's outline, closed, in mm, and each point's depth behind the face: its top, shoulders and sides
+    AGB_BEVEL behind it; its bottom edge in it, AGB_BEVEL in from the sides (the bevels end there), joined to the sides'
+    bottom ends (as cgb_outline_points)."""
+    o = agb_outline()
+    back = dense_line(np.vstack([o[5:], o[:5]]))  # from the bottom left round to the bottom right
+    l, (w, h) = AGB_LEFT, AGB_BODY
+    bottom = dense_line([[l + w - AGB_BEVEL, h], [l + AGB_BEVEL, h]])
+    return np.vstack([back, bottom]), np.r_[np.full(len(back), AGB_BEVEL), np.zeros(len(bottom))]
+
+
+def agb_creases(count=48):
+    """The creases in mm, each (points left to right, their depths behind the face): the upper one raised out of the
+    face by AGB_RAISE at its top, falling to the face at the points as the gap between the creases does; the lower one
+    in the face."""
+    upper, lower = agb_crease(AGB_CREASE_TOPS[0], count), agb_crease(AGB_CREASE_TOPS[1], count)
+    gap = lower[:, 1] - upper[:, 1]
+    return [(upper, -AGB_RAISE * gap / gap.max()), (lower, np.zeros(count))]
+
+
+def agb_camera(H, center):
+    """The camera the AGB's depths are seen from: AGB_CAMERA_HEIGHT above the face, straight over where H (mm -> the
+    photo's pixels) puts the photo's center (pixel center): (x, y, height) in mm, as camera_of gives."""
+    foot = project(np.linalg.inv(np.asarray(H, np.float64)), [center])[0]
+    return np.array([foot[0], foot[1], AGB_CAMERA_HEIGHT])
+
+
+def seen_straight(points, depths, camera):
+    """Where points (mm) at depths behind the face (negative: in front of it) are seen in the face from the camera, by
+    straight lines of sight (no wall to see through: seen_at for the clear CGB's)."""
+    points, depths = np.asarray(points, np.float64), np.asarray(depths, np.float64)
+    if not np.isfinite(camera[2]):
+        return points
+    foot = np.asarray(camera[:2], np.float64)
+    return foot + (points - foot) * (camera[2] / (camera[2] + depths))[:, None]
 
 
 def agb_crease(top, count=48):
@@ -618,15 +666,21 @@ def agb_crease(top, count=48):
 def agb_face_runs():
     """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top, the shoulders' sides,
     the body's sides below them and the bottom. The shoulders' undersides (1.6 mm) are left out. The creases aren't
-    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4. At the outline's size as seen
-    (AGB_OUTLINE_SEEN)."""
+    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4. All but the bottom lie
+    AGB_BEVEL behind the face (agb_depths)."""
     w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
-    k = AGB_OUTLINE_SEEN
-    seen = lambda p: (28.5 + (p[0] + l - 28.5) * k, h / 2 + (p[1] - h / 2) * k)
+    seen = lambda p: (p[0] + l, p[1])
     return [(seen(a), seen(b), n) for a, b, n in (((-s + 1.0, 0.0), (w + s - 1.0, 0.0), (0, -1)),
             ((w + s, 1.0), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
             ((w - 2.0, h), (2.0, h), (0, 1)),
             ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 1.0), (-1, 0)))]
+
+
+def agb_depths(samples):
+    """The depth behind the face of each of the AGB's samples (build_samples'): the outline's AGB_BEVEL but along the
+    bottom, the rest 0."""
+    points, normals, kinds = samples
+    return np.where((kinds == "face") & (normals[:, 1] < 0.5), AGB_BEVEL, 0.0)
 
 
 def agb_logo_lines(lines):
@@ -651,12 +705,17 @@ class Shell:
     """A cartridge's front, as the fitter sees it: the body (w, h), the recess and the label (x1, y1, x2, y2), the
     samples, the plain band below the recess for Fitter.band_line (the recess's bottom line's rows, the band's rows, and
     its columns beside the arrow), where "GAME BOY COLOR" lies on the label (its box's corners; None: not measured), and
-    the box around the whole front (x1, y1, x2, y2; the body's unless given: the AGB's shoulders stick out)."""
+    the box around the whole front (x1, y1, x2, y2; the body's unless given: the AGB's shoulders stick out); with
+    camera (a function (H, the photo's center) -> camera, as agb_camera), each sample's depth behind the face, seen
+    from it as the fit goes (Fitter.seen)."""
 
-    def __init__(self, name, body, recess, label, samples, recess_line_rows, band_rows, band_columns, color_text, box=None):
+    def __init__(self, name, body, recess, label, samples, recess_line_rows, band_rows, band_columns, color_text, box=None,
+                 depths=None, camera=None):
         self.name, self.body, self.recess, self.label = name, body, recess, label
         self.box = box or (0.0, 0.0) + tuple(body)
         self.points, self.normals, self.kinds = samples
+        self.depths = np.zeros(len(self.points)) if depths is None else np.asarray(depths, np.float64)
+        self.camera = camera
         self.recess_line_rows, self.band_rows, self.band_columns, self.color_text = recess_line_rows, band_rows, band_columns, color_text
 
 
@@ -670,9 +729,10 @@ CGB = Shell("cgb", CGB_BODY, CGB_RECESS, CGB_LABEL,
             (59.5, 60.5), (60.6, 64.6), np.r_[np.arange(5.0, 24.0, 0.25), np.arange(33.0, 52.0, 0.25)], CGB_COLOR_TEXT,
             box=(CGB_LEFT, 0.0, CGB_LEFT + CGB_BODY[0], CGB_BODY[1]))
 # No arrow on its front: the band below the recess runs across the whole recess. No "GAME BOY COLOR" on its labels.
-AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL,
-            build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None),
-            (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(AGB_LEFT - AGB_SHOULDER, 0.0, AGB_LEFT + AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]))
+_agb_samples = build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None)
+AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL, _agb_samples,
+            (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(AGB_LEFT - AGB_SHOULDER, 0.0, AGB_LEFT + AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]),
+            depths=agb_depths(_agb_samples), camera=agb_camera)
 SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 
@@ -868,10 +928,12 @@ def outline_starts(quads, shell, size, tolerance=0.15):
 
 
 class Fitter:
-    """Fits a shell's model (the DMG's by default) to one photo."""
+    """Fits a shell's model (the DMG's by default) to one photo: photo may be a crop, center is then the whole photo's
+    center in the crop's pixels (by default the crop's own), where the shell's camera stands over (Shell)."""
 
-    def __init__(self, photo, shell=DMG):
+    def __init__(self, photo, shell=DMG, center=None):
         self.shell = shell
+        self.center = center if center is not None else (photo.shape[1] / 2, photo.shape[0] / 2)
         self.photo = photo
         self.ph, self.pw = photo.shape[:2]
         # Working copy: about 900 px wide, in Lab, slightly blurred.
@@ -879,15 +941,21 @@ class Fitter:
         small = cv2.resize(photo, None, fx=self.work, fy=self.work, interpolation=cv2.INTER_AREA)
         self.lab = cv2.GaussianBlur(cv2.cvtColor(small, cv2.COLOR_BGR2LAB).astype(np.float32), (0, 0), 1.0)
         self.sh, self.sw = self.lab.shape[:2]
-        self.points, self.normals, self.kinds = shell.points, shell.normals, shell.kinds
+        self.points, self.normals, self.kinds, self.depths = shell.points, shell.normals, shell.kinds, shell.depths
         self.is_line = self.kinds == "recess"
+
+    def seen(self, H):
+        """The samples where they're seen in the face from the shell's camera, at the pose H; as they are without one."""
+        if self.shell.camera is None or not self.depths.any():
+            return self.points
+        return seen_straight(self.points, self.depths, self.shell.camera(H, self.center))
 
     def subset(self, kinds):
         """The same photo with only some sample kinds, e.g. ("recess",)."""
         other = object.__new__(Fitter)
         other.__dict__.update(self.__dict__)
         keep = np.isin(self.kinds, kinds)
-        other.points, other.normals, other.kinds = self.points[keep], self.normals[keep], self.kinds[keep]
+        other.points, other.normals, other.kinds, other.depths = self.points[keep], self.normals[keep], self.kinds[keep], self.depths[keep]
         other.is_line = other.kinds == "recess"
         return other
 
@@ -898,7 +966,7 @@ class Fitter:
         other.__dict__.update(self.__dict__)
         normal = np.array(edges_of(self.shell.recess)[side][2], np.float64)
         keep = ~(np.isin(self.kinds, ("recess", "label")) & (np.abs(self.normals - normal).sum(axis=1) < 1e-9))
-        other.points, other.normals, other.kinds = self.points[keep], self.normals[keep], self.kinds[keep]
+        other.points, other.normals, other.kinds, other.depths = self.points[keep], self.normals[keep], self.kinds[keep], self.depths[keep]
         other.is_line = other.kinds == "recess"
         return other
 
@@ -911,7 +979,7 @@ class Fitter:
         # Sampled 0.35 mm beyond the band, so a line near the band's end can still be compared with both its sides.
         margin = 0.36
         offsets = np.arange(-band - margin, band + margin + step / 2, step)
-        grid = self.points[:, None, :] + self.normals[:, None, :] * offsets[None, :, None]
+        grid = self.seen(H)[:, None, :] + self.normals[:, None, :] * offsets[None, :, None]
         xy = project(H, grid.reshape(-1, 2)).reshape(len(self.points), len(offsets), 2) * self.work
         values = self.sample_lab(xy)
         # Steps lie between two offsets; lines at an offset. Both as strength per position, with positions in mm.
@@ -943,7 +1011,8 @@ class Fitter:
     def update(self, H, found, weights, projective):
         """One point-to-line step: the correction M (in mm) that moves each sample across its edge by its found offset,
         leaving it free to slide along the edge, by weighted least squares. Returns H @ M. Affine unless projective."""
-        x, y = self.points[:, 0] / 30.0, self.points[:, 1] / 30.0  # scaled for conditioning
+        seen = self.seen(H)
+        x, y = seen[:, 0] / 30.0, seen[:, 1] / 30.0  # scaled for conditioning
         nx, ny = self.normals[:, 0], self.normals[:, 1]
         # dp = (d0 x + d1 y + d2 - x (d6 x + d7 y), d3 x + d4 y + d5 - y (d6 x + d7 y)) in scaled units; n . dp = found / 30.
         columns = [nx * x, nx * y, nx, ny * x, ny * y, ny]
@@ -980,7 +1049,8 @@ class Fitter:
                 for _ in range(3):
                     Hn = self.update(H, found, weights, projective=band <= 1.0)
                     # Residual across the edges after the step, in mm, for the robust weights.
-                    moved = project(np.linalg.inv(Hn) @ H, self.points + self.normals * found[:, None]) - self.points
+                    seen = self.seen(H)
+                    moved = project(np.linalg.inv(Hn) @ H, seen + self.normals * found[:, None]) - seen
                     residual = np.abs((moved * self.normals).sum(axis=1))
                     scale = max(0.05, 1.4826 * np.median(residual[strong]))
                     u = residual / (4.685 * scale)
@@ -1003,7 +1073,7 @@ class Fitter:
                 side_of.append(k)
         f = self.subset(("recess",))
         f.points, f.normals, side_of = np.array(points), np.array(normals, float), np.array(side_of)
-        f.kinds, f.is_line = np.array(["recess"] * len(points)), np.ones(len(points), bool)
+        f.kinds, f.is_line, f.depths = np.array(["recess"] * len(points)), np.ones(len(points), bool), np.zeros(len(points))
         found, _ = f.search(H, band)
         shares = []
         for k in range(4):

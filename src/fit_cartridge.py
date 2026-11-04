@@ -150,7 +150,7 @@ def candidates_of(photo, lines, shell, start=None):
     groups += [(box_of(group[0], shell, size), group, "outline") for group in by_outline.values()]
     candidates, fitters = [], []
     for (x0, y0, x1, y1), starts, found_by in groups:
-        fitter = Fitter(photo[y0:y1, x0:x1], shell)
+        fitter = Fitter(photo[y0:y1, x0:x1], shell, center=(photo.shape[1] / 2 - x0, photo.shape[0] / 2 - y0))
         shift = np.array([[1, 0, x0], [0, 1, y0], [0, 0, 1]], np.float64)
         fitters.append((fitter, shift, (x0, y0, x1, y1), [np.linalg.inv(shift) @ H0 for H0 in starts], found_by))
         for H0 in fitters[-1][3]:

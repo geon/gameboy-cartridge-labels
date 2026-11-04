@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import AGB_CREASE_TOPS, AGB_OUTLINE_SEEN, agb_crease, agb_outline, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
+from cartridge import AGB_CAMERA_HEIGHT, agb_creases, agb_outline_points, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
 from fit_cartridge import OUT as DETAILS, load
 from find_doubles import rows
 from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bevel_lines, dense, face_outline, facet, facet_counts, filters_of, matching, pill_outline, rounded_outline
@@ -53,9 +53,10 @@ def anchor(shell):
 def model(shell):
     """A shell's model as the page draws it, in mm: the handles' rectangle's corners (anchor), the label's corners,
     and the lines [points, color, dashed, closed, depths, wall] (as review-fits draws them; depths: each point's depth
-    behind the face in mm, or null: in it; the page sees them from the camera it estimates from the placement, as
-    cartridge.camera_of does, through the front wall (wall mm thick, or null: none; refractive index n), as
-    cartridge.seen_at does)."""
+    behind the face in mm, negative in front of it, or null: in it; the page sees them from the camera it estimates
+    from the placement, as cartridge.camera_of does, or with camera_height (the AGB's) from that height over the
+    photo's center, as cartridge.agb_camera does; through the front wall (wall mm thick, or null: none; refractive
+    index n), as cartridge.seen_at does)."""
     lines = [[dense(rounded_outline(shell.recess, RECESS_RADIUS)), "#3d3", False, True]]
     if shell.name == "cgb":
         half = CGB_ARROW_WIDTH / 2
@@ -63,11 +64,13 @@ def model(shell):
         outline, depths = cgb_outline_points()
         lines += [[outline, "#f33", False, True, depths], [arrow, "#f90", False, True], *[[dense(l, False), "#0cf", False, False, np.full(len(dense(l, False)), CGB_RIDGE_DEPTH), CGB_WALL] for l in cgb_ridge_lines()]]
     elif shell.name == "agb":
-        lines += [[dense(agb_outline(AGB_OUTLINE_SEEN)), "#f33", False, True], *[[agb_crease(top), "#f90", False, False] for top in AGB_CREASE_TOPS]]
+        outline, depths = agb_outline_points()
+        lines += [[outline, "#f33", False, True, depths], *[[points, "#f90", False, False, depths] for points, depths in agb_creases()]]
     else:
         lines += [[dense(face_outline()), "#f33", False, True], *[[dense(l, False), "#f33", True, False] for l in bevel_lines()],
                   [arrow_outline(), "#f90", False, True], [pill_outline(), "#f90", False, True], *[[np.array(e), "#f90", False, False] for e in groove_edges()]]
     return {"anchor": anchor(shell).tolist(), "label": corners_of(shell.label).tolist(), "n": CGB_REFRACTIVE_INDEX,
+            "camera_height": AGB_CAMERA_HEIGHT if shell.name == "agb" else None,
             "lines": [[np.round(l[0], 3).tolist(), *l[1:4], None if len(l) < 5 else np.round(l[4], 3).tolist(), l[5] if len(l) > 5 else None]
                       for l in lines]}
 
@@ -458,12 +461,13 @@ function cameraOf(H) {
   const d = det(M), C = [0, 1, 2].map(j => -det(M.map((row, i) => row.map((v, l) => l === j ? t[i] : v))) / d);
   return [C[0], C[1], Math.abs(C[2])];
 }
-// A point depth mm behind the face, as seen in the face from the camera: the line of sight bent through the front wall
-// (wall mm thick, refractive index n) and straight behind it; as cartridge.seen_at.
+// A point depth mm behind the face (negative: in front of it), as seen in the face from the camera: the line of sight
+// bent through the front wall (wall mm thick, refractive index n) and straight behind it; as cartridge.seen_at (and
+// seen_straight, without a wall).
 function seen(cam, [x, y], depth, wall, n) {
-  if (!(depth > 0) || !isFinite(cam[2])) return [x, y];
+  if (!depth || !isFinite(cam[2])) return [x, y];
   const h = cam[2], ax = x - cam[0], ay = y - cam[1], target = Math.hypot(ax, ay);
-  const glass = Math.min(depth, wall), air = Math.max(0, depth - wall);
+  const glass = Math.max(0, Math.min(depth, wall)), air = depth - glass;
   let r = target * h / (h + depth);
   for (let k = 0; k < 8; k++) {
     const tan = r / h, sin = tan / Math.sqrt(1 + tan * tan), sinR = sin / n, cosR = Math.sqrt(1 - sinR * sinR), tanR = sinR / cosR;
@@ -474,7 +478,9 @@ function seen(cam, [x, y], depth, wall, n) {
   return [cam[0] + ax * k, cam[1] + ay * k];
 }
 function shapes() {
-  const H = toPhoto(), cam = model().lines.some(l => l[4]) ? cameraOf(H) : null;
+  // The camera: for the AGB at a set height over the photo's center (cartridge.agb_camera), else as the placement implies.
+  const H = toPhoto(), cam = model().camera_height ? [...apply(toMm(), [photo.width / 2, photo.height / 2]), model().camera_height]
+    : model().lines.some(l => l[4]) ? cameraOf(H) : null;
   const lines = model().lines.map(([pts, col, dash, closed, depths, wall]) => [pts.map((q, k) => apply(H, depths && depths[k] ? seen(cam, q, depths[k], wall || 0, model().n) : q)), col, dash, closed]);
   return placed() ? lines.concat([[roundedOutline(rect).map(q => apply(H, q)), "#3cf", false, true]]) : lines;
 }

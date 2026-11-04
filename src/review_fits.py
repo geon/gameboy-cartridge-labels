@@ -3,13 +3,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import (AGB_CREASE_TOPS, AGB_OUTLINE_SEEN, AGB_RECESS, agb_crease, agb_outline, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
+from cartridge import (AGB_RECESS, agb_camera, agb_creases, agb_outline_points, seen_straight, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
                        PILL_RADIUS, RECESS, RECESS_RADIUS, camera_of, cgb_outline_seen, cgb_ridge_lines, corners_of, groove_edges, project, seen_at, shell_of)
 from fit_cartridge import OUT as DETAILS, load
 
 # review-fits: a local page for judging the plastic's fits (fits.json, src/fits.py; make fit-cartridge) by eye, a page
 # of photos at a time, each with its current fit drawn on it (red: the front face with its notch, and the bevels' inner
-# edges, or the Game Boy Color only cartridge's bowed outline, or the Game Boy Advance's with its shoulders (as seen: AGB_OUTLINE_SEEN); green: the recess; orange: the arrow, the pill and the
+# edges, or the Game Boy Color only cartridge's bowed outline, or the Game Boy Advance's with its shoulders (its top, sides and shoulders 2 mm behind the face, seen from cartridge.agb_camera); green: the recess; orange: the arrow, the pill and the
 # grooves, or the CGB's smaller arrow, or the AGB's creases); a photo without one shows its latest rejected fit. Fits flagged by fit-cartridge
 # (generated/fit-cartridge/: ambiguous, broken recess line) first, then the lowest quality first; photos it couldn't fit
 # are listed with why. A verdict (reject, almost, accept; clicked again, it's taken back; or for all the page's photos
@@ -153,8 +153,10 @@ def render(path, fit, width=800):
             cv2.polylines(photo, [P(seen_at(dense(line, False), CGB_RIDGE_DEPTH, camera)) for line in cgb_ridge_lines()], False, (255, 200, 0), max(1, t // 2), cv2.LINE_AA)
             recess = CGB_RECESS
         elif fit["shell"] == "agb":
-            cv2.polylines(photo, [P(dense(agb_outline(AGB_OUTLINE_SEEN)))], True, (0, 0, 255), t, cv2.LINE_AA)
-            cv2.polylines(photo, [P(agb_crease(top)) for top in AGB_CREASE_TOPS], False, (0, 150, 255), max(1, t // 2), cv2.LINE_AA)
+            # Seen from the camera taken for the AGB (agb_camera): the outline behind the face, the upper crease out of it.
+            camera = agb_camera(H, (photo.shape[1] / 2, photo.shape[0] / 2))
+            cv2.polylines(photo, [P(seen_straight(*agb_outline_points(), camera))], True, (0, 0, 255), t, cv2.LINE_AA)
+            cv2.polylines(photo, [P(seen_straight(points, depths, camera)) for points, depths in agb_creases()], False, (0, 150, 255), max(1, t // 2), cv2.LINE_AA)
             recess = AGB_RECESS
         else:
             cv2.polylines(photo, [P(dense(face_outline()))], True, (0, 0, 255), t, cv2.LINE_AA)
