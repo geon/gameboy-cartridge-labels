@@ -17,7 +17,11 @@ DMG and CGB cartridges (57).
 - height: 23
 - width: 44 (as the DMG's; centered → 6.5 in from the body's sides)
 
-Not measured: how far the recess is from the top or bottom.
+- bottom of the shell to bottom of the recess: 3.5
+- top of the shell to top of the recess: looks like 7.5
+
+These don't quite add up: 7.5 + 23 + 3.5 = 34, half a mm short of the 34.5 height. Counted from the bottom, the recess
+top is 8 from the top.
 
 ## Label (hard to measure accurately)
 
@@ -33,7 +37,7 @@ The bottom crease has its highest point in the horizontal center of the cart, 2.
 shell.
 The top crease tops out at 2 mm from the top.
 
-Not measured: how far down the creases' ends (the points) are.
+The arc points are 2 above the recess top: 5.5 from the top of the shell (6 if the recess top is at 8).
 
 ## Logo
 
