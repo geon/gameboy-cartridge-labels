@@ -5,8 +5,8 @@ import contextlib, fcntl, json, os, cv2, numpy as np
 # white balance alike, as my hand correction of IMG_7324 did): settings making its white white (whitening); Hit-Japan's (eBay), washed out, get the levels of my hand corrections
 # of nine of them
 # (HITJAPAN); yugiyahirano's, likely one photographer's, the settings that brought them nearest the reference sources'
-# labels of the same releases (YUGIYAHIRANO). Elrocinante's are left as they are: its background isn't white, and one
-# setting for all its photos made them no nearer mine of the same releases. Judged by eye on the labels of all these
+# labels of the same releases (YUGIYAHIRANO); elrocinante's (its background isn't white), levels as I set them by hand
+# (ELROCINANTE). Judged by eye on the labels of all these
 # sources' photos (2026-10-30).
 
 # Where the background's white is measured: the frame's outer share on my photos (the cartridge photographed fills the
@@ -22,8 +22,16 @@ HITJAPAN = {"black": 36.6, "white": 231.7, "midtones": 0.98, "temperature": 0, "
 # Fitted on 122 of yugiyahirano's labels against the reference sources' of the same releases (the median of each
 # photo's best settings; 2026-11-04): it took them from ΔE 18.8 to 12.1 (median, each release's photos with settings
 # learned without them). Fitted as exposure and contrast; these levels come within 0.7 of 255 of them on average.
-YUGIYAHIRANO = {"black": 0.0, "white": 217.2, "midtones": 1.17, "temperature": 0.22, "tint": -0.04}
-SOURCE_SETTINGS = {"ebay-hitjapan": HITJAPAN, "yugiyahirano": YUGIYAHIRANO}
+YUGIYAHIRANO = {"black": 14.0, "white": 217.2, "midtones": 1.17, "temperature": 0.22, "tint": -0.04}
+# From my settings by hand (55 photos, 2026-11-04), what fit-colors does by default: a black point at 14 (I set it at
+# 13 on my photos, 14 on elrocinante's, 17 on others', 11 on yugiyahirano's, medians; Hit-Japan's kept its 37), and a
+# white point measured from a background or paper made WHITE_LOWER levels lower (I set it 14 below on my photos, 23 on
+# others'); elrocinante's, left as they were, set alike (my 12: black 14, white 240, midtones 1.08, the white balance
+# left alone on 9).
+DEFAULT_BLACK = 14.0
+WHITE_LOWER = 14.0
+ELROCINANTE = {"black": 14.0, "white": 240.0, "midtones": 1.08, "temperature": 0.0, "tint": 0.0}
+SOURCE_SETTINGS = {"ebay-hitjapan": HITJAPAN, "yugiyahirano": YUGIYAHIRANO, "ebay-elrocinante": ELROCINANTE}
 
 _v = np.arange(256) / 255
 LINEAR = np.where(_v <= 0.04045, _v / 12.92, ((_v + 0.055) / 1.055) ** 2.4).astype(np.float32)

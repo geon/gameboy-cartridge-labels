@@ -9,11 +9,13 @@ from cartridge import shell_of
 # whose plastic is accepted or placed by hand:
 #   - my own photos and jnlgame's (color.BORDERS): temperature, tint and the white level making their background's white
 #     white (color.white, color.whitening);
-#   - Hit-Japan's and yugiyahirano's: their source's settings (color.SOURCE_SETTINGS);
+#   - Hit-Japan's, yugiyahirano's and elrocinante's: their source's settings (color.SOURCE_SETTINGS);
 #   - a source whose photos aren't all lit alike (not in color.LIT_ALIKE), if its label is accepted or placed by hand
 #     and white paper is found on it (color.paper): temperature, tint and the white level set so that the paper comes out
 #     neutral, as bright as the reference sources' paper (color.PAPER_BRIGHTNESS);
-#   - otherwise none (neutral).
+#   - otherwise none but the black point;
+#   where measured, the black point at color.DEFAULT_BLACK and the white point color.WHITE_LOWER levels below what
+#   was measured (as I set them by hand).
 # The labels are read from their images in generated/fit-colors/labels/<photo>.png: straightened, at render-labels'
 # size, the photo's colors as they are; made again when the photo, its label's fit or the code changed (made.json).
 # The backgrounds' whites are kept in generated/fit-colors/whites.json, by photo, with its SHA-1.
@@ -104,13 +106,15 @@ def papers(labels):
 def auto(source, paper, white=None):
     """A photo's auto-generated settings: by its source (see above), from its label's white paper, or its background's
     white."""
-    if source in color.BORDERS:
-        return color.whitening(white)
     if source in color.SOURCE_SETTINGS:
         return dict(color.SOURCE_SETTINGS[source])
-    if source in color.LIT_ALIKE or paper is None:
-        return dict(color.NEUTRAL)
-    return color.whitening(paper, color.PAPER_BRIGHTNESS)
+    if source in color.BORDERS:
+        measured = color.whitening(white)
+    elif source in color.LIT_ALIKE or paper is None:
+        return dict(color.NEUTRAL, black=color.DEFAULT_BLACK)
+    else:
+        measured = color.whitening(paper, color.PAPER_BRIGHTNESS)
+    return measured | {"black": color.DEFAULT_BLACK, "white": max(color.DEFAULT_BLACK + 1, measured["white"] - color.WHITE_LOWER)}
 
 
 if __name__ == "__main__":
