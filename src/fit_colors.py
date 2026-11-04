@@ -1,4 +1,4 @@
-import concurrent.futures, glob, hashlib, json, os, sys, cv2, numpy as np
+import concurrent.futures, hashlib, json, os, sys, cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color, fits, photos
@@ -6,19 +6,16 @@ from cartridge import shell_of
 
 # fit-colors: each photo's own color settings (src/color.py: brightness, contrast, temperature, tint) into
 # colors.json, auto-generated; settings placed by hand (make adjust-colors) are kept. For every photo but the fakes
-# whose plastic is accepted or placed by hand:
-#   - its source's settings (src/source-colors.json, learned by make learn-colors from the labels of releases also
-#     photographed by a reference source), none if its source has none;
-#   - then, for a source whose photos aren't all lit alike (not in color.LIT_ALIKE), if its label is accepted or placed
-#     by hand and white paper is found on it (color.paper): brightness, temperature and tint set so that the paper
-#     comes out neutral, as bright as the reference sources' paper.
+# whose plastic is accepted or placed by hand: for a source whose photos aren't all lit alike (not in
+# color.LIT_ALIKE), if its label is accepted or placed by hand and white paper is found on it (color.paper),
+# brightness, temperature and tint set so that the paper comes out neutral, as bright as the reference sources' paper
+# (color.PAPER_BRIGHTNESS); otherwise none (neutral).
 # The labels are read from their images in generated/fit-colors/labels/<photo>.png: straightened, at render-labels'
 # size, evened out by their source (color.corrected) but without their own settings; made again when the photo, its
 # label's fit or the code changed (made.json).
 # Usage: fit_colors.py
 OUT = "generated/fit-colors"
 LABELS = os.path.join(OUT, "labels")
-CONSTANTS = "src/source-colors.json"
 CODE = hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
                              for f in ("fit_colors.py", "color.py", "render.py"))).hexdigest()
 
@@ -76,30 +73,22 @@ def papers(labels):
         return dict(zip(stems, pool.map(color.paper, [labels[s] for s in stems], chunksize=16)))
 
 
-def load_constants():
-    return json.load(open(CONSTANTS)) if os.path.exists(CONSTANTS) else {"paper": None, "sources": {}}
-
-
-def auto(source, paper, constants):
-    """A photo's auto-generated settings: its source's, then its paper made neutral at the reference sources' paper
-    brightness if its source isn't lit alike and paper was found."""
-    base = constants["sources"].get(source)
-    base = {k: base[k] for k in color.SETTINGS} if base else dict(color.NEUTRAL)
-    if source in color.LIT_ALIKE or paper is None or constants.get("paper") is None:
-        return base
-    k, contrast = color.gains_of(base), base["contrast"]
-    seen = 2.0 ** k * np.asarray(paper, np.float64) ** contrast  # the paper after its source's settings
-    y = float(seen @ color.LUMINANCE)
-    return color.settings_of(k - np.log2(seen / y) + np.log2(constants["paper"] / y), contrast)
+def auto(source, paper):
+    """A photo's auto-generated settings: its paper made neutral at the reference sources' paper brightness, if its
+    source isn't lit alike and paper was found; else neutral."""
+    if source in color.LIT_ALIKE or paper is None:
+        return dict(color.NEUTRAL)
+    paper = np.asarray(paper, np.float64)
+    y = float(paper @ color.LUMINANCE)
+    return color.settings_of(np.log2(color.PAPER_BRIGHTNESS / y) - np.log2(paper / y), 1.0)
 
 
 if __name__ == "__main__":
     found = candidates()
     labels = label_images(found)
     paper_of = papers(labels)
-    constants = load_constants()
     print(f"{len(found)} photos with a good plastic fit, {len(labels)} with a good label, white paper found on "
-          f"{sum(p is not None for p in paper_of.values())}; source settings for {len(constants['sources'])} sources ({CONSTANTS})")
+          f"{sum(p is not None for p in paper_of.values())}")
     kept = changed = 0
     with color.editing_colors() as colors:
         for stem in list(colors):
@@ -110,7 +99,7 @@ if __name__ == "__main__":
             if current and current.get("source") == "hand-placed":
                 kept += 1
                 continue
-            settings = {k: round(v, 4) for k, v in auto(source, paper_of.get(stem), constants).items()} | {"source": "auto-generated"}
+            settings = {k: round(v, 4) for k, v in auto(source, paper_of.get(stem)).items()} | {"source": "auto-generated"}
             changed += current != settings
             colors[stem] = {"sha1": sha1, "colors": settings}
     print(f"{kept} placed by hand, kept; {changed} auto-generated settings changed, into {color.FILE}")

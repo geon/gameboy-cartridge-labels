@@ -22,15 +22,14 @@ Photos of a release from a better source replace those from a worse one, wheneve
 ## Steps
 
 Done, run with `make` (see the Makefile): add-photos, read-text, fit-cartridge (the plastic), fit-label (the label in its
-recess), fit-colors (each photo's color settings), render-labels and render-carts (one straightened image per release, src/render.py). Tools for judging and fixing fits: review-fits, review-labels, fit-by-hand; learn-choice (fit-cartridge's choice among its fits, learned from the verdicts: run it again as verdicts grow); learn-colors (each source's color settings, matched to the reference sources) and adjust-colors (color settings by hand); for finding and naming photos:
+recess), fit-colors (each photo's color settings), render-labels and render-carts (one straightened image per release, src/render.py). Tools for judging and fixing fits: review-fits, review-labels, fit-by-hand; learn-choice (fit-cartridge's choice among its fits, learned from the verdicts: run it again as verdicts grow); adjust-colors (color settings by hand); for finding and naming photos:
 search-photos, name-photos.
 
 ## Open work
 
-- **Check fit-colors and adjust-colors** (built 2026-11-04, awaiting my check). Measured by learn-colors: median ΔE
-  to the reference sources' labels of the same release 14.0 with no settings, 12.0 with each source's, 11.6 with the
-  paper's too (548 pairs; the best a per-pair fit reaches is about 7.6). A photo's own temperature from its paper helps
-  little; the source's settings do most of it.
+- **Check fit-colors and adjust-colors** (built 2026-11-04, awaiting my check). fit-colors makes each label's white
+  paper neutral, for the sources not lit alike. Settings learned per source were dropped: only a source lit alike
+  could have one, and those are the references and jnlgame.
 - **Check fit-label and review-labels** (built, awaiting my check).
 - **Depth layers for the CGB shell**: built (cartridge.camera_of, seen_at; 2026-11-01) and tried; no clear gain
   (results in src/cartridge.py). The measured ridges are taken in flat (cgb_ridge_samples; not inside the recess):

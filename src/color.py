@@ -96,12 +96,14 @@ def corrected(photo, path):
 # "hand-placed"}}; settings made by make fit-colors (auto-generated) or set in make adjust-colors (hand-placed, which
 # fit-colors keeps). An entry whose SHA-1 isn't its photo's is of another photo once under the same name: ignored.
 FILE = "colors.json"
-# The reference sources: photos lit alike within each (after the evening out above), what every other source's are
-# matched to (make learn-colors). And the sources whose photos are lit alike, so that a photo's own white paper isn't
-# trusted over its source's settings: the references and jnlgame (on which the paper made the match worse, ΔE 11.6 ->
-# 15.7, 2026-11-04).
+# The reference sources: photos lit alike within each (after the evening out above), what the others are matched to.
+# And the sources whose photos are lit alike, whose labels' white paper isn't used to set their colors (fit-colors):
+# the references, and jnlgame (on which it made the match with the references worse, ΔE 11.5 -> 15.7, 2026-11-04).
+# The reference sources' paper, as bright as fit-colors makes a photo's: the median of their labels' (color.paper),
+# 0.85 of white, in linear light (2026-11-04).
 REFERENCES = ("my-collection", "ebay-hitjapan", "ebay-elrocinante")
 LIT_ALIKE = REFERENCES + ("jnlgame",)
+PAPER_BRIGHTNESS = 0.85
 SETTINGS = ("brightness", "contrast", "temperature", "tint")
 NEUTRAL = {"brightness": 0.0, "contrast": 1.0, "temperature": 0.0, "tint": 0.0}
 

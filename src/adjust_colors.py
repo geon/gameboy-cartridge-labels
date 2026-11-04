@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color, photos, serials
-from fit_colors import LABELS, auto, candidates, load_constants
+from fit_colors import LABELS, auto, candidates
 from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: brightness, contrast,
@@ -30,7 +30,6 @@ class Adjust:
         for stem in sorted(self.source, key=lambda s: (photos.rank(self.source[s]), s)):
             self.photos.setdefault(serials.release_key(stem, release_of)[0], []).append(stem)
         self.order = sorted(self.photos, key=lambda r: (-len(self.photos[r]), r))
-        self.constants = load_constants()
         self.lock = threading.Lock()
         colors = color.load_colors()
         self.facets = {
@@ -65,7 +64,7 @@ class Adjust:
 
     def auto(self, stem):
         label = cv2.imread(os.path.join(LABELS, stem + ".png"))
-        return self.save(stem, auto(self.source[stem], color.paper(label), self.constants), "auto-generated")
+        return self.save(stem, auto(self.source[stem], color.paper(label)), "auto-generated")
 
 
 PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adjust colors</title>
