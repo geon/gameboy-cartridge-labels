@@ -1,0 +1,16 @@
+# The virtual environment, and Python's caches.
+.venv/
+__pycache__/
+# The text recognition tool, compiled from src/ocr.swift by make.
+src/ocr
+# Everything made from the photos: never committed, can be made again.
+generated/
+# Photos waiting for make add-photos: only the folder's README is kept.
+save-new-images-here/*
+!save-new-images-here/README.md
+# The lock steps and tools take on fits.json (src/fits.py).
+fits.json.lock
+# The lock on colors.json (src/color.py).
+colors.json.lock
+# macOS Finder metadata.
+.DS_Store
