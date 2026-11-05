@@ -808,5 +808,10 @@
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-VYHE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-VYHE-0/ben-black-1_01_front.jpg",
   "sha1": "f8bc7368f1b864cd04eaed05903429f8dfe4f507"
+ },
+ "DIS-CGB-AZ7E-USA.jpg": {
+  "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AZ7E-0/",
+  "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AZ7E-0/rhetchid-1_01_front.jpg",
+  "sha1": "615148b7e46e8a59b29a1b2fc1f274553f733b7c"
  }
 }
