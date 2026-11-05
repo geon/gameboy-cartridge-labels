@@ -1,56 +1,71 @@
-import html, json, os, re, sys, time, urllib.parse, urllib.request
+import json, os, re, sys, time, urllib.parse, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos
 
-# Downloads the first photo of each product in a category of Konsolenkost.de (a German shop, on plentymarkets), by
-# default its loose Game Boy, Game Boy Color and Game Boy Advance games: the product's first photo is mostly its cartridge's front, at about 700-800 px.
-# Saved into save-new-images-here/konsolenkost/, named konsolenkost-<photo's item id>-<file name>, with a listing.json
-# there (file name -> its product page, the image, the product's name, the category), which make add-photos copies into
-# sources.json. A category page lists 60 products in its JSON-LD (page=2, 3... until one brings nothing new); each
-# product page holds its photos in its item's JSON ("images":{"all":[...]}, by position). The shop sells one game in
-# several conditions, each a product of its own with photos of its own; those whose label is missing
-# ("modulaufkleber-fehlt") are skipped. A first photo that comes back empty is passed over for the next. Products
-# already downloaded (their page in photos/'s sources.json, or in the listing) are skipped. Its robots.txt (2026-11-05)
-# shuts out /plenty/ and /xml/ only; one request every 1.5 s.
-# Usage: konsolenkost.py [--limit <n per category>] [category URL...]
-CATEGORIES = ("https://www.konsolenkost.de/gameboy-classic/spiele/?f_umfang=lose",
-              "https://www.konsolenkost.de/gameboy-color/spiele/?f_umfang=lose",
-              "https://www.konsolenkost.de/gameboy-advance/spiele/?f_umfang=lose")
+# Downloads a photo of each loose Game Boy, Game Boy Color and Game Boy Advance game in stock at Konsolenkost.de (a
+# German shop, on plentymarkets): the first photo of one copy's product page, mostly its cartridge's front, at about
+# 700-800 px. Saved into save-new-images-here/konsolenkost/, named konsolenkost-<photo's item id>-<file name>, with a
+# listing.json there (file name -> its product page, the image, the game's name, its system), which make add-photos
+# copies into sources.json.
+# The games come from the shop's own search (Typesense, as its category pages ask it, with the search-only key they
+# use): in stock, "nur Modul", not bundles, 250 a page. A game is a group of copies, each in a condition of its own,
+# with a product page and photos of its own; one copy is taken: the one the search shows, or the first copy in stock
+# sold loose, but not one whose label is missing ("modulaufkleber-fehlt"). The search's cover images are no use (about
+# 500 px, none of 5 read). On the product page, the photos are in its item's JSON ("images":{"all":[...]}, by
+# position); a photo that comes back empty is passed over for the next. Games of which a copy was downloaded before
+# (its page, by its variation id, in photos/'s sources.json or in the listing) are skipped. Its robots.txt
+# (2026-11-05) shuts out /plenty/ and /xml/ only; one request every 1.5 s.
+# Usage: konsolenkost.py [--limit <n per system>] [system...] (default: GameBoy, "GameBoy Color", "GameBoy Advance")
+SITE = "https://www.konsolenkost.de"
+SEARCH = "https://articles-search-new.konsolenkost-tools.de/typesense/collections/item_group/documents/search"
+KEY = "jZTCb103h1Ywxz86ASiciAyBGGewODPZ"
+SYSTEMS = ("GameBoy", "GameBoy Color", "GameBoy Advance")
 OUT = os.path.join("save-new-images-here", "konsolenkost")
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 DELAY = 1.5
 SKIP = ("modulaufkleber-fehlt",)
-LD = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+# A product page's variation id: the last number in its URL.
+VARIATION = re.compile(r"_(\d+)/?$")
 
 args = sys.argv[1:]
 limit = None
 if args[:1] == ["--limit"]:
     limit, args = int(args[1]), args[2:]
-categories = args or CATEGORIES
+systems = args or SYSTEMS
 os.makedirs(OUT, exist_ok=True)
 listing_path = os.path.join(OUT, "listing.json")
 listing = json.load(open(listing_path)) if os.path.exists(listing_path) else {}
-done = {e.get("page_url") for _, _, _, e in photos.all_sources()} | {e["page_url"] for e in listing.values()}
+pages = {e.get("page_url") or "" for _, _, _, e in photos.all_sources()} | {e["page_url"] for e in listing.values()}
+done = {m.group(1) for m in map(VARIATION.search, pages) if m}
 
 
-def get(url):
+def get(url, referer=None):
     time.sleep(DELAY)
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60) as response:
+    headers = {"User-Agent": UA} | ({"Referer": referer} if referer else {})
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as response:
         return response.read()
 
 
-def products(text):
-    """A category page's products: (page URL, name), from its JSON-LD item list."""
-    for block in LD.findall(text):
-        try:
-            graph = json.loads(block).get("@graph", [])
-        except ValueError:
-            continue
-        for node in graph:
-            if node.get("@type") == "CollectionPage":
-                return [(i["url"], i["name"]) for i in node["mainEntity"]["itemListElement"]]
-    return []
+def games(system):
+    """The loose games in stock for a system, as the search gives them."""
+    found, number = [], 1
+    while True:
+        query = {"q": "*", "per_page": "250", "page": str(number), "x-typesense-api-key": KEY,
+                 "filter_by": f"system:=`{system}` && genre:!=[BUNDLEARTIKEL] && availability:!=`Ausverkauft` && items.packaging:=`nur Modul`",
+                 "exclude_fields": "description,eans,attributes,bundle,category_pages"}
+        hits = json.loads(get(SEARCH + "?" + urllib.parse.urlencode(query), SITE + "/"))["hits"]
+        found += [h["document"] for h in hits]
+        if len(hits) < 250:
+            return found
+        number += 1
+
+
+def copy(game):
+    """The URL path of the copy to take, or None."""
+    loose = [i["url_path"] for i in game.get("items", []) if "nur Modul" in i.get("packaging", [])
+             and i.get("availability") != "Ausverkauft" and not any(s in i["url_path"] for s in SKIP)]
+    return game["url"] if game["url"] in loose else (loose or [None])[0]
 
 
 def images(text):
@@ -62,32 +77,31 @@ def images(text):
     return [i["url"] for i in sorted(found, key=lambda i: i.get("position", 0))]
 
 
-for category in categories:
-    seen, saved, number = set(), 0, 1
-    while limit is None or saved < limit:
-        url = category + ("&" if "?" in category else "?") + f"page={number}" if number > 1 else category
-        items = [i for i in products(get(url).decode("utf-8", "replace")) if i[0] not in seen]
-        if not items:
+for system in systems:
+    found = games(system)
+    saved = skipped = 0
+    for game in found:
+        if limit is not None and saved >= limit:
             break
-        for page_url, name in items:
-            seen.add(page_url)
-            if page_url in done or any(s in page_url for s in SKIP) or (limit is not None and saved >= limit):
-                continue
-            for image_url in images(get(page_url).decode("utf-8", "replace")):
-                data = get(image_url)
-                if data.startswith((b"\xff\xd8", b"\x89PNG", b"RIFF")):
-                    break
-            else:
-                print(f"no photo: {page_url}", flush=True)
-                continue
-            item, file = image_url.split("/")[-3], image_url.split("/")[-1]
-            file = f"konsolenkost-{item}-{file}"
-            open(os.path.join(OUT, file), "wb").write(data)
-            listing[file] = {"page_url": page_url, "image_url": image_url, "site": "www.konsolenkost.de",
-                             "title_on_page": html.unescape(name), "category": category}
-            done.add(page_url)
-            saved += 1
-            json.dump(listing, open(listing_path, "w"), ensure_ascii=False, indent=1)
-        number += 1
-    print(f"{category}: {number} pages, {len(seen)} products, {saved} new photos", flush=True)
+        variations = {m.group(1) for m in (VARIATION.search(i["url_path"]) for i in game.get("items", [])) if m}
+        path = copy(game)
+        if variations & done or path is None:
+            skipped += 1
+            continue
+        page_url = SITE + path.rstrip("/") + "/"
+        for image_url in images(get(page_url).decode("utf-8", "replace")):
+            data = get(image_url)
+            if data.startswith((b"\xff\xd8", b"\x89PNG", b"RIFF")):
+                break
+        else:
+            print(f"no photo: {page_url}", flush=True)
+            continue
+        file = f"konsolenkost-{image_url.split('/')[-3]}-{image_url.split('/')[-1]}"
+        open(os.path.join(OUT, file), "wb").write(data)
+        listing[file] = {"page_url": page_url, "image_url": image_url, "site": "www.konsolenkost.de",
+                         "title_on_page": game.get("short_name") or game.get("name"), "system": system}
+        done |= variations
+        saved += 1
+        json.dump(listing, open(listing_path, "w"), ensure_ascii=False, indent=1)
+    print(f"{system}: {len(found)} games, {saved} new photos, {skipped} skipped (downloaded before, or no loose copy)", flush=True)
 print(len(listing), "photos in", OUT)
