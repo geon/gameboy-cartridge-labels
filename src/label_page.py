@@ -1,8 +1,8 @@
-import csv, html, json, os, re, sys, urllib.parse
+import csv, html, json, os, re, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import serials
-from cartridge import AGB, AGB_CREASE_TOPS, BODY, SHELLS, agb_crease, agb_outline
+from cartridge import AGB, BODY, SHELLS
 import render
 
 # label-page: a page of every DMG-shell release's label (make render-labels) laid on an empty cartridge of its shell's
@@ -10,8 +10,10 @@ import render
 # templates/dmg-black.png (from the collection-pipeline branch; 994 x 1132 px, framed on the 57 x 65 mm body), each a
 # card's background image; the label is an element of its own on it, placed straight and centered in the recess, with
 # rounded corners and a drop shadow, on its shell's label rectangle (cartridge.LABEL, CGB_LABEL). The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
-# templates/cgb.png (framed the same way). Then the AGB-shell releases (Game Boy Advance), on a plain gray cartridge
-# drawn from its model (agb_template: there's no photo of an empty one yet), framed on its box with the shoulders.
+# templates/cgb.png (framed the same way). Then the AGB-shell releases (Game Boy Advance), on templates/agb-gray.png
+# (1190 x 688 px, about 20 px per mm; framed on its box with the shoulders, 60 x 34.5 mm).
+# The cards are all one width, and the cartridges drawn at one scale: the widest (the AGB's 60 mm) fills its card, the
+# DMG's and CGB's 57 mm bodies are centered in theirs.
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
 # those in shell-colors.tsv. There are only gray and black templates: a light colored shell (white, pink...) is shown
 # on the gray one, a dark one (dark blue, dark gray) on the black one, its color named under it. A few releases whose
@@ -19,7 +21,10 @@ import render
 # in shell-colors.tsv, to research.
 # Usage: label_page.py
 OUT = "generated/label-page/index.html"
-TEMPLATES = {"gray": "templates/dmg-gray.png", "black": "templates/dmg-black.png", "cgb": "templates/cgb.png"}
+TEMPLATES = {"gray": "templates/dmg-gray.png", "black": "templates/dmg-black.png", "cgb": "templates/cgb.png",
+             "agb": "templates/agb-gray.png"}
+# The width the cards are drawn for, mm: the widest cartridge's.
+CARD_MM = max(max(s.box[2], BODY[0]) - min(s.box[0], 0) for s in SHELLS.values())
 COLORS = "shell-colors.tsv"
 # The template each color is shown on.
 TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray", "yellow": "gray", "red": "gray",
@@ -48,20 +53,6 @@ def color_of(release, listed):
     """The release's color in shell-colors.tsv (listed: colors()), or None: the longest row its id starts with, up to
     a "-", a note's "[" or its end; a row with a note matches only that note's release."""
     return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|$)", release) and ("[" in code or "[" not in release)), None)
-
-
-def agb_template():
-    """The AGB's empty cartridge as an SVG data URL, in mm on its box: the outline with the shoulders, the recess and
-    the creases."""
-    x1, y1, x2, y2 = AGB.box
-    path = lambda pts: " ".join(f"{x:.2f},{y:.2f}" for x, y in pts)
-    r = AGB.recess
-    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x1:g} {y1:g} {x2 - x1:g} {y2 - y1:g}">'
-           f'<polygon points="{path(agb_outline())}" fill="#77777c"/>'
-           f'<rect x="{r[0]:g}" y="{r[1]:g}" width="{r[2] - r[0]:g}" height="{r[3] - r[1]:g}" rx="1" fill="#6c6c71" stroke="#55555a" stroke-width="0.25"/>'
-           + "".join(f'<polyline points="{path(agb_crease(top))}" fill="none" stroke="#5c5c61" stroke-width="0.25"/>' for top in AGB_CREASE_TOPS)
-           + "</svg>")
-    return "data:image/svg+xml," + urllib.parse.quote(svg)
 
 
 def card(classes, release, title, note=""):
@@ -139,11 +130,13 @@ def main():
     }}
     figure {{
       margin: 0;
+      container-type: inline-size;
+      --mm: calc(100cqw / {CARD_MM:g});
     }}
     .cart {{
       position: relative;
-      container-type: inline-size;
-      --mm: calc(100cqw / {BODY[0]:g});
+      width: calc({BODY[0]:g} * var(--mm));
+      margin: 0 auto;
       aspect-ratio: {BODY[0]:g} / {BODY[1]:g};
       background: center / 100% 100% no-repeat;
     }}
@@ -163,9 +156,9 @@ def main():
       background-image: url("{rel(TEMPLATES["cgb"])}");
     }}
     .agb .cart {{
-      --mm: calc(100cqw / {AGB.box[2] - AGB.box[0]:g});
+      width: calc({AGB.box[2] - AGB.box[0]:g} * var(--mm));
       aspect-ratio: {AGB.box[2] - AGB.box[0]:g} / {AGB.box[3] - AGB.box[1]:g};
-      background-image: url("{agb_template()}");
+      background-image: url("{rel(TEMPLATES["agb"])}");
     }}
     .cart img {{
       position: absolute;
@@ -196,7 +189,7 @@ def main():
 {chr(10).join(cgb_cards)}
   </main>
   <h1>AGB labels</h1>
-  <p>{len(agb_cards)} releases in the Game Boy Advance shell (drawn from its model, cartridge.py).</p>
+  <p>{len(agb_cards)} releases in the Game Boy Advance shell.</p>
   <main>
 {chr(10).join(agb_cards)}
   </main>

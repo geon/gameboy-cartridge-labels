@@ -26,7 +26,7 @@
 #   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px, the AGB's 1400 x 890; off the photo transparent), the canonical images of the cartridges (the photo's colors uncorrected), into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
 #   make label-page
-#   A page of every release's label (from make render-labels) on an empty cartridge (templates/), the DMG ones on a gray or black one: black if gb-game-list marks it Game Boy Color enhanced, but for those in shell-colors.tsv; then the CGB ones on the clear CGB cartridge, and the AGB ones on a gray AGB cartridge drawn from its model, into generated/label-page/index.html, to open as a file (src/label_page.py).
+#   A page of every release's label (from make render-labels) on an empty cartridge (templates/), the DMG ones on a gray or black one: black if gb-game-list marks it Game Boy Color enhanced, but for those in shell-colors.tsv; then the CGB ones on the clear CGB cartridge, and the AGB ones on the gray AGB cartridge (all drawn at one scale, the cards one width), into generated/label-page/index.html, to open as a file (src/label_page.py).
 #
 #   make learn-choice
 #   A tool, not a step: learns how fit-cartridge chooses among a photo's fits from the photos whose plastic is accepted or placed by hand, into src/choice.json (committed; fit-cartridge then fits again the photos not yet known to be right), and prints how many each choice gets right (src/learn_choice.py).
