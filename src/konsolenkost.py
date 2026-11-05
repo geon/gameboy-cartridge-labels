@@ -1,4 +1,4 @@
-import json, os, re, sys, time, urllib.parse, urllib.request
+import json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos
@@ -13,7 +13,7 @@ import photos
 # with a product page and photos of its own; one copy is taken: the one the search shows, or the first copy in stock
 # sold loose, but not one whose label is missing ("modulaufkleber-fehlt"). The search's cover images are no use (about
 # 500 px, none of 5 read). On the product page, the photos are in its item's JSON ("images":{"all":[...]}, by
-# position); a photo that comes back empty is passed over for the next. Games of which a copy was downloaded before
+# position); a photo that comes back empty or not found is passed over for the next. Games of which a copy was downloaded before
 # (its page, by its variation id, in photos/'s sources.json or in the listing) are skipped. Its robots.txt
 # (2026-11-05) shuts out /plenty/ and /xml/ only; one request every 1.5 s.
 # Usage: konsolenkost.py [--limit <n per system>] [system...] (default: GameBoy, "GameBoy Color", "GameBoy Advance")
@@ -89,8 +89,17 @@ for system in systems:
             skipped += 1
             continue
         page_url = SITE + path.rstrip("/") + "/"
-        for image_url in images(get(page_url).decode("utf-8", "replace")):
-            data = get(image_url)
+        try:
+            urls = images(get(page_url).decode("utf-8", "replace"))
+        except urllib.error.HTTPError as error:
+            print(f"{error.code}: {page_url}", flush=True)
+            continue
+        for image_url in urls:
+            try:
+                data = get(image_url)
+            except urllib.error.HTTPError as error:
+                print(f"{error.code}: {image_url}", flush=True)
+                continue
             if data.startswith((b"\xff\xd8", b"\x89PNG", b"RIFF")):
                 break
         else:
