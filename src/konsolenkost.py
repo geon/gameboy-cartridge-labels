@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos
 
 # Downloads the first photo of each product in a category of Konsolenkost.de (a German shop, on plentymarkets), by
-# default its loose Game Boy games: the product's first photo is mostly its cartridge's front, at about 700-800 px.
+# default its loose Game Boy, Game Boy Color and Game Boy Advance games: the product's first photo is mostly its cartridge's front, at about 700-800 px.
 # Saved into save-new-images-here/konsolenkost/, named konsolenkost-<photo's item id>-<file name>, with a listing.json
 # there (file name -> its product page, the image, the product's name, the category), which make add-photos copies into
 # sources.json. A category page lists 60 products in its JSON-LD (page=2, 3... until one brings nothing new); each
