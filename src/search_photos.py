@@ -18,7 +18,7 @@ import photos, serials
 # only in their subtitles.
 # A table, one row per release, with a column per place to search:
 # Google's image search; for Japanese releases, the stores of the eBay sellers elrocinante and Hit-Japan and Yahoo!
-# Auctions through Jauce; for the others, the store of the eBay seller ASANOSHOP (each sells the one kind
+# Auctions through Jauce; for the others, the stores of the eBay sellers ASANOSHOP and KONSOLENKOST (each sells the one kind
 # alone, nearly). Japanese releases are searched by their Japanese title, with ゲームボーイ (ゲームボーイアドバンス) and カセット on
 # the image search (listings there are titled in Japanese, rarely with the serial), the others by their English title,
 # with "game boy" ("game boy advance") and cartridge; the eBay sellers title their listings in English, so they get the English title alone. Each serial links to Google's image search for it, quoted. Long titles are cut at their subtitle. Last, Google Lens
@@ -35,7 +35,7 @@ LENS = "https://lens.google.com/uploadbyurl?url="
 # eBay's sellers, of Japanese releases and of the others: name shown, seller id, store name, eBay's site.
 JAPANESE_EBAY_SELLERS = (("elrocinante", "elrocinante119", "elrocinantesecondhandshop", "www.ebay.com"),
                          ("Hit-Japan", "hit-japan", "hitjapanvideogamesandanime", "www.ebay.com"))
-WESTERN_EBAY_SELLERS = (("ASANOSHOP", "thorgans1", "asanoshop", "www.ebay.fr"),)
+WESTERN_EBAY_SELLERS = (("ASANOSHOP", "thorgans1", "asanoshop", "www.ebay.fr"), ("KONSOLENKOST", "konsolenkost", "konsolenkost", "www.ebay.at"))
 
 
 def short(title, release=None):
