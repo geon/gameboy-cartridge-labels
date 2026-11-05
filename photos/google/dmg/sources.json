@@ -1076,7 +1076,7 @@
   "sha1": "2ecbf44d9aa6781b43a8b27c39b60432088be0e1",
   "original_name": "51UeB12MBoL._AC_UF1000,1000_QL80_.jpg"
  },
- "DMG-DL.jpg": {
+ "DMG-DL-USA.jpg": {
   "serial_on_label": "DMG-DL-USA",
   "original_sha1": "42dbcd44da0e309c8f88977f8f7872e2723386a9",
   "sha1": "ae8e411485ceda937e9ad2d3bdb50adbff5df2cf",
@@ -1247,6 +1247,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f7c5f8b78bc01bb4e389b43f01c504aca30151c0"
  },
+ "DMG-HOJ_3.jpg": {
+  "original_name": "s-l1200 (7).jpg",
+  "serial_on_label": "DMG-LD",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "0959b3d7bb20708ea8ec619fb9be2fe23faafed5"
+ },
  "DMG-HPJ.jpg": {
   "original_name": "m18876143574_16.jpg",
   "serial_on_label": "DMG-HES",
@@ -1327,12 +1333,6 @@
   "original_name": "2024_10_02_16_03_33.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "3379518341236754c3b5ad469428d684bdf4e47b"
- },
- "DMG-LD.jpg": {
-  "original_name": "s-l1200 (7).jpg",
-  "serial_on_label": "DMG-LD",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "0959b3d7bb20708ea8ec619fb9be2fe23faafed5"
  },
  "DMG-LE-USA.webp": {
   "original_name": "662074179_ad3afb42-9098-4ae2-a0a0-28ffd8331775.webp",

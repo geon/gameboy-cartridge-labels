@@ -4,7 +4,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-A22X-0/ikk5-1_01_front.jpg",
   "sha1": "ffdc2f465942c3968fdcf3341c6f658309a708d1"
  },
- "CGB-A3HP.jpg": {
+ "CGB-A3HP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-A3HP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-A3HP-0/ikk5-1_01_front.jpg",
   "sha1": "b3a7ac3a5f8927c9a4b340514429eb04dba969b6"
@@ -14,7 +14,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AA6P-0/ikk5-1_01_front.jpg",
   "sha1": "588d49373bdd1ec0a5e4ca0b512c0e08b088229c"
  },
- "CGB-AAUK.jpg": {
+ "CGB-AAUK-KOR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AAUK-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AAUK-0/smelly-ghost-1_01_front.jpg",
   "sha1": "72b969ee2720198f97c3ee3301663f12672d0494"
@@ -89,7 +89,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-ARNP-0/ikk5-1_01_front.jpg",
   "sha1": "3cc507576e42c1017dfe8895c38bc0d57d33a053"
  },
- "CGB-ASNP.jpg": {
+ "CGB-ASNP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-ASNP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-ASNP-0/mattcurrie-1_01_front.jpg",
   "sha1": "ddf1f01b956ada1cf6b9c7639bff4808a5eb2707"
@@ -114,12 +114,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-ATXE-0/granmastro-1_01_front.jpg",
   "sha1": "fccaf4339c2872c03417d89e89276c2b4959d3da"
  },
- "CGB-AVED.jpg": {
+ "CGB-AVED-NOE.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AVED-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AVED-0/ikk5-1_01_front.jpg",
   "sha1": "e4a211bbf23137da8988d1a8baf12495161434f1"
  },
- "CGB-AVFP.jpg": {
+ "CGB-AVFP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AVFP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AVFP-0/ikk5-1_01_front.jpg",
   "sha1": "b649ce56a722d7b6bc4311377614f9de828a2eef"
@@ -134,7 +134,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AXRP-0/ikk5-1_01_front.jpg",
   "sha1": "b3344ea2c2e29ee12fc1f0036de5934025321d80"
  },
- "CGB-AXTP.jpg": {
+ "CGB-AXTP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AXTP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AXTP-0/granmastro-1_01_front.jpg",
   "sha1": "65846bada506978b14d6b8d4b8aec62e8dc4475c"
@@ -154,17 +154,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AYQE-0/ben-black-1_01_front.jpg",
   "sha1": "8649452df5a61edbd5c9240ecfc8011d3d7ca427"
  },
- "CGB-AZ7E.jpg": {
-  "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AZ7E-0/",
-  "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AZ7E-0/rhetchid-1_01_front.jpg",
-  "sha1": "615148b7e46e8a59b29a1b2fc1f274553f733b7c"
- },
- "CGB-AZ7P.jpg": {
+ "CGB-AZ7P-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AZ7P-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AZ7P-0/gekkio-1_01_front.jpg",
   "sha1": "23b7756f17e563c62416ff6f44e2418e6c4d15ff"
  },
- "CGB-AZ8P.jpg": {
+ "CGB-AZ8P-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AZ8P-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AZ8P-0/gekkio-1_01_front.jpg",
   "sha1": "5b1223ad47e57aec29c6bfc6210f4a2a374b06f5"
@@ -194,7 +189,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B2SP-0/ikk5-1_01_front.jpg",
   "sha1": "31db2ca95abd60be60e7c0f6ddfebfce9cacc7ac"
  },
- "CGB-B2XP.jpg": {
+ "CGB-B2XP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-B2XP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B2XP-0/3615retro-1_01_front.jpg",
   "sha1": "01fba98f8cbb265c91a81464f9d8879e7fc53dc2"
@@ -214,7 +209,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B3TP-0/ikk5-1_01_front.jpg",
   "sha1": "a0ee51c3d3a9f6c4f025defaae061688c6d766bf"
  },
- "CGB-B4QE.jpg": {
+ "CGB-B4QE-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-B4QE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B4QE-0/the-damned-canadian-1_01_front.jpg",
   "sha1": "27dbbecb5963d8a4a09773f3ad025902e4ac306f"
@@ -234,7 +229,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B82J-0/gekkio-1_01_front.jpg",
   "sha1": "eb75f8c6ad8857813a5a45058722796083f6464e"
  },
- "CGB-B86P.jpg": {
+ "CGB-B86P-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-B86P-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B86P-0/ikk5-1_01_front.jpg",
   "sha1": "0651a156331e888e91dbfe314a75a434bdc6c6b7"
@@ -249,7 +244,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-B9AJ-0/gekkio-1_01_front.jpg",
   "sha1": "a459491ab88f828ddeaf1de12fe6ddbbeeb083b5"
  },
- "CGB-BADE.jpg": {
+ "CGB-BADE-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BADE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BADE-0/the-damned-canadian-1_01_front.jpg",
   "sha1": "702d76b128d4d416f93347a81fec497c09b96591"
@@ -294,7 +289,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BBQP-0/ikk5-1_01_front.jpg",
   "sha1": "065ed20bdebcc994a83dc7cbe1bb811e7321c753"
  },
- "CGB-BBZI.jpg": {
+ "CGB-BBZI-ITA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BBZI-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BBZI-0/granmastro-1_01_front.jpg",
   "sha1": "889f4f73718ee7d6e13d3cc0077833e8b21b801c"
@@ -319,7 +314,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BDCP-0/ikk5-1_01_front.jpg",
   "sha1": "81900aee30c4c972410c8ccd38f02436b06b924a"
  },
- "CGB-BDDP.jpg": {
+ "CGB-BDDP-EUR-1.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BDDP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BDDP-0/ikk5-1_01_front.jpg",
   "sha1": "4ff92a074818f350fa076e030d2f2f6c5a929119"
@@ -329,7 +324,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BDED-0/ikk5-1_01_front.jpg",
   "sha1": "ddef57822ee34e1493e805ade6d45870bfaaf229"
  },
- "CGB-BDNP.jpg": {
+ "CGB-BDNP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BDNP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BDNP-0/3615retro-1_01_front.jpg",
   "sha1": "4c78c1976fd5f30dde1220801708dd928e6a1d4f"
@@ -354,7 +349,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BECP-0/ikk5-1_01_front.jpg",
   "sha1": "99450efe65961604eddb9c684a6cf27ce72efd15"
  },
- "CGB-BENP.jpg": {
+ "CGB-BENP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BENP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BENP-0/ikk5-1_01_front.jpg",
   "sha1": "73007686824d5133ee8fb47fc0c807439a421cbb"
@@ -404,7 +399,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BHFE-0/mattcurrie-1_01_front.jpg",
   "sha1": "149779a20df73a6700d953ff7fe38f04c627dec2"
  },
- "CGB-BHQP.jpg": {
+ "CGB-BHQP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BHQP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BHQP-0/ikk5-1_01_front.jpg",
   "sha1": "9d2e4db7b9d2bc18da3655df09f04bddbbe05185"
@@ -439,7 +434,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BJAP-0/ikk5-1_01_front.jpg",
   "sha1": "af928662a10750ff24421b857033e49e7d2f0fbb"
  },
- "CGB-BJGP.jpg": {
+ "CGB-BJGP-EUR-1.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BJGP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BJGP-0/ikk5-1_01_front.jpg",
   "sha1": "01938b1706796573aec9e3678aadabb730282564"
@@ -514,7 +509,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BMZP-0/ikk5-1_01_front.jpg",
   "sha1": "e5d3fd217003919b1f0f719621605c677fda4db6"
  },
- "CGB-BNSE.jpg": {
+ "CGB-BNSE-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BNSE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BNSE-0/rhetchid-1_01_front.jpg",
   "sha1": "7b1fdb340f42ca8823abb435f802685cb92398a8"
@@ -524,7 +519,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BNXP-0/ikk5-1_01_front.jpg",
   "sha1": "2931b78890b8465af6851aedf135377e092e7760"
  },
- "CGB-BO7P.jpg": {
+ "CGB-BO7P-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BO7P-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BO7P-0/ikk5-1_01_front.jpg",
   "sha1": "ddcad70023e2b918a7eb597656dc3a330446b58a"
@@ -534,7 +529,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BOBP-0/ikk5-1_01_front.jpg",
   "sha1": "6c56874976fa137f73560bf350aa2e39b0caa71a"
  },
- "CGB-BOMD.jpg": {
+ "CGB-BOMD-NOE.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BOMD-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BOMD-0/ikk5-1_01_front.jpg",
   "sha1": "3647d75efa8f11924e110ff652e4d1736c192643"
@@ -599,7 +594,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BSCP-0/ikk5-1_01_front.jpg",
   "sha1": "779036440689295ac4bb85b03748b1816c821541"
  },
- "CGB-BSEP.jpg": {
+ "CGB-BSEP-UKV.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BSEP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BSEP-0/ikk5-1_01_front.jpg",
   "sha1": "9c3b3038efa50b5ffbf0a28f77213c5a8cdb4385"
@@ -624,7 +619,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BT9P-0/3615retro-1_01_front.jpg",
   "sha1": "666256dfd32554594b383368d37b9e17723e910d"
  },
- "CGB-BTKP.jpg": {
+ "CGB-BTKP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BTKP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BTKP-0/3615retro-1_01_front.jpg",
   "sha1": "a9ae5d202e6a4d521a09d076051a6e1b90ed34db"
@@ -659,7 +654,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BUEP-0/ikk5-1_01_front.jpg",
   "sha1": "1b33484a66da76c937366b6283112147727803d3"
  },
- "CGB-BUIP.jpg": {
+ "CGB-BUIP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BUIP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BUIP-0/ikk5-1_01_front.jpg",
   "sha1": "239177c4d81faa7c44e20e517e48268c7d0610a4"
@@ -699,12 +694,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BWOP-0/ikk5-1_01_front.jpg",
   "sha1": "95d73ab111d4d2a42825f2ca034701b88dee6124"
  },
- "CGB-BWYD.jpg": {
+ "CGB-BWYD-NOE.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BWYD-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BWYD-0/ikk5-1_01_front.jpg",
   "sha1": "edda256d93abb906225ed298ff7bfda9d242d3d6"
  },
- "CGB-BXAP.jpg": {
+ "CGB-BXAP-UKV.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BXAP-1/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BXAP-1/ikk5-1_01_front.jpg",
   "sha1": "8b376854f4b49276d575af6e30e683ad0a77ea04"
@@ -724,12 +719,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BY3D-0/missingno-force-1_01_front.jpg",
   "sha1": "75ca40ee0a8743f0b320358fca5a1d11ac89ce4f"
  },
- "CGB-BY3E.jpg": {
+ "CGB-BY3E-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BY3E-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BY3E-0/the-damned-canadian-1_01_front.jpg",
   "sha1": "f39dc0f90f5a4c8c8062dea07ba114d8df9f203f"
  },
- "CGB-BY3F.jpg": {
+ "CGB-BY3F-FRA-1.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BY3F-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BY3F-0/3615retro-1_01_front.jpg",
   "sha1": "fd153550c3d7cb7053b602aa1213444437f254dc"
@@ -764,12 +759,12 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BYTD-0/max-m-1_01_front.jpg",
   "sha1": "1a97089626e919886d2a8e7d8e1782a5ced3ae4c"
  },
- "CGB-BYTF.jpg": {
+ "CGB-BYTF-FRA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BYTF-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BYTF-0/issotm-1_01_front.jpg",
   "sha1": "3977b4ad3285a2b3d234cb19943c21d84bf5c967"
  },
- "CGB-BYTI.jpg": {
+ "CGB-BYTI-ITA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BYTI-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BYTI-0/granmastro-1_01_front.jpg",
   "sha1": "6719940e662fdcfacd63a277b7e30173d26744d4"
@@ -784,7 +779,7 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BYTU-0/mattcurrie-1_01_front.jpg",
   "sha1": "07e7415e64ef488f5f43ac5a03c23a9ab1184a31"
  },
- "CGB-BZSP.jpg": {
+ "CGB-BZSP-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-BZSP-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-BZSP-0/3615retro-1_01_front.jpg",
   "sha1": "81062896b594cf757ff89f4b11f9384f4b0831a5"

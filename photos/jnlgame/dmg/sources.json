@@ -542,13 +542,13 @@
   "sha1": "ed4be9b1315d2266fdb80a1540a73f8eb95e252f",
   "original_name": "image_6ff73d9a-f70e-4d92-af86-0dda8e3e5b41.webp"
  },
- "DMG-FN.jpg": {
+ "DMG-FN-USA.jpg": {
   "serial_on_label": "DMG-FN",
   "original_sha1": "043e5cd6f67e9cda7667a2af84e00759e54a2a4d",
   "sha1": "c77b3b88ad9455fc5d8b7b41f9fa0361e9b68a15",
   "original_name": "052154CE-92E4-4917-9CB1-CD04F506E0CE.webp"
  },
- "DMG-FP.jpg": {
+ "DMG-FP-USA.jpg": {
   "serial_on_label": "DMG-FP",
   "original_sha1": "f1a172bc6f6c809c2b83898c900562c8920bcbc1",
   "sha1": "c7aee98019a45f5ff88849dee7d58dc493e49286",
@@ -644,7 +644,7 @@
   "sha1": "604a2a35cb42757904776569ee7a2e4c56b1e18b",
   "original_name": "image_a82a533e-3bd2-44c1-a469-36b1f880e882.webp"
  },
- "DMG-HK.jpg": {
+ "DMG-HK-USA.jpg": {
   "serial_on_label": "DMG-HK",
   "original_sha1": "0f45f17eeec194aa36fa508f3aadd03caf319734",
   "sha1": "2c0890b7583bfdf854c9fdd967806ae60e14d091",
@@ -822,7 +822,7 @@
   "sha1": "c5ac68d1964c383b2246ef333009d753a1ebec45",
   "original_name": "image_f801eaf0-e4b5-4abb-b7b4-b3a8ad28af1e.webp"
  },
- "DMG-MP.jpg": {
+ "DMG-MP-USA.jpg": {
   "serial_on_label": "DMG-MP",
   "original_sha1": "4703498dc28c1269f7a3209d711e5ecd866da61d",
   "sha1": "b5ba12c9e30944d23939f6f40c061782e0674c53",
@@ -1011,7 +1011,7 @@
   "sha1": "3580896ef7eb690c2c7e204c7c87aac10e48fb34",
   "original_name": "image_2fc7a659-d985-4a17-aab3-6adc979f1523.webp"
  },
- "DMG-RP.jpg": {
+ "DMG-RP-USA.jpg": {
   "serial_on_label": "DMG-RP",
   "original_sha1": "6bed8da71ecbfaaf8bd17d0234ca26a467d7f216",
   "sha1": "d0eba780c086bf562cc7c5d6e9251fd83b5e14ef",
@@ -1172,7 +1172,7 @@
   "sha1": "040b579bf934f21ef027ca4a996635c455796789",
   "original_name": "F238876E-B301-4371-901F-888BE460F0BC.webp"
  },
- "DMG-VU_2.jpg": {
+ "DMG-VU-USA.jpg": {
   "serial_on_label": "DMG-VU",
   "original_sha1": "30e2488ffbdad39a4bc8e72b5b328bf6492c2d60",
   "sha1": "1ca8b5e78f715b722943d0f7797d882487df9edc",
