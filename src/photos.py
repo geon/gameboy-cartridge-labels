@@ -22,12 +22,10 @@ SYSTEMS = ("dmg", "cgb", "agb", "lrg", "unknown")
 EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".avif", ".heic", ".heif")
 # The sources of fakes made from box art on a rendered cartridge: not photos.
 FAKES = ("emumovies", "launchbox-abeezy1388")
-# The sources, best first: Hit-Japan highest, otakaraou the lowest; sources in a tuple rank alike (zockbar: good and
-# alike, ranked 2026-11-05; retroraven and the Etsy store as uneven as Google's). A source not listed goes just above
-# otakaraou.
+# The sources, best first: Hit-Japan highest, otakaraou the lowest. A source not listed goes just above otakaraou.
 SOURCES = ("ebay-hitjapan", "my-collection", "ebay-elrocinante", "zockbar", "retronintendostore", "yugiyahirano", "jnlgame",
            "jauce", "mercari", "rakuma", "retros-ae", "gbhwdb", "ebay", "tradera", "kleinanzeigen", "marktplaats", "gamestop",
-           ("google", "retroraven", "etsy-queenofgames31"), "unrecorded", "otakaraou")
+           "google", "retroraven", "etsy-queenofgames31", "unrecorded", "otakaraou")
 # Each release's preferred photo, chosen in find-doubles (src/find_doubles.py): release id -> the photo's SHA-1.
 PREFERRED = "preferred.json"
 
@@ -44,8 +42,8 @@ def save_preferred(preferred):
 
 
 def rank(source):
-    """A source's place in SOURCES, lower is better; the sources in a tuple there share one."""
-    return next((k for k, s in enumerate(SOURCES) if source == s or isinstance(s, tuple) and source in s), SOURCES.index("otakaraou") - 0.5)
+    """A source's place in SOURCES, lower is better."""
+    return SOURCES.index(source) if source in SOURCES else SOURCES.index("otakaraou") - 0.5
 
 
 def only(sources):
