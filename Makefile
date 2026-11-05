@@ -23,7 +23,7 @@
 #   Renders each release's label, straightened and its colors set (colors.json, make fit-colors), stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px; AGB 43 x 22 mm, 202 x 103 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
 #   make render-carts
-#   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px, the AGB's 1400 x 890; off the photo transparent), the canonical images of the cartridges, into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
+#   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px, the AGB's 1400 x 890; off the photo transparent), the canonical images of the cartridges (the photo's colors uncorrected), into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
 #   make label-page
 #   A page of every release's label (from make render-labels) on an empty cartridge (templates/), the DMG ones on a gray or black one: black if gb-game-list marks it Game Boy Color enhanced, but for those in shell-colors.tsv; then the CGB ones on the clear CGB cartridge, and the AGB ones on a gray AGB cartridge drawn from its model, into generated/label-page/index.html, to open as a file (src/label_page.py).
