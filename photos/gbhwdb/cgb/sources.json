@@ -24,11 +24,6 @@
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AAXK-0/smelly-ghost-1_01_front.jpg",
   "sha1": "5bec90cd91f83b8a30f47397d730da1021d28f07"
  },
- "CGB-ADME-USA.jpg": {
-  "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-ADME-0/",
-  "image_url": "https://gbhwdb.gekkio.fi/static/CGB-ADME-0/smelly-ghost-1_01_front.jpg",
-  "sha1": "a55d824cb65ec9c7fc0627d1c91ae53bcd128bdd"
- },
  "CGB-AF9P-EUR.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AF9P-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-AF9P-0/ikk5-1_01_front.jpg",
@@ -808,6 +803,11 @@
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-VYHE-0/",
   "image_url": "https://gbhwdb.gekkio.fi/static/CGB-VYHE-0/ben-black-1_01_front.jpg",
   "sha1": "f8bc7368f1b864cd04eaed05903429f8dfe4f507"
+ },
+ "DIS-CGB-ADME-USA.jpg": {
+  "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-ADME-0/",
+  "image_url": "https://gbhwdb.gekkio.fi/static/CGB-ADME-0/smelly-ghost-1_01_front.jpg",
+  "sha1": "a55d824cb65ec9c7fc0627d1c91ae53bcd128bdd"
  },
  "DIS-CGB-AZ7E-USA.jpg": {
   "page": "https://gbhwdb.gekkio.fi/cartridges/CGB-AZ7E-0/",
