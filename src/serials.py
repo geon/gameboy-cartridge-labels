@@ -19,8 +19,9 @@ RELEASES = "../gb-game-list/database/releases.json"
 RANK = {"exact": 0, "near": 1, "unknown": 2}
 REGIONS = ("ASI", "AUS", "BRA", "CAN", "CHN", "DAN", "ESA", "ESP", "EUB", "EUR", "EUU", "FAH", "FRA", "FRG", "GPS", "HKG",
            "HOL", "ITA", "JPG", "JPN", "KOR", "MSA", "NOE", "SCN", "SPA", "UKV", "USA")
-SERIAL = re.compile(r"(DMG|CGB|AGB)-?([A-Z0-9]{1,5})(?:-([A-Z]{3}))?(?:-([0-9]))?")
-NO_DASH = re.compile(r"(DMG|CGB|AGB)-?([A-Z0-9]{1,5})(" + "|".join(REGIONS) + r")(?:-([0-9]))?")
+PREFIX = r"(?:(" + "|".join(photos.SERIAL_PREFIXES) + r")-?)?"  # DIS-CGB-AZ7E-USA
+SERIAL = re.compile(PREFIX + r"(DMG|CGB|AGB)-?([A-Z0-9]{1,5})(?:-([A-Z]{3}))?(?:-([0-9]))?")
+NO_DASH = re.compile(PREFIX + r"(DMG|CGB|AGB)-?([A-Z0-9]{1,5})(" + "|".join(REGIONS) + r")(?:-([0-9]))?")
 
 
 def releases_by_serial():
@@ -38,16 +39,23 @@ def releases_by_serial():
 
 def release_key(name, release_of):
     """A photo's release (release_of: releases_by_serial()), by its name: (the release's id, else its serial, with its
-    note if it has one, as DMG-ATAJ[PINK]: a release of its own; the release in gb-game-list, or None)."""
+    note if it has one, as DMG-ATAJ[PINK]: a release of its own, and so with a prefix, as DIS-CGB-AZ7E; the release in
+    gb-game-list, or None)."""
     serial, note = photos.serial_of(name), photos.note_of(name)
-    release = release_of_serial(serial, release_of)
-    key = release["id"] if release else serial
+    release, prefix = release_of_serial(serial, release_of), photos.prefix_of(serial)
+    key = (f"{prefix}-{release['id']}" if prefix else release["id"]) if release else serial
     return (f"{key}[{note}]" if note is not None else key), release
+
+
+def plain_release(key):
+    """A release key's release id in gb-game-list, without its note and prefix (CGB-AZ7E for DIS-CGB-AZ7E[NOTE])."""
+    return photos.unprefixed(re.sub(r"\[[^]]*\]$", "", key))
 
 
 def release_of_serial(serial, release_of):
     """The release a photo's serial is filed under (release_of: releases_by_serial()), the region dropped if gb-game-list
-    lacks it (DMG-A8-UKV); None if it isn't listed."""
+    lacks it (DMG-A8-UKV), and its prefix (DIS-CGB-AZ7E-USA); None if it isn't listed."""
+    serial = photos.unprefixed(serial)
     match = next((s for s in (serial, re.sub(r"-[A-Z]{3}$", "", serial)) if s in release_of), None)
     return release_of[match] if match else None
 
@@ -60,8 +68,8 @@ def reads(text):
     for u in (t.replace(" ", ""), t):
         for m in [*SERIAL.finditer(u), *NO_DASH.finditer(u)]:
             found.append("-".join(p for p in m.groups() if p))
-            if m.group(3):
-                found.append(f"{m.group(1)}-{m.group(2)}")
+            if m.group(4):
+                found.append("-".join(p for p in m.groups()[:3] if p))
     return found
 
 
@@ -75,6 +83,13 @@ def distance(a, b):
 
 
 def match(found, release_of):
+    """How a read serial matches gb-game-list's: (status, serial), its prefix (DIS-) kept."""
+    prefix = photos.prefix_of(found)
+    status, serial = match_unprefixed(photos.unprefixed(found), release_of)
+    return status, (f"{prefix}-{serial}" if prefix else serial)
+
+
+def match_unprefixed(found, release_of):
     prefix, rest = found[:4], found[4:]
     for variant in (rest, rest.replace("0", "O"), rest.replace("O", "0"), rest.replace("1", "I"), rest.replace("I", "1")):
         if prefix + variant in release_of:
@@ -113,12 +128,12 @@ def serials(text_dir):
         matches = []
         for r in found:
             status, serial = match(r, release_of)
-            if status == "near" and not title_seen(release_of[serial], label):
+            if status == "near" and not title_seen(release_of[photos.unprefixed(serial)], label):
                 status, serial = "unknown", r
             matches.append((status, serial))
         # The longest of the best-matching reads (DMG-AJYJ-JPN rather than DMG-AJYJ).
         status, serial = min(matches, key=lambda m: (RANK[m[0]], -len(m[1])))
-        r = release_of.get(serial)
+        r = release_of.get(photos.unprefixed(serial))
         seen = "title" if r and title_seen(r, label) else ""
         rows.append((name, status, serial, r["id"] if r else "", r["title"] if r else "", seen, " ".join(found)))
     return rows

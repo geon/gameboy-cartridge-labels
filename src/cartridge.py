@@ -1,5 +1,7 @@
 import csv, re, warnings, cv2, numpy as np
 
+from photos import unprefixed
+
 # The models of the Game Boy cartridges' shells, and fitting one to a photo, for fit-cartridge (src/fit_cartridge.py):
 # started from the text read on the photo (or from the outlines in it), points on the model's edges look along their
 # normals for the strongest change, and the model's pose (mm -> photo pixels) is fitted to them. Three shells (Shell): the Game Boy's (DMG), which
@@ -28,7 +30,7 @@ SPECIAL_SHELLS = "special-shells.tsv"
 def special_shell(serial):
     """What is special about the shell of the cartridge with this serial or release id (special-shells.tsv), or None."""
     rows = csv.DictReader((l for l in open(SPECIAL_SHELLS) if not l.startswith("#")), delimiter="\t")
-    return next((r["shell"] for r in rows if re.match(re.escape(r["code"]) + r"[A-Z]?(-|$)", serial)), None)
+    return next((r["shell"] for r in rows if re.match(re.escape(r["code"]) + r"[A-Z]?(-|$)", unprefixed(serial))), None)
 
 
 def corners_of(rect):
@@ -738,8 +740,8 @@ SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 def shell_of(serial):
     """The shell of the cartridge with this serial or release id: CGB- ones are Game Boy Color only, AGB- ones (and
-    release ids like agb-0014) Game Boy Advance."""
-    prefix = serial[:4].upper()
+    release ids like agb-0014) Game Boy Advance; after a prefix like DIS- (photos.prefix_of)."""
+    prefix = unprefixed(serial)[:4].upper()
     return CGB if prefix == "CGB-" else AGB if prefix == "AGB-" else DMG
 
 

@@ -72,7 +72,7 @@ def main():
     listed = colors()
     cards, counts, cgb_cards = [], {}, []
     for release in sorted(r for r, m in made.items() if m["shell"] == "dmg"):
-        info = releases.get(re.sub(r"\[[^]]*\]$", "", release), {})  # a release with a note (DMG-ATAJ[PINK]): its title
+        info = releases.get(serials.plain_release(release), {})  # a release with a note (DMG-ATAJ[PINK]) or prefix: its title
         color = color_of(release, listed) or ("black" if info.get("gameBoyColorEnhanced") else "gray")
         counts[color] = counts.get(color, 0) + 1
         template = TEMPLATE_OF[color]
@@ -82,11 +82,11 @@ def main():
             note = f' <span class="color">{color.replace("-", " ")} shell</span>'
         cards.append(card(f'dmg {template}{" tall" if release in TALL else ""}', release, title, note))
     for release in sorted(r for r, m in made.items() if m["shell"] == "cgb"):
-        title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
+        title = releases.get(serials.plain_release(release), {}).get("title", "")
         cgb_cards.append(card("cgb", release, title))
     agb_cards = []
     for release in sorted(r for r, m in made.items() if m["shell"] == "agb"):
-        title = releases.get(re.sub(r"\[[^]]*\]$", "", release), {}).get("title", "")
+        title = releases.get(serials.plain_release(release), {}).get("title", "")
         agb_cards.append(card("agb", release, title))
     places = "".join(f"""
     .{name} .cart img {{

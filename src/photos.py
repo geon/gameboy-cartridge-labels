@@ -57,10 +57,28 @@ def only(sources):
     return None
 
 
+# Printed before a system's serial on some cartridges: DIS-CGB-AZ7E-USA (gbhwdb's labels for display cartridges). The
+# prefix is part of the serial, and of the photo's name; the system, the shell and the release are those of the serial
+# after it.
+SERIAL_PREFIXES = ("DIS",)
+
+
+def prefix_of(serial):
+    """The prefix printed before the system's serial (DIS for DIS-CGB-AZ7E-USA), else None."""
+    found = re.match(r"(" + "|".join(SERIAL_PREFIXES) + r")-(?=(DMG|CGB|AGB)-)", serial, re.I)
+    return found.group(1).upper() if found else None
+
+
+def unprefixed(serial):
+    """The serial without its prefix (CGB-AZ7E-USA for DIS-CGB-AZ7E-USA)."""
+    prefix = prefix_of(serial)
+    return serial[len(prefix) + 1:] if prefix else serial
+
+
 def system_of(serial):
     """The folder of a serial or release id: its system's prefix (DMG-, CGB-, AGB-, LRG-, or agb-1314 for releases
-    without a serial), else unknown."""
-    prefix = serial.split("-")[0].lower()
+    without a serial; after a prefix like DIS-), else unknown."""
+    prefix = unprefixed(serial).split("-")[0].lower()
     return prefix if prefix in SYSTEMS[:-1] else "unknown"
 
 
@@ -75,7 +93,7 @@ def tidy(name):
     s = re.sub(r"-{2,}", "-", re.sub(r"[^A-Za-z0-9_()\[\]-]+", "-", s)).strip("-")
     s = re.sub(r"-_", "_", re.sub(r"-([(\[])", r"\1", s))  # AGB-U3IJ-JPN (A): no space before the parenthesis on a label
     head, sep, tail = s.rpartition("_") if re.search(r"_\d+$", s) else (s, "", "")
-    if re.match(r"(dmg|cgb|agb|lrg)-(?!\d+$)[a-z0-9()\[\]-]+$", head, re.I):
+    if re.match(r"(?:(?:" + "|".join(SERIAL_PREFIXES) + r")-)?(dmg|cgb|agb|lrg)-(?!\d+$)[a-z0-9()\[\]-]+$", head, re.I):
         head = head.upper()
     return f"{head}{sep}{tail}{ext.lower()}"
 
