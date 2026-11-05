@@ -1,4 +1,4 @@
-import glob, hashlib, os, shutil, sys, cv2, numpy as np
+import glob, hashlib, json, os, shutil, sys, cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials, text
@@ -11,6 +11,9 @@ from fit_cartridge import load
 # by SHA-1) is deleted; one that is the same picture as a photo in photos/, saved another way (re-encoded, another
 # format: see same_picture), stays in the folder, and is listed with that photo, for you to delete or keep; anything not
 # a photo stays too, and is listed. Otherwise the folder is left empty: filed photos and emptied subfolders are removed.
+# A subfolder's listing.json (file name -> where the photo came from: its page, the image's URL..., as written by a
+# downloader such as src/retronintendostore.py) is copied into each photo's entry in sources.json; it is kept only for
+# the photos left in the folder.
 # Usage: add_photos.py
 DROP_OFF = "save-new-images-here"
 WORK = "generated/add-photos"
@@ -53,14 +56,16 @@ def looks_of_photos():
 photos.reconcile()
 known = {e[k] for _, _, _, e in photos.all_sources() for k in ("sha1", "original_sha1") if e.get(k)}
 
-# The photos to file: (source, path, SHA-1).
+# The photos to file: (source, path, SHA-1); each subfolder's listing.json, by its path.
 os.makedirs(DROP_OFF, exist_ok=True)
-incoming, left, duplicates = [], [], 0
+incoming, left, duplicates, listings = [], [], 0, {}
 for folder in [DROP_OFF] + sorted(d for d in glob.glob(os.path.join(DROP_OFF, "*")) if os.path.isdir(d)):
     source = "unrecorded" if folder == DROP_OFF else photos.tidy(os.path.basename(folder)).lower()
+    if folder != DROP_OFF and os.path.exists(os.path.join(folder, "listing.json")):
+        listings[os.path.join(folder, "listing.json")] = json.load(open(os.path.join(folder, "listing.json")))
     for path in sorted(glob.glob(os.path.join(folder, "*"))):
         name = os.path.basename(path)
-        if os.path.isdir(path) or name == "README.md":
+        if os.path.isdir(path) or name == "README.md" or (folder != DROP_OFF and name == "listing.json"):
             continue
         if os.path.splitext(name)[1].lower() not in PHOTO:
             left.append(path)
@@ -108,11 +113,20 @@ for k, (source, path, sha1) in enumerate(incoming):
         name_by, how = serial, f"the serial read on it ({status})"
     else:
         name_by, how = "UNKNOWN", "nothing: no serial read"
-    entry = dict(original_name=original, serial_on_label=serial or None, note=f"named by {how}")
+    listed = listings.get(os.path.join(os.path.dirname(path), "listing.json"), {}).get(original, {})
+    entry = dict(listed, original_name=original, serial_on_label=serial or None, note=f"named by {how}")
     name = photos.add(name_by, open(path, "rb").read(), os.path.splitext(original)[1], {key: value for key, value in entry.items() if value is not None}, source)
     os.remove(path)
     filed.setdefault(source, []).append(name)
     print(f"{source}/{original}\t-> {name}\t({how})")
+
+# The listings, kept for the photos left.
+for path, listing in listings.items():
+    rest = {name: entry for name, entry in listing.items() if os.path.exists(os.path.join(os.path.dirname(path), name))}
+    if rest:
+        json.dump(rest, open(path, "w"), ensure_ascii=False, indent=1)
+    else:
+        os.remove(path)
 
 # The emptied subfolders.
 for folder in sorted(d for d in glob.glob(os.path.join(DROP_OFF, "*")) if os.path.isdir(d)):
