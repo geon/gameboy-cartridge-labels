@@ -29,7 +29,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e7de2f91e5f6c71b26657364bf155914a2a1bc68"
  },
- "CGB-AIRJ.jpg": {
+ "CGB-AIRJ-JPN.jpg": {
   "serial_on_label": "CGB-AIRJ",
   "original_sha1": "4cb536d9a5c21f75e64abd3145e5ff858a01a8da",
   "sha1": "abee48c46242a7d9d36996e6d7a5a2f5e1fe2a3c",
@@ -154,7 +154,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d951616fdc1cda11c517e4cd2ea406b4ab925f18"
  },
- "CGB-BIMJ.jpg": {
+ "CGB-BIMJ-JPN.jpg": {
   "original_name": "images.jpeg",
   "serial_on_label": "CGB-BIMJ",
   "note": "named by the serial read on it (exact)",

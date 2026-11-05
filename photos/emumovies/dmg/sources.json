@@ -87,7 +87,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "cbb0cc5ed44d22a708f370c4b0e55eee58f498e5"
  },
- "DMG-ACWP_4.png": {
+ "DMG-ACWP-EUU.png": {
   "original_name": "Cool Hand (Europe).png",
   "serial_on_label": "DMG-ACWP",
   "note": "named by the serial read on it (exact)",
@@ -448,7 +448,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "641b47130de3123294a7ba2253c1a3064ebb9af1"
  },
- "DMG-AUUJ_2.png": {
+ "DMG-AUUJ-JPN_2.png": {
   "original_name": "Yu Yu Hakusho Dai-4-dan - Makai Touitsu Hen (Japan) (SGB Enhanced).png",
   "serial_on_label": "DMG-AUUJ",
   "note": "named by the serial read on it (exact)",
@@ -742,7 +742,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b0fd89a97877d3e90972bb2b6d17dc3967153870"
  },
- "DMG-OL.png": {
+ "DMG-OL-USA.png": {
   "original_name": "Battle of Olympus, The (Europe) (En,Fr,De,Es,It).png",
   "serial_on_label": "DMG-OL",
   "note": "named by the serial read on it (exact)",

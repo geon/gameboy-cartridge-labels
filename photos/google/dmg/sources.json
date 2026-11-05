@@ -23,13 +23,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "bc4a459aad9cef1c39300ab05e76aff752893551"
  },
- "DMG-A2SJ.jpg": {
+ "DMG-A2SJ-JPN_2.jpg": {
   "serial_on_label": "DMG-A2SJ-JPN",
   "original_sha1": "92b5d209f4d4de1949b49707f233d23b8abd4fa2",
   "sha1": "32339c75d4ed31757939f5ab930cee579c0aba4b",
   "original_name": "10010004909476802018_12_1.webp"
  },
- "DMG-A2SJ_2.jpg": {
+ "DMG-A2SJ-JPN_3.jpg": {
   "serial_on_label": "DMG-A2SJ-JPN",
   "original_sha1": "c80ad1475199fe31a58cc26edb493ca301dab1e7",
   "sha1": "bd27c7fc63a362fa974151a543689596d7b3c0e6",
@@ -41,7 +41,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f7187cf98fadda3d7ee0545f4494bd83489da02d"
  },
- "DMG-A2TP.jpg": {
+ "DMG-A2TP-EUR.jpg": {
   "serial_on_label": "DMG-A2TP-EUR",
   "original_sha1": "2e2211a5ab95ac33e9193723b87c8355bb53103a",
   "sha1": "01d374a2c8f8984bbb965107dbc0507ccc00917a",
@@ -82,7 +82,7 @@
   "sha1": "8a4be2d1b447b750672b5b2d1482e51c76f79dfa",
   "original_name": "20241004_41c75f.jpg"
  },
- "DMG-A3SJ.jpg": {
+ "DMG-A3SJ-JPN_2.jpg": {
   "serial_on_label": "DMG-A3SJ",
   "original_sha1": "418fad544117b7a21bfeb97db265f5a050da538f",
   "sha1": "2808af84b3a373df9671021b3f28031d31ef8a13",
@@ -165,7 +165,7 @@
   "sha1": "004ae0b2b68e3a88787f02d8878633731f6ae1d1",
   "original_name": "images (17).jpeg"
  },
- "DMG-AB2J.jpg": {
+ "DMG-AB2J-JPN_3.jpg": {
   "serial_on_label": "DMG-AB2J",
   "original_sha1": "73984c92b9df9f51ff2c544c92ff6d8cb8f3e179",
   "sha1": "19003a6cbd16744409f0a3087a3fab8a836cef2b",
@@ -787,13 +787,13 @@
   "sha1": "4644f4ed1aaad950a9058d7f96f5aef416876567",
   "original_name": "s-l1200 (11).jpg"
  },
- "DMG-AZAJ.webp": {
+ "DMG-AZAJ-JPN_2.webp": {
   "original_name": "image_57597136-e0a7-48ab-a881-5f22870a5922_530x@2x.webp",
   "serial_on_label": "DMG-AZAJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "a254d121a74c26b51550ea9ef26ea393d33c0f56"
  },
- "DMG-AZAJ_2.jpg": {
+ "DMG-AZAJ-JPN_3.jpg": {
   "original_name": "m88399457780_1.jpg",
   "serial_on_label": "DMG-AZAJ",
   "note": "named by the serial read on it (exact)",
@@ -1178,7 +1178,7 @@
   "sha1": "4297ec2de69eded27795a3ac9240a7c7a29385db",
   "original_name": "98875_1_.jpg"
  },
- "DMG-G6.jpg": {
+ "DMG-G6-USA.jpg": {
   "serial_on_label": "DMG-G6-USA",
   "original_sha1": "6fddea6b5a5ecb0c0ccab203db8cc0dc1158994a",
   "sha1": "cc9944f539dacd51844fbf7a0eb1d45c1de370c2",
@@ -1340,7 +1340,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ade8cd4b5a676ad7afdc5a35564ba7f66dbf4230"
  },
- "DMG-LM.jpg": {
+ "DMG-LM-USA.jpg": {
   "serial_on_label": "DMG-LM-USA",
   "original_sha1": "7b06228d711fcb4c9ec878d7105fd0252fb7f1ea",
   "sha1": "00b1b455ee98f4e5a0dbdfe1aa4f525c3890ef42",

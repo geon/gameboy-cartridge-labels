@@ -1,5 +1,5 @@
 {
- "AGB-A29J.webp": {
+ "AGB-A29J-JPN.webp": {
   "original_name": "306397805501-s-l1600.webp",
   "serial_on_label": "AGB-A29J",
   "note": "named by the serial read on it (exact)",
@@ -82,7 +82,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "71d1a2ea00947c3c8bf86b2d7cee295a5a4b9235"
  },
- "AGB-A5GJ_2.webp": {
+ "AGB-A5GJ-JPN.webp": {
   "original_name": "303401243674-s-l1600.webp",
   "serial_on_label": "AGB-A5GJ",
   "note": "named by the serial read on it (exact)",
@@ -99,19 +99,19 @@
   "note": "named by nothing: no serial read",
   "sha1": "f0c0a006d7b836f55ea8a541fbebe1a3b453b1dd"
  },
- "AGB-A6SJ.webp": {
+ "AGB-A6SJ-JPN.webp": {
   "original_name": "365029502583-s-l1600.webp",
   "serial_on_label": "AGB-A6SJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "e290c0da0e31b91d44a777e303f8177dcecc4dc3"
  },
- "AGB-A7AJ.webp": {
+ "AGB-A7AJ-JPN_2.webp": {
   "original_name": "306211342662-s-l1600.webp",
   "serial_on_label": "AGB-A7AJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "42df94b2d92d407dec90c1444c23e866ff15303b"
  },
- "AGB-A7GJ.webp": {
+ "AGB-A7GJ-JPN.webp": {
   "original_name": "860102768925-s-l1600.webp",
   "serial_on_label": "AGB-A7GJ",
   "note": "named by the serial read on it (exact)",
@@ -123,13 +123,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ce085dc97ced155e536a5936933f659c97c84759"
  },
- "AGB-A8EJ.webp": {
+ "AGB-A8EJ-JPN.webp": {
   "original_name": "307259745520-s-l1600.webp",
   "serial_on_label": "AGB-A8EJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "f9af67e44889390e794f4eeb7ed1ebf69adf675f"
  },
- "AGB-A8OJ_2.webp": {
+ "AGB-A8OJ-JPN_2.webp": {
   "original_name": "362549126905-s-l1600.webp",
   "serial_on_label": "AGB-A8OJ",
   "note": "named by the serial read on it (exact)",
@@ -147,13 +147,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "44de98eba1020069fbf57fbc5c5210e693da0cd3"
  },
- "AGB-A9TJ.webp": {
+ "AGB-A9TJ-JPN.webp": {
   "original_name": "305532820039-s-l1600.webp",
   "serial_on_label": "AGB-A9TJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "d5aab58e3e63ee5e3017b004caca658e6158f2c2"
  },
- "AGB-AAJJ_2.webp": {
+ "AGB-AAJJ-JPN.webp": {
   "original_name": "306211342546-s-l1600.webp",
   "serial_on_label": "AGB-AAJJ",
   "note": "named by the serial read on it (exact)",
@@ -171,7 +171,7 @@
   "note": "named by the serial read on it (near)",
   "sha1": "90c01100da23f914db7973eb1daf603e2747d55d"
  },
- "AGB-AASJ.webp": {
+ "AGB-AASJ-JPN.webp": {
   "original_name": "315583662105-s-l1600.webp",
   "serial_on_label": "AGB-AASJ",
   "note": "named by the serial read on it (exact)",
@@ -183,13 +183,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "82edca34c57da397f0a57541b249fc44137ea771"
  },
- "AGB-AAZJ.webp": {
+ "AGB-AAZJ-JPN.webp": {
   "original_name": "305984024501-s-l1600.webp",
   "serial_on_label": "AGB-AAZJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "a0e3be835e3a41128a6f8ad3f62f720822f2c4ef"
  },
- "AGB-AB2J_2.webp": {
+ "AGB-AB2J-JPN.webp": {
   "original_name": "307259749309-s-l1600.webp",
   "serial_on_label": "AGB-AB2J",
   "note": "named by the serial read on it (exact)",
@@ -207,7 +207,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0a56f6225f4696b53e2deff9c0ad48bc75dcc48d"
  },
- "AGB-ABFJ_2.webp": {
+ "AGB-ABFJ-JPN.webp": {
   "original_name": "362882405243-s-l1600.webp",
   "serial_on_label": "AGB-ABFJ",
   "note": "named by the serial read on it (exact)",
@@ -219,7 +219,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ec7977cbd2de9431fe14ef6c9c31b26d8aea29b1"
  },
- "AGB-AC4J_2.webp": {
+ "AGB-AC4J-JPN.webp": {
   "original_name": "s-l1600 (15).webp",
   "serial_on_label": "AGB-AC4J",
   "note": "named by the serial read on it (exact)",
@@ -237,7 +237,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "46ba7a884e1c45e4d20c45cc6a719356936bc847"
  },
- "AGB-ACOJ.webp": {
+ "AGB-ACOJ-JPN_2.webp": {
   "original_name": "365495577927-s-l1600.webp",
   "serial_on_label": "AGB-ACOJ",
   "note": "named by the serial read on it (exact)",
@@ -255,7 +255,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "968f6bbfc704ed1f2051fd827893bf6086087310"
  },
- "AGB-ADEJ.webp": {
+ "AGB-ADEJ-JPN.webp": {
   "original_name": "306617796954-s-l1600.webp",
   "serial_on_label": "AGB-ADEJ",
   "note": "named by the serial read on it (exact)",
@@ -285,7 +285,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "5433ef96e471c1069740c54804603ab33481507f"
  },
- "AGB-AEAJ_2.webp": {
+ "AGB-AEAJ-JPN.webp": {
   "original_name": "307260006362-s-l1600.webp",
   "serial_on_label": "AGB-AEAJ",
   "note": "named by the serial read on it (exact)",
@@ -297,7 +297,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c25c4653aa0bcc5ebac86613c0907161914660e0"
  },
- "AGB-AEWJ_2.webp": {
+ "AGB-AEWJ-JPN.webp": {
   "original_name": "315618528115-s-l1600.webp",
   "serial_on_label": "AGB-AEWJ",
   "note": "named by the serial read on it (exact)",
@@ -343,7 +343,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f62920bbc51321a5a0d4fbefd0591b6bbae54e3d"
  },
- "AGB-AGKJ.webp": {
+ "AGB-AGKJ-JPN.webp": {
   "original_name": "364921150794-s-l1600.webp",
   "serial_on_label": "AGB-AGKJ",
   "note": "named by the serial read on it (exact)",
@@ -361,7 +361,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "480ccc0040f0c16e94fccb18ab6a2430d969981e"
  },
- "AGB-AGXJ.webp": {
+ "AGB-AGXJ-JPN.webp": {
   "original_name": "316355233996-s-l1600.webp",
   "serial_on_label": "AGB-AGXJ",
   "note": "named by the serial read on it (exact)",
@@ -379,7 +379,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "477d69c82dd2725b543be5986d1ecd172222544b"
  },
- "AGB-AHQJ_2.webp": {
+ "AGB-AHQJ-JPN.webp": {
   "original_name": "315621922214-s-l1600.webp",
   "serial_on_label": "AGB-AHQJ",
   "note": "named by the serial read on it (exact)",
@@ -397,13 +397,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "974df07022bbd77f46f3efa2e16f20b3f74f417f"
  },
- "AGB-AHVJ.webp": {
+ "AGB-AHVJ-JPN.webp": {
   "original_name": "318747180614-s-l1600.webp",
   "serial_on_label": "AGB-AHVJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "8afca4bd75ac0372660ea2879b531fc0841df733"
  },
- "AGB-AHWJ.webp": {
+ "AGB-AHWJ-JPN.webp": {
   "original_name": "860102318254-s-l1600.webp",
   "serial_on_label": "AGB-AHWJ",
   "note": "named by the serial read on it (exact)",
@@ -426,7 +426,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "28aa6e647a632fe95e3c0864a10a1fc53cc00302"
  },
- "AGB-AJOJ_2.webp": {
+ "AGB-AJOJ-JPN.webp": {
   "original_name": "305972710023-s-l1600.webp",
   "serial_on_label": "AGB-AJOJ",
   "note": "named by the serial read on it (exact)",
@@ -438,7 +438,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "fcffd3192080d51831bafb2c61183deb1628fd3a"
  },
- "AGB-AJQJ.webp": {
+ "AGB-AJQJ-JPN.webp": {
   "original_name": "316046907494-s-l1600.webp",
   "serial_on_label": "AGB-AJQJ",
   "note": "named by the serial read on it (exact)",
@@ -462,7 +462,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7511208703b177fbf5f621082cd5f2d52b3f6a84"
  },
- "AGB-AKDJ.webp": {
+ "AGB-AKDJ-JPN.webp": {
   "original_name": "366775240523-s-l1600.webp",
   "serial_on_label": "AGB-AKDJ",
   "note": "named by the serial read on it (exact)",
@@ -497,7 +497,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d59948a62b32f9f59824ab90bd7384a36b052400"
  },
- "AGB-AKYJ_2.webp": {
+ "AGB-AKYJ-JPN.webp": {
   "original_name": "307259750076-s-l1600.webp",
   "serial_on_label": "AGB-AKYJ",
   "note": "named by the serial read on it (exact)",
@@ -515,7 +515,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "b15923f6a72ee663d48543bf2e4736e514bba5fa"
  },
- "AGB-ALQJ.webp": {
+ "AGB-ALQJ-JPN.webp": {
   "original_name": "366775235865-s-l1600.webp",
   "serial_on_label": "AGB-ALQJ",
   "note": "named by the serial read on it (exact)",
@@ -527,7 +527,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "aa96518dba17d3534b4de54fe68285b2f230978e"
  },
- "AGB-AM7J.webp": {
+ "AGB-AM7J-JPN.webp": {
   "original_name": "362855351919-s-l1600.webp",
   "serial_on_label": "AGB-AM7J",
   "note": "named by the serial read on it (exact)",
@@ -539,13 +539,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d638c97d68930abe10c5539f91f227e349357631"
  },
- "AGB-AMFJ.webp": {
+ "AGB-AMFJ-JPN.webp": {
   "original_name": "305972301525-s-l1600.webp",
   "serial_on_label": "AGB-AMFJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "2cef385e39cd94b18653ccadb30a814a9c276754"
  },
- "AGB-AMHJ.webp": {
+ "AGB-AMHJ-JPN_2.webp": {
   "original_name": "364459580456-s-l1600.webp",
   "serial_on_label": "AGB-AMHJ",
   "note": "named by the serial read on it (exact)",
@@ -556,13 +556,13 @@
   "note": "named by nothing: no serial read",
   "sha1": "6dae9f2d12dda9943ec2c0efcb2aeb484f6994a4"
  },
- "AGB-AMXJ_2.webp": {
+ "AGB-AMXJ-JPN.webp": {
   "original_name": "365465043024-s-l1600.webp",
   "serial_on_label": "AGB-AMXJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "877471e68333e8932cd097141ca161dcf08c96be"
  },
- "AGB-AMYJ.webp": {
+ "AGB-AMYJ-JPN_2.webp": {
   "original_name": "306309692558-s-l1600.webp",
   "serial_on_label": "AGB-AMYJ",
   "note": "named by the serial read on it (exact)",
@@ -574,7 +574,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ef7db79787243f7ecda406e48616c70e25ef122c"
  },
- "AGB-AN8J_2.webp": {
+ "AGB-AN8J-JPN.webp": {
   "original_name": "s-l1600.webp",
   "serial_on_label": "AGB-AN8J",
   "note": "named by the serial read on it (exact)",
@@ -597,7 +597,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "89c7e399ac873bfec17b0230d116b4ae8dc86f6f"
  },
- "AGB-AOCJ_2.webp": {
+ "AGB-AOCJ-JPN.webp": {
   "original_name": "305390487596-s-l1600.webp",
   "serial_on_label": "AGB-AOCJ",
   "note": "named by the serial read on it (exact)",
@@ -632,19 +632,19 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d12d7b71ddb5e598dc49f2d6344765208ad8ee2e"
  },
- "AGB-AQCJ.webp": {
+ "AGB-AQCJ-JPN.webp": {
   "original_name": "364271641543-s-l1600.webp",
   "serial_on_label": "AGB-AQCJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "39e13014e2a8e83ab03f449081d5ef3fa3e57e6a"
  },
- "AGB-AREJ.webp": {
+ "AGB-AREJ-JPN_2.webp": {
   "original_name": "303201363533-s-l1600.webp",
   "serial_on_label": "AGB-AREJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "ec28f8f73d0429031959f2acab24bbd010d973b2"
  },
- "AGB-ARIJ_2.webp": {
+ "AGB-ARIJ-JPN.webp": {
   "original_name": "305700169097-s-l1600.webp",
   "serial_on_label": "AGB-ARIJ",
   "note": "named by the serial read on it (exact)",
@@ -698,7 +698,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "a91acfd5b64d262f59b7ac8ea9e98b5ecdbd0a0c"
  },
- "AGB-ATYJ.webp": {
+ "AGB-ATYJ-JPN.webp": {
   "original_name": "302205524704-s-l1600.webp",
   "serial_on_label": "AGB-ATYJ",
   "note": "named by the serial read on it (exact)",
@@ -710,7 +710,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0e460b597bf3a38687dd61565ee70c960c4dcd5a"
  },
- "AGB-AUTJ.webp": {
+ "AGB-AUTJ-JPN.webp": {
   "original_name": "307260003030-s-l1600.webp",
   "serial_on_label": "AGB-AUTJ",
   "note": "named by the serial read on it (exact)",
@@ -740,7 +740,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "05a44c96d9f0c6245b1ef0ebe3e2279f7434796b"
  },
- "AGB-AWEJ_2.webp": {
+ "AGB-AWEJ-JPN.webp": {
   "original_name": "365414927600-s-l1600.webp",
   "serial_on_label": "AGB-AWEJ",
   "note": "named by the serial read on it (exact)",
@@ -764,7 +764,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c11f04d31701fd81093c2485e7d4b39ca0003ccb"
  },
- "AGB-AXBJ.webp": {
+ "AGB-AXBJ-JPN_2.webp": {
   "original_name": "366775239574-s-l1600.webp",
   "serial_on_label": "AGB-AXBJ",
   "note": "named by the serial read on it (exact)",
@@ -776,7 +776,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "bd2d91a3a39317e19957c8cbe97289661cfd0c6b"
  },
- "AGB-AZ3J.webp": {
+ "AGB-AZ3J-JPN.webp": {
   "original_name": "307228619997-s-l1600.webp",
   "serial_on_label": "AGB-AZ3J",
   "note": "named by the serial read on it (exact)",
@@ -800,7 +800,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "88ae38c33a7bfaf5ca74a4f35969489cf9b5e778"
  },
- "AGB-AZKJ.webp": {
+ "AGB-AZKJ-JPN.webp": {
   "original_name": "305117406881-s-l1600.webp",
   "serial_on_label": "AGB-AZKJ",
   "note": "named by the serial read on it (exact)",
@@ -848,13 +848,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "55d44b638ba4d27d369e60ab45b2e22487423ce5"
  },
- "AGB-B4GJ_2.webp": {
+ "AGB-B4GJ-JPN.webp": {
   "original_name": "365042813027-s-l1600.webp",
   "serial_on_label": "AGB-B4GJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "8bd6216050789b7255d9955e7b6d16885a0cea3d"
  },
- "AGB-B4LJ.webp": {
+ "AGB-B4LJ-JPN.webp": {
   "original_name": "317481402004-s-l1600.webp",
   "serial_on_label": "AGB-B4LJ",
   "note": "named by the serial read on it (exact)",
@@ -884,19 +884,19 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "2a029817a17eb74068c5aa407dd0d24a38155eab"
  },
- "AGB-BAMJ_2.webp": {
+ "AGB-BAMJ-JPN.webp": {
   "original_name": "306320677564-s-l1600.webp",
   "serial_on_label": "AGB-BAMJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "cb4b2089b7de52ed0e4d4c74c8c39ddf986059ec"
  },
- "AGB-BASJ.webp": {
+ "AGB-BASJ-JPN.webp": {
   "original_name": "362946848934-s-l1600.webp",
   "serial_on_label": "AGB-BASJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "56b99017fe221403c00dcf2f47926083da2fb9e5"
  },
- "AGB-BAYJ_2.webp": {
+ "AGB-BAYJ-JPN.webp": {
   "original_name": "305691540924-s-l1600.webp",
   "serial_on_label": "AGB-BAYJ",
   "note": "named by the serial read on it (near)",
@@ -932,13 +932,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7e7b0ada35f095917df639b812539e0ab0276473"
  },
- "AGB-BD5J_2.webp": {
+ "AGB-BD5J-JPN.webp": {
   "original_name": "306546673355-s-l1600.webp",
   "serial_on_label": "AGB-BD5J",
   "note": "named by the serial read on it (exact)",
   "sha1": "b70413903d15dfeb2b8c28b28e7c9418c526ad36"
  },
- "AGB-BDCJ_2.webp": {
+ "AGB-BDCJ-JPN.webp": {
   "original_name": "316578601058-s-l1600.webp",
   "serial_on_label": "AGB-BDCJ",
   "note": "named by the serial read on it (exact)",
@@ -1016,7 +1016,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "848ddac74374b10fe3dcd026836ef891682e880b"
  },
- "AGB-BHRJ_2.webp": {
+ "AGB-BHRJ-JPN.webp": {
   "original_name": "365292718561-s-l1600.webp",
   "serial_on_label": "AGB-BHRJ",
   "note": "named by the serial read on it (exact)",
@@ -1028,25 +1028,25 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "53c9c39adf5571f70eb17053512d756298c8992e"
  },
- "AGB-BI2J_2.webp": {
+ "AGB-BI2J-JPN.webp": {
   "original_name": "365284630554-s-l1600.webp",
   "serial_on_label": "AGB-BI2J",
   "note": "named by the serial read on it (exact)",
   "sha1": "e882aba1ca9dfc331f954b710d0ce9d66039a652"
  },
- "AGB-BIKJ.webp": {
+ "AGB-BIKJ-JPN_2.webp": {
   "original_name": "306184069896-s-l1600.webp",
   "serial_on_label": "AGB-BIKJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "4505817ec4d327f3ef6bfbfcdd43f18419e0be6b"
  },
- "AGB-BK2J_2.webp": {
+ "AGB-BK2J-JPN.webp": {
   "original_name": "318645051954-s-l1600.webp",
   "serial_on_label": "AGB-BK2J",
   "note": "named by the serial read on it (exact)",
   "sha1": "4224fcedcb93e1559295193fe8b67a613e8c5ed1"
  },
- "AGB-BK3J_2.webp": {
+ "AGB-BK3J-JPN.webp": {
   "original_name": "362946848611-s-l1600.webp",
   "serial_on_label": "AGB-BK3J",
   "note": "named by the serial read on it (exact)",
@@ -1058,7 +1058,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "8c09b615badb0db735be3aaa3ec80eaadd8e539e"
  },
- "AGB-BK5J_2.webp": {
+ "AGB-BK5J-JPN.webp": {
   "original_name": "314844811047-s-l1600.webp",
   "serial_on_label": "AGB-BK5J",
   "note": "named by the serial read on it (exact)",
@@ -1100,7 +1100,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "5d184f36f797033c435b97ee10370b93bf856f1b"
  },
- "AGB-BMOJ_2.webp": {
+ "AGB-BMOJ-JPN.webp": {
   "original_name": "303203554930-s-l1600.webp",
   "serial_on_label": "AGB-BMOJ",
   "note": "named by the serial read on it (exact)",
@@ -1154,13 +1154,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e129f23a8dc1f26c250918618df8813d5c107c9d"
  },
- "AGB-BOSJ_2.webp": {
+ "AGB-BOSJ-JPN.webp": {
   "original_name": "366620046761-s-l1600.webp",
   "serial_on_label": "AGB-BOSJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "ceb54d5043b41fc42f98a72d5f8ce1053db503e4"
  },
- "AGB-BP7J_2.webp": {
+ "AGB-BP7J-JPN.webp": {
   "original_name": "365465061776-s-l1600.webp",
   "serial_on_label": "AGB-BP7J",
   "note": "named by the serial read on it (exact)",
@@ -1190,7 +1190,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b65ad06bd751c4002fa72ebcebbfbf2987167b32"
  },
- "AGB-BPSJ_2.webp": {
+ "AGB-BPSJ-JPN.webp": {
   "original_name": "307259750688-s-l1600.webp",
   "serial_on_label": "AGB-BPSJ",
   "note": "named by the serial read on it (exact)",
@@ -1214,13 +1214,13 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e2d47e095f3e93a110d0e62c102129f99ac0a99d"
  },
- "AGB-BS4J_2.webp": {
+ "AGB-BS4J-JPN.webp": {
   "original_name": "316582753981-s-l1600.webp",
   "serial_on_label": "AGB-BS4J",
   "note": "named by the serial read on it (exact)",
   "sha1": "508a6ba944168ae3ebb8a4de1919af9f3d0a01c7"
  },
- "AGB-BS8J_2.webp": {
+ "AGB-BS8J-JPN.webp": {
   "original_name": "366775240063-s-l1600.webp",
   "serial_on_label": "AGB-BS8J",
   "note": "named by the serial read on it (exact)",
@@ -1244,7 +1244,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "13595c06004d691a1d03f68483c99b6dd033b928"
  },
- "AGB-BWPJ_2.webp": {
+ "AGB-BWPJ-JPN.webp": {
   "original_name": "365465040385-s-l1600.webp",
   "serial_on_label": "AGB-BWPJ",
   "note": "named by the serial read on it (exact)",
@@ -1278,7 +1278,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "e3e715f6d786ab406713245f2c270bdac085a9d5"
  },
- "AGB-FDMJ_2.webp": {
+ "AGB-FDMJ-JPN.webp": {
   "original_name": "s-l1600 (18).webp",
   "serial_on_label": "AGB-FDMJ",
   "note": "named by the serial read on it (exact)",
@@ -1290,7 +1290,7 @@
   "note": "named by the serial read on it (near)",
   "sha1": "6d388b7998d224a2d3f5f41ef60d92605f94a92f"
  },
- "AGB-FGGJ_2.webp": {
+ "AGB-FGGJ-JPN.webp": {
   "original_name": "366571960067-s-l1600.webp",
   "serial_on_label": "AGB-FGGJ",
   "note": "named by the serial read on it (exact)",
@@ -1326,7 +1326,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9edc9713bdcfa9eb3c7ad94df39c568054960472"
  },
- "AGB-FSOJ_2.webp": {
+ "AGB-FSOJ-JPN.webp": {
   "original_name": "316047308289-s-l1600.webp",
   "serial_on_label": "AGB-FSOJ",
   "note": "named by the serial read on it (exact)",
@@ -1338,7 +1338,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c45ceee678a27305bd544648b487aaaa81261922"
  },
- "AGB-FTWJ_2.webp": {
+ "AGB-FTWJ-JPN.webp": {
   "original_name": "318194817504-s-l1600.webp",
   "serial_on_label": "AGB-FTWJ",
   "note": "named by the serial read on it (exact)",
@@ -1371,7 +1371,7 @@
   "note": "named by nothing: no serial read",
   "sha1": "04089b5803b7ee654f8d8806b7ab3fd0cf4b6fe5"
  },
- "AGB-U3IJ.webp": {
+ "AGB-U3IJ-JPN_2.webp": {
   "original_name": "364593616435-s-l1600.webp",
   "serial_on_label": "AGB-U3IJ",
   "note": "named by the serial read on it (exact)",

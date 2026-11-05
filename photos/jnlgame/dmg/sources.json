@@ -137,7 +137,7 @@
   "sha1": "360b617f0df47ccefe921624c57078f409ff8a70",
   "original_name": "image_9e5f39b3-0b3a-422f-95a8-e060a7318e45.webp"
  },
- "DMG-AK6J_2.jpg": {
+ "DMG-AK6J-JPN.jpg": {
   "serial_on_label": "DMG-AK6J-JPN",
   "original_sha1": "1a21a1bf653f68e1d345810ef484bf8f7e977dad",
   "sha1": "10d385d91b8aaaad9fe24056e02d6f0166418a23",
@@ -173,7 +173,7 @@
   "sha1": "a42c31afc338b2cb977b07d49ba53dda0975c898",
   "original_name": "FullSizeRender_b77175da-1ec6-432f-b3c0-c80142ede2a4.webp"
  },
- "DMG-AKLP_2.jpg": {
+ "DMG-AKLP-FAH.jpg": {
   "serial_on_label": "DMG-AKLP-FAH",
   "original_sha1": "d15796f942375d1233ec2588865373c1df473f55",
   "sha1": "acd4b62c3e12636ec13f92bf6e9a330aab4fbe45",
@@ -339,7 +339,7 @@
   "sha1": "5fbb0de78810dcceaef261ce2a6ef8767bb13031",
   "original_name": "image_bc61ee27-36b9-4fe9-817e-a38b8c411eca.webp"
  },
- "DMG-BA.jpg": {
+ "DMG-BA-USA.jpg": {
   "serial_on_label": "DMG-BA-USA",
   "original_sha1": "bbb898f0e0c81ed06d90a738df5319101630e2a8",
   "sha1": "a6710ddc4228645d9a1dc657581225dffe6c2d3d",
@@ -403,7 +403,7 @@
   "sha1": "fa95af002ef15909a510ae9924ff7aec4323343a",
   "original_name": "image_ba7bba27-33bf-4eb2-a84e-a63bb464d5e1.webp"
  },
- "DMG-CI.jpg": {
+ "DMG-CI-USA.jpg": {
   "serial_on_label": "DMG-CI-USA",
   "original_sha1": "d6edc92ae2a9cd52c451c98b1b57061f10e95a7a",
   "sha1": "7fc8618a7b66b17f40f96a3d87ea48262e5a9090",
@@ -506,7 +506,7 @@
   "sha1": "b9d6698f75c009fd9bb2408ef0c6f0d0c81edfad",
   "original_name": "image_6bf1b0ab-4d33-4164-b60a-7e334a3c6df2.webp"
  },
- "DMG-EE.jpg": {
+ "DMG-EE-USA.jpg": {
   "serial_on_label": "DMG-EE-USA-1",
   "original_sha1": "1413019568d6775c27126c8ea344e98e628c3baf",
   "sha1": "19c7697710c9f064b6fe2ea4119653c3aea9cf06",
@@ -763,7 +763,7 @@
   "sha1": "cb0c5e632de40124c07e94f0bab6254fb3ce71b2",
   "original_name": "FullSizeRender_5fe44463-f2cb-435a-ad17-b04f1bc0e0de.jpg"
  },
- "DMG-KY.jpg": {
+ "DMG-KY-USA.jpg": {
   "serial_on_label": "DMG-KY-USA",
   "original_sha1": "78248f7c68f28bc61e6aef6d6738df7b2c41d459",
   "sha1": "dca4c39dd2afde33a6bdbe8c01cc727c2130d2da",
@@ -798,7 +798,7 @@
   "sha1": "d40ea6f59f9d27ff8b25b844af2b7e32d8ced8a3",
   "original_name": "B0C33BD5-522D-41B9-8F7E-3D1191969265.webp"
  },
- "DMG-LX.jpg": {
+ "DMG-LX-USA.jpg": {
   "serial_on_label": "DMG-LX-USA",
   "original_sha1": "f4c9bd7552ae7be476402a08f895d6b5c080160b",
   "sha1": "8cea9ba1625e7551b868d18ed3beaf98da3d7fff",
@@ -810,13 +810,13 @@
   "sha1": "8d95e0ee8c7a7cfb4b56b921af0b90633e5ceea3",
   "original_name": "image_6903e58b-cca7-40a6-a16c-a70a51a86c00.webp"
  },
- "DMG-MC.jpg": {
+ "DMG-MC-USA.jpg": {
   "serial_on_label": "DMG-MC-USA-1",
   "original_sha1": "352d40ec397dfa3894f4cf3561410f788881851f",
   "sha1": "791503e1500fc152cdca94b6a81f9274e376532d",
   "original_name": "image_adfa2a1b-d398-495f-989f-bc8e14b78da7.webp"
  },
- "DMG-ME.jpg": {
+ "DMG-ME-USA.jpg": {
   "serial_on_label": "DMG-ME-USA",
   "original_sha1": "45a07cbac688b2a41ec8b3bc90b6d43544a3e452",
   "sha1": "c5ac68d1964c383b2246ef333009d753a1ebec45",
@@ -852,7 +852,7 @@
   "sha1": "c14ff32760dcebac218a5dcd24f0ca35dc1fd378",
   "original_name": "image_ab38cc41-20e0-4e40-88bb-cd6005dec60d.webp"
  },
- "DMG-NG.jpg": {
+ "DMG-NG-USA.jpg": {
   "serial_on_label": "DMG-NG-USA",
   "original_sha1": "24c3a3f390bca0cb6b228ccf81c746780c993560",
   "sha1": "6e22c3c8823980b4dd4a2550c62f12ab8faa694f",
@@ -894,7 +894,7 @@
   "sha1": "60cd20d1adc99931c7cd23389251b1e7b462cc22",
   "original_name": "image_a3fc3d94-4566-434c-aaec-b90fcca73f75.webp"
  },
- "DMG-PB.jpg": {
+ "DMG-PB-USA.jpg": {
   "serial_on_label": "DMG-PB-USA",
   "original_sha1": "4e81807cd2948bcd42f67727dc89afa1ad795f44",
   "sha1": "5cd89b9195889b86e64e36e6f0de85a3677c5846",
