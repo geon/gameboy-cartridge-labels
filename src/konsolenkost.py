@@ -15,7 +15,7 @@ import photos
 # 500 px, none of 5 read). On the product page, the photos are in its item's JSON ("images":{"all":[...]}, by
 # position); a photo that comes back empty or not found is passed over for the next. Games of which a copy was downloaded before
 # (its page, by its variation id, in photos/'s sources.json or in the listing) are skipped. Its robots.txt
-# (2026-11-05) shuts out /plenty/ and /xml/ only; one request every 1.5 s.
+# (2026-11-05) shuts out /plenty/ and /xml/ only; one request every 1.5 s; a dropped connection is tried again.
 # Usage: konsolenkost.py [--limit <n per system>] [system...] (default: GameBoy, "GameBoy Color", "GameBoy Advance")
 SITE = "https://www.konsolenkost.de"
 SEARCH = "https://articles-search-new.konsolenkost-tools.de/typesense/collections/item_group/documents/search"
@@ -41,10 +41,20 @@ done = {m.group(1) for m in map(VARIATION.search, pages) if m}
 
 
 def get(url, referer=None):
-    time.sleep(DELAY)
+    """A URL's body; a dropped connection (not an HTTP error) is tried again after 30, 60 and 120 s."""
     headers = {"User-Agent": UA} | ({"Referer": referer} if referer else {})
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as response:
-        return response.read()
+    for wait in (30, 60, 120, None):
+        time.sleep(DELAY)
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as response:
+                return response.read()
+        except urllib.error.HTTPError:
+            raise
+        except (urllib.error.URLError, ConnectionError, TimeoutError) as error:
+            if wait is None:
+                raise
+            print(f"{error}, waiting {wait} s: {url}", flush=True)
+            time.sleep(wait)
 
 
 def games(system):
