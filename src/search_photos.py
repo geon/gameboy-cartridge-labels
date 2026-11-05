@@ -18,7 +18,7 @@ import photos, serials
 # only in their subtitles.
 # A table, one row per release, with a column per place to search:
 # Google's image search; for Japanese releases, the stores of the eBay sellers elrocinante and Hit-Japan and Yahoo!
-# Auctions through Jauce; for the others, the store of the eBay seller ASANOSHOP and GameStop (each sells the one kind
+# Auctions through Jauce; for the others, the store of the eBay seller ASANOSHOP (each sells the one kind
 # alone, nearly). Japanese releases are searched by their Japanese title, with ゲームボーイ (ゲームボーイアドバンス) and カセット on
 # the image search (listings there are titled in Japanese, rarely with the serial), the others by their English title,
 # with "game boy" ("game boy advance") and cartridge; the eBay sellers title their listings in English, so they get the English title alone. Each serial links to Google's image search for it, quoted. Long titles are cut at their subtitle. Last, Google Lens
@@ -82,7 +82,6 @@ def links(release):
     found += [(f"eBay {name}", f"https://{site}/sch/i.html?" + urllib.parse.urlencode({"_ssn": seller, "store_name": store, "_nkw": short(release["title"], release)}))
               if japanese(release) == of_japanese else None
               for sellers, of_japanese in ((JAPANESE_EBAY_SELLERS, True), (WESTERN_EBAY_SELLERS, False)) for name, seller, store, site in sellers]
-    found.append(("GameStop", "https://www.gamestop.com/search-new/?" + urllib.parse.urlencode({"q": short(release["title"], release)})) if not japanese(release) else None)
     found.append(("Jauce", "https://www.jauce.com/search/" + urllib.parse.quote(f"{title} {CONSOLE[release['system']][0]}", safe="")) if japanese(release) else None)
     box = next((i["url"] for i in release["images"] if i["kind"] == "box"), None)
     found.append(("Lens game-boy-database", LENS + q(box.replace("/vizu/", "/cartridges/"))) if box else None)
