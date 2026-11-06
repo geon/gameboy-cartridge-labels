@@ -34,7 +34,7 @@ RELEASES = serials.RELEASES
 OUT = "generated/search-photos/index.html"
 SYSTEMS = ("dmg", "cgb", "agb")
 SYSTEM_NAMES = (("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy Advance"))
-LOW_RESOLUTION = 20  # px per mm: render-labels-high-resolution's scale (render.LABEL_HIGH_PX_PER_MM)
+LOW_RESOLUTION = 15  # px per mm
 # The console's name in the searches, Japanese and English.
 CONSOLE = {"dmg": ("ゲームボーイ", "game boy"), "cgb": ("ゲームボーイ", "game boy"), "agb": ("ゲームボーイアドバンス", "game boy advance")}
 LENS = "https://lens.google.com/uploadbyurl?url="
