@@ -604,6 +604,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ab286e0137aaab6e3407a948bc38041e11f48f75"
  },
+ "DMG-AP-NOE_2.jpg": {
+  "page_url": "https://zockbar.ch/products/kwirk",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Kwirk_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Kwirk",
+  "collection": "game-boy",
+  "original_name": "zockbar-kwirk.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "d1b4d6b435001db71240bb99aff562f8240255d9"
+ },
  "DMG-APAF-FRA.jpg": {
   "page_url": "https://zockbar.ch/products/pokemon-rot",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/pokemon-rot-fra-gb-top.jpg",
@@ -735,6 +745,16 @@
   "serial_on_label": "DMG-ARZP-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "53cbe6a92442f8e6a221796c2897f36d78a6869c"
+ },
+ "DMG-ASBP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/tetris-blast",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Tetris-Blast_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Tetris Blast",
+  "collection": "game-boy",
+  "original_name": "zockbar-tetris-blast.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "d09ac3aa811d0c3e8e3809c37ec01d9d4a0c8db6"
  },
  "DMG-ASFP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/street-fighter-2-game-boy",
@@ -1043,6 +1063,26 @@
   "serial_on_label": "DMG-BQ-FAH",
   "note": "named by the serial read on it (exact)",
   "sha1": "dce046b96bd61c2b9b30e1832e716afc99aca978"
+ },
+ "DMG-BT-FRG.jpg": {
+  "page_url": "https://zockbar.ch/products/balloon-kid",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/balloon-kid-gameboy.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Balloon Kid",
+  "collection": "game-boy",
+  "original_name": "zockbar-balloon-kid.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "dd04ab09a5ec228a1fd60596f7860ff1f29e8446"
+ },
+ "DMG-BU-NOE_2.jpg": {
+  "page_url": "https://zockbar.ch/products/burai-fighter-deluxe",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/burai-fighter-deluxe-gameboy.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Burai Fighter Deluxe",
+  "collection": "game-boy",
+  "original_name": "zockbar-burai-fighter-deluxe.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "5a2308ecc49eb82f169206a5d30da0ff2480f731"
  },
  "DMG-BY-USA_2.jpg": {
   "page_url": "https://zockbar.ch/products/bugs-bunny-crazy-castle-2",
@@ -1638,6 +1678,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "eeecb63479ec79e488591afcbeadc24850e5e47a"
  },
+ "DMG-JK-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/george-foremans-ko-boxing-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/George-Foremans-KO-Boxing_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "George Foreman's KO Boxing",
+  "collection": "game-boy",
+  "original_name": "zockbar-george-foremans-ko-boxing-1.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "7f887600bde17866dcd4d9b8fe8e7e7279cd32bf"
+ },
  "DMG-JM-USA.jpg": {
   "page_url": "https://zockbar.ch/products/joe-mac",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/joe-and-mac-gb-gut.jpg",
@@ -2045,6 +2095,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "168cb3756a675b6180c7930a956f0b0997be33cf"
  },
+ "DMG-OT-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/othello",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Orthello_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Othello",
+  "collection": "game-boy",
+  "original_name": "zockbar-othello.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "005fe543ae912092c86a10c51fa4fa2fa4398ebd"
+ },
  "DMG-P3-USA.jpg": {
   "page_url": "https://zockbar.ch/products/amazing-tater",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/amazing-tater-gameboy-gut-01.jpg",
@@ -2232,6 +2292,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "6eb7b3ce8f07f9f473d3dfcd65ab568229bc73ad"
  },
+ "DMG-RA-FRG.jpg": {
+  "page_url": "https://zockbar.ch/products/gargoyles-quest",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/gargoyles-quest-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Gargoyle's Quest",
+  "collection": "game-boy",
+  "original_name": "zockbar-gargoyles-quest.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "d7d769a57ebeb7d3ef037ae9f473a892d3183454"
+ },
+ "DMG-RC-FRG.jpg": {
+  "page_url": "https://zockbar.ch/products/super-rc-pro-am",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/super-rc-pro-am-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Super RC Pro AM",
+  "collection": "game-boy",
+  "original_name": "zockbar-super-rc-pro-am.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "c307fe34250febb342019b73fb383539b1ab651b"
+ },
  "DMG-RE-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/r-type",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/R-Type_GB_gut.jpg",
@@ -2264,6 +2344,16 @@
   "serial_on_label": "DMG-RM",
   "note": "named by the serial read on it (exact)",
   "sha1": "49c9fe7cd13444646a7ebbed9da9c332ed72cd03"
+ },
+ "DMG-RP-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/rescue-of-princess-blobette",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Rescue-of-Princess-Blobette_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Rescue of Princess Blobette",
+  "collection": "game-boy",
+  "original_name": "zockbar-rescue-of-princess-blobette.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "c6f4ac44b32f0fe27a7ac46c657b636a5568f592"
  },
  "DMG-RR-USA.jpg": {
   "page_url": "https://zockbar.ch/products/who-framed-roger-rabbit",
@@ -2341,6 +2431,16 @@
   "serial_on_label": "DMG-SK-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "373a0ef4d1842633879a67b58774b088aeba1ad2"
+ },
+ "DMG-SM-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/the-amazing-spider-man",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/The-Amazing-Spider-Man_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "The Amazing Spider-Man",
+  "collection": "game-boy",
+  "original_name": "zockbar-the-amazing-spider-man.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "5cde0d3fcfd95f369e27bba5c2d0cf7c353bdc54"
  },
  "DMG-SN-NOE_2.jpg": {
   "page_url": "https://zockbar.ch/products/snoopys-magic-show",
@@ -2693,6 +2793,16 @@
   "serial_on_label": "DMG-WR-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "09bb30ddf5cdf941eaa64d96ebdd0d2289263df7"
+ },
+ "DMG-WW-FRG.jpg": {
+  "page_url": "https://zockbar.ch/products/wizards-warriors-x-fortress-of-fear",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wizards-and-warriors-x-fortress-of-fear-gameboy-gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Wizards & Warriors X: Fortress of Fear",
+  "collection": "game-boy",
+  "original_name": "zockbar-wizards-warriors-x-fortress-of-fear.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "6d8fbb9c4dccd67e017401c3612053dac37781fc"
  },
  "DMG-WX-FRG.jpg": {
   "page_url": "https://zockbar.ch/products/wwf-super-stars-2",

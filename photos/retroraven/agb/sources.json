@@ -252,6 +252,17 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_171",
   "sha1": "eef8008bccc8df3f15686e00a7095a97e5b84659"
  },
+ "AGB-AIFE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/tom-and-jerry-in-infurnal-escape-game-boy-advance",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/tomandjerryinfurnal.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Tom and Jerry in Infurnal Escape - Game Boy Advance",
+  "collection": "game-boy-advance-games",
+  "original_name": "retroraven-tom-and-jerry-in-infurnal-escape-game-boy-advance.jpg",
+  "serial_on_label": "AGB-AFE-USA",
+  "note": "named by nothing: no serial read",
+  "sha1": "5a140cf609b5e5fe8f6e9e8fc5da35dc118298c2"
+ },
  "AGB-AIGE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/inspector-gadget-advance-mission-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/InspectorGadgetAdvanceMission.jpg",
@@ -482,6 +493,17 @@
   "serial_on_label": "AGB-AT5E-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "1dff5ad15dafb787cba9368c1b8844dff1a980da"
+ },
+ "AGB-AVTE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/virtua-tennis-game-boy-advance",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/virtuatennis_b114f2b6-4043-4852-b161-76f9e0d43927.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Virtua Tennis - Game Boy Advance",
+  "collection": "game-boy-advance-games",
+  "original_name": "retroraven-virtua-tennis-game-boy-advance.jpg",
+  "serial_on_label": "AGB-AVTEA-USA",
+  "note": "named by nothing: no serial read",
+  "sha1": "4ca7ece547d5defcd5fa56db47cb85647b362d2d"
  },
  "AGB-AWEE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/the-wild-thornberrys-movie-game-boy-advance",
@@ -1429,6 +1451,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7cef183cd1b382ee0bec788f1852853418887e65"
  },
+ "AGB-BWLE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/the-wild-game-boy-advance",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/thewild.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Wild - Game Boy Advance",
+  "collection": "game-boy-advance-games",
+  "original_name": "retroraven-the-wild-game-boy-advance.jpg",
+  "serial_on_label": "AGB-BWLEI-USA",
+  "note": "named by nothing: no serial read",
+  "sha1": "6637fd21f90e4c3f0589221908ff61441105d842"
+ },
  "AGB-BXAE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/texas-hold-em-poker-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/texasholdem_122ccb16-75bf-47dc-a734-6c37d433a0e4.jpg",
@@ -1450,6 +1483,16 @@
   "serial_on_label": "AGB-BYME",
   "note": "named by the serial read on it (exact)",
   "sha1": "d8e80a4a9dab76fda8558110ff5cddffed68a59f"
+ },
+ "AGB-BYWE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/yu-gi-oh-world-championship-tournament-2004-game-boy-advance",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/yugioh2k4.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Yu-Gi-Oh!: World Championship Tournament 2004 - Game Boy Advance",
+  "collection": "game-boy-advance-games",
+  "original_name": "retroraven-yu-gi-oh-world-championship-tournament-2004-game-boy-advance.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "5cb495b11537614062c83974ad5feac188511e8e"
  },
  "AGB-BZSE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/thats-so-raven-2-supernatural-style-game-boy-advance",

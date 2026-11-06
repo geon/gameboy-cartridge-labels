@@ -21,6 +21,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "a88f014198c503f15e11f27bca3ad06ab2bcf555"
  },
+ "AGB-A5NP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/donkey-kong-country-gba",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/donkey-kong-country-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Donkey Kong Country",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-donkey-kong-country-gba.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "6ed9de39fc16a30a04e50cc9794a3c467ba336d7"
+ },
  "AGB-A6TP-EUU_2.jpg": {
   "page_url": "https://zockbar.ch/products/dr-muto-gba",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/dr-muto-gba-gut.jpg",
@@ -285,6 +295,16 @@
   "sha1": "907108d5d0056d38ce76975cccac9ad48b09b8fd",
   "serial_on_label": "AGB-AGXP"
  },
+ "AGB-AH2P-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/mat-hoffmans-pro-bmx-2",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mat-Hoffmans-Pro-BMX-2_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Mat Hoffman's Pro BMX 2",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-mat-hoffmans-pro-bmx-2.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "98fd77de6cc6be04226a8ff52d5a16a3073e8c83"
+ },
  "AGB-AH8P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/hot-wheels-velocity-x-gba",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/hot-wheels-velocity-x-gba-gut.jpg",
@@ -329,6 +349,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9ec47fb12b726d4209c312ff835cf54bb68e2118"
  },
+ "AGB-AIFP-EUR_3.jpg": {
+  "page_url": "https://zockbar.ch/products/tom-and-jerry-in-infurnal-escape",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/tom-and-jerry-inferunal-escape-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Tom & Jerry in Infurnal Escape",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-tom-and-jerry-in-infurnal-escape.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "ab5e8877129209dd45216ce6cf6a5480ad00161b"
+ },
  "AGB-AIGP_2.jpg": {
   "page_url": "https://zockbar.ch/products/inspector-gadget-advance-mission",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/inspector-gadget-advance-mission-gba-gut.jpg",
@@ -339,6 +369,16 @@
   "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_344",
   "sha1": "6c7c953c80b38bc3a49337e67a362bd9f8e72b95",
   "serial_on_label": "AGB-AIGP"
+ },
+ "AGB-AJ3P-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/jurassic-park-3-park-builder",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/jurassic-park-3-park-builder-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Jurassic Park III: Park Builder",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-jurassic-park-3-park-builder.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "7e0118911c3ab684afb857f30dde4d4e3ef1776d"
  },
  "AGB-AKKP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/kao-the-kangaroo",
@@ -361,6 +401,16 @@
   "serial_on_label": "AGB-AKLP",
   "note": "named by the serial read on it (exact)",
   "sha1": "3e3bfeb5f2daaff6dde0025c2b1ff3cdf99cb461"
+ },
+ "AGB-AKWP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/konami-krazy-racers",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/konami-krazy-racers-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Konami Krazy Racers",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-konami-krazy-racers.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "6dc6c88b50ffcdd04b35a634f3e12527fe6f38e6"
  },
  "AGB-ALBP.jpg": {
   "page_url": "https://zockbar.ch/products/lego-bionicle",
@@ -461,6 +511,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "06efc61bca83b70479e8cd4227a79a9e60885495"
  },
+ "AGB-ALVP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/the-lost-vikings-gba",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/the-lost-vikings-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "The Lost Vikings",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-the-lost-vikings-gba.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "5369b8d2053236ed503b106a31544856b4a568f6"
+ },
  "AGB-AM3P-EUU.jpg": {
   "page_url": "https://zockbar.ch/products/midways-greatest-arcade-hits",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/midways-greatest-arcade-hits-gba-gut.jpg",
@@ -526,6 +586,17 @@
   "serial_on_label": "AGB-AOMP",
   "note": "named by the serial read on it (exact)",
   "sha1": "b8a5d8e91ee9ac511440c1893e57b9d7559f7bb7"
+ },
+ "AGB-AOWP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/spyro-adventure",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spyro-Adventure_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Spyro Adventure",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-spyro-adventure.jpg",
+  "serial_on_label": "AGB-AOWPE",
+  "note": "named by nothing: no serial read",
+  "sha1": "57fe8d08bf402d7fd53313a82e973c497ce60da9"
  },
  "AGB-AQWP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/game-watch-gallery-advance-1",
@@ -835,6 +906,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "60ad4a5698a614a49353b9ad9a2d3ec5df562637"
  },
+ "AGB-BCNP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/crash-nitro-kart-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/crash-nitro-kart-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Crash Nitro Kart",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-crash-nitro-kart-1.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "fe7e1eb71330e65fe4346603045d99e2b0d0aefc"
+ },
  "AGB-BDGP.jpg": {
   "page_url": "https://zockbar.ch/products/digimon-racing",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/digimon-racing-gameboy-advance.jpg",
@@ -1098,6 +1179,16 @@
   "serial_on_label": "AGB-BWIP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "832a7a8d3ca6096696b5cc1195877f2de3fc1bfc"
+ },
+ "AGB-BWIP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/winx-club",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Winx-Club_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Winx Club",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-winx-club.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "3505ba05e183c44ba487d74ef0172068f3f384f5"
  },
  "AGB-BX3P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/spider-man-spiderman-2",

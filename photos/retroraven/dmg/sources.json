@@ -593,6 +593,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c51724f5f3a9ceabaa60404b2ccf14acbf4bf7f9"
  },
+ "DMG-AOAE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/grand-theft-auto-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/grandtheftauto_409ad11c-ae6b-45d2-83b5-196df95a6a5b.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Grand Theft Auto - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-grand-theft-auto-game-boy-classic.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "1df16395242c24422894de4488e21277b5ce9050"
+ },
  "DMG-AOCE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ms-pac-man-special-color-edition-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/mspacman_e5752ee8-f7b5-49cc-a7be-1bdaf8e702d0.jpg",
@@ -1285,6 +1295,16 @@
   "serial_on_label": "DMG-DD-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "bcc52f9841557475a9b0ed8f092fbf322a6920ed"
+ },
+ "DMG-DL-USA_3.jpg": {
+  "page_url": "https://retroravengames.com/products/dragons-lair-the-legend-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/dragonslair_a8b208b5-93f5-440b-aad3-0915dab517a6.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Dragon's Lair: The Legend - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-dragons-lair-the-legend-game-boy-classic.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "fe208a25b25807d1be32bcc020c65e9772c9ede1"
  },
  "DMG-DX-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/double-dragon-3-the-arcade-game-game-boy-classic",
@@ -2407,6 +2427,16 @@
   "serial_on_label": "DMG-YD-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "9c8d51ece13587b059b8466bb66dacd0bd56b789"
+ },
+ "DMG-YF-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/in-your-face-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/In_Your_Face.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "In Your Face - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-in-your-face-game-boy-classic.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "13a403543ca0e39367a66c85cdfa08f526d04169"
  },
  "DMG-YO-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/yoshi-game-boy-classic",
