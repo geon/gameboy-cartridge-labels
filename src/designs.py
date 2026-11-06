@@ -3,29 +3,53 @@ import json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials
 
-# designs.json: which photos are of one label design (one art), where that isn't the default. Every photo is of one
-# design: by default its game stem's in its market, Japan, the USA or the rest of the world (stem_of), named
-# (default_key):
-#   - the USA: the code with -USA (DMG-MC-USA, AGB-AXPE-USA, CGB-AW8A-USA);
-#   - Japan: the code with -JPN (DMG-KYJ-JPN, DMG-PMA-JPN, AGB-AXPJ-JPN);
+# designs.json: which photos are of one label design (one art), where that isn't the default.
+#
+# The default, implicit and never stored: one design per game stem and market (stem_of, default_key).
+#   - The stem is the game's code without its region letter: Nintendo's four-letter codes share their first three
+#     characters across a game's versions and end in a letter for the region or language (E the USA, J Japan, P Europe,
+#     D Germany, F France, S Spain, I Italy...: in gb-game-list, 1163 E codes are printed -USA, 1145 J codes -JPN, 1082
+#     P codes -EUR). gb-game-list has a release per ROM, so a game's language versions (AGB-AXPP, -AXPD, -AXPS, Pokémon
+#     Ruby) are releases of their own; their labels are one design, and the stem is what ties them together. The old
+#     codes of two letters (DMG-MC-USA, -EUR) are one code in every region anyway, and codes of numbers (DMG-110-CHN)
+#     have no region letter: their stem is the code.
+#   - The markets are Japan, the USA and the rest of the world: the USA's own, as labels there and in Europe differ
+#     about as often as not (2026-11-06: of 107 games with labels from both, 46 alike, 45 different, 16 unclear; the
+#     older DMG games mostly alike, the later DMG and AGB ones mostly not), and the rules are to be consistent.
+#
+# The default designs' names (default_key), self-contained and never clashing:
+#   - the USA: the code with -USA (DMG-MC-USA, AGB-AXPE-USA, CGB-AW8A-USA), and Japan: the code with -JPN (DMG-KYJ-JPN,
+#     DMG-PMA-JPN, AGB-AXPJ-JPN): a market there has one code per game, and that code with the region names it as on a
+#     label (an old Japanese code mostly prints no region, but gb-game-list lists them with it too: DMG-PMA-JPN);
 #   - the rest of the world: the stem, with + where the code's region letter was cut off (AGB-AXP+ for AGB-AXPP, -AXPD,
-#     -AXPS; DMG-A2J+ for DMG-A2JP), the code itself for the old codes of two letters and codes of numbers (DMG-MC,
-#     DMG-110);
-#   where a stem has several codes in a market (DMG-E6-USA and DMG-E6E-USA), the shortest (then the first) names it;
-#   with its prefix (DIS-CGB-AZ7E-USA) and note (DMG-ATAJ-JPN[PINK]). Rest-of-world names never end in a region, so
-#   they can't clash with the others (DMG-A2J, Shounen Ashibe, is DMG-A2J-JPN; DMG-A2JP, Jurassic Park 2, DMG-A2J+);
-#   + is never in a serial. That is implicit, never stored. (The USA is a market of its own as labels there and in Europe differ about as often as not: 2026-11-06,
-# of 107 games with labels from both, 46 alike, 45 different, 16 unclear.) A design
-# listed here is made of parts, each either
+#     -AXPS); the code itself for the old codes of two letters and the codes of numbers (DMG-MC, DMG-110). The rest of
+#     the world has many serials per game (DMG-MC-EUR, -NOE, -FAH, -UKV), so none of them names it.
+#   - Why the -JPN and the +: the old codes of three letters and the four-letter codes share one namespace, so a
+#     four-letter code without its region letter can be an old Japanese code: DMG-A2J is Shounen Ashibe (Japanese),
+#     DMG-A2JE and DMG-A2JP Jurassic Park Part 2 (also DMG-AEA, -ALA, -AVA, -BRA). Named DMG-A2J-JPN and DMG-A2J+, they
+#     can't clash: the USA's and Japan's names end in a region, the rest of the world's never do, and + is never in a
+#     serial. (All 5849 names of gb-game-list's serials and the photos', 2026-11-06, are of one stem and market each.)
+#   - Why +: the names are file names (render's images), URL paths and JSON keys, and appear next to serials; it should
+#     need no encoding there. Serials and photo names already use A-Z, 0-9, -, [] (notes), () (on some labels) and _
+#     (photo numbers); * and ? are shell wildcards, ? # % / : mean something in URLs; $ is a shell variable, an end of
+#     line in regular expressions and special in make; . is the extension's separator. + is literal in paths, URL
+#     fragments and file names (only form-encoded query strings read it as a space, which none of these tools rely on).
+#   - Where a stem has several codes in a market (DMG-E6-USA and DMG-E6E-USA, DMG-WA-USA and DMG-WAE-USA), the shortest
+#     (then the first) names it, from gb-game-list's serials and the photos' (codes), so a design isn't renamed by a
+#     photo being added.
+#   - A prefix (DIS-CGB-AZ7E-USA) and a note (DMG-ATAJ-JPN[PINK]) are kept: a release of its own (photos.py).
+#
+# A design listed in designs.json is made of parts, each either
 #   - a default design (DMG-AG): its photos, but those of a serial listed in another design; or
 #   - a serial, with its note if it has one (DMG-AG-FAH, DMG-ATAJ-JPN[PINK]): its photos, those of its revisions too
 #     (DMG-AG-NOE covers DMG-AG-NOE-1).
-# So a release is split by putting some of its serials in designs of their own (Pang: DMG-AG-FAH alone, the other
-# regions in DMG-AG), and releases or serials whose labels are alike are linked by putting them in one design. Photos of
-# one serial with different art are told apart by a note in their names (DMG-MQ-UKV[ALT].jpg: photos.py), which makes
-# a design of its own. A design is named after its first part, defaults before serials (DMG-AG-FAH; DMG-AG-NOE-1's
-# part DMG-AG-NOE); one not listed is its default. Saving leaves out what's implicit: a design of one default part, a
-# serial in the design of its own default; designs sharing a part are one.
+# So a default design is split by putting some of its serials in designs of their own (DMG-ALNP-FRA apart from the
+# rest of Europe), and designs whose labels are alike are linked by putting them in one design (DMG-KY with DMG-KY-USA).
+# Photos of one serial with different art are told apart by a note in their names (DMG-MQ-UKV[ALT].jpg: photos.py),
+# which makes a design of its own. A design is named after its first part, defaults before serials (DMG-AG-FAH;
+# DMG-AG-NOE-1's part DMG-AG-NOE); one not listed is its default. Saving leaves out what's implicit: a design of one
+# default part, a serial in the design of its own default, a design of one serial of Japan or the USA; designs sharing
+# a part are one.
 # Only decisions are kept: how alike labels are is measured afresh (src/compare_labels.py, make review-designs), so a
 # similarity found is never rejected, and labels alike but not linked (variants of a game: Pokémon Gold and Silver)
 # simply stay in designs of their own.
@@ -153,12 +177,12 @@ class Designs:
 
 def stem_of(name):
     """A photo's game stem and market: (stem, "J" for Japan, "E" for the USA, "" for the rest of the world). Labels of
-    one stem and market are expected to look alike. The stem is the code without its region letter: AXP for AGB-AXPE,
-    -AXPP and -AXPJ; KY for DMG-KY-USA, -KY-EUR and DMG-KYJ (the old Japanese and worldwide codes of three letters);
-    with its system. The market: by the serial's region (JPN; USA or CAN), else by the code's region letter (J, E;
-    in the old codes of three letters, A is Japanese too: DMG-PMA, DMG-B2A, all 249 photos of 2026-11-06 of releases
-    gb-game-list lists with a JPN serial, their labels unlike the USA's and Europe's). None for a serial not of that
-    form."""
+    one stem and market are expected to look alike (see above). The stem is the code without its region letter, with
+    its system: AXP for AGB-AXPE, -AXPP and -AXPJ; KY for DMG-KY-USA, -KY-EUR and DMG-KYJ (the old Japanese codes of
+    three letters); the whole code where it ends in a digit (DMG-110). The market: by the serial's region (JPN; USA,
+    or CAN, sold alike), else by the code's region letter (J, E; in the old codes of three letters, A is Japanese
+    too: DMG-PMA, DMG-B2A, all 249 photos of 2026-11-06 of releases gb-game-list lists with a JPN serial, their labels
+    unlike the USA's and Europe's). None for a serial not of that form."""
     m = re.match(r"(DMG|CGB|AGB)-([A-Z0-9]+)(?:-([A-Z]{3}))?", photos.unprefixed(photos.serial_of(name)))
     if not m:
         return None
