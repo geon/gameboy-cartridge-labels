@@ -16,7 +16,7 @@ from fit_cartridge import load
 #   labels-high-resolution: generated/labels-high-resolution/<release>.avif, the same at LABEL_HIGH_PX_PER_MM;
 #   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at
 #     CART_PX_PER_MM: meant as the canonical images of the cartridges; where the margin runs off the photo, transparent.
-# The release's photo: its preferred one (preferred.json, chosen in find-doubles) if the fit the image needs (the label
+# The release's photo: its preferred one (preferred.json, chosen in choose-photos) if the fit the image needs (the label
 # for labels, the plastic for carts) is accepted or placed by hand, else the best one by source (photos.SOURCES) whose
 # fit is; the fakes (photos.FAKES) never. A release with no such photo gets no image. So a release's label and cart
 # come from different photos while its preferred photo's label isn't accepted. Each step's made.json records what each image was made from (the photo's

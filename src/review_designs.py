@@ -23,7 +23,7 @@ from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
 #   - Designs: the designs whose photos are of several serials, of the releases in designs.json (a family: the designs
 #     sharing a release), their photos by serial. A serial can be split off into a design of its own, and a design in
 #     designs.json dissolved (its serials back to their releases' designs). Designs are joined through "Same design".
-# Each photo can be renamed to a corrected serial (photos.rename, as find-doubles does), its fits following it.
+# Each photo can be renamed to a corrected serial (photos.rename, as choose-photos does), its fits following it.
 # Usage: review_designs.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8772
 lock = threading.Lock()
@@ -366,8 +366,8 @@ class Handler(BaseHTTPRequestHandler):
             path = next((os.path.join(photos.ROOT, s, sy, n) for s, sy, n, e in photos.all_sources() if e.get("sha1") == sha1), None)
             if not path:
                 return self.send_error(404)
-            import find_doubles
-            self.send(find_doubles.image(path, 480), "image/webp", cache=True)
+            import choose_photos
+            self.send(choose_photos.image(path, 480), "image/webp", cache=True)
         else:
             self.send_error(404)
 

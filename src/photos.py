@@ -26,7 +26,7 @@ FAKES = ("emumovies", "launchbox-abeezy1388")
 SOURCES = ("ebay-hitjapan", "my-collection", "ebay-elrocinante", "zockbar", "retronintendostore", "yugiyahirano", "jnlgame",
            "jauce", "mercari", "rakuma", "retros-ae", "gbhwdb", "ebay", "tradera", "kleinanzeigen", "marktplaats", "gamestop",
            "google", "retroraven", "etsy-queenofgames31", "unrecorded", "otakaraou")
-# Each release's preferred photo, chosen in find-doubles (src/find_doubles.py): release id -> the photo's SHA-1.
+# Each release's preferred photo, chosen in choose-photos (src/choose_photos.py): release id -> the photo's SHA-1.
 PREFERRED = "preferred.json"
 
 

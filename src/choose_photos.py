@@ -6,20 +6,19 @@ import designs, fits, photos, render
 from cartridge import shell_of
 from fit_cartridge import load
 
-# find-doubles: a local page listing every photo in photos/, one design per row (src/designs.py: by default the release
-# its serial is filed under in gb-game-list, the region dropped if gb-game-list lacks it; else the serial itself; split
-# and joined in review-designs), its photos sorted by
-# their source's quality (photos.SOURCES, best first), each marked with an orange check if its plastic is fitted (accepted or
-# placed by hand), a green one if its label is too. Each photo can be deleted (photos.delete), its fits with it, or
-# renamed to a corrected serial (photos.rename: tidied, numbered if taken, moved to its system's folder), its fits
-# following it. Clicking a photo makes it its design's preferred one (clicking it again unmakes it), saved in
-# preferred.json: design -> the photo's SHA-1, so a renamed photo stays preferred, and a design split or joined keeps it
-# (designs.preferred); an entry whose photo is gone is dropped on the next save. The fakes (photos.FAKES) are left
-# out: never worth preferring. The preferred photo comes first. A photo whose plastic fit is accepted or placed by hand
-# is shown cropped to it, as render-carts renders it.
+# choose-photos: a local page for choosing each design's photo (src/designs.py; made in review-designs), the one
+# render-labels and render-carts use: every photo in photos/, one design per row, its photos sorted by their source's
+# quality (photos.SOURCES, best first), each marked with an orange check if its plastic is fitted (accepted or placed
+# by hand), a green one if its label is too. Clicking a photo makes it its design's preferred one (clicking it again
+# unmakes it), saved in preferred.json: design -> the photo's SHA-1, so a renamed photo stays preferred, and a design
+# split or joined keeps it (designs.preferred); an entry whose photo is gone is dropped on the next save. The fakes
+# (photos.FAKES) are left out: never worth preferring. The preferred photo comes first. A photo whose plastic fit is
+# accepted or placed by hand is shown cropped to it, as render-carts renders it. For convenience, each photo can also be
+# deleted (photos.delete), its fits with it, or renamed to a corrected serial (photos.rename: tidied, numbered if
+# taken, moved to its system's folder), its fits following it.
 # The rows can be narrowed to the designs with several photos (one and one from otakaraou count as one: photos.only),
 # and to those with no preferred photo (a design given one stays shown until the rows are drawn again).
-# Usage: find_doubles.py [port]
+# Usage: choose_photos.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
 lock = threading.Lock()
 
@@ -87,7 +86,7 @@ def prefer(path):
         return row["release"], None if photo["preferred"] else path
 
 
-PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Find doubles</title>
+PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choose photos</title>
 <style>
 body{font:14px system-ui;margin:0;background:#f4f4f4;color:#222}
 header{position:sticky;top:0;z-index:1;background:#fff;padding:8px 16px;border-bottom:1px solid #ddd;display:flex;gap:16px;align-items:center}
@@ -104,7 +103,7 @@ figure.preferred{border-color:#2a6fdb}figure img{cursor:pointer}
 figcaption a{color:inherit}
 button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em}button.delete{color:#b00}
 </style>
-<header><b>Find doubles</b><label><input type="checkbox" id="doubles"> only designs with several photos</label>
+<header><b>Choose photos</b><label><input type="checkbox" id="doubles"> only designs with several photos</label>
 <label><input type="checkbox" id="unpreferred"> only designs with no preferred photo</label>
 <span><span class="check plastic" style="position:static;display:inline-block">✓</span> plastic fitted
 <span class="check label" style="position:static;display:inline-block">✓</span> label fitted</span>

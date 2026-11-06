@@ -52,8 +52,8 @@
 #   make name-photos
 #   A tool, not a step: a local page for naming the photos whose serial isn't known, one at a time: type the serial on its label and press enter; the photo is renamed in photos/, its fits in fits.json with it; or delete it (src/name_photos.py).
 #
-#   make find-doubles
-#   A tool, not a step: a local page listing every photo in photos/, one design per row (designs.json, make review-designs), its photos sorted by their source's quality (Hit-Japan first, otakaraou the last real photos, the box-art fakes below), each cropped to its plastic as in render-carts if that is accepted or placed by hand, each marked with an orange check if its plastic is fitted, a green one if its label is too; each can be deleted, its fits with it, or renamed to a corrected serial, its fits following it; clicking a photo makes it its release's preferred one, saved to preferred.json (src/find_doubles.py).
+#   make choose-photos
+#   A tool, not a step: a local page for choosing each design's photo (designs.json, make review-designs), the one render-labels and render-carts use, saved to preferred.json: every photo in photos/, one design per row, its photos sorted by their source's quality (Hit-Japan first, otakaraou the last real photos, the box-art fakes left out), each cropped to its plastic as in render-carts if that is accepted or placed by hand, marked with an orange check if its plastic is fitted, a green one if its label is too; for convenience, a photo can also be deleted, its fits with it, or renamed to a corrected serial, its fits following it (src/choose_photos.py).
 #
 #   make review-designs
 #   A tool, not a step: a local page for telling the photos' label designs apart (designs.json: by default one per release; split by serial, or by a note in the photos' names, and linked across releases), from how alike their labels are, compared when it starts (those with a good label, from make fit-colors' label images): photos alike across designs, to make one design or keep apart; designs whose photos are unalike, to split or keep whole; the designs listed, with the others of their releases, to split, join or dissolve; each photo can be renamed (src/review_designs.py, src/compare_labels.py, src/designs.py).
@@ -62,7 +62,7 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-labels-high-resolution clean-render-labels-high-resolution render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles review-designs
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-labels-high-resolution clean-render-labels-high-resolution render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos choose-photos review-designs
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -139,8 +139,8 @@ search-photos:
 name-photos:
 	$(PYTHON) src/name_photos.py
 
-find-doubles:
-	$(PYTHON) src/find_doubles.py
+choose-photos:
+	$(PYTHON) src/choose_photos.py
 
 review-designs:
 	$(PYTHON) src/review_designs.py
