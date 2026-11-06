@@ -18,9 +18,9 @@ from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
 #     at least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
 #     it shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for.
-#   - Designs: each design in designs.json, with the others of its releases (a family: the designs sharing a
-#     release), their photos by serial. A serial can be split off into a design of its own, a design joined with another
-#     of its family, or dissolved (its serials back to their releases' designs).
+#   - Designs: the designs whose photos are of several serials, of the releases in designs.json (a family: the designs
+#     sharing a release), their photos by serial. A serial can be split off into a design of its own, and a design in
+#     designs.json dissolved (its serials back to their releases' designs). Designs are joined through "Same design".
 # Each photo can be renamed to a corrected serial (photos.rename, as find-doubles does), its fits following it.
 # Usage: review_designs.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8772
@@ -196,8 +196,6 @@ class Review:
                 if not designs.is_serial(part):
                     return "not a serial with a region: give its photos a note instead (rename)"
                 d = designs.split_off(d, [part])
-            elif action == "join":
-                d = designs.merged(d, {data.get("design"), data.get("with")}, by_design)
             elif action == "dissolve":
                 d = designs.dissolved(d, data.get("design"), by_design)
             elif action == "rename":
@@ -278,14 +276,13 @@ function render() {
       u.groups.map(g => `<div class="group"><div><button class="go" data-action="split" data-design="${esc(u.design)}" data-shas="${shas(g.photos)}">Split off</button></div>` +
         `<div class="photos">${g.photos.map(p => figure(p, `<span>best ${p.best.toFixed(3)} with the others</span>`)).join("")}</div></div>`).join("") + `</div></div>`).join("");
   } else {
-    const shown = state.families;
-    n = shown.length;
-    html = shown.map(f => `<div class="item">` + f.designs.map(d => `<div class="design ${d.listed ? "listed" : ""}"><div class="top"><b>${esc(d.name)}</b>` +
+    // The designs of several serials: one of a single serial has nothing to split off.
+    const shown = state.families.map(f => f.designs.filter(d => d.serials.length > 1)).filter(ds => ds.length);
+    n = shown.reduce((k, ds) => k + ds.length, 0);
+    html = shown.map(ds => `<div class="item">` + ds.map(d => `<div class="design ${d.listed ? "listed" : ""}"><div class="top"><b>${esc(d.name)}</b>` +
       `<span class="muted">${esc(d.title)}${d.listed ? " · " + d.parts.map(esc).join(", ") : " · default"}</span>` +
-      (f.designs.length > 1 ? `<select data-action="join" data-design="${esc(d.name)}"><option value="">join with…</option>` +
-        f.designs.filter(o => o.name !== d.name).map(o => `<option>${esc(o.name)}</option>`).join("") + `</select>` : "") +
       (d.listed ? `<button data-action="dissolve" data-design="${esc(d.name)}">Dissolve</button>` : "") + `</div>` +
-      d.serials.map(s => `<div class="serial"><b>${esc(s.part)}${d.serials.length > 1 ? `<br><button data-action="split-serial" data-part="${esc(s.part)}">Split off</button>` : ""}</b>` +
+      d.serials.map(s => `<div class="serial"><b>${esc(s.part)}<br><button data-action="split-serial" data-part="${esc(s.part)}">Split off</button></b>` +
         `<div class="photos">${s.photos.map(p => figure(p)).join("")}</div></div>`).join("") + `</div>`).join("") + `</div>`).join("");
   }
   $("count").textContent = `${n} shown`;
@@ -320,11 +317,6 @@ $("items").onclick = async e => {
     if (!note) return;
     error = await act({action: d.action, shas: list, design: d.design, note});
   }
-  if (error) alert("Not saved: " + error);
-};
-$("items").onchange = async e => {
-  if (e.target.dataset.action !== "join" || !e.target.value) return;
-  const error = await act({action: "join", design: e.target.dataset.design, with: e.target.value});
   if (error) alert("Not saved: " + error);
 };
 for (const b of document.querySelectorAll("nav button")) b.onclick = () => { tab = b.dataset.tab; location.hash = tab; render(); };
