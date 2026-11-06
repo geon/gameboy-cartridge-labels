@@ -57,12 +57,17 @@ class Review:
             print(f"{len(stale)} photos with a good label but no current label image, left out: run make fit-colors first")
         self.scores = all_scores(self.current)
         self.shell = {s: shell for shell, (shas, _) in self.scores.items() for s in shas}
+        self.index = {s: i for shas, _ in self.scores.values() for i, s in enumerate(shas)}
         # The pairs alike: (score, sha1, sha1).
         self.alike = []
         for shell, (shas, m) in self.scores.items():
             for i, j in zip(*((m >= SAME).nonzero())):
                 if i < j:
                     self.alike.append((float(m[i, j]), shas[i], shas[j]))
+
+    def score(self, a, b):
+        """How alike two compared photos' labels are (of one shell)."""
+        return float(self.scores[self.shell[a]][1][self.index[a], self.index[b]])
 
     def photos_now(self):
         """Every photo but the fakes, as named now: [{"sha1", "path", "name", "design", "release", "title", "part"}]."""
@@ -82,9 +87,6 @@ class Review:
         listed, by_design = self.photos_now()
         data = by_design.data
         info = {p["sha1"]: p for p in listed}
-        score = {}
-        for v, a, b in self.alike:
-            score[(a, b)] = score[(b, a)] = v
 
         # Similar designs, multiple serials.
         across = [(v, a, b) for v, a, b in self.alike if v >= SIMILAR and a in info and b in info
@@ -121,7 +123,7 @@ class Review:
             groups = []
             for g in sorted(parts, key=lambda g: (-len(g), min(info[x]["name"] for x in g))):
                 others = inside - set(g)
-                groups.append({"photos": [dict(info[x], best=max((score.get((x, y), -1) for y in others), default=-1)) for x in sorted(g, key=lambda x: info[x]["name"])]})
+                groups.append({"photos": [dict(info[x], best=max((self.score(x, y) for y in others), default=-1)) for x in sorted(g, key=lambda x: info[x]["name"])]})
             unalike.append({"design": design, "title": members[0]["title"], "shell": self.shell[compared[0]].upper(), "groups": groups})
 
         # Designs, with their families.
