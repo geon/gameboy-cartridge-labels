@@ -5,13 +5,17 @@ import glob, hashlib, json, os, re, shutil, sys
 # - source: where the photos came from (my-collection: my own; google: saved from Google image searches; the others
 #   named after a site or seller), the subfolder of save-new-images-here/ they were dropped off in (src/add_photos.py).
 # - system: dmg, cgb, agb, lrg (Limited Run Games' unlicensed releases, LRG-AP-USA), or unknown, from the serial.
-# - serial: THE SERIAL PRINTED ON THE LABEL, EXACTLY AS PRINTED, OR UNKNOWN. Nothing else, ever:
-#     - all of it as printed: DMG-A2JE-USA (Jurassic Park 2), never DMG-A2JE; DMG-A2J (Shounen Ashibe) only because its
+# - serial: THE CARTRIDGE'S SERIAL, IN FULL, AS PRINTED ON ITS LABEL. Never shortened:
+#     - all of it, as printed: DMG-A2JE-USA (Jurassic Park 2), never DMG-A2JE; DMG-A2J (Shounen Ashibe) only because its
 #       label prints no region; a revision as printed (DMG-AG-NOE-1); parentheses only where printed (AGB-U3IJ-JPN(A));
 #     - NEVER a release id, a game id, a stem or any other short form of the serial (DMG-A2JE, DMG-A2J+), not even
-#       when gb-game-list only lists that form: gb-game-list's ids are keys in its data, not what's printed;
-#     - NEVER the serial of the release a photo was searched for or listed as: only what its label shows;
-#     - if the serial can't be read on the photo, UNKNOWN, until someone reads it.
+#       when gb-game-list only lists that form: gb-game-list's ids are keys in its data, not the serial;
+#     - it's the cartridge's serial, not what the photo happens to show: a label partly torn off is still named by its
+#       full serial, if that's known (from the rest of its label, its art: never by guessing the region);
+#     - a cartridge with no serial printed at all (the AGS Aging Cartridge, a test cartridge whose label only says
+#       "LCD用カートリッジ") is named by the most complete code it has, its ROM's (AGB-TCHK); never with a made-up
+#       region;
+#     - if the serial isn't known, UNKNOWN, until someone finds it.
 #   Designs (src/designs.py) and releases are worked out from these names; they are never written into them.
 # - note: what sets the release apart but isn't printed on the label, in square brackets (DMG-ATAJ-JPN[PINK]: the pink
 #   cartridge bundled with a pink Game Boy Pocket; DMG-TRA[MINUET]); a photo with a note is a release of its own
