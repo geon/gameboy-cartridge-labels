@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import (AGB_RECESS, agb_camera, agb_creases, agb_outline_points, seen_straight, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
+from cartridge import (AGB_RECESS, agb_camera, agb_creases, agb_outline_lines, agb_ridge_lines, seen_straight, ARROW_HALF_ANGLE, CGB_RIDGE_DEPTH, ARROW_HALF_WIDTH, ARROW_TOP, BODY, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, CGB_RECESS, PILL,
                        PILL_RADIUS, RECESS, RECESS_RADIUS, body_box, camera_for, CGB, cgb_outline_seen, cgb_ridge_lines, corners_of, groove_edges, project, seen_at, shell_of)
 from fit_cartridge import OUT as DETAILS, load
 
@@ -46,6 +46,13 @@ def face_outline():
 def bevel_lines():
     """The bevels' inner edges along the lower sides, in mm."""
     return [np.array([(BEVEL_IN, FACE_STEP), (BEVEL_IN, 64.85)]), np.array([(56.85 - BEVEL_IN, FACE_STEP), (56.85 - BEVEL_IN, 64.85)])]
+
+
+def dotted_line(photo, points, color, t):
+    """A polyline (pixels) drawn as dots t across, 3 t apart."""
+    for a, b in zip(points[:-1], points[1:]):
+        for u in np.arange(0, 1, 3 * t / max(1.0, float(np.linalg.norm(b - a)))):
+            cv2.circle(photo, tuple(int(round(v)) for v in a + (b - a) * u), max(1, t // 2), color, -1, cv2.LINE_AA)
 
 
 def pill_outline(per_end=24):
@@ -155,7 +162,15 @@ def render(path, fit, width=800):
         elif fit["shell"] == "agb":
             # Seen from the camera taken for the AGB (agb_camera): the outline behind the face, the upper crease out of it.
             camera = agb_camera(H, (photo.shape[1] / 2, photo.shape[0] / 2))
-            cv2.polylines(photo, [P(seen_straight(*agb_outline_points(), camera))], True, (0, 0, 255), t, cv2.LINE_AA)
+            # The outline, its top's unsampled middle dotted; the side bevels' ridges in the face, thin as the DMG's bevels.
+            parts = agb_outline_lines()
+            for points, depths, dotted in parts:
+                seen = P(seen_straight(points, depths, camera))
+                if dotted:
+                    dotted_line(photo, seen, (0, 0, 255), t)
+                else:
+                    cv2.polylines(photo, [seen], len(parts) == 1, (0, 0, 255), t, cv2.LINE_AA)
+            cv2.polylines(photo, [P(dense(line, False)) for line in agb_ridge_lines()], False, (0, 0, 180), max(1, t // 2), cv2.LINE_AA)
             cv2.polylines(photo, [P(seen_straight(points, depths, camera)) for points, depths in agb_creases()], False, (0, 150, 255), max(1, t // 2), cv2.LINE_AA)
             recess = AGB_RECESS
         else:

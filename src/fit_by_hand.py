@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fits, photos
-from cartridge import DEFAULT_CAMERA_HEIGHT, body_box, RELIABLE_PERSPECTIVE, agb_creases, agb_outline_points, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
+from cartridge import DEFAULT_CAMERA_HEIGHT, body_box, RELIABLE_PERSPECTIVE, agb_creases, agb_outline_lines, agb_ridge_lines, CGB_ARROW_HEIGHT, CGB_ARROW_TIP_RADIUS, CGB_ARROW_TOP, CGB_ARROW_TOP_RADIUS, CGB_ARROW_WIDTH, RECESS_RADIUS, CGB_REFRACTIVE_INDEX, CGB_RIDGE_DEPTH, CGB_WALL, SHELLS, cgb_outline_points, cgb_ridge_lines, corners_of, groove_edges, shell_of
 from fit_cartridge import OUT as DETAILS, load
 from find_doubles import rows
 from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bevel_lines, dense, face_outline, facet, facet_counts, filters_of, matching, pill_outline, rounded_outline
@@ -52,7 +52,7 @@ def anchor(shell):
 
 def model(shell):
     """A shell's model as the page draws it, in mm: the handles' rectangle's corners (anchor), the label's corners,
-    and the lines [points, color, dashed, closed, depths, wall] (as review-fits draws them; depths: each point's depth
+    and the lines [points, color, dashed (or "dot": dotted), closed, depths, wall] (as review-fits draws them; depths: each point's depth
     behind the face in mm, negative in front of it, or null: in it; the page sees them from the camera
     cartridge.camera_for takes (the placement's where it shows perspective, else a set height), through the front wall (wall mm thick, or null: none; refractive
     index n), as cartridge.seen_at does)."""
@@ -63,8 +63,10 @@ def model(shell):
         outline, depths = cgb_outline_points()
         lines += [[outline, "#f33", False, True, depths], [arrow, "#f90", False, True], *[[dense(l, False), "#0cf", False, False, np.full(len(dense(l, False)), CGB_RIDGE_DEPTH), CGB_WALL] for l in cgb_ridge_lines()]]
     elif shell.name == "agb":
-        outline, depths = agb_outline_points()
-        lines += [[outline, "#f33", False, True, depths], *[[points, "#f90", False, False, depths] for points, depths in agb_creases()]]
+        # The outline (its top's unsampled middle dotted), the side bevels' ridges in the face (dashed, as the DMG's bevels), the creases.
+        lines += [*[[points, "#f33", "dot" if dotted else False, len(parts) == 1, depths] for parts in [agb_outline_lines()] for points, depths, dotted in parts],
+                  *[[dense(l, False), "#f33", True, False] for l in agb_ridge_lines()],
+                  *[[points, "#f90", False, False, depths] for points, depths in agb_creases()]]
     else:
         lines += [[dense(face_outline()), "#f33", False, True], *[[dense(l, False), "#f33", True, False] for l in bevel_lines()],
                   [arrow_outline(), "#f90", False, True], [pill_outline(), "#f90", False, True], *[[np.array(e), "#f90", False, False] for e in groove_edges()]]
@@ -501,7 +503,7 @@ function draw() {
   ctx.clearRect(0, 0, c.width, c.height);
   ctx.drawImage(img, ox, oy, img.width * scale, img.height * scale);
   ctx.lineWidth = 1;
-  for (const [pts, col, dash, closed] of shapes()) { ctx.strokeStyle = col; ctx.setLineDash(dash ? [5, 4] : []); stroke(ctx, pts, closed, toScreen); }
+  for (const [pts, col, dash, closed] of shapes()) { ctx.strokeStyle = col; ctx.setLineDash(dash === "dot" ? [1.5, 3] : dash ? [5, 4] : []); stroke(ctx, pts, closed, toScreen); }
   ctx.setLineDash([]);
   handles().forEach((q, k) => {
     const [x, y] = toScreen(q);
@@ -518,7 +520,7 @@ function loupe(q) {
   lctx.imageSmoothingEnabled = false;
   lctx.fillStyle = "#000"; lctx.fillRect(0, 0, 240, 240);
   lctx.drawImage(img, v[0] - r, v[1] - r, 2 * r, 2 * r, 0, 0, 240, 240);
-  for (const [pts, col, dash, closed] of shapes()) { lctx.strokeStyle = col; lctx.setLineDash(dash ? [5, 4] : []); stroke(lctx, pts, closed, at); }
+  for (const [pts, col, dash, closed] of shapes()) { lctx.strokeStyle = col; lctx.setLineDash(dash === "dot" ? [1.5, 3] : dash ? [5, 4] : []); stroke(lctx, pts, closed, at); }
   lctx.setLineDash([]);
   lctx.strokeStyle = "#ff0"; lctx.strokeRect(117, 117, 6, 6);
 }

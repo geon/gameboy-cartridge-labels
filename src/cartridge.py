@@ -590,6 +590,8 @@ AGB_LEFT = 28.5 - AGB_BODY[0] / 2  # the body's left side: its middle at 28.5, a
 AGB_SHOULDER = 1.6
 AGB_SHOULDER_HEIGHT = 6.7
 AGB_BEVEL = 2.0
+AGB_RIDGE_IN = 1.75  # the side bevels' inner edges (ridges), in from the sides: their edge's median on 173 hand fits (2026-11-06)
+AGB_TOP_UNSAMPLED = 0.5  # the share of the top edge, in its middle, left out of the fit's samples
 AGB_RECESS = (6.5, 7.65, 50.5, 30.65)
 AGB_LABEL = (7.0, 8.05, 50.0, 30.05)
 # Depth (2026-11-04, from the fits refitted by hand): the outline's top, sides and shoulders lie AGB_BEVEL behind the
@@ -633,6 +635,19 @@ def agb_outline_points():
     return np.vstack([back, bottom]), np.r_[np.full(len(back), AGB_BEVEL), np.zeros(len(bottom))]
 
 
+def agb_outline_lines():
+    """The outline for drawing, as (points, depths, dotted) lines: open from the top's unsampled middle (agb_top_gap)
+    round to it, and that middle on its own, dotted (the whole outline closed if nothing is left out)."""
+    points, depths = agb_outline_points()
+    g0, g1 = agb_top_gap()
+    gap = np.flatnonzero((np.abs(points[:, 1]) < 1e-9) & (points[:, 0] > g0) & (points[:, 0] < g1))
+    if not len(gap):
+        return [(points, depths, False)]
+    order = np.r_[gap[-1] + 1:len(points), 0:gap[0]]
+    solid = np.vstack([[g1, 0.0], points[order], [g0, 0.0]])
+    return [(solid, np.r_[AGB_BEVEL, depths[order], AGB_BEVEL], False), (np.array([[g0, 0.0], [g1, 0.0]]), np.full(2, AGB_BEVEL), True)]
+
+
 def agb_creases(count=48):
     """The creases in mm, each (points left to right, their depths behind the face): the upper one raised out of the
     face by AGB_RAISE in the middle, falling to the face at the points as one period of a cosine across them; the lower
@@ -665,24 +680,50 @@ def agb_crease(top, count=48):
     return np.c_[xs, top + r - np.sqrt(r * r - (xs - 28.5) ** 2)]
 
 
+def agb_top_gap():
+    """The x range (mm) of the top edge left unsampled: its middle AGB_TOP_UNSAMPLED, about 28.5."""
+    half = (AGB_BODY[0] + 2 * AGB_SHOULDER) * AGB_TOP_UNSAMPLED / 2
+    return 28.5 - half, 28.5 + half
+
+
 def agb_face_runs():
-    """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top, the shoulders' sides,
-    the body's sides below them and the bottom. The shoulders' undersides (1.6 mm) are left out. The creases aren't
-    sampled: their measurements are rough (half a mm) and the fit's last bands are 0.4. All but the bottom lie
-    AGB_BEVEL behind the face (agb_depths)."""
+    """The AGB body's edges as runs for sampling, clear of the corners by 1 mm or more: the top (but its middle,
+    agb_top_gap), the shoulders' sides, the body's sides below them and the bottom. The shoulders' undersides (1.6 mm)
+    are left out. The creases aren't sampled: their measurements are rough (half a mm) and the fit's last bands are
+    0.4. All but the bottom lie AGB_BEVEL behind the face (agb_depths)."""
     w, h, s, sh, l = *AGB_BODY, AGB_SHOULDER, AGB_SHOULDER_HEIGHT, AGB_LEFT
+    g0, g1 = np.array(agb_top_gap()) - l
     seen = lambda p: (p[0] + l, p[1])
-    return [(seen(a), seen(b), n) for a, b, n in (((-s + 2.5, 0.0), (w + s - 2.5, 0.0), (0, -1)),
+    return [(seen(a), seen(b), n) for a, b, n in (((-s + 2.5, 0.0), (g0, 0.0), (0, -1)), ((g1, 0.0), (w + s - 2.5, 0.0), (0, -1)),
             ((w + s, 2.5), (w + s, sh - 1.0), (1, 0)), ((w, sh + 1.5), (w, h - 1.5), (1, 0)),
             ((w - 2.0, h), (2.0, h), (0, 1)),
             ((0.0, h - 1.5), (0.0, sh + 1.5), (-1, 0)), ((-s, sh - 1.0), (-s, 2.5), (-1, 0)))]
 
 
-def agb_depths(samples):
+def agb_ridge_lines():
+    """The bevels' inner edges along the body's sides (the ridges where the face meets the bevels), in mm: AGB_BEVEL in
+    from the sides, from the shoulders' undersides to the bottom, in the face."""
+    l, (w, h), sh, r = AGB_LEFT, AGB_BODY, AGB_SHOULDER_HEIGHT, AGB_RIDGE_IN
+    return [np.array([(l + r, sh), (l + r, h)]), np.array([(l + w - r, sh), (l + w - r, h)])]
+
+
+def agb_ridge_samples():
+    """The ridges (agb_ridge_lines) as steps for sampling (mm, outward normals), clear of their ends as the sides' runs."""
+    points, normals = [], []
+    for (a, b), n in zip(agb_ridge_lines(), ((-1, 0), (1, 0))):
+        for y in np.linspace(a[1] + 1.5, b[1] - 1.5, max(6, int((b[1] - a[1] - 3.0) / 2.5))):
+            points.append((a[0], y))
+            normals.append(n)
+    return np.array(points), np.array(normals, np.float64)
+
+
+def agb_depths(samples, ridges=0):
     """The depth behind the face of each of the AGB's samples (build_samples'): the outline's AGB_BEVEL but along the
-    bottom, the rest 0."""
+    bottom, the rest 0; the last ridges face samples (the ridges, build_samples' face_points) in the face."""
     points, normals, kinds = samples
-    return np.where((kinds == "face") & (normals[:, 1] < 0.5), AGB_BEVEL, 0.0)
+    depths = np.where((kinds == "face") & (normals[:, 1] < 0.5), AGB_BEVEL, 0.0)
+    depths[len(depths) - ridges:] = 0.0
+    return depths
 
 
 def agb_logo_lines(lines):
@@ -731,10 +772,11 @@ CGB = Shell("cgb", CGB_BODY, CGB_RECESS, CGB_LABEL,
             (59.5, 60.5), (60.6, 64.6), np.r_[np.arange(5.0, 24.0, 0.25), np.arange(33.0, 52.0, 0.25)], CGB_COLOR_TEXT,
             box=(CGB_LEFT, 0.0, CGB_LEFT + CGB_BODY[0], CGB_BODY[1]))
 # No arrow on its front: the band below the recess runs across the whole recess. No "GAME BOY COLOR" on its labels.
-_agb_samples = build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), recess_radius=None)
+_agb_ridges = agb_ridge_samples()
+_agb_samples = build_samples(AGB_RECESS, AGB_LABEL, [], pill=False, grooves=False, face_runs=agb_face_runs(), face_points=_agb_ridges, recess_radius=None)
 AGB = Shell("agb", AGB_BODY, AGB_RECESS, AGB_LABEL, _agb_samples,
             (30.15, 31.15), (31.35, 33.6), np.arange(7.0, 50.0, 0.25), None, box=(AGB_LEFT - AGB_SHOULDER, 0.0, AGB_LEFT + AGB_BODY[0] + AGB_SHOULDER, AGB_BODY[1]),
-            depths=agb_depths(_agb_samples), camera=agb_camera)
+            depths=agb_depths(_agb_samples, len(_agb_ridges[0])), camera=agb_camera)
 SHELLS = {"dmg": DMG, "cgb": CGB, "agb": AGB}
 
 
