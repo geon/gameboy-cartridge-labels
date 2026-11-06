@@ -7,11 +7,11 @@ from fit_cartridge import load
 # add-photos: files the photos left in save-new-images-here/ into photos/ (src/photos.py). A subfolder names their
 # source (save-new-images-here/ebay-elrocinante/ -> photos/ebay-elrocinante/); photos straight in the folder go to
 # photos/unrecorded/. Each photo is stored as it came (never re-encoded) under the serial read on its label
-# (src/serials.py: exact, or one character off), the better of its reads as it is and enlarged (see enlargement);
-# without one, as UNKNOWN. A photo already in photos/ (the same file, by SHA-1) is deleted; one that is the same picture
-# as a photo in photos/, saved another way (re-encoded, another format: see same_picture), stays in the folder, and is
-# listed with that photo, for you to delete or keep; anything not a photo stays too, and is listed. Otherwise the
-# folder is left empty: filed photos and emptied subfolders are removed.
+# (src/serials.py: exact, or one character off), read as it is, enlarged, and line by line (see enlargement,
+# cut_out); without one, as UNKNOWN. A photo already in photos/ (the same file, by SHA-1) is deleted; one that is the
+# same picture as a photo in photos/, saved another way (re-encoded, another format: see same_picture), stays in the
+# folder, and is listed with that photo, for you to delete or keep; anything not a photo stays too, and is listed.
+# Otherwise the folder is left empty: filed photos and emptied subfolders are removed.
 # A subfolder's listing.json (file name -> where the photo came from: its page, the image's URL..., as written by a
 # downloader such as src/retronintendostore.py) is copied into each photo's entry in sources.json; it is kept only for
 # the photos left in the folder.
@@ -39,6 +39,22 @@ def enlargement(photo):
     3000 px, not at all above."""
     side = max(photo.shape[:2])
     return 3 if side < 1500 else 2 if side < 3000 else 0
+
+
+def cut_out(photo, quad):
+    """A line of text (its corners in the photo, as read: src/ocr.swift) cut out on its own, laid flat, with a margin of
+    0.4 times its height, enlarged 3 times; None if it's under 4 px. Vision reads the text along a label's edge in one
+    direction, so a line printed the other way next to another is read upside down (DMG-GZ-EUR as "とAB-Z9-9NO"); on
+    its own, it's read either way up."""
+    quad = np.array(quad, np.float32)
+    w, h = np.linalg.norm(quad[1] - quad[0]), np.linalg.norm(quad[3] - quad[0])
+    if w < 4 or h < 4:
+        return None
+    m = 0.4 * h
+    flat = np.array([[m, m], [m + w, m], [m + w, m + h], [m, m + h]], np.float32) * 3
+    size = (int(3 * (w + 2 * m)), int(3 * (h + 2 * m)))
+    return cv2.warpPerspective(photo, cv2.getPerspectiveTransform(quad, flat), size, flags=cv2.INTER_CUBIC,
+                               borderMode=cv2.BORDER_REPLICATE)
 
 
 def same_picture(a, b):
@@ -110,21 +126,34 @@ if incoming:
         links.append(os.path.join(WORK, "photos", f"p{k}{os.path.splitext(path)[1].lower()}"))
         os.symlink(os.path.abspath(path), links[-1])
     text.read(links, os.path.join(WORK, "ocr"))
-    # Each photo also enlarged, for the serial's small print: read in 48 more of 219 UNKNOWN photos (2026-11-06).
-    os.makedirs(os.path.join(WORK, "enlarged"))
-    enlarged = []
+    # Read again, for the serial's small print: each photo enlarged (see enlargement), and each line read unsure
+    # (confidence under 1) cut out on its own (see cut_out); the serial is matched on the text of all three reads.
+    # Enlarged, 48 more of 219 UNKNOWN photos read a listed serial; lines cut out, 66 more of the other 128
+    # (2026-11-06).
+    for folder in ("enlarged", "lines", "all"):
+        os.makedirs(os.path.join(WORK, folder))
+    again = []
     for k, (_, path, _) in enumerate(incoming):
         photo = load(path)
-        factor = enlargement(photo) if photo is not None else 0
+        if photo is None:
+            continue
+        factor = enlargement(photo)
         if factor:
-            enlarged.append(os.path.join(WORK, "enlarged", f"p{k}.png"))
-            cv2.imwrite(enlarged[-1], cv2.resize(photo, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC))
-    text.read(enlarged, os.path.join(WORK, "ocr-enlarged"))
-    for folder in ("ocr", "ocr-enlarged"):
-        for row in serials.serials(os.path.join(WORK, folder)):
-            best = reads.get(row[0])
-            if best is None or (serials.RANK.get(row[1], 3), -len(row[2])) < (serials.RANK.get(best[0], 3), -len(best[1])):
-                reads[row[0]] = (row[1], row[2])
+            again.append(os.path.join(WORK, "enlarged", f"p{k}.png"))
+            cv2.imwrite(again[-1], cv2.resize(photo, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC))
+        read = os.path.join(WORK, "ocr", f"p{k}.json")
+        for i, line in enumerate(json.load(open(read)) if os.path.exists(read) else []):
+            if line["confidence"] < 1 and (cut := cut_out(photo, line["quad"])) is not None:
+                again.append(os.path.join(WORK, "lines", f"p{k}-{i}.png"))
+                cv2.imwrite(again[-1], cut)
+    text.read(again, os.path.join(WORK, "ocr-again"))
+    for k in range(len(incoming)):
+        lines = []
+        for read in [os.path.join(WORK, "ocr", f"p{k}.json"), os.path.join(WORK, "ocr-again", f"p{k}.json"),
+                     *glob.glob(os.path.join(WORK, "ocr-again", f"p{k}-*.json"))]:
+            lines += json.load(open(read)) if os.path.exists(read) else []
+        json.dump(lines, open(os.path.join(WORK, "all", f"p{k}.json"), "w"))
+    reads = {row[0]: (row[1], row[2]) for row in serials.serials(os.path.join(WORK, "all"))}
     shutil.rmtree(WORK)
 
 filed = {}
