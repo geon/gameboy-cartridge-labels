@@ -40,7 +40,7 @@ def releases_by_serial():
 def release_key(name, release_of):
     """A photo's release (release_of: releases_by_serial()), by its name: (the release's id, else its serial, with its
     note if it has one, as DMG-ATAJ[PINK]: a release of its own, and so with a prefix, as DIS-CGB-AZ7E; the release in
-    gb-game-list, or None). Its default design (src/designs.py)."""
+    gb-game-list, or None)."""
     serial, note = photos.serial_of(name), photos.note_of(name)
     release, prefix = release_of_serial(serial, release_of), photos.prefix_of(serial)
     key = (f"{prefix}-{release['id']}" if prefix else release["id"]) if release else serial

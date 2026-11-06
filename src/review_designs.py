@@ -130,8 +130,7 @@ class Review:
 
         # Designs, with their families.
         family_pairs = [("d:" + p["design"], "r:" + (p["release"] or p["design"])) for p in listed]
-        family_pairs += [("d:" + by_design.names[i], "r:" + ((designs.release_of(part, by_design.release_of) or {}).get("id") or part))
-                         for i, g in enumerate(data["designs"]) for part in g]
+        family_pairs += [("d:" + by_design.names[i], "r:" + part) for i, g in enumerate(data["designs"]) for part in g]
         of = union(family_pairs)
         families = {}
         for name in by_design.names:

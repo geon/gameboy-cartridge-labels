@@ -1,7 +1,7 @@
 import html, json, os, pathlib, re, sys, unicodedata, urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import designs, photos, render, serials
+import photos, render, serials
 
 # search-photos: a local page of searches for photos of the Game Boy, Game Boy Color and Game Boy Advance releases still
 # without one (gb-game-list lists about half the Game Boy Advance ones): no
@@ -136,16 +136,16 @@ groups = [(f"{system_name}: {label}", [r for r in missing if r["system"] == syst
           for ja, label in ((True, "Japanese releases"), (False, "Other releases"))]
 groups.append(("On Nintendo Power", np_missing))
 groups.append(("Only from otakaraou: worth replacing", replace))
-low = []  # (px per mm, release key, shell)
+low = []  # (px per mm, design, shell, the photo rendered)
 for key, (stem, path, sha1, shell, plastic_H, label_H, settings) in render.chosen("labels").items():
     resolution = render.label_px_per_mm(shell, label_H)
     if resolution < LOW_RESOLUTION:
-        low.append((resolution, key, shell))
+        low.append((resolution, key, shell, stem))
 sections = [f"<h2>Labels under {LOW_RESOLUTION} px per mm ({len(low)})</h2>"]
 for shell, system_name in SYSTEM_NAMES:
     rows = []
-    for resolution, key, _ in sorted(l for l in low if l[2] == shell):
-        r = designs.release_of(key, release_of)
+    for resolution, key, _, stem in sorted(l for l in low if l[2] == shell):
+        r = serials.release_key(stem, release_of)[1]  # the release of the design's photo
         title = (japanese_title(r) if japanese(r) else r["title"]) if r else ""
         serial = serial_links(r) if r and r["cartridgeSerials"] else html.escape(key)
         searches = "".join(f'<td><a href="{html.escape(link[1])}" target="_blank">{link[0]}</a></td>' if link else "<td></td>" for link in links(r)) if r else ""

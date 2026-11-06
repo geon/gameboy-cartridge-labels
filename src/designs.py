@@ -3,22 +3,25 @@ import json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials
 
-# designs.json: which photos are of one label design (one art), where that isn't what gb-game-list's releases (one per
-# ROM) say. Every photo is of one design: by default its release's (serials.release_key: DMG-AG, DMG-ATAJ[PINK] for a
-# photo with a note, DIS-CGB-AZ7E for a prefixed serial); a design listed here is made of parts, each either
-#   - a release's default design (DMG-AG): its photos, but those of a serial listed in another design; or
+# designs.json: which photos are of one label design (one art), where that isn't the default. Every photo is of one
+# design: by default its game stem's, on its side, Japan or the rest of the world (stem_of: AGB-AXPE, -AXPP, -AXPD,
+# -AXPS are AGB-AXP; AGB-AXPJ is AGB-AXPJ; DMG-KY-USA and -KY-EUR are DMG-KY; DMG-KYJ is DMG-KYJ), with its note
+# (DMG-ATAJ[PINK]) and its prefix (DIS-CGB-AZ7) if it has one (default_key). That is implicit, never stored. A design
+# listed here is made of parts, each either
+#   - a default design (DMG-AG): its photos, but those of a serial listed in another design; or
 #   - a serial, with its note if it has one (DMG-AG-FAH, DMG-ATAJ-JPN[PINK]): its photos, those of its revisions too
 #     (DMG-AG-NOE covers DMG-AG-NOE-1).
 # So a release is split by putting some of its serials in designs of their own (Pang: DMG-AG-FAH alone, the other
 # regions in DMG-AG), and releases or serials whose labels are alike are linked by putting them in one design. Photos of
 # one serial with different art are told apart by a note in their names (DMG-MQ-UKV[ALT].jpg: photos.py), which makes
-# a design of its own. A design is named after its first part, releases before serials (DMG-AG-FAH; DMG-AG-NOE-1's
-# part DMG-AG-NOE); one not listed, after its release key.
+# a design of its own. A design is named after its first part, defaults before serials (DMG-AG-FAH; DMG-AG-NOE-1's
+# part DMG-AG-NOE); one not listed is its default. Saving leaves out what's implicit: a design of one default part, a
+# serial in the design of its own default; designs sharing a part are one.
 # Only decisions are kept: how alike labels are is measured afresh (src/compare_labels.py, make review-designs), so a
 # similarity found is never rejected, and labels alike but not linked (variants of a game: Pokémon Gold and Silver)
 # simply stay in designs of their own.
 FILE = "designs.json"
-SERIAL_PART = re.compile(r".*-[A-Z]{3}(-[0-9])?(\[[^]]*\])?$")
+SERIAL_PART = re.compile(r"(.+-)?(DMG|CGB|AGB)-[A-Z0-9]+-[A-Z]{3}(-[0-9])?(\[[^]]*\])?$")
 
 
 def load():
@@ -27,9 +30,19 @@ def load():
 
 
 def save(data):
-    """One design per line, so that the file's history reads as decisions made."""
-    groups = [sorted(set(g), key=part_order) for g in data["designs"]]
-    groups = sorted((g for g in groups if len(g) > 1 or g and is_serial(g[0])), key=lambda g: part_order(g[0]))
+    """One design per line, so that the file's history reads as decisions made; what's implicit left out (see above)."""
+    # Designs sharing a part made one.
+    groups = []
+    for g in data["designs"]:
+        g = set(g)
+        for other in [o for o in groups if o & g]:
+            groups.remove(other)
+            g |= other
+        groups.append(g)
+    # A serial in the design of its own default, and a design of one default part, are implicit.
+    groups = [{p for p in g if not (is_serial(p) and default_key(p) in g)} for g in groups]
+    groups = [sorted(g, key=part_order) for g in groups if len(g) > 1 or g and is_serial(next(iter(g)))]
+    groups.sort(key=lambda g: part_order(g[0]))
     text = '{\n"designs": [' + ("\n" + ",\n".join(json.dumps(g, ensure_ascii=False) for g in groups) + "\n" if groups else "") + "]\n}\n"
     open(FILE + ".tmp", "w").write(text)
     os.replace(FILE + ".tmp", FILE)
@@ -56,6 +69,19 @@ def name_of(group):
     return re.sub(r"(-[A-Z]{3})-[0-9](?=$|\[)", r"\1", first)
 
 
+def default_key(name):
+    """A photo's default design (by its name, or a serial's): its game stem on its side (stem_of), the stem with J on the
+    Japanese side (AGB-AXPJ, DMG-KYJ), with its prefix and note; for a serial not of that form, the serial."""
+    serial, note = photos.serial_of(name), photos.note_of(name)
+    stem = stem_of(name)
+    if stem is None:
+        key = serial
+    else:
+        prefix = photos.prefix_of(serial)
+        key = (f"{prefix}-" if prefix else "") + stem[0] + ("J" if stem[1] else "")
+    return key + (f"[{note}]" if note is not None else "")
+
+
 class Designs:
     """The designs as listed now: design_of(name) for each photo."""
 
@@ -66,14 +92,13 @@ class Designs:
         self.names = [name_of(g) for g in self.data["designs"]]
 
     def part_of(self, name):
-        """The part of a listed design a photo falls under (its serial, else its release's), or None."""
-        key = serials.release_key(name, self.release_of)[0]
+        """The part of a listed design a photo falls under (its serial, else its default), or None."""
         note = f"[{photos.note_of(name)}]" if photos.note_of(name) is not None else ""
-        return next((p for p in (photos.serial_of(name) + note, serial_part(name), key) if p in self.group_of), None)
+        return next((p for p in (photos.serial_of(name) + note, serial_part(name), default_key(name)) if p in self.group_of), None)
 
     def design_of(self, name):
         """A photo's design (by its name): (the design's name, its parts, the photo's release in gb-game-list or None)."""
-        key, release = serials.release_key(name, self.release_of)
+        key, release = default_key(name), serials.release_key(name, self.release_of)[1]
         part = self.part_of(name)
         if part is not None:
             i = self.group_of[part]
@@ -97,12 +122,6 @@ def stem_of(name):
     return f"{system}-{stem}", letter == "J" or region == "JPN"
 
 
-def release_of(design, release_of):
-    """The release in gb-game-list a design's name is of (its note, prefix and region dropped), or None."""
-    plain = photos.unprefixed(re.sub(r"\[[^]]*\]$", "", design))
-    return serials.release_of_serial(plain, release_of)
-
-
 def preferred(key_of_sha1):
     """preferred.json by design: design -> the preferred photo's SHA-1, each entry under its photo's design as the photos
     are named and the designs listed now (key_of_sha1: sha1 -> design), so that splitting and joining designs keeps it;
@@ -123,7 +142,7 @@ def merged(data, names, by_design):
             parts |= set(g)
         else:
             groups.append(g)
-    parts |= {n for n in names if n not in by_design.names}  # a design not listed: its release key is its part
+    parts |= {n for n in names if n not in by_design.names}  # a design not listed: its default is its part
     return dict(data, designs=groups + [sorted(parts, key=part_order)])
 
 
@@ -135,7 +154,7 @@ def split_off(data, parts):
 
 
 def unlinked(data, parts):
-    """data with the parts taken out of the designs they're in: back to their releases' designs."""
+    """data with the parts taken out of the designs they're in: back to their default designs."""
     parts = set(parts)
     return dict(data, designs=[[p for p in g if p not in parts] for g in data["designs"]])
 
