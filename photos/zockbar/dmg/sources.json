@@ -43,6 +43,61 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_316",
   "sha1": "b1b11c05b64829061a9140dacf8f8a3c3c945092"
  },
+ "DMG-A3BP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/bases-loaded-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/batman-forever-gameboy.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Batman Forever",
+  "collection": "game-boy",
+  "original_name": "zockbar-bases-loaded-1.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_312",
+  "sha1": "3fd45029db9830da8b9e99acaf7825ac1bc7a438",
+  "serial_on_label": "DMG-A3BP-EUR"
+ },
+ "DMG-A6BP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/nba-live-96",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/nba-live-96-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "NBA Live 96",
+  "collection": "game-boy",
+  "original_name": "zockbar-nba-live-96.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_356",
+  "sha1": "48a737db51e66d6fc6b28baf0b74aa98627171c2",
+  "serial_on_label": "DMG-A6BP-EUR"
+ },
+ "DMG-A6HP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/nhl-96",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/NHL-96_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "NHL 96",
+  "collection": "game-boy",
+  "original_name": "zockbar-nhl-96.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_358",
+  "sha1": "2f2e7c43111866492e6359aae01d8c710075e73c",
+  "serial_on_label": "DMG-A6HP-EUR"
+ },
+ "DMG-A6SP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/fifa-96",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-96_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Fifa 96",
+  "collection": "game-boy",
+  "original_name": "zockbar-fifa-96.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_329",
+  "sha1": "22841fd9d4f0d84e09bc74864621f601d493e2c6",
+  "serial_on_label": "DMG-A6SP-EUR"
+ },
+ "DMG-A6SP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/fifa-soccer-96",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-Soccer-96_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "FIFA Soccer 96",
+  "collection": "game-boy",
+  "original_name": "zockbar-fifa-soccer-96.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_330",
+  "sha1": "9c29a27c784ba6b666cd5b3a9fc94da72b8e3893",
+  "serial_on_label": "DMG-A6SP-EUR"
+ },
  "DMG-A7SP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/fifa-97",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-97_GB_gut.jpg",
@@ -98,6 +153,28 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "a3cd826fb997cebf87eb315195d9bcfb41346d84"
  },
+ "DMG-ABUP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/bust-a-move-2-arcade-edition",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/bust-a-move-arcade-edition-2-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Bust-A-Move 2 Arcade Edition",
+  "collection": "game-boy",
+  "original_name": "zockbar-bust-a-move-2-arcade-edition.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_318",
+  "sha1": "efee6f4083b20dd9cd91caca8cd33f5fb3832359",
+  "serial_on_label": "DMG-ABUP-EUR"
+ },
+ "DMG-ABVP-EUR_3.jpg": {
+  "page_url": "https://zockbar.ch/products/beethoven",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/beethoven-gameboy-gut-01.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Beethoven",
+  "collection": "game-boy",
+  "original_name": "zockbar-beethoven.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_313",
+  "sha1": "80af676bf7dd2584eabb0b985013f93aed29e2b7",
+  "serial_on_label": "DMG-ABVP-EUR"
+ },
  "DMG-AC-FRG.jpg": {
   "page_url": "https://zockbar.ch/products/nba-all-star-challenge",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/NBA-All-Star-Challenge_GB_gut.jpg",
@@ -108,6 +185,17 @@
   "serial_on_label": "DMG-AC-FRG",
   "note": "named by the serial read on it (exact)",
   "sha1": "1113b832f666aa4e9530a3d7c8fbddf67f1d957c"
+ },
+ "DMG-AC3E-EUR_3.jpg": {
+  "page_url": "https://zockbar.ch/products/choplifter-iii",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Choplifter-3_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Choplifter III",
+  "collection": "game-boy",
+  "original_name": "zockbar-choplifter-iii.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_319",
+  "sha1": "d1054af58fafebd63b59f226ea588b379c1eacd8",
+  "serial_on_label": "DMG-AC3E-EUR"
  },
  "DMG-ACEE-USA_4.jpg": {
   "page_url": "https://zockbar.ch/products/casper",
@@ -175,6 +263,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "470f08f23aaa52e87861db71f1ed70a839a3a658"
  },
+ "DMG-ADSP-FAH.jpg": {
+  "page_url": "https://zockbar.ch/products/desert-strike-return-to-the-gulf",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/desert-strike-gameboy.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Desert Strike: Return to the Gulf",
+  "collection": "game-boy",
+  "original_name": "zockbar-desert-strike-return-to-the-gulf.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_324",
+  "sha1": "1d658c585680c20b5fb106ff372520dc07e65c71",
+  "serial_on_label": "DMG-ADSP-FAH"
+ },
  "DMG-ADYI-ITA.jpg": {
   "page_url": "https://zockbar.ch/products/barbie-meeresabenteuer",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/barbie-meeresabenteuer-ita-gameboy-color-gut.jpg",
@@ -208,6 +307,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "824d1b79e3ecb449e94853bd5f785171aa8c15cb"
  },
+ "DMG-AFRP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/frogger",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/frogger-gameboy-color-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Frogger",
+  "collection": "game-boy",
+  "original_name": "zockbar-frogger.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_333",
+  "sha1": "10b0ca065ad08423cf4825abde1bee846e687a87",
+  "serial_on_label": "DMG-AFRP-EUR"
+ },
  "DMG-AFSE-USA.jpg": {
   "page_url": "https://zockbar.ch/products/fifa-international-soccer-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-International-Soccer_GB_gut.jpg",
@@ -218,6 +328,28 @@
   "serial_on_label": "DMG-AFSE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "7adbeec7866ac1aed4c708fb3c762de506676ad8"
+ },
+ "DMG-AG-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/pang",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Pang_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Pang",
+  "collection": "game-boy",
+  "original_name": "zockbar-pang.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_362",
+  "sha1": "bc17d07b43406ca071857d5c2563ee22303ab728",
+  "serial_on_label": "DMG-AG-NOE"
+ },
+ "DMG-AGAP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/game-watch-gallery",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Game-_-Watch-Gallery_GB_gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Game & Watch Gallery",
+  "collection": "game-boy",
+  "original_name": "zockbar-game-watch-gallery.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_335",
+  "sha1": "217acce997d4b458415967b91ba0f19d10bb7dce",
+  "serial_on_label": "DMG-AGAP-EUR"
  },
  "DMG-AGCE-USA_2.jpg": {
   "page_url": "https://zockbar.ch/products/arcade-classic-no-3-galaga-galaxian",
@@ -251,6 +383,17 @@
   "serial_on_label": "DMG-AGOP-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "7ae679eb25f94ffddeaecb55be4dcafd12a7bdb5"
+ },
+ "DMG-AGTP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/stargate-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Stargate_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Stargate",
+  "collection": "game-boy",
+  "original_name": "zockbar-stargate-1.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_376",
+  "sha1": "59a26343ec62f6e2bbd8bea1a1067ed123794dfa",
+  "serial_on_label": "DMG-AGTP-EUR"
  },
  "DMG-AH-USA_3.jpg": {
   "page_url": "https://zockbar.ch/products/home-alone-3",
@@ -362,6 +505,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0b1ea90349e48cb73a932c0a9ff566ae43f31b33"
  },
+ "DMG-ALNP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/der-konig-der-lowen",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/der-koenig-der-loewen-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Der König der Löwen",
+  "collection": "game-boy",
+  "original_name": "zockbar-der-konig-der-lowen.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_322",
+  "sha1": "91d75dfcccdcae868255f2933034ed5f538bf2e8",
+  "serial_on_label": "DMG-ALNP-EUR"
+ },
  "DMG-AMIE-USA_2.jpg": {
   "page_url": "https://zockbar.ch/products/maui-mallard-in-cold-shadow",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Maui-Mallard-in-Cold-Shadow_GB_gut.jpg",
@@ -372,6 +526,17 @@
   "serial_on_label": "DMG-AMIE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "126b9454225d25764ef2d0e3d398bbf215dbbfbf"
+ },
+ "DMG-AMKE-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/mortal-kombat-4",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mortal-Kombat-2_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Mortal Kombat 2",
+  "collection": "game-boy",
+  "original_name": "zockbar-mortal-kombat-4.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_353",
+  "sha1": "ae950b19d4d591433c001f0190973f79f35ca5ec",
+  "serial_on_label": "DMG-AMKE-EUR"
  },
  "DMG-ANCP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/animaniacs",
@@ -395,6 +560,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4eb2f73507ce5f913d15f40303db10009702da6e"
  },
+ "DMG-ANHP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/nhl-hockey-95",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/NHL-Hockey-95_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "NHL Hockey 95",
+  "collection": "game-boy",
+  "original_name": "zockbar-nhl-hockey-95.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_359",
+  "sha1": "db42614b353a4859b374866661ab65b5612e054e",
+  "serial_on_label": "DMG-ANHP-EUR"
+ },
  "DMG-ANXP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/antz",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/antz-gameboy-color-gut.jpg",
@@ -405,6 +581,17 @@
   "serial_on_label": "DMG-ANXP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "1ef5108553b9e4d667ed5e77ca4af1931f945a33"
+ },
+ "DMG-AO2P-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/hugo-2",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Hugo-2_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Hugo 2",
+  "collection": "game-boy",
+  "original_name": "zockbar-hugo-2.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_343",
+  "sha1": "68065e8eab1ad6df8815dc4746257bfdbc542e8c",
+  "serial_on_label": "DMG-AO2P-NOE"
  },
  "DMG-AO9P-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/olympic-summer-games",
@@ -483,6 +670,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "327039987e95f4468be6c46a57fd498f02320dd8"
  },
+ "DMG-APSU-EUR_4.jpg": {
+  "page_url": "https://zockbar.ch/products/fire-fight",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fire-Figher_GB.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Fire Fighter",
+  "collection": "game-boy",
+  "original_name": "zockbar-fire-fight.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_331",
+  "sha1": "ca1f4bb3a4808a91c5f9e73cb4916e246aa66f04",
+  "serial_on_label": "DMG-APSU-EUR"
+ },
  "DMG-APXP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/a-bugs-life-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/a-bugs-life-gameboy-color-gut.jpg",
@@ -515,6 +713,17 @@
   "serial_on_label": "DMG-AQHP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "1e0ff9a170d1aa70d13c900dd0a23b3fbafb2f4b"
+ },
+ "DMG-ARDP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/race-days",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Race-Days_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Race Days",
+  "collection": "game-boy",
+  "original_name": "zockbar-race-days.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_369",
+  "sha1": "ba053b16f6cf6f3409962e9273453d8a8031c7ca",
+  "serial_on_label": "DMG-ARDP-EUR"
  },
  "DMG-ARZP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/rugrats-der-film",
@@ -549,6 +758,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "814a54a3341652cd03202c180a4fc234085be997"
  },
+ "DMG-ASMP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/superman",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/superman-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Superman",
+  "collection": "game-boy",
+  "original_name": "zockbar-superman.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_379",
+  "sha1": "1007a11a28aa299eed57f41fe4d508644342b95d",
+  "serial_on_label": "DMG-ASMP-EUR"
+ },
  "DMG-ASRP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/street-racer",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Street-Racer_GB_gut.jpg",
@@ -582,6 +802,28 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7cc6937ff94d93131592132b047dbea998a7b903"
  },
+ "DMG-ATWP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/monster-truck-wars",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Monster-Truck-Wars_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Monster Truck Wars",
+  "collection": "game-boy",
+  "original_name": "zockbar-monster-truck-wars.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_352",
+  "sha1": "ab60f4d4f2856b772e70bb35adbd9e1a00549aba",
+  "serial_on_label": "DMG-ATWP-EUR"
+ },
+ "DMG-AU3P-NOE_3.jpg": {
+  "page_url": "https://zockbar.ch/products/die-schluempfe-im-alptraumland",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Die-Schluempfe-im-Alptraumland_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Die Schlümpfe im Alptraumland",
+  "collection": "game-boy",
+  "original_name": "zockbar-die-schluempfe-im-alptraumland.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_325",
+  "sha1": "4d3f977a27c1825e2e16cda1381a8d8d74c0abce",
+  "serial_on_label": "DMG-AU3P-NOE"
+ },
  "DMG-AUFP-FAH.jpg": {
   "page_url": "https://zockbar.ch/products/die-schlumpfe-reisen-um-die-welt-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Die-Schluempfe-reisen-um-die-Welt-FRA_GB_gut.jpg",
@@ -604,6 +846,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ca6c44ded77adc7606f6ca2f1f78f5baa2749d71"
  },
+ "DMG-AVLP-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/v-rally",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/v-rally-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "V-Rally",
+  "collection": "game-boy",
+  "original_name": "zockbar-v-rally.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_385",
+  "sha1": "de8cc932bfca766158149503fccfa378c79403c3",
+  "serial_on_label": "DMG-AVLP-NOE"
+ },
  "DMG-AW.jpg": {
   "page_url": "https://zockbar.ch/products/alleyway",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/alleyway-gameboy-gebraucht.jpg",
@@ -615,6 +868,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e4917c765eff45b6895ef0a9f23178d875c82b72"
  },
+ "DMG-AW2P-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/wario-land-2",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wario-land-2-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Wario Land 2",
+  "collection": "game-boy",
+  "original_name": "zockbar-wario-land-2.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_387",
+  "sha1": "bfd9891c1b80f467de7dc0d16c473fcca434744b",
+  "serial_on_label": "DMG-AW2P-EUR"
+ },
  "DMG-AW7P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/james-bond-007",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/James-Bond-007_GB_gut.jpg",
@@ -625,6 +889,17 @@
   "serial_on_label": "DMG-AW7P-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "b2a5c13cbe58b31cbf0e07e2365eb76617688704"
+ },
+ "DMG-AWFP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/wwf-raw",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wwf-raw-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "WWF Raw",
+  "collection": "game-boy",
+  "original_name": "zockbar-wwf-raw.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_391",
+  "sha1": "4e16743b532b234c8c3a6bed5fbcd470193a8c6b",
+  "serial_on_label": "DMG-AWFP-EUR"
  },
  "DMG-AWQD-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/dragon-quest-monsters",
@@ -790,6 +1065,17 @@
   "serial_on_label": "DMG-C3-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "2f9a030a57a2ec284edd74e9a08939ffb400fa73"
+ },
+ "DMG-C9-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/mortal-kombat-6",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mortal-Kombat_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Mortal Kombat",
+  "collection": "game-boy",
+  "original_name": "zockbar-mortal-kombat-6.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_354",
+  "sha1": "68c10e4848cb992d6aeed67144b93df115212884",
+  "serial_on_label": "DMG-C9-NOE"
  },
  "DMG-CE-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/caesars-palace",
@@ -1219,6 +1505,17 @@
   "serial_on_label": "DMG-GU-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "e87d5cb93d91a411310c5319f0feb332e516eaa1"
+ },
+ "DMG-GZ-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/godzilla",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/godzilla-gb-gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Godzilla",
+  "collection": "game-boy",
+  "original_name": "zockbar-godzilla.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_340",
+  "sha1": "e9a1ea364a9598a3b69f13ed261e428374a0cc4b",
+  "serial_on_label": "DMG-GZ-EUR"
  },
  "DMG-H5-FAH.jpg": {
   "page_url": "https://zockbar.ch/products/road-rash",
@@ -2254,6 +2551,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "67f70e1755c11832ba108cfa3384ca487c840a1d"
  },
+ "DMG-UH-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/prehistorik-man",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Prehistorik-Man_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Prehistorik Man",
+  "collection": "game-boy",
+  "original_name": "zockbar-prehistorik-man.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_367",
+  "sha1": "1ad79791c917703891275e4bd62b48d1b28985df",
+  "serial_on_label": "DMG-UH-EUR"
+ },
  "DMG-UP-USA.jpg": {
   "page_url": "https://zockbar.ch/products/ninja-taro",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/ninja-taro-gb-gut.jpg",
@@ -2419,6 +2727,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4384bcbd8ceb0428002d4b57fbe5d3fd208b6072"
  },
+ "DMG-XG-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/spider-man-x-men",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spider-Man-X-Men_GB_stark_gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Spider-Man and the X-Men in Arcade's Revenge",
+  "collection": "game-boy",
+  "original_name": "zockbar-spider-man-x-men.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_373",
+  "sha1": "33898caff64d26f90758ecbc5626ea981092d0ed",
+  "serial_on_label": "DMG-XG-NOE"
+ },
  "DMG-XP-FRG.jpg": {
   "page_url": "https://zockbar.ch/products/ferrari-grand-prix-challenge-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Ferrari-Grand-Prix-Challenge_GB.jpg",
@@ -2451,6 +2770,17 @@
   "serial_on_label": "DMG-Y5-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "256512a69c09df1768f63bf45c56c10c5f173e4d"
+ },
+ "DMG-YC-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/winter-gold",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/winter-gold-gameboy-gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Winter Gold",
+  "collection": "game-boy",
+  "original_name": "zockbar-winter-gold.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_388",
+  "sha1": "d9445338c67ed7083721c7a0b95aaaf19d1c985b",
+  "serial_on_label": "DMG-YC-EUR"
  },
  "DMG-YC-USA.jpg": {
   "page_url": "https://zockbar.ch/products/winter-olymic-games",
@@ -2528,5 +2858,16 @@
   "serial_on_label": "DMG-ZN-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "a02efd262ae90d5b9e2100a39d8fa32f7fea3bfe"
+ },
+ "DMG-ZW-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/power-rangers-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/power-rangers-gb-gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Power Rangers",
+  "collection": "game-boy",
+  "original_name": "zockbar-power-rangers-1.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_365",
+  "sha1": "f4a304548836da41f3d8ce71015b629c755803be",
+  "serial_on_label": "DMG-ZW-EUR"
  }
 }

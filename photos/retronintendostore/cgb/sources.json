@@ -76,6 +76,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "22477222d7b3d1ab6b5eb8e348578c278117b310"
  },
+ "CGB-ALQP.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-color/games/lucky-luke",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459456137.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Lucky Luke",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-459456137.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_86",
+  "sha1": "cef67aabc2b411471c9103ac229b35f70c3f03ab",
+  "serial_on_label": "CGB-ALQP"
+ },
  "CGB-AO4P.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/bugs-bunny-crazy-castle-4",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351459805.jpg",
@@ -250,6 +261,28 @@
   "serial_on_label": "CGB-B3OP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "b12a9e3034bdfd702e01b3d0f3e8929893d01db1"
+ },
+ "CGB-B3SE-USA.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-color/games/shaun-palmers-pro-snowboarder",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459456911.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Shaun Palmer's Pro Snowboarder",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-459456911.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_88",
+  "sha1": "d87a3d5701b0a8a95ee94c20b3ca4f65a4c0d63d",
+  "serial_on_label": "CGB-B3SE-USA"
+ },
+ "CGB-B3TE-USA.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-color/games/tony-hawks-pro-skater-3",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459458600.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Tony Hawk's Pro Skater 3",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-459458600.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_89",
+  "sha1": "d91790753f232dda0a1289792fdc0a889d4fb3bc",
+  "serial_on_label": "CGB-B3TE-USA"
  },
  "CGB-B4TP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/power-rangers-time-force",
@@ -480,6 +513,17 @@
   "serial_on_label": "CGB-BERP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "29747c8761caf5e6fe9a948696ae4297be8ba629"
+ },
+ "CGB-BESP-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-color/games/extreme-sports-with-the-berenstain-bears",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459451784.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Extreme Sports with the Berenstain Bears",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-459451784.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_85",
+  "sha1": "027d18a753e2b21bc8f2f4241e1ebe46d0062ed7",
+  "serial_on_label": "CGB-BESP-EUR"
  },
  "CGB-BEXP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/elevator-action-ex",
@@ -849,6 +893,17 @@
   "serial_on_label": "CGB-BSUP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "afbfad7637ed9affd8b2b5e7b1b099f8f53fe665"
+ },
+ "CGB-BSYP-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-color/games/toonsylvania",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459458669.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Toonsylvania",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-459458669.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_90",
+  "sha1": "113a87b41db97cb8c976abc0f009f421d309f15b",
+  "serial_on_label": "CGB-BSYP-EUR"
  },
  "CGB-BT3P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/turok-3-shadow-of-oblivion",

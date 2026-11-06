@@ -65,6 +65,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c033df820644d76325c8f142cec4da5ee4a5ee76"
  },
+ "CGB-ALQE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/lucky-luke-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/luckyluke.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Lucky Luke - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-lucky-luke-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_189",
+  "sha1": "e87ab0dc9ae047ff6ad9c4460e3b642b70e0cd22",
+  "serial_on_label": "CGB-ALQE-USA"
+ },
  "CGB-ALXE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/klax-game-boy-color-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Klax_aec8e043-de29-4178-955f-e73705d6c6aa.jpg",
@@ -296,6 +307,50 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "df24be5093b5f6461e8317324ef9fd8be261d0e2"
  },
+ "CGB-B2ME-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/madden-2002-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Madden_2002.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Madden 2002 - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-madden-2002-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_194",
+  "sha1": "40592e44d050ae486ba7af19287e5e94e8e5a0d9",
+  "serial_on_label": "CGB-B2ME-USA"
+ },
+ "CGB-B2XE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/mega-man-xtreme-2-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/megamanxtreme2.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Mega Man Xtreme 2 - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-mega-man-xtreme-2-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_201",
+  "sha1": "05252e9fc190e4e90e259b7725796e74f17fd42f",
+  "serial_on_label": "CGB-B2XE-USA"
+ },
+ "CGB-B3TE-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/tony-hawks-pro-skater-3-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/tonyhawk3_e68fadb0-4f78-429b-b3fc-0d4c094a3306.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Tony Hawk's Pro Skater 3 - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-tony-hawks-pro-skater-3-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_294",
+  "sha1": "ea1efe663e8b8fbde71db14f980186b0e2c6158f",
+  "serial_on_label": "CGB-B3TE-USA"
+ },
+ "CGB-B4QE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/monsters-inc-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Monster_Inc.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Monsters Inc - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-monsters-inc-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_208",
+  "sha1": "f07fa56ef73ad7584c5c37dab4b7d88998734ac9",
+  "serial_on_label": "CGB-B4QE-USA"
+ },
  "CGB-B4TE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/power-rangers-time-force-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/powerrangerstimeforce.jpg",
@@ -318,6 +373,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f259116ddba8cca1d2c506fbd7d20c2f7a63ce7e"
  },
+ "CGB-B99E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/disneys-102-dalmatians-puppies-to-the-rescue-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/102dalmations.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "102 Dalmatians: Puppies to the Rescue - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-disneys-102-dalmatians-puppies-to-the-rescue-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_139",
+  "sha1": "21667ecb6d4920255ca57a162226c0acddd0207a",
+  "serial_on_label": "CGB-B99E-USA"
+ },
  "CGB-B9TE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/lara-croft-tomb-raider-curse-of-the-sword-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/tombraidersword.jpg",
@@ -328,6 +394,17 @@
   "serial_on_label": "CGB-B9TE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "a22927648ef201072789cc052f005f2b6f0b2fb6"
+ },
+ "CGB-BABE-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/atlantis-the-lost-empire-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/atlantisthelostempire_e79030b7-7f93-4caa-b595-a5b4c99d535f.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Atlantis: The Lost Empire - Game Boy Color",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-atlantis-the-lost-empire-game-boy-classic.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_108",
+  "sha1": "597bf8f6cffd710502be4d141b3eef9b980220bf",
+  "serial_on_label": "CGB-BABE-USA"
  },
  "CGB-BAEE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/aliens-thanatos-encounter-game-boy-color",
@@ -373,6 +450,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "040cb9c62f6ca1c22b6d805ba2d71ffbd5c7cf39"
  },
+ "CGB-BB7E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/jim-hensons-bear-in-the-big-blue-house-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/jimhensonsbearinthebluehouse_cb6e91a6-c31d-4895-9cb8-12575f1fe9b7.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Jim Henson's Bear in The Big Blue House - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-jim-hensons-bear-in-the-big-blue-house-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_174",
+  "sha1": "843517cd3b511dddc0f19fbafcd67770ffae2a3d",
+  "serial_on_label": "CGB-BB7E-USA"
+ },
  "CGB-BCCE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/scooby-doo-classic-creep-capers-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/scoobydoo.jpg",
@@ -417,6 +505,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9afece3a5931b12a44ddec8f40afdca92ce24e42"
  },
+ "CGB-BCXE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/cubix-robots-for-everyone-race-n-robots-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Cubix_Robots_for_Everyone_Race_n_Robots.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Cubix: Robots for Everyone - Race 'n Robots - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-cubix-robots-for-everyone-race-n-robots-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_132",
+  "sha1": "5437320bfc372920ebce20b0e8c00b57313d143a",
+  "serial_on_label": "CGB-BCXE-USA"
+ },
  "CGB-BD3E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/dragon-warrior-iii-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/dragonwarrior3.jpg",
@@ -449,6 +548,17 @@
   "serial_on_label": "CGB-BDDE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "2bb9ff6b00be6bd06ea8b206372e53bf397a5903"
+ },
+ "CGB-BDNE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/disneys-dinosaur-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/dinosaur.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Disney's Dinosaur - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-disneys-dinosaur-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_140",
+  "sha1": "1383b231cc911359f91ae23dc61b6c63c1647f3d",
+  "serial_on_label": "CGB-BDNE-USA"
  },
  "CGB-BDZE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/dragon-tales-game-boy-color",
@@ -526,6 +636,28 @@
   "serial_on_label": "CGB-BH2E-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "3c422fa6641fb4af0b36d76325729eede992740b"
+ },
+ "CGB-BH6E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/harry-potter-and-the-chamber-of-secrets-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/HarryPotterAndTheChamberOfSecrets.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Harry Potter: And The Chamber Of Secrets - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-harry-potter-and-the-chamber-of-secrets-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_164",
+  "sha1": "5d7cfbd1eb3a81f1309e7ecfaa99eb28b8ec618e",
+  "serial_on_label": "CGB-BH6E-USA"
+ },
+ "CGB-BJIE-USA_3.jpg": {
+  "page_url": "https://retroravengames.com/products/stuart-little-the-journey-home-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/stuartlittlejourneyhome.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Stuart Little: The Journey Home - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-stuart-little-the-journey-home-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_262",
+  "sha1": "51337c613dc51920debbb827684665c367acefe7",
+  "serial_on_label": "CGB-BJIE-USA"
  },
  "CGB-BJQE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/jump-start-dino-adventure-field-trip-game-boy-color",
@@ -692,6 +824,28 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "dfd6feae0bdd380d5030000cd674a5b07089ec23"
  },
+ "CGB-BO7E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/007-the-world-is-not-enough-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/007WorldisNotEnough_c441b6dd-7c14-4457-93bc-985570883d66.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "007: The World is Not Enough - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-007-the-world-is-not-enough-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_99",
+  "sha1": "25c1a76e27140ac069e4dc8943276f3f77d36bc7",
+  "serial_on_label": "CGB-BO7E-USA"
+ },
+ "CGB-BP8E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/pooh-and-tiggers-hunny-safari-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/poohhunny.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Pooh and Tigger's Hunny Safari - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-pooh-and-tiggers-hunny-safari-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_238",
+  "sha1": "f4d568d4419cb0603573f1f7e9b64ae3f5035662",
+  "serial_on_label": "CGB-BP8E-USA"
+ },
  "CGB-BPEE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/barbie-pet-rescue-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Barbie_Pet_Rescue.jpg",
@@ -724,6 +878,17 @@
   "serial_on_label": "CGB-BPTE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "45feb6d03f3c57d7970800028a166c93e702d1de"
+ },
+ "CGB-BQPE.jpg": {
+  "page_url": "https://retroravengames.com/products/spongebob-squarepants-legend-of-the-lost-spatula-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/spongebobspatula.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "SpongeBob Squarepants: Legend of the Lost Spatula - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-spongebob-squarepants-legend-of-the-lost-spatula-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_257",
+  "sha1": "4ed1ecaa0ab69d3d2caeae39678a67555207604c",
+  "serial_on_label": "CGB-BQPE"
  },
  "CGB-BROE-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/dexters-laboratory-robot-rampage-game-boy-color",
@@ -857,6 +1022,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "5beb1df4501d79f063f95f3887934bf5102875d7"
  },
+ "CGB-BTGE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/tony-hawks-pro-skater-2-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/tonyhawkproskater2.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Tony Hawk's Pro Skater 2 - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-tony-hawks-pro-skater-2-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_293",
+  "sha1": "2f81fc24e41ebbc5cca34ead912e983d863f8b05",
+  "serial_on_label": "CGB-BTGE-USA"
+ },
  "CGB-BTKE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/batman-beyond-return-of-the-joker-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/batmanbeyond_f176f3cf-b44f-4ac9-a4ab-8ad2d9e17465.jpg",
@@ -944,6 +1120,17 @@
   "serial_on_label": "CGB-BXOE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "06dff47b40ef4e211db3b71fcaba735c602960ec"
+ },
+ "CGB-BY3E-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/yu-gi-oh-dark-duel-stories-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/YugiohDarkDuelstories.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Yu-Gi-Oh: Dark Duel Stories - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-yu-gi-oh-dark-duel-stories-game-boy-color.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_307",
+  "sha1": "af169416634e546e89aa01afac2a5bb88b269147",
+  "serial_on_label": "CGB-BY3E-USA"
  },
  "CGB-BY6J-JPN_3.jpg": {
   "page_url": "https://retroravengames.com/products/jpn-yu-gi-oh-duel-monsters-4-battle-of-great-duelist-jonouchi-deck-game-boy-color",

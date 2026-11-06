@@ -9,26 +9,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "dd04ab09a5ec228a1fd60596f7860ff1f29e8446"
  },
- "UNKNOWN_312.jpg": {
-  "page_url": "https://zockbar.ch/products/bases-loaded-1",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/batman-forever-gameboy.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Batman Forever",
-  "collection": "game-boy",
-  "original_name": "zockbar-bases-loaded-1.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "3fd45029db9830da8b9e99acaf7825ac1bc7a438"
- },
- "UNKNOWN_313.jpg": {
-  "page_url": "https://zockbar.ch/products/beethoven",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/beethoven-gameboy-gut-01.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Beethoven",
-  "collection": "game-boy",
-  "original_name": "zockbar-beethoven.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "80af676bf7dd2584eabb0b985013f93aed29e2b7"
- },
  "UNKNOWN_315.jpg": {
   "page_url": "https://zockbar.ch/products/bomb-jack",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/bomb-jack-gameboy-gebraucht.jpg",
@@ -49,26 +29,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "5a2308ecc49eb82f169206a5d30da0ff2480f731"
  },
- "UNKNOWN_318.jpg": {
-  "page_url": "https://zockbar.ch/products/bust-a-move-2-arcade-edition",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/bust-a-move-arcade-edition-2-gameboy-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Bust-A-Move 2 Arcade Edition",
-  "collection": "game-boy",
-  "original_name": "zockbar-bust-a-move-2-arcade-edition.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "efee6f4083b20dd9cd91caca8cd33f5fb3832359"
- },
- "UNKNOWN_319.jpg": {
-  "page_url": "https://zockbar.ch/products/choplifter-iii",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Choplifter-3_GB.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Choplifter III",
-  "collection": "game-boy",
-  "original_name": "zockbar-choplifter-iii.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "d1054af58fafebd63b59f226ea588b379c1eacd8"
- },
  "UNKNOWN_321.jpg": {
   "page_url": "https://zockbar.ch/products/crash-nitro-kart-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/crash-nitro-kart-gba-gut.jpg",
@@ -78,36 +38,6 @@
   "original_name": "zockbar-crash-nitro-kart-1.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "fe7e1eb71330e65fe4346603045d99e2b0d0aefc"
- },
- "UNKNOWN_322.jpg": {
-  "page_url": "https://zockbar.ch/products/der-konig-der-lowen",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/der-koenig-der-loewen-gameboy-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Der König der Löwen",
-  "collection": "game-boy",
-  "original_name": "zockbar-der-konig-der-lowen.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "91d75dfcccdcae868255f2933034ed5f538bf2e8"
- },
- "UNKNOWN_324.jpg": {
-  "page_url": "https://zockbar.ch/products/desert-strike-return-to-the-gulf",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/desert-strike-gameboy.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Desert Strike: Return to the Gulf",
-  "collection": "game-boy",
-  "original_name": "zockbar-desert-strike-return-to-the-gulf.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "1d658c585680c20b5fb106ff372520dc07e65c71"
- },
- "UNKNOWN_325.jpg": {
-  "page_url": "https://zockbar.ch/products/die-schluempfe-im-alptraumland",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Die-Schluempfe-im-Alptraumland_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Die Schlümpfe im Alptraumland",
-  "collection": "game-boy",
-  "original_name": "zockbar-die-schluempfe-im-alptraumland.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "4d3f977a27c1825e2e16cda1381a8d8d74c0abce"
  },
  "UNKNOWN_326.jpg": {
   "page_url": "https://zockbar.ch/products/donkey-kong-country-gba",
@@ -129,56 +59,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "bf32a393bad29ae964b45c7a6cee8dbe4bae26c0"
  },
- "UNKNOWN_329.jpg": {
-  "page_url": "https://zockbar.ch/products/fifa-96",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-96_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Fifa 96",
-  "collection": "game-boy",
-  "original_name": "zockbar-fifa-96.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "22841fd9d4f0d84e09bc74864621f601d493e2c6"
- },
- "UNKNOWN_330.jpg": {
-  "page_url": "https://zockbar.ch/products/fifa-soccer-96",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fifa-Soccer-96_GB.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "FIFA Soccer 96",
-  "collection": "game-boy",
-  "original_name": "zockbar-fifa-soccer-96.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "9c29a27c784ba6b666cd5b3a9fc94da72b8e3893"
- },
- "UNKNOWN_331.jpg": {
-  "page_url": "https://zockbar.ch/products/fire-fight",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Fire-Figher_GB.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Fire Fighter",
-  "collection": "game-boy",
-  "original_name": "zockbar-fire-fight.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "ca1f4bb3a4808a91c5f9e73cb4916e246aa66f04"
- },
- "UNKNOWN_333.jpg": {
-  "page_url": "https://zockbar.ch/products/frogger",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/frogger-gameboy-color-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Frogger",
-  "collection": "game-boy",
-  "original_name": "zockbar-frogger.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "10b0ca065ad08423cf4825abde1bee846e687a87"
- },
- "UNKNOWN_335.jpg": {
-  "page_url": "https://zockbar.ch/products/game-watch-gallery",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Game-_-Watch-Gallery_GB_gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Game & Watch Gallery",
-  "collection": "game-boy",
-  "original_name": "zockbar-game-watch-gallery.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "217acce997d4b458415967b91ba0f19d10bb7dce"
- },
  "UNKNOWN_336.jpg": {
   "page_url": "https://zockbar.ch/products/gargoyles-quest",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/gargoyles-quest-gb-gut.jpg",
@@ -198,36 +78,6 @@
   "original_name": "zockbar-george-foremans-ko-boxing-1.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "7f887600bde17866dcd4d9b8fe8e7e7279cd32bf"
- },
- "UNKNOWN_340.jpg": {
-  "page_url": "https://zockbar.ch/products/godzilla",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/godzilla-gb-gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Godzilla",
-  "collection": "game-boy",
-  "original_name": "zockbar-godzilla.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "e9a1ea364a9598a3b69f13ed261e428374a0cc4b"
- },
- "UNKNOWN_341.jpg": {
-  "page_url": "https://zockbar.ch/products/guilty-gear-x-advance-edition",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Guilty-Gear-X-Advance-Edition_GBA.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Guilty Gear X Advance Edition",
-  "collection": "game-boy-advance",
-  "original_name": "zockbar-guilty-gear-x-advance-edition.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "907108d5d0056d38ce76975cccac9ad48b09b8fd"
- },
- "UNKNOWN_343.jpg": {
-  "page_url": "https://zockbar.ch/products/hugo-2",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Hugo-2_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Hugo 2",
-  "collection": "game-boy",
-  "original_name": "zockbar-hugo-2.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "68065e8eab1ad6df8815dc4746257bfdbc542e8c"
  },
  "UNKNOWN_345.jpg": {
   "page_url": "https://zockbar.ch/products/jurassic-park-3-park-builder",
@@ -259,16 +109,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "d1b4d6b435001db71240bb99aff562f8240255d9"
  },
- "UNKNOWN_348.jpg": {
-  "page_url": "https://zockbar.ch/products/lady-sia",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lady-sia-gba-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Lady Sia",
-  "collection": "game-boy-advance",
-  "original_name": "zockbar-lady-sia.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "1fe5e63565fb521ed5d2a46ae6d57382cc6603d3"
- },
  "UNKNOWN_350.jpg": {
   "page_url": "https://zockbar.ch/products/mat-hoffmans-pro-bmx-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mat-Hoffmans-Pro-BMX-2_GBA.jpg",
@@ -289,66 +129,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "5eff0cec1e2457eb8e385d4729e2069ec9487e2d"
  },
- "UNKNOWN_352.jpg": {
-  "page_url": "https://zockbar.ch/products/monster-truck-wars",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Monster-Truck-Wars_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Monster Truck Wars",
-  "collection": "game-boy",
-  "original_name": "zockbar-monster-truck-wars.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "ab60f4d4f2856b772e70bb35adbd9e1a00549aba"
- },
- "UNKNOWN_353.jpg": {
-  "page_url": "https://zockbar.ch/products/mortal-kombat-4",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mortal-Kombat-2_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Mortal Kombat 2",
-  "collection": "game-boy",
-  "original_name": "zockbar-mortal-kombat-4.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "ae950b19d4d591433c001f0190973f79f35ca5ec"
- },
- "UNKNOWN_354.jpg": {
-  "page_url": "https://zockbar.ch/products/mortal-kombat-6",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mortal-Kombat_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Mortal Kombat",
-  "collection": "game-boy",
-  "original_name": "zockbar-mortal-kombat-6.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "68c10e4848cb992d6aeed67144b93df115212884"
- },
- "UNKNOWN_356.jpg": {
-  "page_url": "https://zockbar.ch/products/nba-live-96",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/nba-live-96-gb-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "NBA Live 96",
-  "collection": "game-boy",
-  "original_name": "zockbar-nba-live-96.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "48a737db51e66d6fc6b28baf0b74aa98627171c2"
- },
- "UNKNOWN_358.jpg": {
-  "page_url": "https://zockbar.ch/products/nhl-96",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/NHL-96_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "NHL 96",
-  "collection": "game-boy",
-  "original_name": "zockbar-nhl-96.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "2f2e7c43111866492e6359aae01d8c710075e73c"
- },
- "UNKNOWN_359.jpg": {
-  "page_url": "https://zockbar.ch/products/nhl-hockey-95",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/NHL-Hockey-95_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "NHL Hockey 95",
-  "collection": "game-boy",
-  "original_name": "zockbar-nhl-hockey-95.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "db42614b353a4859b374866661ab65b5612e054e"
- },
  "UNKNOWN_361.jpg": {
   "page_url": "https://zockbar.ch/products/othello",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Orthello_GB.jpg",
@@ -358,46 +138,6 @@
   "original_name": "zockbar-othello.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "005fe543ae912092c86a10c51fa4fa2fa4398ebd"
- },
- "UNKNOWN_362.jpg": {
-  "page_url": "https://zockbar.ch/products/pang",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Pang_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Pang",
-  "collection": "game-boy",
-  "original_name": "zockbar-pang.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "bc17d07b43406ca071857d5c2563ee22303ab728"
- },
- "UNKNOWN_365.jpg": {
-  "page_url": "https://zockbar.ch/products/power-rangers-1",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/power-rangers-gb-gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Power Rangers",
-  "collection": "game-boy",
-  "original_name": "zockbar-power-rangers-1.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "f4a304548836da41f3d8ce71015b629c755803be"
- },
- "UNKNOWN_367.jpg": {
-  "page_url": "https://zockbar.ch/products/prehistorik-man",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Prehistorik-Man_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Prehistorik Man",
-  "collection": "game-boy",
-  "original_name": "zockbar-prehistorik-man.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "1ad79791c917703891275e4bd62b48d1b28985df"
- },
- "UNKNOWN_369.jpg": {
-  "page_url": "https://zockbar.ch/products/race-days",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Race-Days_GB_gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Race Days",
-  "collection": "game-boy",
-  "original_name": "zockbar-race-days.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "ba053b16f6cf6f3409962e9273453d8a8031c7ca"
  },
  "UNKNOWN_370.jpg": {
   "page_url": "https://zockbar.ch/products/rescue-of-princess-blobette",
@@ -419,16 +159,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "8cafccc8b687fce21fd478d333441f2b75f0e3e2"
  },
- "UNKNOWN_373.jpg": {
-  "page_url": "https://zockbar.ch/products/spider-man-x-men",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spider-Man-X-Men_GB_stark_gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Spider-Man and the X-Men in Arcade's Revenge",
-  "collection": "game-boy",
-  "original_name": "zockbar-spider-man-x-men.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "33898caff64d26f90758ecbc5626ea981092d0ed"
- },
  "UNKNOWN_375.jpg": {
   "page_url": "https://zockbar.ch/products/spyro-adventure",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spyro-Adventure_GBA.jpg",
@@ -440,16 +170,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "57fe8d08bf402d7fd53313a82e973c497ce60da9"
  },
- "UNKNOWN_376.jpg": {
-  "page_url": "https://zockbar.ch/products/stargate-1",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Stargate_GB.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Stargate",
-  "collection": "game-boy",
-  "original_name": "zockbar-stargate-1.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "59a26343ec62f6e2bbd8bea1a1067ed123794dfa"
- },
  "UNKNOWN_378.jpg": {
   "page_url": "https://zockbar.ch/products/super-rc-pro-am",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/super-rc-pro-am-gb-gut.jpg",
@@ -459,16 +179,6 @@
   "original_name": "zockbar-super-rc-pro-am.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "c307fe34250febb342019b73fb383539b1ab651b"
- },
- "UNKNOWN_379.jpg": {
-  "page_url": "https://zockbar.ch/products/superman",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/superman-gb-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Superman",
-  "collection": "game-boy",
-  "original_name": "zockbar-superman.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "1007a11a28aa299eed57f41fe4d508644342b95d"
  },
  "UNKNOWN_380.jpg": {
   "page_url": "https://zockbar.ch/products/tetris-blast",
@@ -510,36 +220,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "ab5e8877129209dd45216ce6cf6a5480ad00161b"
  },
- "UNKNOWN_385.jpg": {
-  "page_url": "https://zockbar.ch/products/v-rally",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/v-rally-gameboy-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "V-Rally",
-  "collection": "game-boy",
-  "original_name": "zockbar-v-rally.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "de8cc932bfca766158149503fccfa378c79403c3"
- },
- "UNKNOWN_387.jpg": {
-  "page_url": "https://zockbar.ch/products/wario-land-2",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wario-land-2-gameboy-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Wario Land 2",
-  "collection": "game-boy",
-  "original_name": "zockbar-wario-land-2.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "bfd9891c1b80f467de7dc0d16c473fcca434744b"
- },
- "UNKNOWN_388.jpg": {
-  "page_url": "https://zockbar.ch/products/winter-gold",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/winter-gold-gameboy-gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Winter Gold",
-  "collection": "game-boy",
-  "original_name": "zockbar-winter-gold.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "d9445338c67ed7083721c7a0b95aaaf19d1c985b"
- },
  "UNKNOWN_389.jpg": {
   "page_url": "https://zockbar.ch/products/winx-club",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Winx-Club_GBA.jpg",
@@ -559,15 +239,5 @@
   "original_name": "zockbar-wizards-warriors-x-fortress-of-fear.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "6d8fbb9c4dccd67e017401c3612053dac37781fc"
- },
- "UNKNOWN_391.jpg": {
-  "page_url": "https://zockbar.ch/products/wwf-raw",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wwf-raw-gameboy-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "WWF Raw",
-  "collection": "game-boy",
-  "original_name": "zockbar-wwf-raw.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "4e16743b532b234c8c3a6bed5fbcd470193a8c6b"
  }
 }

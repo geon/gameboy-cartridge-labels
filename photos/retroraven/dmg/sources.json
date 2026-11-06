@@ -1561,6 +1561,17 @@
   "sha1": "86982fe49964d6c755f665a0703fe58d00cc572a",
   "serial_on_label": "DMG-HM-USA"
  },
+ "DMG-HQ.jpg": {
+  "page_url": "https://retroravengames.com/products/chase-h-q-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Chase_HQ.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Chase H.Q. - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-chase-h-q-game-boy-classic.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (near); was UNKNOWN_126",
+  "sha1": "ce561ab3fda5e2733ca87c2fe854cdfe51e37ada",
+  "serial_on_label": "DMG-HQ"
+ },
  "DMG-HW-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/hudson-hawk-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/hudsonhawk_00d71196-6da7-4b85-8c61-24b6f4a5fd54.jpg",
@@ -1869,6 +1880,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "831e03475fd4ea227617321ad32b2c5f5d26f999"
  },
+ "DMG-NU-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/star-trek-the-next-generation-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/startrekTNG.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Star Trek: The Next Generation - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-star-trek-the-next-generation-game-boy-classic.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_261",
+  "sha1": "dd5f3b58e24ff0c075019c5d470af983b23571b7",
+  "serial_on_label": "DMG-NU-USA"
+ },
  "DMG-OS-USA-1.jpg": {
   "page_url": "https://retroravengames.com/products/final-fantasy-legend-iii-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/fflegends3.jpg",
@@ -1956,6 +1978,17 @@
   "serial_on_label": "DMG-QP-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "f1e75c77c493d41d1c9648b1d0dc17583cd856fb"
+ },
+ "DMG-QX-USA_3.jpg": {
+  "page_url": "https://retroravengames.com/products/qix-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/qix_f0418713-ff4b-4d9d-880c-38268a65b8c5.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Qix - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-qix-game-boy-classic.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_241",
+  "sha1": "dfe574f328fe03548d244a2bdcdba4123a0002ff",
+  "serial_on_label": "DMG-QX-USA"
  },
  "DMG-R7-USA.jpg": {
   "page_url": "https://retroravengames.com/products/battletoads-in-ragnaroks-world-game-boy-classic",
@@ -2330,6 +2363,17 @@
   "serial_on_label": "DMG-WS-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "424f384cbf7c5682d5dd022a5a27651ebb4ba300"
+ },
+ "DMG-XB.jpg": {
+  "page_url": "https://retroravengames.com/products/muhammad-ali-heavyweight-boxing-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/muhammadaliheavyweightboxing.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Muhammad Ali Heavyweight Boxing - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-muhammad-ali-heavyweight-boxing-game-boy-classic.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_212",
+  "sha1": "6f0882b043963cea824be2b6f3cd6b0e5884a658",
+  "serial_on_label": "DMG-XB"
  },
  "DMG-XP-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ferrari-grand-prix-challenge-game-boy-classic",

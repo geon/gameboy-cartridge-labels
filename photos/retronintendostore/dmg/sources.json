@@ -21,6 +21,28 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "eec890c9968a95c17bce2f0022b011b5994f4119"
  },
+ "DMG-A8NP-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/nba-jam",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459484577.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "NBA Jam",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459484577.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_92",
+  "sha1": "baf809bfcadc5f1f249d3ee1bc52e9d5339b04f5",
+  "serial_on_label": "DMG-A8NP-EUR"
+ },
+ "DMG-A8WP-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/fifa-road-to-world-cup-98",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459486605.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "World Cup 98",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459486605.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_96",
+  "sha1": "53b11b662f08fde5343370d5f7cf9d39e94452a5",
+  "serial_on_label": "DMG-A8WP-EUR"
+ },
  "DMG-AA7E-USA_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/720",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351463119.jpg",
@@ -807,6 +829,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "36f6459d8e25d38f3ac3eb34f15d20243d781992"
  },
+ "DMG-ED-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/tiny-toon-wacky-sports",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351481111.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Tiny Toon Wacky Sports",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351481111.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_83",
+  "sha1": "a57aef190d80d003e036584df3f93c4e5eff1856",
+  "serial_on_label": "DMG-ED-EUR"
+ },
  "DMG-EH-FAH.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/tetris-2-budget",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000171220.jpg",
@@ -949,6 +982,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d988ed14dab39ca236963dca40468ada772aa430"
  },
+ "DMG-GQ-NOE.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/adventure-island-ii",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459459980.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Adventure Island II",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459459980.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_91",
+  "sha1": "266b8ee35b5794994d66c74ed5f8a5f3ab5246cc",
+  "serial_on_label": "DMG-GQ-NOE"
+ },
  "DMG-GQ-USA_3.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/adventure-island-ii-aliens-in-paradise",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2412678014.jpg",
@@ -981,6 +1025,17 @@
   "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_84",
   "sha1": "6b6e68582ccb9400b3bfcf606d518a945297e80e",
   "serial_on_label": "DMG-GS-FAH"
+ },
+ "DMG-GZ-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/godzilla",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351472877.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Godzilla",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351472877.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_80",
+  "sha1": "94e1216b018072e138ba218fdef6ac056cdf4a3f",
+  "serial_on_label": "DMG-GZ-EUR"
  },
  "DMG-H2-USA_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/nba-all-star-challenge-2",
@@ -1265,6 +1320,17 @@
   "original_name": "retronintendostore-2105305113.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "4fc0ae98714694ace785fcdef7d7e123bae12b62"
+ },
+ "DMG-NM-ITA.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/nemesis",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459484589.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Nemesis",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459484589.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_93",
+  "sha1": "59152c56335cd2f852d41f2ca68d945b5a3b5d74",
+  "serial_on_label": "DMG-NM-ITA"
  },
  "DMG-NT-FAH.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/turtles-fall-of-the-foot-clan-german-budget",
@@ -1769,6 +1835,17 @@
   "serial_on_label": "DMG-WW",
   "note": "named by the serial read on it (exact)",
   "sha1": "fdd6775c915fc376f375f2d8f2933c015a8a6912"
+ },
+ "DMG-XG-FAH.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/spider-man-x-men",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459485705.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Spider-Man X-Men",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459485705.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_94",
+  "sha1": "2aaefcab292c89967ab5dd7fc47536aeb5a3ef1d",
+  "serial_on_label": "DMG-XG-FAH"
  },
  "DMG-XP-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/ferrari-grand-prix-challenge",

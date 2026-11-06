@@ -274,6 +274,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "bb8028ff144d6a1140bd708f14b945160bcd866c"
  },
+ "AGB-AGXP.jpg": {
+  "page_url": "https://zockbar.ch/products/guilty-gear-x-advance-edition",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Guilty-Gear-X-Advance-Edition_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Guilty Gear X Advance Edition",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-guilty-gear-x-advance-edition.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_341",
+  "sha1": "907108d5d0056d38ce76975cccac9ad48b09b8fd",
+  "serial_on_label": "AGB-AGXP"
+ },
  "AGB-AH8P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/hot-wheels-velocity-x-gba",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/hot-wheels-velocity-x-gba-gut.jpg",
@@ -361,6 +372,17 @@
   "serial_on_label": "AGB-ALBP",
   "note": "named by the serial read on it (exact)",
   "sha1": "d282d1cd80f3e74b11e94aa3ecb1dcf03b81d170"
+ },
+ "AGB-ALDE.jpg": {
+  "page_url": "https://zockbar.ch/products/lady-sia",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lady-sia-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Lady Sia",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-lady-sia.jpg",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (near); was UNKNOWN_348",
+  "sha1": "1fe5e63565fb521ed5d2a46ae6d57382cc6603d3",
+  "serial_on_label": "AGB-ALDE"
  },
  "AGB-ALGP.jpg": {
   "page_url": "https://zockbar.ch/products/dragon-ball-z-das-erbe-von-goku",
