@@ -810,6 +810,12 @@
   "sha1": "8d95e0ee8c7a7cfb4b56b921af0b90633e5ceea3",
   "original_name": "image_6903e58b-cca7-40a6-a16c-a70a51a86c00.webp"
  },
+ "DMG-MC-USA-1.jpg": {
+  "serial_on_label": "DMG-MC-USA-1",
+  "original_sha1": "352d40ec397dfa3894f4cf3561410f788881851f",
+  "sha1": "791503e1500fc152cdca94b6a81f9274e376532d",
+  "original_name": "image_adfa2a1b-d398-495f-989f-bc8e14b78da7.webp"
+ },
  "DMG-ME-USA.jpg": {
   "serial_on_label": "DMG-ME-USA",
   "original_sha1": "45a07cbac688b2a41ec8b3bc90b6d43544a3e452",
