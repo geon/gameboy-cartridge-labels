@@ -5,17 +5,23 @@ import glob, hashlib, json, os, re, shutil, sys
 # - source: where the photos came from (my-collection: my own; google: saved from Google image searches; the others
 #   named after a site or seller), the subfolder of save-new-images-here/ they were dropped off in (src/add_photos.py).
 # - system: dmg, cgb, agb, lrg (Limited Run Games' unlicensed releases, LRG-AP-USA), or unknown, from the serial.
-# - serial: the serial printed on the label (DMG-ADQJ-JPN), else the release id it's known by (DMG-ADQJ), or UNKNOWN;
-#   parentheses only where the label prints them (AGB-U3IJ-JPN(A));
+# - serial: THE SERIAL PRINTED ON THE LABEL, EXACTLY AS PRINTED, OR UNKNOWN. Nothing else, ever:
+#     - all of it as printed: DMG-A2JE-USA (Jurassic Park 2), never DMG-A2JE; DMG-A2J (Shounen Ashibe) only because its
+#       label prints no region; a revision as printed (DMG-AG-NOE-1); parentheses only where printed (AGB-U3IJ-JPN(A));
+#     - NEVER a release id, a game id, a stem or any other short form of the serial (DMG-A2JE, DMG-A2J+), not even
+#       when gb-game-list only lists that form: gb-game-list's ids are keys in its data, not what's printed;
+#     - NEVER the serial of the release a photo was searched for or listed as: only what its label shows;
+#     - if the serial can't be read on the photo, UNKNOWN, until someone reads it.
+#   Designs (src/designs.py) and releases are worked out from these names; they are never written into them.
 # - note: what sets the release apart but isn't printed on the label, in square brackets (DMG-ATAJ-JPN[PINK]: the pink
 #   cartridge bundled with a pink Game Boy Pocket; DMG-TRA[MINUET]); a photo with a note is a release of its own
 #   (serials.release_key);
 # - a number only when several photos have the same serial and note: the first has none, the next ones _2, _3...
 # - ext: the format the photo came in (jpg, png, webp, avif, heic), never re-encoded.
-# The file names are the truth: to identify a photo, or correct one, rename it (e.g. UNKNOWN_5.jpg -> DMG-A8-JPN.jpg),
-# in whichever folder of its source; spaces become "-" (parentheses and square brackets are kept), and lower-case serials upper case. reconcile() (run by
-# add-photos, or as photos.py reconcile) then finds its entry by its SHA-1, moves it to its system's folder, and numbers
-# it if its name is taken.
+# The file names are the truth: to identify a photo, or correct one, rename it to the serial printed on its label (e.g.
+# UNKNOWN_5.jpg -> DMG-A8-JPN.jpg), in whichever folder of its source; spaces become "-" (parentheses and square
+# brackets are kept), and lower-case serials upper case. reconcile() (run by add-photos, or as photos.py reconcile) then
+# finds its entry by its SHA-1, moves it to its system's folder, and numbers it if its name is taken.
 # Usage: photos.py reconcile
 ROOT = "photos"
 SYSTEMS = ("dmg", "cgb", "agb", "lrg", "unknown")
