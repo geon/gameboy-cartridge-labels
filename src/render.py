@@ -2,11 +2,11 @@ import concurrent.futures, hashlib, io, json, os, re, sys, cv2, numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import color, fits, photos, serials
+import color, designs, fits, photos
 from cartridge import SHELLS, project, shell_of
 from fit_cartridge import load
 
-# render-labels and render-carts: one image per release, straightened (perspective removed through its fits), as AVIF;
+# render-labels and render-carts: one image per design (src/designs.py: by default a release), straightened (perspective removed through its fits), as AVIF;
 # the labels with their colors set by the photo's own settings (src/color.py; colors.json, make fit-colors, make
 # adjust-colors), the carts with the photo's colors as they are (the canonical images: the settings can be applied to
 # them when shown, and they don't go stale when the settings change; clipping can't be undone):
@@ -58,9 +58,11 @@ SCALE = {"labels": LABEL_PX_PER_MM, "labels-high-resolution": LABEL_HIGH_PX_PER_
 def chosen(kind):
     """Each release's photo to render for kind (labels or carts): release id -> (stem, path, sha1, shell name, plastic and
     label homographies, color settings; the label and the settings None for carts)."""
-    release_of, known, preferred, colors = serials.releases_by_serial(), fits.load(), photos.load_preferred(), color.load_colors()
+    known, colors, by_design = fits.load(), color.load_colors(), designs.Designs()
+    all_photos = list(photos.all_sources())
+    preferred = designs.preferred({e["sha1"]: by_design.key(name) for _, _, name, e in all_photos if e.get("sha1")})
     candidates = {}
-    for source, system, name, entry in photos.all_sources():
+    for source, system, name, entry in all_photos:
         if source in photos.FAKES:
             continue
         stem, sha1 = photos.stem(name), entry.get("sha1")
@@ -68,7 +70,7 @@ def chosen(kind):
         if not fits.good(fit.get("plastic")) or kind in SCALE and not fits.good(fit.get("label")):
             continue
         serial = photos.serial_of(name)
-        release = serials.release_key(name, release_of)[0]
+        release = by_design.key(name)
         candidates.setdefault(release, []).append((preferred.get(release) != sha1, photos.rank(source), name, stem,
                                                    os.path.join(photos.ROOT, source, system, name), sha1, shell_of(serial).name,
                                                    fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind in SCALE else None,

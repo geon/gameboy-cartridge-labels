@@ -1,24 +1,24 @@
-import hashlib, json, os, re, sys, threading, urllib.parse, cv2
+import hashlib, json, os, sys, threading, urllib.parse, cv2
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import fits, photos, render, serials
+import designs, fits, photos, render
 from cartridge import shell_of
 from fit_cartridge import load
 
-# find-doubles: a local page listing every photo in photos/, one release per row (the release its serial is filed
-# under in gb-game-list, the region dropped if gb-game-list lacks it; else the serial itself), its photos sorted by
+# find-doubles: a local page listing every photo in photos/, one design per row (src/designs.py: by default the release
+# its serial is filed under in gb-game-list, the region dropped if gb-game-list lacks it; else the serial itself; split
+# and joined in review-designs), its photos sorted by
 # their source's quality (photos.SOURCES, best first), each marked with an orange check if its plastic is fitted (accepted or
 # placed by hand), a green one if its label is too. Each photo can be deleted (photos.delete), its fits with it, or
 # renamed to a corrected serial (photos.rename: tidied, numbered if taken, moved to its system's folder), its fits
-# following it. Clicking a photo makes it its release's preferred one (clicking it again unmakes it), saved in
-# preferred.json: release id -> the photo's SHA-1, so a renamed photo stays preferred; an entry whose photo is no longer
-# in its release (deleted, or renamed to another serial) is dropped on the next save. The fakes (photos.FAKES) are left
+# following it. Clicking a photo makes it its design's preferred one (clicking it again unmakes it), saved in
+# preferred.json: design -> the photo's SHA-1, so a renamed photo stays preferred, and a design split or joined keeps it
+# (designs.preferred); an entry whose photo is gone is dropped on the next save. The fakes (photos.FAKES) are left
 # out: never worth preferring. The preferred photo comes first. A photo whose plastic fit is accepted or placed by hand
-# is shown cropped to it, as render-carts renders it. A release whose photos are of several regions can be split by
-# region (split-by-region.tsv: each region a release of its own, serials.release_key), or its regions joined again.
-# The rows can be narrowed to the releases with several photos (one and one from otakaraou count as one: photos.only), and to those with no preferred photo (a release given
-# one stays shown until the rows are drawn again).
+# is shown cropped to it, as render-carts renders it.
+# The rows can be narrowed to the designs with several photos (one and one from otakaraou count as one: photos.only),
+# and to those with no preferred photo (a design given one stays shown until the rows are drawn again).
 # Usage: find_doubles.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
 lock = threading.Lock()
@@ -48,23 +48,16 @@ def image(path, longest):
 
 
 def rows():
-    """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred",
-    "version": its image's (image)}],
-    "single": whether it counts as having one photo (photos.only)}], by release, the preferred photo first, then by source."""
-    release_of = serials.releases_by_serial()
-    known, preferred = fits.load(), photos.load_preferred()
+    """[{"release": the design, "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label",
+    "preferred", "version": its image's (image)}], "single": whether it counts as having one photo (photos.only)}], by
+    design, the preferred photo first, then by source."""
+    known, by_design = fits.load(), designs.Designs()
+    listed = [(source, system, name, entry, *by_design.design_of(name)) for source, system, name, entry in photos.all_sources()
+              if source not in photos.FAKES]
+    preferred = designs.preferred({entry["sha1"]: key for _, _, _, entry, key, _, _ in listed if entry.get("sha1")})
     found = {}
-    for source, system, name, entry in photos.all_sources():
-        if source in photos.FAKES:
-            continue
-        key, release = serials.release_key(name, release_of)
-        # The release in gb-game-list the row can be split by region from or joined into ("id"): the photos of it, without
-        # a note or prefix.
-        plain = release["id"] if release and re.fullmatch(re.escape(release["id"]) + r"(-[A-Z]{3})?", key) else None
-        row = found.setdefault(key, {"release": key, "title": release["title"] if release else "(not in gb-game-list)", "photos": [],
-                                     "id": plain, "split": plain in serials.SPLIT, "regions": set()})
-        if region := re.search(r"-([A-Z]{3})(?:-[0-9])?$", photos.unprefixed(photos.serial_of(name))):
-            row["regions"].add(region.group(1))
+    for source, system, name, entry, key, _, release in listed:
+        row = found.setdefault(key, {"release": key, "title": release["title"] if release else "(not in gb-game-list)", "photos": []})
         fit = fits.of(known, photos.stem(name), entry.get("sha1"))["fit"]
         fitted = "label" if fits.good(fit.get("label")) else "plastic" if fits.good(fit.get("plastic")) else None
         plastic = plastic_of(known, name, entry.get("sha1"))
@@ -75,13 +68,12 @@ def rows():
     for row in found.values():
         row["photos"].sort(key=lambda p: (not p["preferred"], photos.rank(p["source"]), p["path"]))
         row["single"] = photos.only([p["source"] for p in row["photos"]]) is not None
-        row["regions"] = len(row["regions"])
     return [found[k] for k in sorted(found)]
 
 
 def prefer(path):
-    """Makes the photo its release's preferred one, or unmakes it if it is; drops the entries whose photo is no longer
-    in its release. Returns the release and its preferred photo's path (None if none)."""
+    """Makes the photo its design's preferred one, or unmakes it if it is; drops the entries whose photo is gone. Returns
+    the design and its preferred photo's path (None if none)."""
     with lock:
         all_rows = rows()
         row = next(r for r in all_rows if any(p["path"] == path for p in r["photos"]))
@@ -93,26 +85,6 @@ def prefer(path):
             preferred[row["release"]] = photo["sha1"]
         photos.save_preferred(preferred)
         return row["release"], None if photo["preferred"] else path
-
-
-def split(release, title, by_region):
-    """Splits the release (an id in gb-game-list) by region (serials.SPLIT_BY_REGION), or joins its regions again. Its
-    preferred photo stays preferred, in its region's release; joined, the regions' preferred photo stays only if there's
-    one."""
-    with lock:
-        serials.save_split(release, title, by_region)
-        preferred = photos.load_preferred()
-        if by_region and release in preferred:
-            sha1 = preferred.pop(release)
-            for r in rows():
-                if any(p["sha1"] == sha1 for p in r["photos"]):
-                    preferred[r["release"]] = sha1
-        elif not by_region:
-            regions = [k for k in preferred if re.fullmatch(re.escape(release) + r"-[A-Z]{3}", k)]
-            kept = [preferred.pop(k) for k in regions]
-            if len(kept) == 1:
-                preferred[release] = kept[0]
-        photos.save_preferred(preferred)
 
 
 PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Find doubles</title>
@@ -132,8 +104,8 @@ figure.preferred{border-color:#2a6fdb}figure img{cursor:pointer}
 figcaption a{color:inherit}
 button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em}button.delete{color:#b00}
 </style>
-<header><b>Find doubles</b><label><input type="checkbox" id="doubles"> only releases with several photos</label>
-<label><input type="checkbox" id="unpreferred"> only releases with no preferred photo</label>
+<header><b>Find doubles</b><label><input type="checkbox" id="doubles"> only designs with several photos</label>
+<label><input type="checkbox" id="unpreferred"> only designs with no preferred photo</label>
 <span><span class="check plastic" style="position:static;display:inline-block">✓</span> plastic fitted
 <span class="check label" style="position:static;display:inline-block">✓</span> label fitted</span>
 <span>click a photo to prefer it</span><span id="count"></span></header>
@@ -144,23 +116,15 @@ const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&g
 let rows = [];
 function render() {
   const shown = rows.filter(r => (!$("doubles").checked || !r.single) && (!$("unpreferred").checked || !r.photos.some(p => p.preferred)));
-  $("count").textContent = `${shown.length} releases, ${shown.reduce((n, r) => n + r.photos.length, 0)} photos`;
-  const splitting = r => r.split ? `<br><button data-action="join" data-release="${esc(r.id)}">Join regions</button>`
-    : r.id && r.regions > 1 ? `<br><button data-action="split" data-release="${esc(r.id)}" data-title="${esc(r.title)}">Split by region</button>` : "";
-  $("rows").innerHTML = shown.map(r => `<div class="row" data-release="${esc(r.release)}"><div class="release"><b>${esc(r.release)}</b><span>${esc(r.title)}</span>${splitting(r)}</div><div class="photos">` +
+  $("count").textContent = `${shown.length} designs, ${shown.reduce((n, r) => n + r.photos.length, 0)} photos`;
+  $("rows").innerHTML = shown.map(r => `<div class="row" data-release="${esc(r.release)}"><div class="release"><b>${esc(r.release)}</b><span>${esc(r.title)}</span></div><div class="photos">` +
     r.photos.map(p => `<figure data-path="${esc(p.path)}"${p.preferred ? ' class="preferred"' : ""}>${p.fitted ? `<span class="check ${p.fitted}" title="${p.fitted} fitted">✓</span>` : ""}` +
       `<img loading="lazy" data-action="prefer" data-path="${esc(p.path)}" src="/image?size=1000&v=${p.version}&path=${encodeURIComponent(p.path)}" alt="">` +
       `<figcaption title="${esc(p.path)}">${esc(p.source)} · <a href="/image?size=1600&v=${p.version}&path=${encodeURIComponent(p.path)}" target="_blank">open</a><br>${esc(p.path.split("/").pop())}</figcaption>` +
       `<button data-action="rename" data-path="${esc(p.path)}">Rename</button> <button class="delete" data-action="delete" data-path="${esc(p.path)}">Delete</button></figure>`).join("") + `</div></div>`).join("");
 }
 $("rows").onclick = async e => {
-  const {action, path, release, title} = e.target.dataset || {};
-  if (action === "split" || action === "join") {
-    const response = await fetch("/split", {method: "POST", body: JSON.stringify({release, title, split: action === "split"})});
-    if (!response.ok) return alert("Not saved: " + await response.text());
-    rows = await (await fetch("/rows")).json();
-    return render();
-  }
+  const {action, path} = e.target.dataset || {};
   if (action === "rename") return rename(path);
   if (action === "prefer") return prefer(path);
   if (action !== "delete" || !confirm(`Delete ${path} from photos/?`)) return;
@@ -231,15 +195,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(404)
 
     def do_POST(self):
-        if self.path not in ("/delete", "/rename", "/prefer", "/split"):
+        if self.path not in ("/delete", "/rename", "/prefer"):
             return self.send_error(404)
         data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-        if self.path == "/split":
-            if not re.fullmatch(r"(DMG|CGB|AGB)-[A-Z0-9]{1,5}", data.get("release", "")):
-                return self.send(b"not a release id", "text/plain", 400)
-            split(data["release"], data.get("title", ""), bool(data["split"]))
-            print(f"{data['release']}: {'split by region' if data['split'] else 'regions joined'}", flush=True)
-            return self.send({})
         path = data["path"]
         if not is_photo(path):
             return self.send(b"not a photo in photos/", "text/plain", 400)

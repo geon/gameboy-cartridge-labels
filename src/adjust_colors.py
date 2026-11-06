@@ -2,13 +2,13 @@ import json, os, sys, threading, urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import color, photos, serials
+import color, designs, photos
 from fit_colors import LABELS, candidates
 from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: black, white,
-# midtones, temperature, tint), release by release, its photos' labels side by side, so that they can be made to match; the
-# reference sources' (color.REFERENCES: lit alike, what the others are matched to) with a blue border, the release's preferred
+# midtones, temperature, tint), design by design (src/designs.py), its photos' labels side by side, so that they can be made to match; the
+# reference sources' (color.REFERENCES: lit alike, what the others are matched to) with a blue border, the design's preferred
 # photo (preferred.json, chosen in find-doubles: the one render-labels uses if its label is good) first, with a check
 # mark, the others by their source's rank. Each label is shown as
 # render-labels makes it (its image from make fit-colors, with its settings applied as color.adjusted does), and
@@ -28,10 +28,11 @@ class Adjust:
         found = candidates()
         self.source = {stem: f[0] for stem, f in found.items() if os.path.exists(os.path.join(LABELS, stem + ".png"))}
         self.sha1 = {stem: found[stem][2] for stem in self.source}
-        release_of = serials.releases_by_serial()
-        self.photos = {}
+        by_design = designs.Designs()
+        self.photos, self.design = {}, {}  # design -> its photos; photo -> its design
         for stem in sorted(self.source, key=lambda s: (photos.rank(self.source[s]), s)):
-            self.photos.setdefault(serials.release_key(stem, release_of)[0], []).append(stem)
+            self.design[stem] = by_design.key(stem)
+            self.photos.setdefault(self.design[stem], []).append(stem)
         self.order = sorted(self.photos, key=lambda r: (-len(self.photos[r]), r))
         self.lock = threading.Lock()
         colors = color.load_colors()
@@ -56,7 +57,8 @@ class Adjust:
     def page(self, filters, number):
         chosen = matching(self.order, self.facets, filters)
         colors = color.load_colors()
-        preferred = photos.load_preferred()  # read afresh: find-doubles may change it meanwhile
+        # Read afresh: find-doubles may change it meanwhile.
+        preferred = designs.preferred({self.sha1[p]: d for p, d in self.design.items()})
         releases = [{"release": r, "photos": [{"name": p, "source": self.source[p], "reference": self.source[p] in color.REFERENCES,
                                                "preferred": preferred.get(r) == self.sha1[p], "settings": self.settings(colors, p)}
                                               for p in sorted(self.photos[r], key=lambda p: preferred.get(r) != self.sha1[p])]}
@@ -102,7 +104,7 @@ button{font:inherit;padding:4px 10px;border:none;border-radius:0.3em}
 <header>
 <span id="filters"></span><span id="count"></span>
 <button id="prev">← prev</button><span id="position"></span><button id="next">next →</button>
-<span style="color:#555">Blue border: a reference source. <span class="preferred">✓</span> the release's preferred photo.</span>
+<span style="color:#555">Blue border: a reference source. <span class="preferred">✓</span> the design's preferred photo.</span>
 </header>
 <main id="entries"></main>
 <script>
@@ -154,11 +156,11 @@ async function show() {
   pages = data.pages;
   if (page >= pages) { page = pages - 1; return show(); }
   setHash({page: page + 1});
-  $("count").textContent = `${data.count} releases`;
+  $("count").textContent = `${data.count} designs`;
   $("position").textContent = `page ${page + 1} / ${pages}`;
   $("entries").innerHTML = data.releases.map(r => `<div class="release"><h2>${esc(r.release)}</h2><div class="row">` + r.photos.map(p => `
     <section data-name="${esc(p.name)}" class="${p.reference ? "reference" : ""}">
-      <div class="top">${p.preferred ? `<span class="preferred" title="the release's preferred photo">✓</span>` : ""}<h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="reset" hidden>Reset</button><button class="undo" hidden>Undo</button></div>
+      <div class="top">${p.preferred ? `<span class="preferred" title="the design's preferred photo">✓</span>` : ""}<h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="reset" hidden>Reset</button><button class="undo" hidden>Undo</button></div>
       <canvas width="200" height="174"></canvas>
       ${NAMES.map(n => `<label class="slider"><span>${n}</span><input type="range" name="${n}" min="${RANGES[n][0]}" max="${RANGES[n][1]}" step="${RANGES[n][2]}"><span data-value="${n}"></span></label>`).join("")}
     </section>`).join("") + "</div></div>").join("");

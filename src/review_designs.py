@@ -1,0 +1,387 @@
+import json, os, sys, threading, urllib.parse
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import designs, fits, photos
+from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
+
+# review-designs: a local page for telling the photos' label designs apart (src/designs.py, designs.json), from how
+# alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
+# placed by hand, with a current label image from make fit-colors). Three lists:
+#   - Alike across designs: the photos of different designs, with different serials, whose labels score at least
+#     THRESHOLD, and those joined through them (A+B, B+C and C+D make A+B+C+D), by best score. "Same design" makes their
+#     designs one (designs.merged); "Different designs" keeps them apart (variants of a game: Pokémon Gold and Silver),
+#     saved as reviewed pairs ("distinct"), hidden with the reviewed; "Not reviewed" undoes that.
+#   - Unalike within a design: the designs whose compared photos fall into separate groups (joined by pairs scoring at
+#     least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where it
+#     shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for. "One design"
+#     keeps it whole ("whole": as long as its compared photos are those); "Not reviewed" undoes that.
+#   - Designs listed: each design in designs.json, with the others of its releases (a family: the designs sharing a
+#     release), their photos by serial. A serial can be split off into a design of its own, a design joined with another
+#     of its family, or dissolved (its serials back to their releases' designs).
+# Each photo can be renamed to a corrected serial (photos.rename, as find-doubles does), its fits following it.
+# Usage: review_designs.py [port]
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8772
+lock = threading.Lock()
+
+
+def union(pairs):
+    """Each item's group (item -> a representative) of the items joined through pairs."""
+    parent = {}
+
+    def root(s):
+        while parent.setdefault(s, s) != s:
+            parent[s] = parent[parent[s]]
+            s = parent[s]
+        return s
+    for a, b in pairs:
+        parent[root(a)] = root(b)
+    return {s: root(s) for s in parent}
+
+
+def groups_of(items, pairs):
+    of = union(pairs)
+    found = {}
+    for x in items:
+        found.setdefault(of.get(x, x), []).append(x)
+    return list(found.values())
+
+
+class Review:
+    def __init__(self):
+        self.current, stale = compared_photos()
+        if stale:
+            print(f"{len(stale)} photos with a good label but no current label image, left out: run make fit-colors first")
+        self.scores = all_scores(self.current)
+        self.shell = {s: shell for shell, (shas, _) in self.scores.items() for s in shas}
+        # The pairs alike: (score, sha1, sha1).
+        self.alike = []
+        for shell, (shas, m) in self.scores.items():
+            for i, j in zip(*((m >= THRESHOLD).nonzero())):
+                if i < j:
+                    self.alike.append((float(m[i, j]), shas[i], shas[j]))
+
+    def photos_now(self):
+        """Every photo but the fakes, as named now: [{"sha1", "path", "name", "design", "release", "title", "part"}]."""
+        by_design = designs.Designs()
+        found = []
+        for source, system, name, entry in photos.all_sources():
+            if source in photos.FAKES or not entry.get("sha1"):
+                continue
+            design, _, release = by_design.design_of(name)
+            found.append({"sha1": entry["sha1"], "path": os.path.join(photos.ROOT, source, system, name), "name": photos.stem(name),
+                          "design": design, "release": release["id"] if release else None, "game": release["gameId"] if release else design,
+                          "title": release["title"] if release else "(not in gb-game-list)", "part": designs.serial_part(name),
+                          "compared": entry["sha1"] in self.current})
+        return found, by_design
+
+    def state(self):
+        listed, by_design = self.photos_now()
+        data = by_design.data
+        info = {p["sha1"]: p for p in listed}
+        score = {}
+        for v, a, b in self.alike:
+            score[(a, b)] = score[(b, a)] = v
+        distinct = {tuple(sorted(p)) for p in data["distinct"]}
+        whole = {tuple(sorted(w)) for w in data["whole"]}
+
+        # Alike across designs.
+        across = [(v, a, b) for v, a, b in self.alike if a in info and b in info and info[a]["design"] != info[b]["design"]
+                  and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])]
+        alike = []
+        for shas in groups_of({s for _, a, b in across for s in (a, b)}, [(a, b) for _, a, b in across]):
+            inside = set(shas)
+            pairs = [(v, a, b) for v, a, b in across if a in inside]
+            best = {}
+            for v, a, b in pairs:
+                for x, y in ((a, b), (b, a)):
+                    if v > best.get(x, (-1, None))[0]:
+                        best[x] = (v, y)
+            reviewed = sum(tuple(sorted((a, b))) in distinct for _, a, b in pairs)
+            alike.append({"score": max(v for v, _, _ in pairs), "shell": self.shell[shas[0]].upper(),
+                          "reviewed": "yes" if reviewed == len(pairs) else "partly" if reviewed else None,
+                          "same game": len({info[x]["game"] for x in shas}) == 1,
+                          "photos": [dict(info[x], best=best[x][0], **{"with": info[best[x][1]]["name"]}) for x in sorted(shas, key=lambda x: info[x]["name"])]})
+        alike.sort(key=lambda c: -c["score"])
+
+        # Unalike within a design.
+        by = {}
+        for p in listed:
+            by.setdefault(p["design"], []).append(p)
+        unalike = []
+        for design, members in sorted(by.items()):
+            compared = [p["sha1"] for p in members if p["compared"]]
+            if len(compared) < 2:
+                continue
+            inside = set(compared)
+            parts = groups_of(compared, [(a, b) for _, a, b in self.alike if a in inside and b in inside])
+            if len(parts) < 2:
+                continue
+            groups = []
+            for g in sorted(parts, key=lambda g: (-len(g), min(info[x]["name"] for x in g))):
+                others = inside - set(g)
+                groups.append({"photos": [dict(info[x], best=max((score.get((x, y), -1) for y in others), default=-1)) for x in sorted(g, key=lambda x: info[x]["name"])]})
+            unalike.append({"design": design, "title": members[0]["title"], "shell": self.shell[compared[0]].upper(),
+                            "reviewed": tuple(sorted(compared)) in whole, "groups": groups})
+
+        # Designs listed, with their families.
+        family_pairs = [("d:" + p["design"], "r:" + (p["release"] or p["design"])) for p in listed]
+        family_pairs += [("d:" + by_design.names[i], "r:" + ((designs.release_of(part, by_design.release_of) or {}).get("id") or part))
+                         for i, g in enumerate(data["designs"]) for part in g]
+        of = union(family_pairs)
+        families = {}
+        for name in by_design.names:
+            families.setdefault(of["d:" + name], set())
+        for p in listed:
+            root = of.get("d:" + p["design"])
+            if root in families:
+                families[root].add(p["design"])
+        for i, name in enumerate(by_design.names):
+            families[of["d:" + name]].add(name)
+        listed_names = set(by_design.names)
+        family_list = []
+        for names in families.values():
+            cards = []
+            for name in sorted(names, key=lambda n: (n not in listed_names, n)):
+                members = by.get(name, [])
+                parts = data["designs"][by_design.names.index(name)] if name in listed_names else [name]
+                serials_of = {}
+                for p in sorted(members, key=lambda p: p["name"]):
+                    serials_of.setdefault(p["part"], []).append(p)
+                cards.append({"name": name, "listed": name in listed_names, "parts": parts,
+                              "title": members[0]["title"] if members else "",
+                              "serials": [{"part": k, "photos": v} for k, v in sorted(serials_of.items())]})
+            family_list.append({"designs": cards})
+        family_list.sort(key=lambda f: f["designs"][0]["name"])
+        return {"alike": alike, "unalike": unalike, "families": family_list}
+
+    def act(self, action, data):
+        """Changes designs.json (or a photo's name) as the page asks; returns an error message, or None."""
+        with lock:
+            listed, by_design = self.photos_now()
+            info = {p["sha1"]: p for p in listed}
+            d = by_design.data
+            shas = [s for s in data.get("shas", []) if s in info]
+            if action == "merge":
+                names = {info[s]["design"] for s in shas} | set(data.get("designs", []))
+                if len(names) < 2:
+                    return "not several designs"
+                inside = set(shas)
+                d = designs.merged(d, names, by_design)
+                d["distinct"] = [p for p in d["distinct"] if not (p[0] in inside and p[1] in inside)]
+            elif action in ("distinct", "undistinct"):
+                inside = set(shas)
+                pairs = {tuple(sorted((a, b))) for _, a, b in self.alike if a in inside and b in inside}
+                kept = {tuple(sorted(p)) for p in d["distinct"]}
+                d["distinct"] = sorted(kept | pairs if action == "distinct" else kept - pairs)
+            elif action in ("whole", "unwhole"):
+                compared = tuple(sorted(p["sha1"] for p in listed if p["design"] == data.get("design") and p["compared"]))
+                kept = {tuple(sorted(w)) for w in d["whole"]}
+                d["whole"] = sorted(kept | {compared} if action == "whole" else kept - {compared})
+            elif action == "split":
+                design = data.get("design")
+                group = set(shas)
+                parts = {info[s]["part"] for s in group}
+                rest = {p["part"] for p in listed if p["design"] == design and p["compared"] and p["sha1"] not in group}
+                note = (data.get("note") or "").strip().upper()
+                if parts & rest or not all(designs.is_serial(p) for p in parts):
+                    if not note:
+                        return "needs a note"
+                    for s in group:
+                        p = info[s]
+                        photos.rename(p["path"], photos.serial_of(p["name"]) + f"[{note}]")
+                    with fits.editing():
+                        pass  # their fits follow them (fits.reconcile)
+                    return None
+                d = designs.split_off(d, parts)
+            elif action == "split-serial":
+                part = data.get("part", "")
+                if not designs.is_serial(part):
+                    return "not a serial with a region: give its photos a note instead (rename)"
+                d = designs.split_off(d, [part])
+            elif action == "join":
+                d = designs.merged(d, {data.get("design"), data.get("with")}, by_design)
+            elif action == "dissolve":
+                d = designs.dissolved(d, data.get("design"), by_design)
+            elif action == "rename":
+                p = next((p for p in listed if p["path"] == data.get("path")), None)
+                if not p:
+                    return "not a photo in photos/"
+                try:
+                    photos.rename(p["path"], data.get("name", ""))
+                except ValueError as e:
+                    return str(e)
+                with fits.editing():
+                    pass  # its fits follow it (fits.reconcile)
+                return None
+            else:
+                return "unknown action"
+            designs.save(d)
+            return None
+
+
+PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Review designs</title>
+<style>
+body{font:14px system-ui;margin:0;background:#f4f4f4;color:#222}
+header{position:sticky;top:0;z-index:1;background:#fff;padding:8px 16px;border-bottom:1px solid #ddd;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+nav button{background:#eee}nav button.on{background:#222;color:#fff}
+#count{margin-left:auto;font-variant-numeric:tabular-nums}
+main{display:flex;flex-direction:column;gap:12px;padding:12px 16px}
+.item{background:#fff;border-radius:0.3em;padding:8px;border:3px solid transparent}
+.item.yes{border-color:#2a9d3a}.item.partly{border-color:#9fd3a8}
+.top{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.score{font-weight:bold;font-variant-numeric:tabular-nums}.muted{color:#555}.game{color:#a60}
+.top .state{margin-left:auto;color:#2a9d3a}
+.photos{display:flex;gap:8px;flex-wrap:wrap}
+.group{border:1px dashed #bbb;border-radius:0.3em;padding:6px;display:flex;flex-direction:column;gap:6px}
+.design{border:1px solid #ddd;border-radius:0.3em;padding:6px;margin-bottom:8px}.design.listed{border-color:#2a6fdb}
+.serial{display:flex;gap:8px;align-items:flex-start;margin:4px 0}.serial>b{width:150px;flex:none;font-weight:600}
+figure{margin:0;width:240px}
+figure img{width:240px;aspect-ratio:200/174;object-fit:contain;display:block;background:#eee}
+figcaption{font-size:12px;color:#555;margin:4px 0;display:flex;gap:6px;align-items:flex-start}
+figcaption div{overflow:hidden;flex:1;min-width:0}figcaption div span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+figcaption b{color:#222}
+button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em;cursor:pointer;background:#e4e4e4}
+button.go{background:#2a9d3a;color:#fff}
+</style>
+<header><b>Review designs</b>
+<nav><button data-tab="alike">Alike across designs</button> <button data-tab="unalike">Unalike within a design</button> <button data-tab="families">Designs listed</button></nav>
+<label>shell <select id="shell"><option value="">all</option><option>DMG</option><option>CGB</option><option>AGB</option></select></label>
+<label><input type="checkbox" id="hide" checked> hide reviewed</label>
+<span id="count"></span></header>
+<main id="items"></main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
+let state = {alike: [], unalike: [], families: []}, tab = location.hash.slice(1) || "alike";
+const image = p => p.compared ? `/label?sha1=${p.sha1}` : `/photo?sha1=${p.sha1}`;
+const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
+  `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${extra}</div>` +
+  `<button data-action="rename" data-path="${esc(p.path)}">Rename</button></figcaption></figure>`;
+const shas = ps => ps.map(p => p.sha1).join(" ");
+function render() {
+  for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
+  const shell = $("shell").value, hide = $("hide").checked;
+  let html = "", n = 0;
+  if (tab === "alike") {
+    const shown = state.alike.filter(c => (!shell || c.shell === shell) && (!hide || c.reviewed !== "yes"));
+    n = shown.length;
+    html = shown.map(c => `<div class="item ${c.reviewed || ""}"><div class="top"><span class="score">${c.score.toFixed(3)}</span>` +
+      `<span class="muted">${c.shell} · ${c.photos.length} photos</span>${c["same game"] ? '<span class="game">same game</span>' : ""}` +
+      `<span class="state">${c.reviewed === "yes" ? "different designs" : c.reviewed ? "partly reviewed" : ""}</span>` +
+      `<button class="go" data-action="merge" data-shas="${shas(c.photos)}">Same design</button>` +
+      (c.reviewed === "yes" ? `<button data-action="undistinct" data-shas="${shas(c.photos)}">Not reviewed</button>`
+                            : `<button data-action="distinct" data-shas="${shas(c.photos)}">Different designs</button>`) +
+      `</div><div class="photos">` + c.photos.map(p => figure(p, `<span>${esc(p.design)} · ${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("") + `</div></div>`).join("");
+  } else if (tab === "unalike") {
+    const shown = state.unalike.filter(u => (!shell || u.shell === shell) && (!hide || !u.reviewed));
+    n = shown.length;
+    html = shown.map(u => `<div class="item ${u.reviewed ? "yes" : ""}"><div class="top"><b>${esc(u.design)}</b><span class="muted">${esc(u.title)} · ${u.shell}</span>` +
+      `<span class="state">${u.reviewed ? "one design" : ""}</span>` +
+      (u.reviewed ? `<button data-action="unwhole" data-design="${esc(u.design)}">Not reviewed</button>`
+                  : `<button data-action="whole" data-design="${esc(u.design)}">One design</button>`) + `</div><div class="photos">` +
+      u.groups.map(g => `<div class="group"><div><button class="go" data-action="split" data-design="${esc(u.design)}" data-shas="${shas(g.photos)}">Split off</button></div>` +
+        `<div class="photos">${g.photos.map(p => figure(p, `<span>best ${p.best.toFixed(3)} with the others</span>`)).join("")}</div></div>`).join("") + `</div></div>`).join("");
+  } else {
+    const shown = state.families;
+    n = shown.length;
+    html = shown.map(f => `<div class="item">` + f.designs.map(d => `<div class="design ${d.listed ? "listed" : ""}"><div class="top"><b>${esc(d.name)}</b>` +
+      `<span class="muted">${esc(d.title)}${d.listed ? " · " + d.parts.map(esc).join(", ") : " · default"}</span>` +
+      (f.designs.length > 1 ? `<select data-action="join" data-design="${esc(d.name)}"><option value="">join with…</option>` +
+        f.designs.filter(o => o.name !== d.name).map(o => `<option>${esc(o.name)}</option>`).join("") + `</select>` : "") +
+      (d.listed ? `<button data-action="dissolve" data-design="${esc(d.name)}">Dissolve</button>` : "") + `</div>` +
+      d.serials.map(s => `<div class="serial"><b>${esc(s.part)}${d.serials.length > 1 ? `<br><button data-action="split-serial" data-part="${esc(s.part)}">Split off</button>` : ""}</b>` +
+        `<div class="photos">${s.photos.map(p => figure(p)).join("")}</div></div>`).join("") + `</div>`).join("") + `</div>`).join("");
+  }
+  $("count").textContent = `${n} shown`;
+  $("items").innerHTML = html;
+}
+async function load() { state = await (await fetch("/state")).json(); render(); }
+async function act(body) {
+  const response = await fetch("/act", {method: "POST", body: JSON.stringify(body)});
+  const text = await response.text();
+  if (!response.ok) return text;
+  await load();
+  return null;
+}
+$("items").onclick = async e => {
+  const d = e.target.dataset || {};
+  if (!d.action || e.target.tagName === "SELECT") return;
+  const list = d.shas ? d.shas.split(" ") : [];
+  if (d.action === "rename") {
+    const old = d.path.split("/").pop().replace(/\\.[^.]*$/, "").replace(/_\\d+$/, "");
+    const name = (prompt(`The serial on the label of ${d.path}:`, old) || "").trim();
+    if (!name || name === old) return;
+    const error = await act({action: "rename", path: d.path, name});
+    if (error) alert("Not renamed: " + error);
+    return;
+  }
+  let error = await act({action: d.action, shas: list, design: d.design, part: d.part});
+  if (error === "needs a note") {
+    const note = (prompt("These photos share a serial with the others: a note for their names, telling their design apart (e.g. ALT):") || "").trim();
+    if (!note) return;
+    error = await act({action: d.action, shas: list, design: d.design, note});
+  }
+  if (error) alert("Not saved: " + error);
+};
+$("items").onchange = async e => {
+  if (e.target.dataset.action !== "join" || !e.target.value) return;
+  const error = await act({action: "join", design: e.target.dataset.design, with: e.target.value});
+  if (error) alert("Not saved: " + error);
+};
+for (const b of document.querySelectorAll("nav button")) b.onclick = () => { tab = b.dataset.tab; location.hash = tab; render(); };
+$("shell").onchange = $("hide").onchange = render;
+load();
+</script>
+"""
+
+
+class Handler(BaseHTTPRequestHandler):
+    def send(self, body, kind="application/json", status=200, cache=False):
+        body = json.dumps(body).encode() if kind == "application/json" else body
+        self.send_response(status)
+        self.send_header("Content-Type", kind)
+        if cache:  # by SHA-1: the label as compared when the page started
+            self.send_header("Cache-Control", "max-age=86400")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        url = urllib.parse.urlparse(self.path)
+        sha1 = urllib.parse.parse_qs(url.query).get("sha1", [""])[0]
+        if url.path == "/":
+            self.send(PAGE.encode(), "text/html; charset=utf-8")
+        elif url.path == "/state":
+            self.send(review.state())
+        elif url.path == "/label" and sha1 in review.current:
+            self.send(open(os.path.join(LABELS, review.current[sha1][0] + ".png"), "rb").read(), "image/png", cache=True)
+        elif url.path == "/photo":
+            path = next((os.path.join(photos.ROOT, s, sy, n) for s, sy, n, e in photos.all_sources() if e.get("sha1") == sha1), None)
+            if not path:
+                return self.send_error(404)
+            import find_doubles
+            self.send(find_doubles.image(path, 480), "image/webp", cache=True)
+        else:
+            self.send_error(404)
+
+    def do_POST(self):
+        if self.path != "/act":
+            return self.send_error(404)
+        data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+        error = review.act(data.get("action"), data)
+        if error:
+            return self.send(error.encode(), "text/plain", 409 if error == "needs a note" else 400)
+        print(f"{data.get('action')}: {json.dumps({k: v for k, v in data.items() if k != 'action'}, ensure_ascii=False)}", flush=True)
+        self.send({})
+
+    def log_message(self, *args):
+        pass
+
+
+if __name__ == "__main__":
+    review = Review()
+    state = review.state()
+    print(f"{len(review.current)} labels compared: {len(state['alike'])} clusters alike across designs, {len(state['unalike'])} "
+          f"designs unalike within, {len(state['families'])} families of designs listed; review them at http://localhost:{PORT}/ (ctrl-C to stop)")
+    ThreadingHTTPServer(("localhost", PORT), Handler).serve_forever()

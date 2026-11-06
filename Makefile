@@ -53,19 +53,16 @@
 #   A tool, not a step: a local page for naming the photos whose serial isn't known, one at a time: type the serial on its label and press enter; the photo is renamed in photos/, its fits in fits.json with it; or delete it (src/name_photos.py).
 #
 #   make find-doubles
-#   A tool, not a step: a local page listing every photo in photos/, one release per row, its photos sorted by their source's quality (Hit-Japan first, otakaraou the last real photos, the box-art fakes below), each cropped to its plastic as in render-carts if that is accepted or placed by hand, each marked with an orange check if its plastic is fitted, a green one if its label is too; each can be deleted, its fits with it, or renamed to a corrected serial, its fits following it; clicking a photo makes it its release's preferred one, saved to preferred.json (src/find_doubles.py).
+#   A tool, not a step: a local page listing every photo in photos/, one design per row (designs.json, make review-designs), its photos sorted by their source's quality (Hit-Japan first, otakaraou the last real photos, the box-art fakes below), each cropped to its plastic as in render-carts if that is accepted or placed by hand, each marked with an orange check if its plastic is fitted, a green one if its label is too; each can be deleted, its fits with it, or renamed to a corrected serial, its fits following it; clicking a photo makes it its release's preferred one, saved to preferred.json (src/find_doubles.py).
 #
-#   make compare-labels
-#   A tool, not a step: finds the photos whose labels look alike but which are of different releases with different serials, DMG only against DMG, CGB against CGB, AGB against AGB: their label images from make fit-colors (the label alone), compared in gray with the lighting evened out, shrunk to about 1.2 px per mm, by their correlation, the best of shifts up to about 1.7 mm; the scores kept by the photos' SHA-1s in generated/compare-labels/scores.json, so that a new photo is only compared with those already there; the pairs scoring at least 0.7, by score, into generated/compare-labels/matches.tsv, to review (src/compare_labels.py).
-#
-#   make review-matches
-#   A tool, not a step: a local page of the clusters of photos make compare-labels found alike: the pairs of different releases with different serials as the photos are named now, and the photos joined through them (A+B, B+C and C+D make A+B+C+D), by best score, their labels side by side; each photo can be renamed to a corrected serial, its fits following it; a cluster can be confirmed (clicked again, unconfirmed), saved in label-clusters.json as its pairs of SHA-1s; the confirmed clusters can be hidden (src/review_matches.py).
+#   make review-designs
+#   A tool, not a step: a local page for telling the photos' label designs apart (designs.json: by default one per release; split by serial, or by a note in the photos' names, and linked across releases), from how alike their labels are, compared when it starts (those with a good label, from make fit-colors' label images): photos alike across designs, to make one design or keep apart; designs whose photos are unalike, to split or keep whole; the designs listed, with the others of their releases, to split, join or dissolve; each photo can be renamed (src/review_designs.py, src/compare_labels.py, src/designs.py).
 #
 # Plain make lists these.
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-labels-high-resolution clean-render-labels-high-resolution render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles compare-labels review-matches
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-labels-high-resolution clean-render-labels-high-resolution render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles review-designs
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -145,11 +142,8 @@ name-photos:
 find-doubles:
 	$(PYTHON) src/find_doubles.py
 
-compare-labels:
-	$(PYTHON) src/compare_labels.py
-
-review-matches:
-	$(PYTHON) src/review_matches.py
+review-designs:
+	$(PYTHON) src/review_designs.py
 
 # The text recognition tool, built when missing (macOS).
 src/ocr: src/ocr.swift
