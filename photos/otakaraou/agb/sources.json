@@ -4077,15 +4077,6 @@
   "sha1": "4ef1dba18bd6a625e001e6dd2b728aadb91dff0f",
   "original_name": "otakaraou-9401.jpg"
  },
- "AGB-BZ4J-JPN_2.jpg": {
-  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240212_7bf978.jpg",
-  "page_url": "https://www.otakaraou.com/product/9402",
-  "title_on_page": "ファイナルファンタジーVIアドバンス ゲームボーイアドバンスソフト",
-  "serial_on_label": "AGB-BZ8J-JPN",
-  "original_sha1": "eb4958387170dbf0bdd09944fce9d966789c879e",
-  "sha1": "94fde2dbc95be272ae47340e499ac3555a71de5c",
-  "original_name": "otakaraou-9402.jpg"
- },
  "AGB-BZ5J-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/gb/1780.jpg",
   "page_url": "https://www.otakaraou.com/product/9403",
@@ -4094,6 +4085,15 @@
   "original_sha1": "13fc27eecb79cafba0dce81179ac204128e60d42",
   "sha1": "d1939a128f798061d8fa53853c333db1f4a97088",
   "original_name": "otakaraou-9403.jpg"
+ },
+ "AGB-BZ6J-JPN.jpg": {
+  "image_url": "https://www.otakaraou.com/data/otakaraou/product/20240212_7bf978.jpg",
+  "page_url": "https://www.otakaraou.com/product/9402",
+  "title_on_page": "ファイナルファンタジーVIアドバンス ゲームボーイアドバンスソフト",
+  "serial_on_label": "AGB-BZ8J-JPN",
+  "original_sha1": "eb4958387170dbf0bdd09944fce9d966789c879e",
+  "sha1": "94fde2dbc95be272ae47340e499ac3555a71de5c",
+  "original_name": "otakaraou-9402.jpg"
  },
  "AGB-BZDJ-JPN.jpg": {
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/20230828_85ae20.jpg",
