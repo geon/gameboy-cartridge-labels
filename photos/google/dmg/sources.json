@@ -688,10 +688,10 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0db907ba6d815afc9c6045b118ca2dc1eff0a2b3"
  },
- "DMG-APXP.webp": {
+ "DMG-APXP-EUU.webp": {
   "original_name": "s-l1600.webp",
-  "serial_on_label": "DMG-APXP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-APXP-EUU",
+  "note": "named by the serial read on it (exact); renamed from DMG-APXP: the region read on its label (it was named by a release id)",
   "sha1": "4fab8cfd6ed82138956d5e173a578d7cad553787"
  },
  "DMG-AQ2J-JPN.jpg": {

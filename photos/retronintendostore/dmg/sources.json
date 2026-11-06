@@ -120,15 +120,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c64aa5d04ed627dcfa268643a77b4897414d8c8d"
  },
- "DMG-ABLP.jpg": {
+ "DMG-ABLP-HOL.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/bugs-bunny-lola-bunny",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351469055.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Bugs Bunny & Lola Bunny",
   "category": "gameboy-classic/games",
   "original_name": "retronintendostore-351469055.jpg",
-  "serial_on_label": "DMG-ABLP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-ABLP-HOL",
+  "note": "named by the serial read on it (exact); renamed from DMG-ABLP: the region read on its label (it was named by a release id)",
   "sha1": "ac0a0462d6730ea07a7894ed2bda46d8d38b81c9"
  },
  "DMG-AC3E-EUR_2.jpg": {
@@ -425,15 +425,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7a70a6201eb28dfec75c49eab3bce4519edb8b02"
  },
- "DMG-AQ3P.jpg": {
+ "DMG-AQ3P-UKV_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/4x4-world-trophy",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459459917.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "4x4 World Trophy",
   "category": "gameboy-classic/games",
   "original_name": "retronintendostore-459459917.jpg",
-  "serial_on_label": "DMG-AQ3P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-AQ3P-UKV",
+  "note": "named by the serial read on it (exact); renamed from DMG-AQ3P: the region read on its label (it was named by a release id)",
   "sha1": "6f5819a10c62705f42b67a1f1eb808723f1fb54c"
  },
  "DMG-ARZP-FAH.jpg": {

@@ -119,15 +119,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "11c1686bad93abdaffa79a9465c2f2b15b9e44ed"
  },
- "AGB-ABYP.jpg": {
+ "AGB-ABYP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/rayman-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/rayman-advance-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Rayman Advance",
   "collection": "game-boy-advance",
   "original_name": "zockbar-rayman-advance.jpg",
-  "serial_on_label": "AGB-ABYP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ABYP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-ABYP: the region read on its label (it was named by a release id)",
   "sha1": "8766e5863172465e23366400de928cdf46dcef46"
  },
  "AGB-AC6D-NOE.jpg": {
@@ -273,27 +273,27 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9b1e3633f8952a555b69593282c6cd74431df480"
  },
- "AGB-AG5P.jpg": {
+ "AGB-AG5P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/super-ghouls-n-ghosts-gba",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/super-ghouls-n-ghosts-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Super Ghouls'n Ghosts",
   "collection": "game-boy-advance",
   "original_name": "zockbar-super-ghouls-n-ghosts-gba.jpg",
-  "serial_on_label": "AGB-AG5P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AG5P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AG5P: the region read on its label (it was named by a release id)",
   "sha1": "bb8028ff144d6a1140bd708f14b945160bcd866c"
  },
- "AGB-AGXP.jpg": {
+ "AGB-AGXP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/guilty-gear-x-advance-edition",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Guilty-Gear-X-Advance-Edition_GBA.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Guilty Gear X Advance Edition",
   "collection": "game-boy-advance",
   "original_name": "zockbar-guilty-gear-x-advance-edition.jpg",
-  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_341",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_341; renamed from AGB-AGXP: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "907108d5d0056d38ce76975cccac9ad48b09b8fd",
-  "serial_on_label": "AGB-AGXP"
+  "serial_on_label": "AGB-AGXP-EUR"
  },
  "AGB-AH2P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/mat-hoffmans-pro-bmx-2",
@@ -359,16 +359,16 @@
   "note": "named by nothing: no serial read",
   "sha1": "ab5e8877129209dd45216ce6cf6a5480ad00161b"
  },
- "AGB-AIGP_2.jpg": {
+ "AGB-AIGP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/inspector-gadget-advance-mission",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/inspector-gadget-advance-mission-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Inspector Gadget: Advance Mission",
   "collection": "game-boy-advance",
   "original_name": "zockbar-inspector-gadget-advance-mission.jpg",
-  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_344",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_344; renamed from AGB-AIGP_2: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "6c7c953c80b38bc3a49337e67a362bd9f8e72b95",
-  "serial_on_label": "AGB-AIGP"
+  "serial_on_label": "AGB-AIGP-EUR"
  },
  "AGB-AJ3P-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/jurassic-park-3-park-builder",
@@ -391,15 +391,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b54a4bfb8810bb80c1e4fb916a1990b6b803bbf2"
  },
- "AGB-AKLP.jpg": {
+ "AGB-AKLP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/klonoa-empire-of-dreams",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/klonoa-empire-of-dreams-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Klonoa: Empire of Dreams",
   "collection": "game-boy-advance",
   "original_name": "zockbar-klonoa-empire-of-dreams.jpg",
-  "serial_on_label": "AGB-AKLP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AKLP-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-AKLP: the region read on its label (it was named by a release id)",
   "sha1": "3e3bfeb5f2daaff6dde0025c2b1ff3cdf99cb461"
  },
  "AGB-AKWP-EUR_2.jpg": {
@@ -412,15 +412,15 @@
   "note": "named by nothing: no serial read",
   "sha1": "6dc6c88b50ffcdd04b35a634f3e12527fe6f38e6"
  },
- "AGB-ALBP.jpg": {
+ "AGB-ALBP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/lego-bionicle",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lego-bionicle-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Lego Bionicle",
   "collection": "game-boy-advance",
   "original_name": "zockbar-lego-bionicle.jpg",
-  "serial_on_label": "AGB-ALBP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ALBP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-ALBP: the region read on its label (it was named by a release id)",
   "sha1": "d282d1cd80f3e74b11e94aa3ecb1dcf03b81d170"
  },
  "AGB-ALDE.jpg": {
@@ -434,15 +434,15 @@
   "sha1": "1fe5e63565fb521ed5d2a46ae6d57382cc6603d3",
   "serial_on_label": "AGB-ALDE"
  },
- "AGB-ALGP.jpg": {
+ "AGB-ALGP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/dragon-ball-z-das-erbe-von-goku",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/dragon-ball-z-das-erbe-von-goku-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Dragon Ball Z: Das Erbe von Goku",
   "collection": "game-boy-advance",
   "original_name": "zockbar-dragon-ball-z-das-erbe-von-goku.jpg",
-  "serial_on_label": "AGB-ALGP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ALGP-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-ALGP: the region read on its label (it was named by a release id)",
   "sha1": "b1efa97ad7e512f584f300b2622c7833dd55794a"
  },
  "AGB-ALLP-NOE.jpg": {
@@ -478,15 +478,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "a606d49b0e7b69ee39b6ee3655ddd0de6b38ae37"
  },
- "AGB-ALRP.jpg": {
+ "AGB-ALRP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/lego-racers-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Lego-Racers-2_GBA.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Lego Racers 2",
   "collection": "game-boy-advance",
   "original_name": "zockbar-lego-racers-2.jpg",
-  "serial_on_label": "AGB-ALRP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ALRP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-ALRP: the region read on its label (it was named by a release id)",
   "sha1": "e6f88cb236e57b88d9d6d956896cdcfaf073b39a"
  },
  "AGB-ALTP-EUR.jpg": {
@@ -565,26 +565,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e474de9e7e3a3458197bb5f03f0d417a82afce2d"
  },
- "AGB-AOBP_2.jpg": {
+ "AGB-AOBP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/asterix-obelix-jetzt-gehts-rund",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/asterix-und-obelix-jetzt-gehts-rund-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Asterix & Obelix: Jetzt geht's rund!",
   "collection": "game-boy-advance",
   "original_name": "zockbar-asterix-obelix-jetzt-gehts-rund.jpg",
-  "serial_on_label": "AGB-AOBP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AOBP-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-AOBP_2: the region read on its label (it was named by a release id)",
   "sha1": "60c8594734466d9a0fcaa82fcfeacbd1a01eb931"
  },
- "AGB-AOMP.jpg": {
+ "AGB-AOMP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/magical-quest-2-starring-mickey-and-minnie",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/magical-quest-2-starring-mickey-and-minnie-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Magical Quest 2 Starring Mickey & Minnie",
   "collection": "game-boy-advance",
   "original_name": "zockbar-magical-quest-2-starring-mickey-and-minnie.jpg",
-  "serial_on_label": "AGB-AOMP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AOMP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AOMP: the region read on its label (it was named by a release id)",
   "sha1": "b8a5d8e91ee9ac511440c1893e57b9d7559f7bb7"
  },
  "AGB-AOWP-EUR.jpg": {
@@ -609,15 +609,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9aa12b62babf487419b7605985e5a05f9fb68862"
  },
- "AGB-AR9P.jpg": {
+ "AGB-AR9P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/reign-of-fire",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/reign-of-fire-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Reign of Fire",
   "collection": "game-boy-advance",
   "original_name": "zockbar-reign-of-fire.jpg",
-  "serial_on_label": "AGB-AR9P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AR9P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AR9P: the region read on its label (it was named by a release id)",
   "sha1": "c9901a85542fdd7480198c0bf5e2e16eb48b441e"
  },
  "AGB-AS6P.jpg": {
@@ -741,15 +741,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b15323f7dd1abdd1aca71f030cfa03528b59087a"
  },
- "AGB-AXDP.jpg": {
+ "AGB-AXDP-EUU.jpg": {
   "page_url": "https://zockbar.ch/products/mortal-kombat-deadly-alliance",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Mortal-Kombat-Deadly-Alliance_GBA.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Mortal Kombat: Deadly Alliance",
   "collection": "game-boy-advance",
   "original_name": "zockbar-mortal-kombat-deadly-alliance.jpg",
-  "serial_on_label": "AGB-AXDP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AXDP-EUU",
+  "note": "named by the serial read on it (exact); renamed from AGB-AXDP: the region read on its label (it was named by a release id)",
   "sha1": "e2fc489e877d4ab0552c0871b2684ac803ee26e2"
  },
  "AGB-AXPD-NOE.jpg": {
@@ -774,15 +774,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "071d137bce7e51e09721af4a39dc050afdccd4a2"
  },
- "AGB-AXZP.jpg": {
+ "AGB-AXZP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/micro-machines",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Micro-Machines_GBA.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Micro Machines",
   "collection": "game-boy-advance",
   "original_name": "zockbar-micro-machines.jpg",
-  "serial_on_label": "AGB-AXZP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AXZP-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-AXZP: the region read on its label (it was named by a release id)",
   "sha1": "ef19439ffed191633a6de535d6000c62fc8317d3"
  },
  "AGB-AYWP-EUR_2.jpg": {
@@ -840,15 +840,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "21cf7c10146bd608fe1ca08a2e8a2c9b76f4cff0"
  },
- "AGB-B2MP.jpg": {
+ "AGB-B2MP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/shaman-king-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Shaman-King-2_GBA.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Shaman King 2",
   "collection": "game-boy-advance",
   "original_name": "zockbar-shaman-king-2.jpg",
-  "serial_on_label": "AGB-B2MP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B2MP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-B2MP: the region read on its label (it was named by a release id)",
   "sha1": "7d5888e550d3ecba8696b42b518c6d799c01ce5c"
  },
  "AGB-B53P-EUR.jpg": {
@@ -916,15 +916,15 @@
   "note": "named by nothing: no serial read",
   "sha1": "fe7e1eb71330e65fe4346603045d99e2b0d0aefc"
  },
- "AGB-BDGP.jpg": {
+ "AGB-BDGP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/digimon-racing",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/digimon-racing-gameboy-advance.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Digimon Racing",
   "collection": "game-boy-advance",
   "original_name": "zockbar-digimon-racing.jpg",
-  "serial_on_label": "AGB-BDGP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BDGP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BDGP: the region read on its label (it was named by a release id)",
   "sha1": "4b9afce37149eb67488987508bc0892370c4196d"
  },
  "AGB-BE8P-EUR_2.jpg": {
@@ -938,15 +938,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b377897d42398cbc11603f6e750010bf9050e849"
  },
- "AGB-BEYP_3.jpg": {
+ "AGB-BEYP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/beyblade-v-force",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/beyblade-v-force-gameboy-advance.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Beyblade V-Force",
   "collection": "game-boy-advance",
   "original_name": "zockbar-beyblade-v-force.jpg",
-  "serial_on_label": "AGB-BEYP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BEYP-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-BEYP_3: the region read on its label (it was named by a release id)",
   "sha1": "e0d1a9f32dae24ab7f3793eaca40cd2697cdf20c"
  },
  "AGB-BHGP-EUR.jpg": {
@@ -971,15 +971,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "3ea876a4dd04188ccae2d221693eb6935eeedea6"
  },
- "AGB-BJTP.jpg": {
+ "AGB-BJTP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/tom-and-jerry-tales",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/tom-and-jerry-tales-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Tom & Jerry: Tales",
   "collection": "game-boy-advance",
   "original_name": "zockbar-tom-and-jerry-tales.jpg",
-  "serial_on_label": "AGB-BJTP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BJTP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BJTP: the region read on its label (it was named by a release id)",
   "sha1": "7aaf26a092ba8cfa1336807e9ed8d5738ff76f69"
  },
  "AGB-BKZX-EUR_2.jpg": {
@@ -1070,15 +1070,15 @@
   "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_357",
   "sha1": "f05056795cb93b9eaea71d86b5aeb3e749ce3390"
  },
- "AGB-BP8P.jpg": {
+ "AGB-BP8P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/pac-man-pinball-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/pac-man-pinball-advance-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Pac-Man Pinball Advance",
   "collection": "game-boy-advance",
   "original_name": "zockbar-pac-man-pinball-advance.jpg",
-  "serial_on_label": "AGB-BP8P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BP8P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BP8P: the region read on its label (it was named by a release id)",
   "sha1": "28e048c61f8cd0fd8606bd38ac006facc73cd733"
  },
  "AGB-BPEF-FRA_2.jpg": {
@@ -1103,15 +1103,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "cd9408c3cba3c57a98050de5c705f85180c1d46a"
  },
- "AGB-BPHP.jpg": {
+ "AGB-BPHP-UKV.jpg": {
   "page_url": "https://zockbar.ch/products/pitfall-the-lost-expedition",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/pitfall-the-lost-expedition-gba-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Pitfall: The Lost Expedition",
   "collection": "game-boy-advance",
   "original_name": "zockbar-pitfall-the-lost-expedition.jpg",
-  "serial_on_label": "AGB-BPHP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BPHP-UKV",
+  "note": "named by the serial read on it (exact); renamed from AGB-BPHP: the region read on its label (it was named by a release id)",
   "sha1": "50152b1849c70e44260cd6bdd36bb8fa3cd8054e"
  },
  "AGB-BR3P-EUR_2.jpg": {

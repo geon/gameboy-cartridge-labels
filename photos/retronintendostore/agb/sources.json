@@ -1,13 +1,13 @@
 {
- "AGB-A2AE.jpg": {
+ "AGB-A2AE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/disney-sports-basketball",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351419955.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Disney Sports Basketball",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351419955.jpg",
-  "serial_on_label": "AGB-A2AE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-A2AE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-A2AE: the region read on its label (it was named by a release id)",
   "sha1": "418df041f5ed16cbe1b43d3512dcd1ab5e65f95d"
  },
  "AGB-A2SP-EUR.jpg": {
@@ -119,15 +119,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ae6e13d14b5d123f52f3f18fac690b286d0f5316"
  },
- "AGB-A8QE.jpg": {
+ "AGB-A8QE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/pirates-of-the-carribean-the-curse-of-the-black-pearl",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/460059269.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Pirates of the Carribean The Curse of the Black Pearl",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-460059269.jpg",
-  "serial_on_label": "AGB-A8QE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-A8QE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-A8QE: the region read on its label (it was named by a release id)",
   "sha1": "3280ecc94c7d2b41dba7baa04019fb28f10ea413"
  },
  "AGB-A9BP-EUR_2.jpg": {
@@ -360,15 +360,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "54c70d22ab5e6d9b541d998a6a30c80bdf32061b"
  },
- "AGB-AD3P.jpg": {
+ "AGB-AD3P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/dinotopia-the-timestone-pirates",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351419869.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Dinotopia The Timestone Pirates",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351419869.jpg",
-  "serial_on_label": "AGB-AD3P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AD3P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AD3P: the region read on its label (it was named by a release id)",
   "sha1": "e17d264cc41fd9663a5ff12e9754c83c74aa58db"
  },
  "AGB-AD6P-EUR.jpg": {
@@ -426,15 +426,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "666b35f00a3b42c860b6377d627ed765f67e78de"
  },
- "AGB-ADVE.jpg": {
+ "AGB-ADVE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/driven",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/460057712.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Driven",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-460057712.jpg",
-  "serial_on_label": "AGB-ADVE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ADVE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-ADVE: the region read on its label (it was named by a release id)",
   "sha1": "60270c5ff26ccd64de59793eebabe1484370ecf9"
  },
  "AGB-ADWP-EUR_2.jpg": {
@@ -481,15 +481,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1ff127368138dd50a8691950795d986e2a2f9c16"
  },
- "AGB-AELP.jpg": {
+ "AGB-AELP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/european-super-league",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2329771454.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "European Super League",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2329771454.jpg",
-  "serial_on_label": "AGB-AELP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AELP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AELP: the region read on its label (it was named by a release id)",
   "sha1": "d354604a909fe56fb8638083ec07dd53b380b845"
  },
  "AGB-AEPP-EUR_2.jpg": {
@@ -701,15 +701,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "6b8baeac42e2fdefca9512c42f76a11ed62396f3"
  },
- "AGB-AIGP.jpg": {
+ "AGB-AIGP-EUR-2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/inspector-gadget",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197221720.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Inspector Gadget",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197221720.jpg",
-  "serial_on_label": "AGB-AIGP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AIGP-EUR-2",
+  "note": "named by the serial read on it (exact); renamed from AGB-AIGP: the region read on its label (it was named by a release id)",
   "sha1": "27e7c09c0b4d8993bc3abdc6fbeb91ffe8ed2a2a"
  },
  "AGB-AILP-EUR.jpg": {
@@ -789,15 +789,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "224c073644d113b856cb4f097b456687978ada64"
  },
- "AGB-AJGF.jpg": {
+ "AGB-AJGF-FRA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/tarzan-french",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197223091.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Tarzan (French)",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197223091.jpg",
-  "serial_on_label": "AGB-AJGF",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AJGF-FRA",
+  "note": "named by the serial read on it (exact); renamed from AGB-AJGF: the region read on its label (it was named by a release id)",
   "sha1": "f45dab3e58ffbe6614c6220edef806d73f0b81ca"
  },
  "AGB-AK8P-EUR_2.jpg": {
@@ -844,15 +844,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "6f7ac39cb7f50a06ea81e489c12e3a34a3d6e836"
  },
- "AGB-ALAP.jpg": {
+ "AGB-ALAP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/land-before-time",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351429181.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "The Land before Time",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351429181.jpg",
-  "serial_on_label": "AGB-ALAP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ALAP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-ALAP: the region read on its label (it was named by a release id)",
   "sha1": "88e555abf3f2d8bc805ff956fd3466847a9efe00"
  },
  "AGB-ALBP-SCN.jpg": {
@@ -877,15 +877,15 @@
   "note": "named by nothing: no serial read",
   "sha1": "723cb864bc88624745d0d9a5c6bd30d9f2ea7ef9"
  },
- "AGB-ALLP.jpg": {
+ "AGB-ALLP-HOL.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/lucky-luke-wanted",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197058649.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Lucky Luke Wanted",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197058649.jpg",
-  "serial_on_label": "AGB-ALLP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ALLP-HOL",
+  "note": "named by the serial read on it (exact); renamed from AGB-ALLP: the region read on its label (it was named by a release id)",
   "sha1": "f19707d9e66890799796b48c152979e1ae5bcdc8"
  },
  "AGB-ALPP-EUR_2.jpg": {
@@ -932,15 +932,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "69af3bfd3513aba458ffb060f5f6b4059f807141"
  },
- "AGB-AMIP.jpg": {
+ "AGB-AMIP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/mib-men-in-black-the-series",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197309536.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "MIB Men In Black the Series",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197309536.jpg",
-  "serial_on_label": "AGB-AMIP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AMIP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AMIP: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "660471f39b9b5c5963a3e3833a3d118e2a459c2a"
  },
  "AGB-AMKP-EUR_2.jpg": {
@@ -976,15 +976,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "de6b02002aee7aa28978b7bdb1696309eff423fe"
  },
- "AGB-AOBP.jpg": {
+ "AGB-AOBP-HOL.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/asterix-obelix-paf-them-all-budget",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000185830.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Asterix & Obelix PAF them All - Budget",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2000185830.jpg",
-  "serial_on_label": "AGB-AOBP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AOBP-HOL",
+  "note": "named by the serial read on it (exact); renamed from AGB-AOBP: the region read on its label (it was named by a release id)",
   "sha1": "36802e936f682d428ab289f61041c005c28f75fb"
  },
  "AGB-APBP-EUR-1.jpg": {
@@ -1031,15 +1031,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "3020b63237252478ca0c13cd1eaee29b9bd1ed36"
  },
- "AGB-APPP.jpg": {
+ "AGB-APPP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/peter-pan-return-to-neverland",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351441907.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Peter Pan Return to Neverland",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351441907.jpg",
-  "serial_on_label": "AGB-APPP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-APPP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-APPP: the region read on its label (it was named by a release id)",
   "sha1": "ed45ac2172beb699a5fb4dc2c3d0cfdc5f7585d7"
  },
  "AGB-APWE-USA.jpg": {
@@ -1163,15 +1163,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "24a90b95d05fd700d115e8d51bc91cd2e106b3d1"
  },
- "AGB-AS5E.jpg": {
+ "AGB-AS5E-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/sims-bustin-out",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/460061663.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "The Sims Bustin Out",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-460061663.jpg",
-  "serial_on_label": "AGB-AS5E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AS5E-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-AS5E: the region read on its label (it was named by a release id)",
   "sha1": "cb3b4a6ff89abe8a29c9ee524874800c542252ed"
  },
  "AGB-ASCP-EUR_2.jpg": {
@@ -1273,26 +1273,26 @@
   "note": "named by nothing: no serial read",
   "sha1": "6b4cf63c1072d83da1a852982e934a76355af859"
  },
- "AGB-AT5X.jpg": {
+ "AGB-AT5X-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/tiger-woods-pga-tour-2004",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197875903.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Tiger Woods PGA Tour 2004",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197875903.jpg",
-  "serial_on_label": "AGB-AT5X",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AT5X-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AT5X: the region read on its label (it was named by a release id)",
   "sha1": "552924fc3db8f61cbe3a196c78eeb05d0206bce9"
  },
- "AGB-AT8P.jpg": {
+ "AGB-AT8P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/tennis-mastersseries-2003",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197332009.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Tennis Mastersseries 2003",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197332009.jpg",
-  "serial_on_label": "AGB-AT8P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AT8P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AT8P: the region read on its label (it was named by a release id)",
   "sha1": "5babaca7067e819e6acba9a6a47d8e87674b7675"
  },
  "AGB-ATCP-EUR.jpg": {
@@ -1306,15 +1306,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c1dcd0d65b6f3ce37376a59c4f605db31cf39083"
  },
- "AGB-ATEP.jpg": {
+ "AGB-ATEP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/pro-tennis-wta-tour",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197065300.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Pro Tennis WTA Tour",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197065300.jpg",
-  "serial_on_label": "AGB-ATEP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ATEP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-ATEP: the region read on its label (it was named by a release id)",
   "sha1": "7d43c83e1a67b50af63a68fcf93aab72ade4b549"
  },
  "AGB-ATHP-EUR.jpg": {
@@ -1350,15 +1350,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "92ffff114a4cb6087ef07cf9a8e272f793a97ff9"
  },
- "AGB-ATMF.jpg": {
+ "AGB-ATMF-FRA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/titi-et-les-bijoux-magiques",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197303272.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Titi Et Les Bijoux Magiques",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197303272.jpg",
-  "serial_on_label": "AGB-ATMF",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ATMF-FRA",
+  "note": "named by the serial read on it (exact); renamed from AGB-ATMF: the region read on its label (it was named by a release id)",
   "sha1": "bb2b064e6084825044ee9539ed6365496fd91384"
  },
  "AGB-ATMH-HOL.jpg": {
@@ -1416,15 +1416,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "777b80f883118ae605ac1421c03776aa9ebd81c6"
  },
- "AGB-AVLX.jpg": {
+ "AGB-AVLX-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/daredevil",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/268561333.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Daredevil",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-268561333.jpg",
-  "serial_on_label": "AGB-AVLX",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AVLX-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AVLX: the region read on its label (it was named by a release id)",
   "sha1": "8f8828bfa42847e409723f2786b14723fb56a743"
  },
  "AGB-AW2P-EUR_2.jpg": {
@@ -1504,15 +1504,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d2d6fff73b25e00eb1a894c7b5ba43224bc479d7"
  },
- "AGB-AXMP.jpg": {
+ "AGB-AXMP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/x-men-reign-of-apocalypse",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197363830.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "X-Men: Reign of Apocalypse",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197363830.jpg",
-  "serial_on_label": "AGB-AXMP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AXMP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AXMP: the region read on its label (it was named by a release id)",
   "sha1": "c7ef645bedb6c4a81d58d1e8b12f8646e0dda1b9"
  },
  "AGB-AXPP-EUR.jpg": {
@@ -1635,15 +1635,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f146ec7073210ce89fabcff23fede23e7c28ffaf"
  },
- "AGB-AZPP.jpg": {
+ "AGB-AZPP-EUR_3.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/zapper",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351450537.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Zapper",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351450537.jpg",
-  "serial_on_label": "AGB-AZPP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AZPP-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-AZPP: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "977c2429bcc8cc2327690d82e3c4fdd3b543a9db"
  },
  "AGB-AZQP-EUR.jpg": {
@@ -1668,15 +1668,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "870862e72ff0a7ce09b72c83303babb92ab3c620"
  },
- "AGB-B2AP.jpg": {
+ "AGB-B2AP-FAH.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/asterix-obelix-2-jeux-en-1",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351410593.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Asterix & Obelix 2 Jeux en 1",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351410593.jpg",
-  "serial_on_label": "AGB-B2AP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B2AP-FAH",
+  "note": "named by the serial read on it (exact); renamed from AGB-B2AP: the region read on its label (it was named by a release id)",
   "sha1": "971caf08111d301bce7893ba3b8fcabe9074c446"
  },
  "AGB-B2BP-EUR_2.jpg": {
@@ -1745,15 +1745,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "a25c81392b2739d39163f8ef8fd61916949daeed"
  },
- "AGB-B44P.jpg": {
+ "AGB-B44P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/spongebob-supersponge-rugrats-tak",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351448217.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Spongebob Supersponge + Rugrats + Tak",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351448217.jpg",
-  "serial_on_label": "AGB-B44P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B44P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-B44P: the region read on its label (it was named by a release id)",
   "sha1": "7b9b1e2ada202c3cfb17a268e1c297cba14e1e5c"
  },
  "AGB-B46P-EUR_2.jpg": {
@@ -1833,15 +1833,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e4533decad093b9a7b45288a857885f2062b1fcc"
  },
- "AGB-BBVP.jpg": {
+ "AGB-BBVP-FRA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/babar-to-the-rescue",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2184813987.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Babar: To the Rescue",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2184813987.jpg",
-  "serial_on_label": "AGB-BBVP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BBVP-FRA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BBVP: the region read on its label (it was named by a release id)",
   "sha1": "72ec7c6e329dae961b5640f32cb2d4db62a79b3a"
  },
  "AGB-BBYX-EUR.jpg": {
@@ -1877,15 +1877,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "46d5823bd64a7ff51cdfdf3cfe18735f8f8e9df5"
  },
- "AGB-BCCX.jpg": {
+ "AGB-BCCX-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/spongebob-squarepants-freeze-frame-frenzy",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351446845.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Spongebob Squarepants Freeze Frame Frenzy",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351446845.jpg",
-  "serial_on_label": "AGB-BCCX",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BCCX-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BCCX: the region read on its label (it was named by a release id)",
   "sha1": "d73a865dfab88974c10e52426d59ef3607a169b2"
  },
  "AGB-BCFP-EUR-1.jpg": {
@@ -1954,15 +1954,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "31a6bcc6946300a326f69d364de7d70a6049dd57"
  },
- "AGB-BCWE.jpg": {
+ "AGB-BCWE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/catwoman",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2184721947.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Catwoman",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2184721947.jpg",
-  "serial_on_label": "AGB-BCWE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BCWE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BCWE: the region read on its label (it was named by a release id)",
   "sha1": "832f7f5cfeea45ba5a8b8d079b465326f4345e07"
  },
  "AGB-BCXE-USA.jpg": {
@@ -2086,15 +2086,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "28f9aad18d5cad02f100ac3a6898a386141bd958"
  },
- "AGB-BH7P.jpg": {
+ "AGB-BH7P-EUR_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/over-the-hedge-hammy-goes-nuts",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197873656.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Over the Hedge Hammy Goes Nuts",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197873656.jpg",
-  "serial_on_label": "AGB-BH7P",
-  "note": "named by the serial read on it (near)",
+  "serial_on_label": "AGB-BH7P-EUR",
+  "note": "named by the serial read on it (near); renamed from AGB-BH7P: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "9c14877336284e15903f3ea73133ca09b9a0a2a7"
  },
  "AGB-BH8P-EUR_2.jpg": {
@@ -2108,15 +2108,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1952c9fdd18376f0349c1d2c05bc958237a88c82"
  },
- "AGB-BHHE.jpg": {
+ "AGB-BHHE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/hi-hi-puffy-amiyumi-kaznapped",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197224123.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Hi Hi Puffy AmiYumi: Kaznapped!",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197224123.jpg",
-  "serial_on_label": "AGB-BHHE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BHHE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BHHE: the region read on its label (it was named by a release id)",
   "sha1": "9829da29710700f35ffb64cff632797bd90d931a"
  },
  "AGB-BHME-USA.jpg": {
@@ -2174,15 +2174,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1441e156d7614e482ac41171c6239ed2999d6f76"
  },
- "AGB-BIDD.jpg": {
+ "AGB-BIDD-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/deutschland-sucht-den-superstar-german",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197238682.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Deutschland sucht den Superstar (German)",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197238682.jpg",
-  "serial_on_label": "AGB-BIDD",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BIDD-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-BIDD: the region read on its label (it was named by a release id)",
   "sha1": "ed0c7963c38d38238f2fe5212b9105e490aaa2b5"
  },
  "AGB-BIHP-EUR.jpg": {
@@ -2251,15 +2251,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7ce7dae3631ca448ba3afdb0e52943fe76ae60ea"
  },
- "AGB-BKNE.jpg": {
+ "AGB-BKNE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/lego-knights-kingdom",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351429257.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Lego Knight's Kingdom",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351429257.jpg",
-  "serial_on_label": "AGB-BKNE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BKNE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BKNE: the region read on its label (it was named by a release id)",
   "sha1": "e38016a7aabfffb24971dcaa11cec01c8e39be32"
  },
  "AGB-BKQP-EUR.jpg": {
@@ -2284,15 +2284,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f4db4944cdf2ace86750a461f09d99436c8ac771"
  },
- "AGB-BL5P.jpg": {
+ "AGB-BL5P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/lego-knights-kingdom-bionicle",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2330320865.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Lego Knight's Kingdom + Bionicle",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2330320865.jpg",
-  "serial_on_label": "AGB-BL5P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BL5P-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BL5P: the region read on its label (it was named by a release id)",
   "sha1": "4709937403bfc7f650ce1348b135132b7fb19c51"
  },
  "AGB-BL8P-EUR.jpg": {
@@ -2306,15 +2306,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4c642a82859813df875967e865500f15cf3766a3"
  },
- "AGB-BLBX.jpg": {
+ "AGB-BLBX-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/brother-bear-the-lion-king",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459488420.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Brother Bear + The Lion King",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-459488420.jpg",
-  "serial_on_label": "AGB-BLBX",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BLBX-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BLBX: the region read on its label (it was named by a release id)",
   "sha1": "82788b090945fa87ecad2426d00dc9718ef09a6c"
  },
  "AGB-BLKP-EUR.jpg": {
@@ -2492,15 +2492,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1f273db1caa75f8bb9f63e05f3aa298c7e6d7f3a"
  },
- "AGB-BQ7X.jpg": {
+ "AGB-BQ7X-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/monster-house",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351436813.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Monster House",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351436813.jpg",
-  "serial_on_label": "AGB-BQ7X",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BQ7X-EUR",
+  "note": "named by the serial read on it (exact); renamed from AGB-BQ7X: the region read on its label (it was named by a release id)",
   "sha1": "0869978f93c25f7b3ee139fe720e4b4b3a54689e"
  },
  "AGB-BQDE-USA_2.jpg": {
@@ -2525,7 +2525,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9fa0811f6d70ed4a172eac60fad219656bbab3bc"
  },
- "AGB-BQTX.jpg": {
+ "AGB-BQTX-EUU.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/mijn-dierenpension-german",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2171688018.jpg",
   "site": "www.retronintendostore.com",
@@ -2811,15 +2811,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "80906ef85421e8d51fa55f49dc1f4a12b7505d86"
  },
- "AGB-BWUD.jpg": {
+ "AGB-BWUD-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/die-wilden-fussball-kerle",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197254384.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Die wilden Fussball Kerle",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-2197254384.jpg",
-  "serial_on_label": "AGB-BWUD",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BWUD-NOE",
+  "note": "named by the serial read on it (exact); renamed from AGB-BWUD: the region read on its label (it was named by a release id)",
   "sha1": "727fd3c48e29622474fe5ac9598d6c9304df3cb2"
  },
  "AGB-BXFP-EUR_2.jpg": {
@@ -2910,15 +2910,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9361710dcef63e5d8fd6faef5e36334c7242ef06"
  },
- "AGB-BZTE.jpg": {
+ "AGB-BZTE-USA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/veggietales-larryboy-and-the-bad-apple",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351450135.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "VeggieTales LarryBoy and the Bad Apple",
   "category": "gameboy-advance/games",
   "original_name": "retronintendostore-351450135.jpg",
-  "serial_on_label": "AGB-BZTE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BZTE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BZTE: the region read on its label (it was named by a release id)",
   "sha1": "688385cad56febde6b0fa53579c58ab405190f9c"
  },
  "AGB-FP7P-EUR_2.jpg": {

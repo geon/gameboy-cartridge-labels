@@ -428,15 +428,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c2273ee1c19fa1e4e1385dbc8d052aeeffdfe6f1"
  },
- "DMG-AKBP.jpg": {
+ "DMG-AKBP-FRG.jpg": {
   "page_url": "https://zockbar.ch/products/kirbys-dream-land-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Kirbys-Dream-Land-2_GB.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Kirby's Dream Land 2",
   "collection": "game-boy",
   "original_name": "zockbar-kirbys-dream-land-2.jpg",
-  "serial_on_label": "DMG-AKBP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-AKBP-FRG",
+  "note": "named by the serial read on it (exact); renamed from DMG-AKBP: the region read on its label (it was named by a release id)",
   "sha1": "fddfd495bb0b5c7d1319a5594f13441084b55fe7"
  },
  "DMG-AKFP-EUR.jpg": {
@@ -767,15 +767,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0d6c9262902e84031a149140891c822d161192f1"
  },
- "DMG-ASIP.jpg": {
+ "DMG-ASIP-UKV_2.jpg": {
   "page_url": "https://zockbar.ch/products/small-soldiers",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/small-soldiers-gb-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Small Soldiers",
   "collection": "game-boy",
   "original_name": "zockbar-small-soldiers.jpg",
-  "serial_on_label": "DMG-ASIP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-ASIP-UKV",
+  "note": "named by the serial read on it (exact); renamed from DMG-ASIP: the region read on its label (it was named by a release id)",
   "sha1": "814a54a3341652cd03202c180a4fc234085be997"
  },
  "DMG-ASMP-EUR.jpg": {
@@ -855,15 +855,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1ae6fc66ec4a936bd17e28ce514c11c9bb3e0d8c"
  },
- "DMG-AVAP.jpg": {
+ "DMG-AVAP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/ein-schweinchen-namens-babe",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/ein-schweinchen-namens-babe-gameboy-color-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Ein Schweinchen namens Babe",
   "collection": "game-boy",
   "original_name": "zockbar-ein-schweinchen-namens-babe.jpg",
-  "serial_on_label": "DMG-AVAP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-AVAP-NOE",
+  "note": "named by the serial read on it (exact); renamed from DMG-AVAP: the region read on its label (it was named by a release id)",
   "sha1": "ca6c44ded77adc7606f6ca2f1f78f5baa2749d71"
  },
  "DMG-AVLP-NOE.jpg": {

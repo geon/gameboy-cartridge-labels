@@ -197,15 +197,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c01329b2b34e07309cea281f3bafd68cf45257cb"
  },
- "DMG-AD7E.jpg": {
+ "DMG-AD7E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/daffy-duck-fowl-play-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/fowlplay.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Daffy Duck: \"Fowl Play\" - Game Boy Color",
   "collection": "game-boy-color-games",
   "original_name": "retroraven-daffy-duck-fowl-play-game-boy-color.jpg",
-  "serial_on_label": "DMG-AD7E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-AD7E-USA",
+  "note": "named by the serial read on it (exact); renamed from DMG-AD7E: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "6379440dddfe27dd2bcd056e93606ade8088aafe"
  },
  "DMG-ADDE-USA-1.jpg": {
@@ -219,15 +219,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "84cc7f8173f2d6d2f0623466f6c86db2ffd952c0"
  },
- "DMG-ADYE.jpg": {
+ "DMG-ADYE-USA-1.jpg": {
   "page_url": "https://retroravengames.com/products/barbie-ocean-discovery-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/barbieocean.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Barbie: Ocean Discovery - Game Boy Color",
   "collection": "game-boy-color-games",
   "original_name": "retroraven-barbie-ocean-discovery-game-boy-color.jpg",
-  "serial_on_label": "DMG-ADYE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-ADYE-USA-1",
+  "note": "named by the serial read on it (exact); renamed from DMG-ADYE: the region read on its label (it was named by a release id)",
   "sha1": "1b5e95f9b4fd0b9a9849fca38c70681d3541002e"
  },
  "DMG-AE3E-USA.jpg": {

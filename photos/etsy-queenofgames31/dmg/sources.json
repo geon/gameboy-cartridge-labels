@@ -1,8 +1,8 @@
 {
- "DMG-AARE.webp": {
+ "DMG-AARE-USA.webp": {
   "original_name": "il_1588xN.7827492970_36vp.webp",
-  "serial_on_label": "DMG-AARE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "DMG-AARE-USA",
+  "note": "named by the serial read on it (exact); renamed from DMG-AARE: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "920dff5a6b0027b84a60c2b8c3873b35de3010f8"
  },
  "DMG-ABLE-USA.webp": {

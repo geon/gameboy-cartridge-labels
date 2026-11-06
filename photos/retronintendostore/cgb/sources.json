@@ -65,37 +65,37 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e29f2eeb2cada70835b4f9e31a40d4ca51035c1e"
  },
- "CGB-ALMP.jpg": {
+ "CGB-ALMP-HOL.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/looney-tunes-gevaar-van-mars",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2211224076.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Looney Tunes Gevaar van Mars",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-2211224076.jpg",
-  "serial_on_label": "CGB-ALMP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-ALMP-HOL",
+  "note": "named by the serial read on it (exact); renamed from CGB-ALMP: the region read on its label (it was named by a release id)",
   "sha1": "22477222d7b3d1ab6b5eb8e348578c278117b310"
  },
- "CGB-ALQP.jpg": {
+ "CGB-ALQP-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/lucky-luke",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459456137.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Lucky Luke",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-459456137.jpg",
-  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_86",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_86; renamed from CGB-ALQP: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "cef67aabc2b411471c9103ac229b35f70c3f03ab",
-  "serial_on_label": "CGB-ALQP"
+  "serial_on_label": "CGB-ALQP-NOE"
  },
- "CGB-AO4P.jpg": {
+ "CGB-AO4P-EUR-1.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/bugs-bunny-crazy-castle-4",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351459805.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Bugs Bunny Crazy Castle 4",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-351459805.jpg",
-  "serial_on_label": "CGB-AO4P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AO4P-EUR-1",
+  "note": "named by the serial read on it (exact); renamed from CGB-AO4P: the region read on its label (it was named by a release id)",
   "sha1": "cb46e1220fba8bc7b7606cfa4f6f01c716e43680"
  },
  "CGB-AQOP-EUU.jpg": {
@@ -219,15 +219,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "840f30c61022bc9d06e53c1fb056a520b3efd2f1"
  },
- "CGB-AYQP.jpg": {
+ "CGB-AYQP-EUR-1.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/rayman",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351461029.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Rayman",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-351461029.jpg",
-  "serial_on_label": "CGB-AYQP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AYQP-EUR-1",
+  "note": "named by the serial read on it (exact); renamed from CGB-AYQP: the region read on its label (it was named by a release id)",
   "sha1": "51d2862f4b0763c975d6f9e50b02f99befc5e78f"
  },
  "CGB-AZ7P-EUR_2.jpg": {
@@ -328,15 +328,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f50fee73ef29127bf2cd978b0bcbe78054eb2d29"
  },
- "CGB-B99P.jpg": {
+ "CGB-B99P-UKV-1.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/102-dalmations",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351503827.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "102 Dalmatians",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-351503827.jpg",
-  "serial_on_label": "CGB-B99P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-B99P-UKV-1",
+  "note": "named by the serial read on it (exact); renamed from CGB-B99P: the region read on its label (it was named by a release id)",
   "sha1": "cfdd9155b88e79f0a586927aeb64493780fab93c"
  },
  "CGB-BABY-EUU.jpg": {
@@ -350,15 +350,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "7cf349b794765fc19a8cc9aac0627b17559f759b"
  },
- "CGB-BADP.jpg": {
+ "CGB-BADP-EUR-1.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/aladdin",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2334072398.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Aladdin",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-2334072398.jpg",
-  "serial_on_label": "CGB-BADP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-BADP-EUR-1",
+  "note": "named by the serial read on it (exact); renamed from CGB-BADP: the region read on its label (it was named by a release id)",
   "sha1": "d61f04506fa43ab339fbb5226b2aaf1bd062a175"
  },
  "CGB-BAZP-EUR_2.jpg": {
@@ -653,15 +653,15 @@
   "note": "named by nothing: no serial read",
   "sha1": "ae253aea08ca013cf7426b98a3b6b35e09b47514"
  },
- "CGB-BLAP.jpg": {
+ "CGB-BLAP-HOL.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/looney-tunes-de-wraak-van-mars",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/1497201851.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Looney Tunes De Wraak van Mars!",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-1497201851.jpg",
-  "serial_on_label": "CGB-BLAP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-BLAP-HOL",
+  "note": "named by the serial read on it (exact); renamed from CGB-BLAP: the region read on its label (it was named by a release id)",
   "sha1": "b3a6d40bf69d5165954f7b7f964c8bff41c5bfd1"
  },
  "CGB-BLBP-EUR_2.jpg": {
@@ -708,15 +708,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ce90742faac78a1c9500ba5050bfe85955cc4188"
  },
- "CGB-BM8P.jpg": {
+ "CGB-BM8P-EUR-2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/mario-tennis",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351460501.jpg",
   "site": "www.retronintendostore.com",
   "title_on_page": "Mario Tennis",
   "category": "gameboy-color/games",
   "original_name": "retronintendostore-351460501.jpg",
-  "serial_on_label": "CGB-BM8P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-BM8P-EUR-2",
+  "note": "named by the serial read on it (exact); renamed from CGB-BM8P: the region read on its label (it was named by a release id)",
   "sha1": "8cd8fbf8f4fab7c5dc6041549b2f083374b12652"
  },
  "CGB-BMIP-UKV.jpg": {

@@ -10,37 +10,37 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c857728b57eb1bff165708d95897c5079914ea49"
  },
- "CGB-AHYP.jpg": {
+ "CGB-AHYP-EUR-1.jpg": {
   "page_url": "https://zockbar.ch/products/super-mario-bros-deluxe",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/super-mario-bros-deluxe-gameboy-color-gebraucht.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Super Mario Bros. Deluxe",
   "collection": "game-boy-color",
   "original_name": "zockbar-super-mario-bros-deluxe.jpg",
-  "serial_on_label": "CGB-AHYP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AHYP-EUR-1",
+  "note": "named by the serial read on it (exact); renamed from CGB-AHYP: the region read on its label (it was named by a release id)",
   "sha1": "bafe702cb7ad5020d59d6eb81d442d98781e30ac"
  },
- "CGB-AIMP.jpg": {
+ "CGB-AIMP-UKV.jpg": {
   "page_url": "https://zockbar.ch/products/mission-impossible-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/mission-impossible-gameboy-color-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Mission: Impossible",
   "collection": "game-boy-color",
   "original_name": "zockbar-mission-impossible-2.jpg",
-  "serial_on_label": "CGB-AIMP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AIMP-UKV",
+  "note": "named by the serial read on it (exact); renamed from CGB-AIMP: the region read on its label (it was named by a release id)",
   "sha1": "1464f921848f43293d2e31a5b29c2f039b513396"
  },
- "CGB-AOLP.jpg": {
+ "CGB-AOLP-FAH.jpg": {
   "page_url": "https://zockbar.ch/products/asterix-obelix-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/asterix-und-obelix-gameboy-color-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Astérix & Obélix",
   "collection": "game-boy-color",
   "original_name": "zockbar-asterix-obelix-1.jpg",
-  "serial_on_label": "CGB-AOLP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AOLP-FAH",
+  "note": "named by the serial read on it (exact); renamed from CGB-AOLP: the region read on its label (it was named by a release id)",
   "sha1": "c99b68084e707cd4dc2ded3e4583d432982d566c"
  },
  "CGB-ATHF-FRA.jpg": {
@@ -54,15 +54,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4a2acc4b5aeb7fdc251913daad6a2acd1fa368f6"
  },
- "CGB-AWXP.jpg": {
+ "CGB-AWXP-EUR-2.jpg": {
   "page_url": "https://zockbar.ch/products/mario-golf-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/mario-golf-gameboy-color-gebraucht.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Mario Golf",
   "collection": "game-boy-color",
   "original_name": "zockbar-mario-golf-game-boy-color.jpg",
-  "serial_on_label": "CGB-AWXP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-AWXP-EUR-2",
+  "note": "named by the serial read on it (exact); renamed from CGB-AWXP: the region read on its label (it was named by a release id)",
   "sha1": "4a56f15eec1a926aa7337435f6a25641374db652"
  },
  "CGB-AZ7P-EUR_3.jpg": {
@@ -87,26 +87,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9956c4b1ee6febfbb92506818ed4d292c183f407"
  },
- "CGB-BL2P.jpg": {
+ "CGB-BL2P-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/lego-insel-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lego-insel-2-gameboy-color-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Lego Insel 2",
   "collection": "game-boy-color",
   "original_name": "zockbar-lego-insel-2.jpg",
-  "serial_on_label": "CGB-BL2P",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-BL2P-NOE",
+  "note": "named by the serial read on it (exact); renamed from CGB-BL2P: the region read on its label (it was named by a release id)",
   "sha1": "74a7197c4c0fda8bf725766940df2920d3ee94f5"
  },
- "CGB-BLYP.jpg": {
+ "CGB-BLYP-EUU.jpg": {
   "page_url": "https://zockbar.ch/products/lego-stunt-rally",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lego-stunt-rally-gameboy-color-gut.jpg",
   "site": "zockbar.ch",
   "title_on_page": "Lego Stunt Rally",
   "collection": "game-boy-color",
   "original_name": "zockbar-lego-stunt-rally.jpg",
-  "serial_on_label": "CGB-BLYP",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "CGB-BLYP-EUU",
+  "note": "named by the serial read on it (exact); renamed from CGB-BLYP: the region read on its label (it was named by a release id)",
   "sha1": "7861dcb0093c0e7f3d5e0b71cf29385dfa86e5ab"
  },
  "CGB-BMZP-EUR_2.jpg": {

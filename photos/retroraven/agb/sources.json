@@ -21,26 +21,26 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_134",
   "sha1": "341cdef868d57578393fba72aaf05f2f0074f82f"
  },
- "AGB-A2KE.jpg": {
+ "AGB-A2KE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/spy-kids-challenger-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Spy_Kids_Challenger.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Spy Kids: Challenger - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-spy-kids-challenger-game-boy-advance.jpg",
-  "serial_on_label": "AGB-A2KE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-A2KE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-A2KE: the region read on its label (it was named by a release id)",
   "sha1": "4146093993e2a4c057195cd9a6a776391cba71ab"
  },
- "AGB-A2ME.jpg": {
+ "AGB-A2ME-USA.jpg": {
   "page_url": "https://retroravengames.com/products/madden-nfl-2002-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/madden2002_fb98ea73-db2d-4950-a540-b42b206f9a8f.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Madden NFL 2002 - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-madden-nfl-2002-game-boy-advance.jpg",
-  "serial_on_label": "AGB-A2ME",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-A2ME-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-A2ME: the region read on its label (it was named by a release id)",
   "sha1": "2297201dfe11478f16e98953008ee1e1a669acb8"
  },
  "AGB-A3ME-USA.jpg": {
@@ -109,15 +109,15 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_107",
   "sha1": "3ff8947a79d31ff0b6689f2688df644e02b50871"
  },
- "AGB-AB9E.jpg": {
+ "AGB-AB9E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/dual-blades-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/dualblades.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Dual Blades - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-dual-blades-game-boy-advance.jpg",
-  "serial_on_label": "AGB-AB9E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AB9E-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-AB9E: the region read on its label (it was named by a release id)",
   "sha1": "8d3900df98c563d4558b530be8b7fb5a27f8fc8f"
  },
  "AGB-ABTE-USA.jpg": {
@@ -296,15 +296,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "5bbdd5e6df69853c115ea8098c9cb9c6a4f5e08a"
  },
- "AGB-AKXE.jpg": {
+ "AGB-AKXE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/spider-man-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/spiderman_64053ff0-3917-4c08-bf52-5fde409b21ee.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Spider-Man - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-spider-man-game-boy-advance.jpg",
-  "serial_on_label": "AGB-AKXE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-AKXE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-AKXE: the region read on its label (it was named by a release id)",
   "sha1": "bac5a9a0cff474b206cea5bf11a42d918e09b27f"
  },
  "AGB-ALTE-USA.jpg": {
@@ -340,15 +340,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d4e0618ff76c627bbdc02afc9ad7771a2723324c"
  },
- "AGB-AMXE.jpg": {
+ "AGB-AMXE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/disney-pixar-monsters-inc-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/monsterinc.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Monsters, Inc. - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-disney-pixar-monsters-inc-game-boy-advance.jpg",
-  "serial_on_label": "AGB-AMXE",
-  "note": "named by the serial read on it (near)",
+  "serial_on_label": "AGB-AMXE-USA",
+  "note": "named by the serial read on it (near); renamed from AGB-AMXE: the region read on its label (it was named by a release id)",
   "sha1": "b1a50810c5149a67168d015360e8afa5adb97f37"
  },
  "AGB-AN3E-USA.jpg": {
@@ -362,15 +362,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "492fc48ead7dd51f25a6a4c0905ec714ee46cf47"
  },
- "AGB-ANCE.jpg": {
+ "AGB-ANCE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/zoocube-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/zoocube.jpg",
   "site": "retroravengames.com",
   "title_on_page": "ZooCube  - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-zoocube-game-boy-advance.jpg",
-  "serial_on_label": "AGB-ANCE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ANCE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-ANCE: the region read on its label (it was named by a release id)",
   "sha1": "1b97599c55716467ee8037efde2fdbcdda8d5d20"
  },
  "AGB-ANME-USA.jpg": {
@@ -472,15 +472,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "30371b814068eb190ea0d3912376a2dd1ef51404"
  },
- "AGB-ASDE.jpg": {
+ "AGB-ASDE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/scooby-doo-and-the-cyber-chase-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/scoobydoocyber.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Scooby-Doo and the Cyber Chase - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-scooby-doo-and-the-cyber-chase-game-boy-advance.jpg",
-  "serial_on_label": "AGB-ASDE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-ASDE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-ASDE: the region read on its label (it was named by a release id)",
   "sha1": "904559466b43b3ce742afef8f8acc767a1adb80e"
  },
  "AGB-AT5E-USA.jpg": {
@@ -571,26 +571,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c5643e1bf27f91e4b3fc56251e2cf9ad3860f865"
  },
- "AGB-B2FE.jpg": {
+ "AGB-B2FE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/family-feud-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/familyfeud_201d0cfd-0b09-4188-b1ee-6a91bbbe43ae.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Family Feud  - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-family-feud-game-boy-advance.jpg",
-  "serial_on_label": "AGB-B2FE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B2FE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B2FE: the region read on its label (it was named by a release id)",
   "sha1": "8144c5e1c973d7a4517cecfdac2888c45f6a899f"
  },
- "AGB-B2ME.jpg": {
+ "AGB-B2ME-USA.jpg": {
   "page_url": "https://retroravengames.com/products/shaman-king-master-of-spirits-2-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/shamankingmasterofspirits2brighter.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Shaman King: Master of Spirits 2 - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-shaman-king-master-of-spirits-2-game-boy-advance.jpg",
-  "serial_on_label": "AGB-B2ME",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B2ME-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B2ME: the region read on its label (it was named by a release id)",
   "sha1": "9da1e8e7c3f4f90e30f4265cbc9284d3ef2e9fd2"
  },
  "AGB-B2WE-USA.jpg": {
@@ -659,26 +659,26 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_237",
   "sha1": "7ea6ab9fc43ba6514c20ac861048f27d83999348"
  },
- "AGB-B65E.jpg": {
+ "AGB-B65E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/connect-four-perfection-trouble-game-boy-advance-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/connectfourperfectiontrouble.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Connect Four / Perfection / Trouble - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-connect-four-perfection-trouble-game-boy-advance-1.jpg",
-  "serial_on_label": "AGB-B65E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B65E-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B65E: the region read on its label (it was named by a release id)",
   "sha1": "da4b5e0b8f296fea84073c253cfd8d16579b2a14"
  },
- "AGB-B66E.jpg": {
+ "AGB-B66E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/risk-battleship-clue-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/battleshipriskclue.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Risk / Battleship / Clue - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-risk-battleship-clue-game-boy-advance.jpg",
-  "serial_on_label": "AGB-B66E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B66E-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B66E: the region read on its label (it was named by a release id)",
   "sha1": "b8972a7c93ad661649882fa4dca637fc4fc6d2f5"
  },
  "AGB-B67E-USA.jpg": {
@@ -692,26 +692,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b8f9607b954ea0182f45acdc5fcaf69178a1a89f"
  },
- "AGB-B6GE.jpg": {
+ "AGB-B6GE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/chicken-shoot-2-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/chickenshoot2.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Chicken Shoot 2 - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-chicken-shoot-2-game-boy-advance.jpg",
-  "serial_on_label": "AGB-B6GE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B6GE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B6GE: the region read on its label (it was named by a release id)",
   "sha1": "9abaf793a7174b287de405a6c980c2610d07ae5c"
  },
- "AGB-B6PE.jpg": {
+ "AGB-B6PE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ms-pac-man-maze-madness-pac-man-world-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/mspacmanpacmanworld.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Ms. Pac-Man: Maze Madness/Pac-Man World - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-ms-pac-man-maze-madness-pac-man-world-game-boy-advance.jpg",
-  "serial_on_label": "AGB-B6PE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-B6PE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-B6PE: the region read on its label (it was named by a release id)",
   "sha1": "0f2d95731e8093f1591b5ac0840000539221ab6e"
  },
  "AGB-B6ZE-USA.jpg": {
@@ -824,15 +824,15 @@
   "note": "named by the serial read on it (near)",
   "sha1": "b9d02a24398ce2dffb2a20f06ed86bdc013299f4"
  },
- "AGB-BCAE.jpg": {
+ "AGB-BCAE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/disney-pixar-cars-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/cars_7d9cd046-e789-4b17-89be-7831b71ff853.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Cars - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-disney-pixar-cars-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BCAE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BCAE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BCAE: the region read on its label (it was named by a release id)",
   "sha1": "fbd4af20733cd1da93b906246b478462aba5d940"
  },
  "AGB-BCFE-USA.jpg": {
@@ -923,15 +923,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "333eee8b2f4300f699dd5bda97131dc0035df8e3"
  },
- "AGB-BF2E.jpg": {
+ "AGB-BF2E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/the-fairly-oddparents-shadow-showdown-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/oddparentsshadow.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Fairly OddParents!: Shadow Showdown - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-the-fairly-oddparents-shadow-showdown-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BF2E",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BF2E-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BF2E: the region read on its label (it was named by a release id)",
   "sha1": "b5190a5699f9821e39f6928327ddfd1579fbdf9c"
  },
  "AGB-BF4E-USA.jpg": {
@@ -978,26 +978,26 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_154",
   "sha1": "f0208962f5f5f9d974c9346de0b842447f20670b"
  },
- "AGB-BFXE.jpg": {
+ "AGB-BFXE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/phil-of-the-future-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/PhiloftheFuture.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Phil of the Future - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-phil-of-the-future-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BFXE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BFXE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BFXE: the region read on its label (it was named by a release id)",
   "sha1": "03c4f0551f8c385448a6c593b6063dc9783f5bbe"
  },
- "AGB-BG6P.jpg": {
+ "AGB-BG6P-USA.jpg": {
   "page_url": "https://retroravengames.com/products/super-army-war-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/superarmywar.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Super Army War - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-super-army-war-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BG6P",
-  "note": "named by the serial read on it (near)",
+  "serial_on_label": "AGB-BG6P-USA",
+  "note": "named by the serial read on it (near); renamed from AGB-BG6P: the region read on its label (it was named by a release id)",
   "sha1": "ecb0297de47f9b2f3da05519b2a947a2b6536f90"
  },
  "AGB-BG7E-USA_2.jpg": {
@@ -1055,15 +1055,15 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_169",
   "sha1": "ec4ff75572403bccf8de206254f296714a821ff8"
  },
- "AGB-BHWE.jpg": {
+ "AGB-BHWE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/hot-wheels-world-race-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/hotwheelsworldrace_48a950bd-eea1-4117-9d08-8cc890893d46.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Hot Wheels World Race- Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-hot-wheels-world-race-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BHWE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BHWE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BHWE: the region read on its label (it was named by a release id)",
   "sha1": "59530c8bc70c2014ac2688c981c4e7481039fb14"
  },
  "AGB-BIAE-USA.jpg": {
@@ -1121,15 +1121,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "cfbc22d29235a6155dc1fb65d34bdfa18140b0c3"
  },
- "AGB-BKQE.jpg": {
+ "AGB-BKQE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/kong-the-8th-wonder-of-the-world-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Kong.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Kong: The 8th Wonder of the World - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-kong-the-8th-wonder-of-the-world-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BKQE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BKQE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BKQE: the region read on its label (it was named by a release id)",
   "sha1": "6fbaafdcee7a36a57237a048c7fd4f37c09df302"
  },
  "AGB-BL2E-USA.jpg": {
@@ -1176,16 +1176,16 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_188",
   "sha1": "963b867ff5750210df09473f45272786ed983f4c"
  },
- "AGB-BM7E.jpg": {
+ "AGB-BM7E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/madagascar-operation-penguin-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/madagascaroperationpenguin.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Madagascar: Operation Penguin - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-madagascar-operation-penguin-game-boy-advance.jpg",
-  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_192",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_192; renamed from AGB-BM7E: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "475d73751c81238f31fc4a539b4720a5dfb91e92",
-  "serial_on_label": "AGB-BM7E"
+  "serial_on_label": "AGB-BM7E-USA"
  },
  "AGB-BMCE-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/monster-trucks-game-boy-advance",
@@ -1253,15 +1253,15 @@
   "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_215",
   "sha1": "5b62da388de2041beb1d54615f6698889208d79a"
  },
- "AGB-BNVE.jpg": {
+ "AGB-BNVE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/nicktoons-battle-for-volcano-island-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/nicktoonsvolcano.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Nicktoons: Battle for Volcano Island - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-nicktoons-battle-for-volcano-island-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BNVE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BNVE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BNVE: the region read on its label (it was named by a release id)",
   "sha1": "d70fbb6d0fe160f0b018fe7cf591dfa530232d8a"
  },
  "AGB-BP9E-USA_2.jpg": {
@@ -1341,37 +1341,37 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0c9bc3a2bf98e12c7128e118531062ae767e500c"
  },
- "AGB-BRTE.jpg": {
+ "AGB-BRTE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/robots-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Robots_5f8d359a-f58a-4b4d-b439-8a2516d646a0.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Robots - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-robots-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BRTE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BRTE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BRTE: the region read on its label (it was named by a release id)",
   "sha1": "05c0a19927d08e9cc05e557fa669e0a23018ba27"
  },
- "AGB-BSEE.jpg": {
+ "AGB-BSEE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/shrek-2-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Shrek2_22329fa9-331b-49d0-ac78-0dcb32b952a5.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Shrek 2 - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-shrek-2-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BSEE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BSEE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BSEE: the region read on its label (it was named by a release id)",
   "sha1": "b59b7a48517fe89838825a1334803291483c6785"
  },
- "AGB-BSPE.jpg": {
+ "AGB-BSPE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/spider-man-2-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/spiderman2_8bc87042-3bf1-4498-ae15-fd1d10a60313.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Spider-Man 2 - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-spider-man-2-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BSPE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BSPE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BSPE: the region read on its label (it was named by a release id)",
   "sha1": "789b19e84c79db9e697de27acd1d80249452ebbf"
  },
  "AGB-BT2E-USA_2.jpg": {
@@ -1407,37 +1407,37 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ad16065b102f13636ce893eb74522c69604e123f"
  },
- "AGB-BUAE.jpg": {
+ "AGB-BUAE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ultimate-puzzle-games-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/ultimatepuzzlegames.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Ultimate Puzzle Games - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-ultimate-puzzle-games-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BUAE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BUAE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BUAE: the region read on its label (it was named by a release id)",
   "sha1": "9595ca27bcf1581f1244e30d2ee3ed074237e85e"
  },
- "AGB-BURE.jpg": {
+ "AGB-BURE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/paws-claws-pet-resort-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/petresort.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Paws & Claws: Pet Resort - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-paws-claws-pet-resort-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BURE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BURE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BURE: the region read on its label (it was named by a release id)",
   "sha1": "16dc828b482f3d2fdea1925ca1341f7e42ba3965"
  },
- "AGB-BUSE.jpg": {
+ "AGB-BUSE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/dr-seuss-green-eggs-and-ham-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/greeneggsandham.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Dr. Seuss: Green Eggs and Ham - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-dr-seuss-green-eggs-and-ham-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BUSE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BUSE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BUSE: the region read on its label (it was named by a release id)",
   "sha1": "d0f23dac2e0317976ddacc32ec076b12747220e8"
  },
  "AGB-BWIE-USA_3.jpg": {
@@ -1473,15 +1473,15 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "f7f7d27fe768a0dbfe091a2fa2745709b7b57a91"
  },
- "AGB-BYME.jpg": {
+ "AGB-BYME-USA.jpg": {
   "page_url": "https://retroravengames.com/products/monster-trucks-mayhem-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/monstertruckmayhem.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Monster Trucks Mayhem - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-monster-trucks-mayhem-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BYME",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BYME-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BYME: the region read on its label (it was named by a release id)",
   "sha1": "d8e80a4a9dab76fda8558110ff5cddffed68a59f"
  },
  "AGB-BYWE-USA.jpg": {
@@ -1505,26 +1505,26 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c7efff3caa2ec26554e720043c07cb46c6451b99"
  },
- "AGB-BZTE_2.jpg": {
+ "AGB-BZTE-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/veggie-tales-larry-boy-and-the-bad-apple-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/VeggieTalesLarryBoyandtheBadApple.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Veggie Tales: Larry Boy and the Bad Apple - Game Boy Advance",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-veggie-tales-larry-boy-and-the-bad-apple-game-boy-advance.jpg",
-  "serial_on_label": "AGB-BZTE",
-  "note": "named by the serial read on it (exact)",
+  "serial_on_label": "AGB-BZTE-USA",
+  "note": "named by the serial read on it (exact); renamed from AGB-BZTE_2: the region read on its label (it was named by a release id)",
   "sha1": "f220bad41121eaa51d3d815ab83d3b6eabc5b395"
  },
- "AGB-MPCE.jpg": {
+ "AGB-MPCE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/pokemon-i-choose-you-here-comes-the-squirtle-squad-game-boy-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/PokemonIChooseYou.jpg",
   "site": "retroravengames.com",
   "title_on_page": "Pokemon: I Choose You! / Here Comes the Squirtle Squad - Game Boy Advance Video",
   "collection": "game-boy-advance-games",
   "original_name": "retroraven-pokemon-i-choose-you-here-comes-the-squirtle-squad-game-boy-advance.jpg",
-  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_229",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_229; renamed from AGB-MPCE: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "7b88fcb204ed1230f437cebf0c974856b1a7e965",
-  "serial_on_label": "AGB-MPCE"
+  "serial_on_label": "AGB-MPCE-USA"
  }
 }

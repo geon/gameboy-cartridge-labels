@@ -867,16 +867,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "45feb6d03f3c57d7970800028a166c93e702d1de"
  },
- "CGB-BQPE.jpg": {
+ "CGB-BQPE-USA-1.jpg": {
   "page_url": "https://retroravengames.com/products/spongebob-squarepants-legend-of-the-lost-spatula-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/spongebobspatula.jpg",
   "site": "retroravengames.com",
   "title_on_page": "SpongeBob Squarepants: Legend of the Lost Spatula - Game Boy Color",
   "collection": "game-boy-color-games",
   "original_name": "retroraven-spongebob-squarepants-legend-of-the-lost-spatula-game-boy-color.jpg",
-  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_257",
+  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_257; renamed from CGB-BQPE: the region read on its label, enlarged and line by line (it was named by a release id)",
   "sha1": "4ed1ecaa0ab69d3d2caeae39678a67555207604c",
-  "serial_on_label": "CGB-BQPE"
+  "serial_on_label": "CGB-BQPE-USA-1"
  },
  "CGB-BROE-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/dexters-laboratory-robot-rampage-game-boy-color",
