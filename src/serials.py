@@ -47,6 +47,20 @@ def split_by_region():
 SPLIT = split_by_region()
 
 
+def save_split(release, title, split):
+    """Adds the release to SPLIT_BY_REGION (with its title), or takes it out; SPLIT follows."""
+    lines = open(SPLIT_BY_REGION).read().splitlines()
+    head = [l for l in lines if l.startswith("#")]
+    rows = {l.split("\t")[0]: l for l in lines if l.strip() and not l.startswith("#")}
+    if split:
+        rows.setdefault(release, f"{release}\t{title}")
+    else:
+        rows.pop(release, None)
+    open(SPLIT_BY_REGION, "w").write("\n".join(head + [rows[r] for r in sorted(rows)]) + "\n")
+    SPLIT.clear()
+    SPLIT.update(rows)
+
+
 def release_key(name, release_of):
     """A photo's release (release_of: releases_by_serial()), by its name: (the release's id, else its serial, with its
     note if it has one, as DMG-ATAJ[PINK]: a release of its own, and so with a prefix, as DIS-CGB-AZ7E; with its region
