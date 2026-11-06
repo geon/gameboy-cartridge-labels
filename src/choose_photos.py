@@ -16,8 +16,9 @@ from fit_cartridge import load
 # accepted or placed by hand is shown cropped to it, as render-carts renders it. For convenience, each photo can also be
 # deleted (photos.delete), its fits with it, or renamed to a corrected serial (photos.rename: tidied, numbered if
 # taken, moved to its system's folder), its fits following it.
-# The rows can be narrowed to the designs with several photos (one and one from otakaraou count as one: photos.only),
-# and to those with no preferred photo (a design given one stays shown until the rows are drawn again).
+# Only the designs with several photos are listed (one and one from otakaraou count as one: photos.only: nothing to
+# choose); those with a preferred photo only with "Show designs with a preferred photo" (a design given one stays shown
+# until the rows are drawn again).
 # Usage: choose_photos.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
 lock = threading.Lock()
@@ -103,8 +104,7 @@ figure.preferred{border-color:#2a6fdb}figure img{cursor:pointer}
 figcaption a{color:inherit}
 button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em}button.delete{color:#b00}
 </style>
-<header><b>Choose photos</b><label><input type="checkbox" id="doubles"> only designs with several photos</label>
-<label><input type="checkbox" id="unpreferred"> only designs with no preferred photo</label>
+<header><b>Choose photos</b><label><input type="checkbox" id="preferred"> Show designs with a preferred photo</label>
 <span><span class="check plastic" style="position:static;display:inline-block">✓</span> plastic fitted
 <span class="check label" style="position:static;display:inline-block">✓</span> label fitted</span>
 <span>click a photo to prefer it</span><span id="count"></span></header>
@@ -114,7 +114,7 @@ const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
 let rows = [];
 function render() {
-  const shown = rows.filter(r => (!$("doubles").checked || !r.single) && (!$("unpreferred").checked || !r.photos.some(p => p.preferred)));
+  const shown = rows.filter(r => !r.single && ($("preferred").checked || !r.photos.some(p => p.preferred)));
   $("count").textContent = `${shown.length} designs, ${shown.reduce((n, r) => n + r.photos.length, 0)} photos`;
   $("rows").innerHTML = shown.map(r => `<div class="row" data-release="${esc(r.release)}"><div class="release"><b>${esc(r.release)}</b><span>${esc(r.title)}</span></div><div class="photos">` +
     r.photos.map(p => `<figure data-path="${esc(p.path)}"${p.preferred ? ' class="preferred"' : ""}>${p.fitted ? `<span class="check ${p.fitted}" title="${p.fitted} fitted">✓</span>` : ""}` +
@@ -158,7 +158,7 @@ async function rename(path) {
   rows = await (await fetch("/rows")).json();
   render();
 }
-$("doubles").onchange = $("unpreferred").onchange = render;
+$("preferred").onchange = render;
 fetch("/rows").then(r => r.json()).then(r => { rows = r; render(); });
 </script>
 """
