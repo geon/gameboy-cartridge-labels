@@ -1,4 +1,7 @@
-import contextlib, fcntl, json, os, cv2, numpy as np
+import contextlib, fcntl, json, os, sys, cv2, numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import photos
 
 # Each source's colors, as fit-colors sets them (src/fit_colors.py), for the sources that photograph every cartridge
 # alike: my own photos and jnlgame's, on a plain white background, have it made white (that sets their exposure and
@@ -65,6 +68,8 @@ def white(photo, border=None):
 # colors.json: by the photo's stem, {"sha1": its SHA-1, "colors": settings + {"source": "auto-generated" or
 # "hand-placed"}}; settings made by make fit-colors (auto-generated) or set in make adjust-colors (hand-placed, which
 # fit-colors keeps). An entry whose SHA-1 isn't its photo's is of another photo once under the same name: ignored.
+# Entries follow their photos by SHA-1 when they're renamed (follow_renames), as fits.json's do, so that renaming a
+# photo keeps its settings, hand-placed ones too.
 FILE = "colors.json"
 # The reference sources: photos lit alike within each (with their source's settings above), what the others are
 # matched to.
@@ -120,7 +125,18 @@ def whitening(color, target=1.0):
 
 
 def load_colors():
-    return json.load(open(FILE)) if os.path.exists(FILE) else {}
+    return follow_renames(json.load(open(FILE))) if os.path.exists(FILE) else {}
+
+
+def follow_renames(colors):
+    """Each entry not of the photo under its name moved to the name of the photo with its SHA-1, if that has none."""
+    sha1s = photos.sha1s()
+    kept = {name: e for name, e in colors.items() if sha1s.get(name) == e.get("sha1")}
+    for name, e in sorted(colors.items()):
+        if name not in kept:
+            free = [n for n, sha1 in sorted(sha1s.items()) if sha1 == e.get("sha1") and n not in kept]
+            kept[free[0] if free else name] = e
+    return kept
 
 
 def save_colors(colors):
