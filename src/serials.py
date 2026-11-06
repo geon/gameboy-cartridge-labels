@@ -129,11 +129,13 @@ def serials(text_dir):
         matches = []
         for r in found:
             status, serial = match(r, release_of)
-            if status == "near" and not title_seen(release_of[photos.unprefixed(serial)], label):
+            seen = status != "unknown" and title_seen(release_of[photos.unprefixed(serial)], label)
+            if status == "near" and not seen:
                 status, serial = "unknown", r
-            matches.append((status, serial))
-        # The longest of the best-matching reads (DMG-AJYJ-JPN rather than DMG-AJYJ).
-        status, serial = min(matches, key=lambda m: (RANK[m[0]], -len(m[1])))
+            matches.append((status, not seen, serial))
+        # Of the best-matching reads, those whose title was read (DMG-UQJ, Ultra Quiz, rather than a misread DMG-UOJ),
+        # the longest (DMG-AJYJ-JPN rather than DMG-AJYJ).
+        status, _, serial = min(matches, key=lambda m: (RANK[m[0]], m[1], -len(m[2])))
         r = release_of.get(photos.unprefixed(serial))
         seen = "title" if r and title_seen(r, label) else ""
         rows.append((name, status, serial, r["id"] if r else "", r["title"] if r else "", seen, " ".join(found)))
