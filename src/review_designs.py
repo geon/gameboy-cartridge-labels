@@ -11,11 +11,11 @@ from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
 #   - Similar designs, multiple serials: the photos with different serials whose labels score at least THRESHOLD, and
 #     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
-#     (hidden with "hide confirmed"), partly when some are. The photos are shown by serial, each serial with a checkbox,
-#     ticked to begin with (an unticked one stays so while the page is open): "Same design" makes the ticked serials'
-#     designs one (designs.merged); "Unlink" takes the ticked ones out of a design they share with others in the cluster
-#     (designs.unlinked: back to their releases' designs). Variants of a game (Pokémon Gold and Silver) are simply left
-#     as they are.
+#     (hidden with "hide confirmed"), partly when some are. The photos are shown by design (the serials already linked
+#     together), then by serial, each design with a checkbox, ticked to begin with (an unticked one stays so while the
+#     page is open): "Same design" makes the ticked designs one (designs.merged); "Unlink" takes the ticked ones' serials
+#     out of a design they share with others in the cluster (designs.unlinked: back to their releases' designs).
+#     Variants of a game (Pokémon Gold and Silver) are simply left as they are.
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
 #     at least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
 #     it shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for.
@@ -255,10 +255,12 @@ const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}"
   `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${extra}</div>` +
   `<button data-action="rename" data-path="${esc(p.path)}">Rename</button></figcaption></figure>`;
 const shas = ps => ps.map(p => p.sha1).join(" ");
-// The serials unticked in the clusters of similar designs, kept as the page is drawn again (after each change).
+// The designs unticked in the clusters of similar designs, kept as the page is drawn again (after each change).
 const unticked = new Set();
 // Photos by serial (with its note): [[serial, photos]], in the order they come.
 const bySerial = ps => Object.entries(ps.reduce((by, p) => ((by[p.part] ||= []).push(p), by), {}));
+// Photos by design: [[design, photos]], in the order they come.
+const byDesign = ps => Object.entries(ps.reduce((by, p) => ((by[p.design] ||= []).push(p), by), {}));
 function render() {
   for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
   const shell = $("shell").value, hide = $("hide").checked;
@@ -271,9 +273,11 @@ function render() {
       `<span class="state">${c.confirmed === "yes" ? "one design" : c.confirmed ? "partly one design" : ""}</span>` +
       (c.confirmed !== "yes" ? `<button class="go" data-action="merge">Same design</button>` : "") +
       (c.confirmed ? `<button data-action="unlink">Unlink</button>` : "") +
-      `</div><div class="photos">` + bySerial(c.photos).map(([part, ps]) => `<div class="group"><label><input type="checkbox" class="tick" data-part="${esc(part)}" data-shas="${shas(ps)}"${unticked.has(part) ? "" : " checked"}> ` +
-        `<b>${esc(part)}</b> <span class="muted">· ${esc(ps[0].design)}</span></label>` +
-        `<div class="photos">${ps.map(p => figure(p, `<span>${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("")}</div></div>`).join("") + `</div></div>`).join("");
+      `</div><div class="photos">` + byDesign(c.photos).map(([design, ps]) => { const serials = bySerial(ps); return `<div class="group">` +
+        `<label><input type="checkbox" class="tick" data-key="${esc(design)}" data-shas="${shas(ps)}"${unticked.has(design) ? "" : " checked"}> ` +
+        (serials.length > 1 ? `<b>${esc(design)}</b> <span class="muted">· ${serials.length} serials linked</span>` : `<b>${esc(serials[0][0])}</b> <span class="muted">· ${esc(design)}</span>`) + `</label>` +
+        serials.map(([part, sps]) => (serials.length > 1 ? `<div class="muted">${esc(part)}</div>` : "") +
+          `<div class="photos">${sps.map(p => figure(p, `<span>${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("")}</div>`).join("") + `</div>`; }).join("") + `</div></div>`).join("");
   } else if (tab === "unalike") {
     const shown = state.unalike.filter(u => !shell || u.shell === shell);
     n = shown.length;
@@ -326,7 +330,7 @@ $("items").onclick = async e => {
 };
 $("items").onchange = e => {
   if (!e.target.matches("input.tick")) return;
-  if (e.target.checked) unticked.delete(e.target.dataset.part); else unticked.add(e.target.dataset.part);
+  if (e.target.checked) unticked.delete(e.target.dataset.key); else unticked.add(e.target.dataset.key);
 };
 for (const b of document.querySelectorAll("nav button")) b.onclick = () => { tab = b.dataset.tab; location.hash = tab; render(); };
 $("shell").onchange = $("hide").onchange = render;
