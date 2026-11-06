@@ -1,9 +1,9 @@
-import json, os, sys, threading, urllib.parse, cv2, numpy as np
+import json, os, sys, threading, urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color, photos, serials
-from fit_colors import LABELS, LEARNED, WHITES, auto, candidates, learned_model
+from fit_colors import LABELS, candidates
 from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 
 # adjust-colors: a local page for setting each photo's colors by hand (src/color.py: black, white,
@@ -13,9 +13,8 @@ from review_fits import FILTERS_JS, facet_counts, filters_of, matching
 # mark, the others by their source's rank. Each label is shown as
 # render-labels makes it (its image from make fit-colors, with its settings applied as color.adjusted does), and
 # changes as its sliders move; let go of one, and the photo's settings are saved to colors.json as placed by hand,
-# which fit-colors keeps. "Auto" puts back the settings fit-colors would make: learned from those placed by hand (the
-# others', learned afresh), as fit-colors does; "Undo" puts back what the photo had before. Releases with the most
-# photos first.
+# which fit-colors keeps. "Reset", on a photo whose settings are placed by hand, clears them (fit-colors makes it new
+# ones on its next run); "Undo" puts back what it had before. Releases with the most photos first.
 # Needs make fit-colors first (the label images, and the settings to start from).
 # Usage: adjust_colors.py [port]
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8771
@@ -27,9 +26,7 @@ RANGES = {"black": (0, 254, 1), "white": (1, 255, 1), "midtones": (0.3, 3.0, 0.0
 class Adjust:
     def __init__(self):
         found = candidates()
-        self.found = {stem: f for stem, f in found.items() if os.path.exists(os.path.join(LABELS, stem + ".png"))}
-        self.features = {}  # stem -> color.label_features, read as needed
-        self.source = {stem: f[0] for stem, f in self.found.items()}
+        self.source = {stem: f[0] for stem, f in found.items() if os.path.exists(os.path.join(LABELS, stem + ".png"))}
         self.sha1 = {stem: found[stem][2] for stem in self.source}
         release_of = serials.releases_by_serial()
         self.photos = {}
@@ -72,12 +69,6 @@ class Adjust:
             colors[stem] = {"sha1": self.sha1[stem], "colors": clean | {"source": source}}
         return clean | {"source": source}
 
-    def features_of(self, stems):
-        for stem in stems:
-            if stem not in self.features:
-                self.features[stem] = color.label_features(cv2.imread(os.path.join(LABELS, stem + ".png")))
-        return {stem: self.features[stem] for stem in stems}
-
     def restore(self, stem, settings, source):
         """Puts back settings the photo had (source None: none)."""
         if source is None:
@@ -85,20 +76,6 @@ class Adjust:
                 colors.pop(stem, None)
             return dict(color.NEUTRAL, source=None)
         return self.save(stem, settings, source)
-
-    def auto(self, stem):
-        label = cv2.imread(os.path.join(LABELS, stem + ".png"))
-        if LEARNED:
-            # As fit-colors would: learned from the other photos' settings placed by hand.
-            colors = color.load_colors()
-            hand = [s for s in self.found if s != stem and (color.colors_of(colors, s, self.sha1[s]) or {}).get("source") == "hand-placed"]
-            model, _ = learned_model(colors, {s: self.found[s] for s in hand}, self.features_of(hand))
-            if model:
-                return self.save(stem, color.learned_settings(model, self.features_of([stem])[stem]), "auto-generated")
-        white = json.load(open(WHITES)).get(stem, {}).get("white") if os.path.exists(WHITES) else None
-        if self.source[stem] in color.BORDERS and white is None:
-            raise ValueError("its background's white isn't measured yet: run make fit-colors")
-        return self.save(stem, auto(self.source[stem], color.paper(label), white), "auto-generated")
 
 
 PAGE = """<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adjust colors</title>
@@ -163,6 +140,7 @@ function setSettings(section, s) {
   const state = section.querySelector(".state");
   state.textContent = s.source === "hand-placed" ? "by hand" : s.source === "auto-generated" ? "auto" : "none";
   state.classList.toggle("hand", s.source === "hand-placed");
+  section.querySelector("button.reset").hidden = s.source !== "hand-placed";
   draw(section);
 }
 async function load() {
@@ -180,7 +158,7 @@ async function show() {
   $("position").textContent = `page ${page + 1} / ${pages}`;
   $("entries").innerHTML = data.releases.map(r => `<div class="release"><h2>${esc(r.release)}</h2><div class="row">` + r.photos.map(p => `
     <section data-name="${esc(p.name)}" class="${p.reference ? "reference" : ""}">
-      <div class="top">${p.preferred ? `<span class="preferred" title="the release's preferred photo">✓</span>` : ""}<h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="auto">Auto</button><button class="undo" disabled>Undo</button></div>
+      <div class="top">${p.preferred ? `<span class="preferred" title="the release's preferred photo">✓</span>` : ""}<h3 title="${esc(p.source)}">${esc(p.name)} · ${esc(p.source)}</h3><span class="state"></span><button class="reset" hidden>Reset</button><button class="undo" hidden>Undo</button></div>
       <canvas width="200" height="174"></canvas>
       ${NAMES.map(n => `<label class="slider"><span>${n}</span><input type="range" name="${n}" min="${RANGES[n][0]}" max="${RANGES[n][1]}" step="${RANGES[n][2]}"><span data-value="${n}"></span></label>`).join("")}
     </section>`).join("") + "</div></div>").join("");
@@ -217,12 +195,12 @@ $("entries").onchange = async e => {
   const saved = await post("/colors", {name: section.dataset.name, settings: settingsOf(section)});
   if (saved) setSettings(section, saved);
 };
-const before = {};  // photo -> the settings it had before each "Auto", the last last
+const before = {};  // photo -> the settings it had before each "Reset", the last last
 $("entries").onclick = async e => {
   const section = e.target.closest("section"), name = section && section.dataset.name;
-  if (e.target.matches("button.auto")) {
+  if (e.target.matches("button.reset")) {
     const had = section.settings;
-    const saved = await post("/auto", {name});
+    const saved = await post("/restore", {name, source: null});
     if (!saved) return;
     (before[name] ||= []).push(had);
     setSettings(section, saved);
@@ -233,7 +211,7 @@ $("entries").onclick = async e => {
     before[name].pop();
     setSettings(section, saved);
   } else return;
-  section.querySelector("button.undo").disabled = !before[name]?.length;
+  section.querySelector("button.undo").hidden = !before[name]?.length;
 };
 const go = p => { if (p >= 0 && p < pages) { page = p; show(); } };
 $("filters").onchange = () => { page = 0; show(); };
@@ -272,16 +250,11 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(404)
 
     def do_POST(self):
-        if self.path not in ("/colors", "/auto", "/restore"):
+        if self.path not in ("/colors", "/restore"):
             return self.send_error(404)
         data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         if data.get("name") not in adjust.source:
             return self.send_error(400)
-        if self.path == "/auto":
-            try:
-                return self.send(adjust.auto(data["name"]))
-            except ValueError as e:
-                return self.send_error(409, str(e))
         settings = data.get("settings", {})
         if self.path == "/restore":
             if data.get("source") is None:
