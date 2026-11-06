@@ -13,6 +13,7 @@ from fit_cartridge import load
 #   labels: generated/render-labels/<release>.avif, the label alone, stretched to its shell's canonical label
 #     size at LABEL_PX_PER_MM (the labels' size varies a few tenths of a mm: their fits' model corners are mapped to the
 #     image's corners);
+#   labels-high-resolution: generated/labels-high-resolution/<release>.avif, the same at LABEL_HIGH_PX_PER_MM;
 #   carts: generated/render-carts/<release>.avif, the cartridge's front with CART_MARGIN mm around it, at
 #     CART_PX_PER_MM: meant as the canonical images of the cartridges; where the margin runs off the photo, transparent.
 # The release's photo: its preferred one (preferred.json, chosen in find-doubles) if the fit the image needs (the label
@@ -21,7 +22,7 @@ from fit_cartridge import load
 # come from different photos while its preferred photo's label isn't accepted. Each step's made.json records what each image was made from (the photo's
 # SHA-1, the fits, its color settings for labels, this code's version); an image is made again when any of it changes, and those of releases no
 # longer rendered are removed.
-# Usage: render.py labels|carts
+# Usage: render.py labels|labels-high-resolution|carts
 # The labels' scale: 4.7 px per mm, the same for both shells, so that their images keep the labels' sizes to each other.
 # Each label is rendered at its shell's canonical label size (cartridge.LABEL, CGB_LABEL, AGB_LABEL), rounded to whole
 # pixels: DMG 42.5 x 37 mm -> 200 x 174 px (199.75 x 173.9), CGB 41.5 x 37 -> 195 x 174 (195.05 x 173.9), AGB 43 x 22
@@ -29,6 +30,10 @@ from fit_cartridge import load
 # DMG's at 200 px wide with little rounding: no scale near it gives both shells whole pixels (only even px per mm do:
 # 4, 170 x 148 and 166 x 148, too small; 6, 255 x 222, too big).
 LABEL_PX_PER_MM = 4.7
+# The high resolution labels' scale: 20 px per mm, DMG 850 x 740 px, CGB 830 x 740, AGB 860 x 440 (whole pixels for all
+# three). Judged on a sample (2026-11-06): just enough to keep the printing's detail. Half the labels rendered have less
+# in their photo (median 18.6 px per mm at the label's middle; the better half's median 22.4): those are enlarged.
+LABEL_HIGH_PX_PER_MM = 20
 CART_MARGIN = 5.0
 # The cartridge images' scale: 20 px per mm, 1340 x 1500 px (the AGB's, with its shoulders, 1400 x 890). Measured on the photos render-carts uses (1402,
 # 2026-11-03): the cartridge is seen at a median 18 px per mm (Hit-Japan 20, jnlgame 19, my own 43, otakaraou 10);
@@ -42,11 +47,12 @@ CART_PX_PER_MM = 20
 QUALITY = 90
 # Drawn at SUPERSAMPLE times the scale, from the photo shrunk to at most twice that, then shrunk by area: every output
 # pixel the mean of the photo under it, not a sample of it. Less for the carts, whose image is large.
-SUPERSAMPLE = {"labels": 4, "carts": 2}
-OUT = {"labels": "generated/render-labels", "carts": "generated/render-carts"}
+SUPERSAMPLE = {"labels": 4, "labels-high-resolution": 2, "carts": 2}
+OUT = {"labels": "generated/render-labels", "labels-high-resolution": "generated/labels-high-resolution", "carts": "generated/render-carts"}
 CODE = {kind: hashlib.sha1(b"".join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb").read()
                                    for f in files)).hexdigest()
-        for kind, files in (("labels", ("render.py", "color.py")), ("carts", ("render.py",)))}
+        for kind, files in (("labels", ("render.py", "color.py")), ("labels-high-resolution", ("render.py", "color.py")), ("carts", ("render.py",)))}
+SCALE = {"labels": LABEL_PX_PER_MM, "labels-high-resolution": LABEL_HIGH_PX_PER_MM}
 
 
 def chosen(kind):
@@ -59,14 +65,14 @@ def chosen(kind):
             continue
         stem, sha1 = photos.stem(name), entry.get("sha1")
         fit = fits.of(known, stem, sha1)["fit"]
-        if not fits.good(fit.get("plastic")) or kind == "labels" and not fits.good(fit.get("label")):
+        if not fits.good(fit.get("plastic")) or kind in SCALE and not fits.good(fit.get("label")):
             continue
         serial = photos.serial_of(name)
         release = serials.release_key(name, release_of)[0]
         candidates.setdefault(release, []).append((preferred.get(release) != sha1, photos.rank(source), name, stem,
                                                    os.path.join(photos.ROOT, source, system, name), sha1, shell_of(serial).name,
-                                                   fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind == "labels" else None,
-                                                   settings_of(colors, stem, sha1) if kind == "labels" else None))
+                                                   fit["plastic"]["mm_to_photo"], fit["label"]["mm_to_photo"] if kind in SCALE else None,
+                                                   settings_of(colors, stem, sha1) if kind in SCALE else None))
     return {release: min(c)[3:] for release, c in candidates.items()}
 
 
@@ -101,10 +107,18 @@ def rendered(photo, M, size, supersample, alpha=False):
     return cv2.resize(big, size, interpolation=cv2.INTER_AREA)
 
 
-def label_image(photo, shell, label_H):
+def label_image(photo, shell, label_H, kind="labels"):
     model = SHELLS[shell].label
-    size = (round((model[2] - model[0]) * LABEL_PX_PER_MM), round((model[3] - model[1]) * LABEL_PX_PER_MM))
-    return rendered(photo, frame(label_H, model, size, SUPERSAMPLE["labels"]), size, SUPERSAMPLE["labels"])
+    size = (round((model[2] - model[0]) * SCALE[kind]), round((model[3] - model[1]) * SCALE[kind]))
+    return rendered(photo, frame(label_H, model, size, SUPERSAMPLE[kind]), size, SUPERSAMPLE[kind])
+
+
+def label_px_per_mm(shell, label_H):
+    """How many of the photo's pixels per mm the label has, at its middle (the label's fit's local scale)."""
+    x1, y1, x2, y2 = SHELLS[shell].label
+    m = np.array([(x1 + x2) / 2, (y1 + y2) / 2])
+    (ax, ay), (bx, by) = project(np.asarray(label_H, np.float64), [m + [0.1, 0], m + [0, 0.1]]) - project(np.asarray(label_H, np.float64), [m])[0]
+    return float(np.sqrt(abs(ax * by - ay * bx)) / 0.1)
 
 
 def cart_image(photo, shell, plastic_H):
@@ -118,7 +132,7 @@ def cart_image(photo, shell, plastic_H):
 
 def render(kind, release, path, shell, plastic_H, label_H, settings, out):
     photo = color.adjusted(load(path), settings)
-    image = label_image(photo, shell, label_H) if kind == "labels" else cart_image(photo, shell, plastic_H)
+    image = label_image(photo, shell, label_H, kind) if kind in SCALE else cart_image(photo, shell, plastic_H)
     data = io.BytesIO()
     Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA if image.shape[2] == 4 else cv2.COLOR_BGR2RGB)).save(
         data, "AVIF", quality=QUALITY, subsampling="4:4:4", speed=4)
@@ -138,7 +152,7 @@ def main(kind):
     made = json.load(open(made_path)) if os.path.exists(made_path) else {}
     photo_of = chosen(kind)
     want = {release: {"photo": stem, "sha1": sha1, "shell": shell, "pose": plastic_H if kind == "carts" else label_H, "code": CODE[kind]}
-            | ({"colors": settings} if kind == "labels" else {})
+            | ({"colors": settings} if kind in SCALE else {})
             for release, (stem, path, sha1, shell, plastic_H, label_H, settings) in photo_of.items()}
     for release in set(made) - set(want):
         if os.path.exists(os.path.join(folder, file_of(release))):
@@ -162,5 +176,5 @@ def main(kind):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in OUT:
-        sys.exit("Usage: render.py labels|carts")
+        sys.exit("Usage: render.py labels|labels-high-resolution|carts")
     main(sys.argv[1])

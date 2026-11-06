@@ -1,7 +1,7 @@
 import html, json, os, pathlib, re, sys, unicodedata, urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, serials
+import photos, render, serials
 
 # search-photos: a local page of searches for photos of the Game Boy, Game Boy Color and Game Boy Advance releases still
 # without one (gb-game-list lists about half the Game Boy Advance ones): no
@@ -25,10 +25,16 @@ import photos, serials
 # searches by image: with the release's cartridge photo from game-boy-database.com, and with its otakaraou photo (by the
 # URLs they're found at, so Lens can fetch them). gb-game-list has only the box photos from game-boy-database.com; the
 # cartridge's is next to it, by the same number (vizu/3741.jpg, cartridges/3741.jpg), for most games.
+# At the top, apart: the releases whose label is rendered (render-labels' photo) from a photo with fewer than LOW_RESOLUTION
+# px per mm on the label (at its middle, render.label_px_per_mm): worth a sharper photo. By shell (Game Boy, Game Boy
+# Color, Game Boy Advance), the lowest resolution first; a release gb-game-list doesn't list (a serial with a note, say)
+# by its name in photos/, without searches.
 # Usage: search_photos.py
 RELEASES = serials.RELEASES
 OUT = "generated/search-photos/index.html"
 SYSTEMS = ("dmg", "cgb", "agb")
+SYSTEM_NAMES = (("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy Advance"))
+LOW_RESOLUTION = 20  # px per mm: render-labels-high-resolution's scale (render.LABEL_HIGH_PX_PER_MM)
 # The console's name in the searches, Japanese and English.
 CONSOLE = {"dmg": ("ゲームボーイ", "game boy"), "cgb": ("ゲームボーイ", "game boy"), "agb": ("ゲームボーイアドバンス", "game boy advance")}
 LENS = "https://lens.google.com/uploadbyurl?url="
@@ -126,11 +132,26 @@ missing = [r for r in missing if r["id"] not in nintendo_power]
 fake_only = sum(r["id"] in fake for r in missing)
 
 groups = [(f"{system_name}: {label}", [r for r in missing if r["system"] == system and japanese(r) == ja])
-          for system, system_name in (("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy Advance"))
+          for system, system_name in SYSTEM_NAMES
           for ja, label in ((True, "Japanese releases"), (False, "Other releases"))]
 groups.append(("On Nintendo Power", np_missing))
 groups.append(("Only from otakaraou: worth replacing", replace))
-sections = []
+by_id = {r["id"]: r for r in all_releases}
+low = []  # (px per mm, release key, shell)
+for key, (stem, path, sha1, shell, plastic_H, label_H, settings) in render.chosen("labels").items():
+    resolution = render.label_px_per_mm(shell, label_H)
+    if resolution < LOW_RESOLUTION:
+        low.append((resolution, key, shell))
+sections = [f"<h2>Labels under {LOW_RESOLUTION} px per mm ({len(low)})</h2>"]
+for shell, system_name in SYSTEM_NAMES:
+    rows = []
+    for resolution, key, _ in sorted(l for l in low if l[2] == shell):
+        r = by_id.get(key)
+        title = (japanese_title(r) if japanese(r) else r["title"]) if r else ""
+        serial = serial_links(r) if r and r["cartridgeSerials"] else html.escape(key)
+        searches = "".join(f'<td><a href="{html.escape(link[1])}" target="_blank">{link[0]}</a></td>' if link else "<td></td>" for link in links(r)) if r else ""
+        rows.append(f'<tr><td>{resolution:.1f}</td><td>{html.escape(title)}</td><td><small>{serial}</small></td><td></td>{searches}</tr>')
+    sections.append(f"<h3>{system_name} ({len(rows)})</h3><table>{''.join(rows)}</table>")
 for heading, group in groups:
     rows = []
     for r in sorted(group, key=lambda r: r["title"]):
@@ -148,7 +169,8 @@ td{{padding:3px 8px;white-space:nowrap}}tr:nth-child(odd){{background:#fff}}smal
 <p>{len(missing)} Game Boy, Game Boy Color and Game Boy Advance releases without a cartridge photo in gb-game-list or in photos/ ({fake_only} of them
 with only fakes made from box art, from emumovies or launchbox-abeezy1388),
 {len(np_missing)} sold on Nintendo Power (their cartridge's label reads DMG-MMSA-JPN; the serials are from the ROMs' headers), and
-{len(replace)} with photos from otakaraou alone. Save the photos found in a subfolder of save-new-images-here/ named after where they came from, and file them with
+{len(replace)} with photos from otakaraou alone; first, {len(low)} whose label is rendered from a photo with under {LOW_RESOLUTION} px per mm on it
+(px per mm in the first column). Save the photos found in a subfolder of save-new-images-here/ named after where they came from, and file them with
 make add-photos.</p>
 {''.join(sections)}
 </body></html>"""

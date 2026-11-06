@@ -22,6 +22,9 @@
 #   make render-labels
 #   Renders each release's label, straightened and its colors set (colors.json, make fit-colors), stretched to its shell's canonical label size at 4.7 px per mm (DMG 42.5 x 37 mm, 200 x 174 px; CGB 41.5 x 37 mm, 195 x 174 px; AGB 43 x 22 mm, 202 x 103 px), into generated/render-labels/<release>.avif: from its preferred photo if that one's label is accepted or placed by hand, else the best one by source whose label is; releases without one get none (src/render.py).
 #
+#   make render-labels-high-resolution
+#   Renders the same labels at 20 px per mm (DMG 850 x 740 px, CGB 830 x 740, AGB 860 x 440), into generated/labels-high-resolution/<release>.avif (src/render.py).
+#
 #   make render-carts
 #   Renders each release's cartridge front the same way, with 5 mm around it, at 20 px per mm (1340 x 1500 px, the AGB's 1400 x 890; off the photo transparent), the canonical images of the cartridges (the photo's colors uncorrected), into generated/render-carts/<release>.avif, from the photo chosen alike but by its plastic fit (src/render.py).
 #
@@ -44,7 +47,7 @@
 #   A tool, not a step: a local page for placing the plastic and the label by hand where the fit is off, one photo at a time, those judged almost first: drag the recess's corners and the label into place; saved to fits.json as the photo's fit, placed by hand, which the steps keep (src/fit_by_hand.py).
 #
 #   make search-photos
-#   A tool, not a step: a local page of searches (Google; for Japanese releases the eBay sellers elrocinante and Hit-Japan, and Jauce; for the others the eBay sellers ASANOSHOP and KONSOLENKOST; and Google Lens with the release's cartridge photo from game-boy-database.com or otakaraou photo) for photos of the Game Boy, Game Boy Color and Game Boy Advance releases not in photos/, or there only as fakes from emumovies or launchbox-abeezy1388 (those sold on Nintendo Power, and those from otakaraou alone, apart), into generated/search-photos/index.html (src/search_photos.py).
+#   A tool, not a step: a local page of searches (Google; for Japanese releases the eBay sellers elrocinante and Hit-Japan, and Jauce; for the others the eBay sellers ASANOSHOP and KONSOLENKOST; and Google Lens with the release's cartridge photo from game-boy-database.com or otakaraou photo) for photos of the Game Boy, Game Boy Color and Game Boy Advance releases not in photos/, or there only as fakes from emumovies or launchbox-abeezy1388 (those sold on Nintendo Power, and those from otakaraou alone, apart); first, the releases whose rendered label's photo has under 20 px per mm on the label, by shell, the lowest first; into generated/search-photos/index.html (src/search_photos.py).
 #
 #   make name-photos
 #   A tool, not a step: a local page for naming the photos whose serial isn't known, one at a time: type the serial on its label and press enter; the photo is renamed in photos/, its fits in fits.json with it; or delete it (src/name_photos.py).
@@ -62,7 +65,7 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles compare-labels review-matches
+.PHONY: help setup add-photos read-text clean-read-text fit-cartridge clean-fit-cartridge fit-label clean-fit-label fit-colors clean-fit-colors adjust-colors render-labels clean-render-labels render-labels-high-resolution clean-render-labels-high-resolution render-carts clean-render-carts label-page learn-choice review-fits review-labels fit-by-hand search-photos name-photos find-doubles compare-labels review-matches
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -102,6 +105,12 @@ render-labels:
 
 clean-render-labels:
 	rm -rf generated/render-labels
+
+render-labels-high-resolution:
+	$(PYTHON) src/render.py labels-high-resolution
+
+clean-render-labels-high-resolution:
+	rm -rf generated/labels-high-resolution
 
 render-carts:
 	$(PYTHON) src/render.py carts
