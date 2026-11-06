@@ -17,7 +17,9 @@ from review_fits import FILTERS_JS, SHELL_NAMES, STATE_NAMES, arrow_outline, bev
 # (else its latest rejected one on that plastic, else the model's). The handles (green squares) sit on the recess's
 # corners and are dragged onto the photo's (the photo shown as it is, or straightened: STRAIGHT); the dots in the middle of its sides slide one side through the perspective. Once "Label placed" is
 # ticked, the label (cyan) shows: a rectangle in the recess, moving with it: its corners turn it about its center, the
-# dots in its sides move one side. A magnifier shows 6 mm around the handle held. Saving makes the
+# dots in its sides move one side. A photo whose current plastic is accepted or placed by hand shows the label alone
+# (cyan), its handles as the recess's: its corners dragged freely (the perspective with them), the dots sliding a side;
+# the plastic, not shown, follows it (the label keeps its place in the recess), and both are saved. A magnifier shows 6 mm around the handle held. Saving makes the
 # placement the photo's current fit, placed by hand (the steps keep it), with the label once it's placed (else the
 # current label stays if the plastic wasn't moved, or fit-label fits one); an almost fit it replaces goes to the
 # rejected ones. Saved again in the same run, a photo's placement replaces the one saved before. "Save for refit" saves
@@ -207,7 +209,8 @@ class Hand:
         straight = None if view is None else {"view_to_photo": (view[0] / view[0][2, 2]).tolist(),
                                               "photo_to_view": (np.linalg.inv(view[0]) / np.linalg.inv(view[0])[2, 2]).tolist()}
         return {"name": name, "path": self.paths[name], "shell": shell.name, "anchor": None if H is None else project(H, anchor(shell)).tolist(),
-                "label": label_mm, "notes": notes, "straight": straight, "fitted": "plastic" in e["fit"]}
+                "label": label_mm, "notes": notes, "straight": straight, "fitted": "plastic" in e["fit"],
+                "label_only": fits.good(e["fit"].get("plastic"))}
 
     def save(self, name, corners, label_mm):
         """Makes a placement the photo's current fit, placed by hand: the handles' corners (anchor) in the photo's pixels, and the
@@ -281,7 +284,7 @@ button#save{background:#070;color:#fff}button#refit{background:#06c;color:#fff}
 <h2 id="title"></h2><button id="reset">Reset (R)</button><label><input type="checkbox" id="labelplaced"> Label placed (L)</label><label><input type="checkbox" id="straighten"> Straightened (P)</label>
 <button id="save">Save as great (S)</button><button id="refit">Save for refit (F)</button><span id="status"></span>
 <p id="notes"></p>
-<p id="help">Drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo; F: save the plastic as a rough fit for make fit-cartridge to fit from, and go to the next.</p>
+<p id="help">With an accepted plastic, only the label shows: drag its corners onto the label's (the plastic follows). Else, drag the green corners (squares) onto the recess's; the dots slide a side. Tick Label placed to show the label (cyan): its corners turn it, the dots move a side. Tab: next handle; arrow keys: nudge 1 px (Shift: 10 px); wheel: zoom; drag elsewhere: pan; P: straightened or not (the perspective of the plastic fit taken out); S: save and go to the next photo; F: save the plastic as a rough fit for make fit-cartridge to fit from, and go to the next.</p>
 </header><div id="stage"><canvas id="c"></canvas></div></div>
 <script>
 const $ = id => document.getElementById(id);
@@ -312,7 +315,10 @@ function homography(src, dst) {
   return [[h[0], h[1], h[2]], [h[3], h[4], h[5]], [h[6], h[7], 1]];
 }
 const model = () => models[item.shell];
-const anchorMm = () => model().anchor;  // the handles' rectangle in mm: the recess
+// The handles' quadrilateral in mm: the recess's, or with the label alone (labelOnly), the label's in the recess's mm (labelMm).
+let labelOnly = false, labelMm = null;
+const anchorMm = () => labelOnly ? labelMm : model().anchor;
+const recessCorners = () => labelOnly ? model().anchor.map(q => apply(toPhoto(), q)) : corners;
 const toPhoto = () => homography(anchorMm(), corners), toMm = () => homography(corners, anchorMm());
 // The label: a rectangle in the recess's mm, {c: center, a: turn (radians), w, h}.
 const LOCAL = [[-.5, -.5], [.5, -.5], [.5, .5], [-.5, .5]], NORMALS = [[0, -1], [1, 0], [0, 1], [-1, 0]];
@@ -336,7 +342,7 @@ function rectFrom(q) {
   const t = [q[1][0] - q[0][0] + q[2][0] - q[3][0], q[1][1] - q[0][1] + q[2][1] - q[3][1]], l = [q[3][0] - q[0][0] + q[2][0] - q[1][0], q[3][1] - q[0][1] + q[2][1] - q[1][1]];
   return {c: q.reduce((s, p) => [s[0] + p[0] / 4, s[1] + p[1] / 4], [0, 0]), a: Math.atan2(t[1], t[0]), w: Math.hypot(...t) / 2, h: Math.hypot(...l) / 2};
 }
-const placed = () => $("labelplaced").checked;
+const placed = () => $("labelplaced").checked && !labelOnly;
 // Handles, in the photo's pixels: 0-3 the anchor's corners (the recess's), 4-7 the middle of its sides (top, right, bottom, left),
 // and with the label placed, 8-11 the label's corners, 12-15 the middle of its sides.
 function handles() {
@@ -352,7 +358,9 @@ function setPlaced(on) {
 }
 // Slides the anchor's side k, from where it was at the start of the drag, to pass through the photo's point q.
 function slide(k, q, start) {
-  const R = anchorMm(), Hs = homography(R, start), m = apply(homography(start, R), q), n = NORMALS[k], s = mid(R[k], R[(k + 1) % 4]);
+  // The side's outward normal in mm (the label's quadrilateral may be turned a little in the recess).
+  const R = anchorMm(), Hs = homography(R, start), m = apply(homography(start, R), q), s = mid(R[k], R[(k + 1) % 4]);
+  const e = [R[(k + 1) % 4][0] - R[k][0], R[(k + 1) % 4][1] - R[k][1]], len = Math.hypot(...e), n = [e[1] / len, -e[0] / len];
   const d = (m[0] - s[0]) * n[0] + (m[1] - s[1]) * n[1];
   corners = start.map(p => p.slice());
   for (const j of [k, (k + 1) % 4]) corners[j] = apply(Hs, [R[j][0] + d * n[0], R[j][1] + d * n[1]]);
@@ -420,9 +428,17 @@ async function show() {
 }
 function reset() {
   const w = photo.width, h = photo.height, R = model().anchor;
+  labelOnly = false;
   corners = item.anchor ? item.anchor.map(q => q.slice()) : R.map(([x, y]) => [w / 2 + (x - 28.5) * w / 120, h / 2 + (y - 37.5) * w / 120]);
   rect = rectFrom(item.label || model().label);
+  if (item.label_only) {
+    // The label's corners become the handles; the plastic's pose stays as it was until they move.
+    labelMm = (item.label || model().label).map(q => q.slice());
+    corners = labelMm.map(q => apply(toPhoto(), q));
+    labelOnly = true;
+  }
   $("labelplaced").checked = !!item.label;
+  $("labelplaced").disabled = labelOnly;
   sel = 0;
   draw();
 }
@@ -481,6 +497,7 @@ function seen(cam, [x, y], depth, wall, n) {
   return [cam[0] + ax * k, cam[1] + ay * k];
 }
 function shapes() {
+  if (labelOnly) return [[roundedOutline(rectFrom(labelMm)).map(q => apply(toPhoto(), q)), "#3cf", false, true]];
   // The camera: as the placement implies where it shows the body in perspective (its scale changing by over
   // reliable_perspective across the box), else default_camera_height over the photo's center (cartridge.camera_for).
   const H = toPhoto(), m = model();
@@ -507,7 +524,7 @@ function draw() {
   ctx.setLineDash([]);
   handles().forEach((q, k) => {
     const [x, y] = toScreen(q);
-    ctx.fillStyle = ctx.strokeStyle = k === sel ? "#ff0" : k >= 8 ? "#3cf" : "#3d3";
+    ctx.fillStyle = ctx.strokeStyle = k === sel ? "#ff0" : k >= 8 || labelOnly ? "#3cf" : "#3d3";
     if (k % 8 < 4) ctx.fillRect(x - 4, y - 4, 8, 8);
     else { ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); }
   });
@@ -551,7 +568,8 @@ c.onwheel = e => {
 };
 async function save(forRefit) {
   if (!corners) return;
-  const body = {name: item.name, anchor: corners, label: placed() && !forRefit ? rectCorners(rect) : null, filters: chosenFilters(), refit: !!forRefit};
+  const label = forRefit ? null : labelOnly ? labelMm : placed() ? rectCorners(rect) : null;
+  const body = {name: item.name, anchor: recessCorners(), label, filters: chosenFilters(), refit: !!forRefit};
   const response = await fetch("/save", {method: "POST", body: JSON.stringify(body)});
   if (!response.ok) return alert("Not saved: " + response.status);
   showSummary(await response.json());
@@ -581,7 +599,7 @@ document.onkeydown = e => {
   else if (e.key === "s" || e.key === "S") save(false);
   else if (e.key === "f" || e.key === "F") save(true);
   else if (e.key === "r" || e.key === "R") reset();
-  else if (e.key === "l" || e.key === "L") setPlaced(!placed());
+  else if ((e.key === "l" || e.key === "L") && !labelOnly) setPlaced(!placed());
   else if ((e.key === "p" || e.key === "P") && straight) { $("straighten").checked = !$("straighten").checked; setView(); draw(); }
 };
 window.onresize = () => { if (img.width) { frame(); draw(); } };
