@@ -10,8 +10,8 @@ from fit_cartridge import OUT as DETAILS, load
 # review-fits: a local page for judging the plastic's fits (fits.json, src/fits.py; make fit-cartridge) by eye, a page
 # of photos at a time, each with its current fit drawn on it (red: the front face with its notch, and the bevels' inner
 # edges, or the Game Boy Color only cartridge's bowed outline, or the Game Boy Advance's with its shoulders (its top, sides and shoulders 2 mm behind the face, seen from cartridge.agb_camera); green: the recess; orange: the arrow, the pill and the
-# grooves, or the CGB's smaller arrow, or the AGB's creases); a photo without one shows its latest rejected fit. Fits flagged by fit-cartridge
-# (generated/fit-cartridge/: ambiguous, broken recess line) first, then the lowest quality first; photos it couldn't fit
+# grooves, or the CGB's smaller arrow, or the AGB's creases); a photo without one shows its latest rejected fit. The best fits first: those not flagged
+# by fit-cartridge (generated/fit-cartridge/: ambiguous, broken recess line), then the flagged ones, each the highest quality first; photos it couldn't fit
 # are listed with why. A verdict (reject, almost, accept; clicked again, it's taken back; or for all the page's photos
 # not yet judged at once) changes the fit shown in fits.json (fits.judge_plastic): accepted or almost, it's the current
 # fit with that review; rejected, it goes to the rejected fits, and fit-cartridge fits the photo anew on its next run.
@@ -228,8 +228,8 @@ class Review:
         unreviewed = lambda n: self.shown[n] is not None and self.state(n) is None
         flagged = lambda n: self.details[n] is not None and "error" not in self.details[n] and (self.details[n]["ambiguous"] or self.details[n]["broken_line"])
         quality = lambda n: self.details[n]["quality"] if self.details[n] is not None else 1.0
-        # Flagged fits first, then the lowest quality first, then fits already judged; photos not fitted last.
-        self.order = sorted(self.entries, key=lambda n: (3, 0) if self.shown[n] is None else (2, 0) if not unreviewed(n) else (not flagged(n), quality(n)))
+        # Best first: unflagged fits, then flagged ones, each the highest quality first; then fits already judged; photos not fitted last.
+        self.order = sorted(self.entries, key=lambda n: (3, 0) if self.shown[n] is None else (2, 0) if not unreviewed(n) else (flagged(n), -quality(n)))
         self.facets = {"plastic": facet(self.order, lambda n: "not fitted" if self.shown[n] is None else STATE_NAMES[self.state(n)], [*STATE_NAMES.values(), "not fitted"]),
                        "flags": facet(self.order, lambda n: "flagged" if flagged(n) else "unflagged", ["flagged", "unflagged"]),
                        "shell": facet(self.order, lambda n: SHELL_NAMES[shell_of(photos.serial_of(n)).name], SHELL_NAMES.values())}

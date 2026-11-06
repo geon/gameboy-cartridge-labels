@@ -12,7 +12,7 @@ from review_fits import BUTTONS, FILTERS_JS, GIVEN, SHELL_NAMES, SHOWN, STATE_NA
 # photos at a time. Each shows the recess straightened (the photo seen through the plastic's fit, perspective removed),
 # with 5 mm around it, all at the same scale whatever the photo's resolution, and the current label drawn red; a photo
 # without one shows its latest rejected label on that plastic, or the fit fit-label rejected for sticking out of the
-# recess (orange, from generated/fit-label/). The labels farthest from the recess's middle come first. A verdict
+# recess (orange, from generated/fit-label/). The labels nearest the recess's middle come first. A verdict
 # (reject, almost, accept; clicked again, it's taken back; or for all the page's photos not yet judged at once) changes
 # the label shown in fits.json (fits.judge_label). Labels placed by hand are shown as accepted, and can't be judged here.
 # Where the plastic's fit turns out to be off, "Plastic: almost" beside the photo's name makes it almost and rejects the
@@ -95,10 +95,10 @@ class Review:
             self.shown[name] = label and label["mm_to_photo"]
             # What fit-label found, if it's about the label shown.
             self.details[name] = details if details is not None and ("error" in details and label is None or "error" not in details and label is not None and fits.same(details["label_mm_to_photo"], label)) else None
-        # Farthest from the recess's middle first (the shift, plus the turn's reach at the label's corners), then those
+        # Best first: nearest the recess's middle first (the shift, plus the turn's reach at the label's corners), then those
         # without what fit-label found (placed by hand); rejected by fit-label last.
         reach = lambda d: np.hypot(*d["offset_mm"]) + 28 * abs(np.radians(d["angle_degrees"]))
-        self.order = sorted(self.entries, key=lambda n: (2, 0) if self.shown[n] is None else (1, 0) if self.details[n] is None else (0, -reach(self.details[n])))
+        self.order = sorted(self.entries, key=lambda n: (2, 0) if self.shown[n] is None else (1, 0) if self.details[n] is None else (0, reach(self.details[n])))
         self.facets = {"label": facet(self.order, lambda n: "rejected by fit-label" if self.shown[n] is None else STATE_NAMES[self.state(n)], [*STATE_NAMES.values(), "rejected by fit-label"]),
                        "shell": facet(self.order, lambda n: SHELL_NAMES[shell_of(photos.serial_of(n)).name], SHELL_NAMES.values())}
         self.demoted = {}  # photo -> its entry before its plastic was demoted in this run

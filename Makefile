@@ -35,10 +35,10 @@
 #   A tool, not a step: a local page for setting each photo's colors by hand, release by release, its photos' labels side by side, the reference sources' marked: black, white, midtones, temperature and tint sliders, saved to colors.json as placed by hand when let go; Auto puts back fit-colors' settings (src/adjust_colors.py).
 #
 #   make review-fits
-#   A tool, not a step: a local page for judging the plastic's fits by eye, each drawn on its photo, flagged ones first; your verdicts are saved to fits.json (src/review_fits.py).
+#   A tool, not a step: a local page for judging the plastic's fits by eye, each drawn on its photo, best first (unflagged ones, highest quality first); your verdicts are saved to fits.json (src/review_fits.py).
 #
 #   make review-labels
-#   A tool, not a step: a local page for judging the label's fits by eye, each on its recess straightened, with 5 mm around it, all at one scale, those farthest from the recess's middle first; your verdicts are saved to fits.json; a plastic fit found off can be demoted to almost, rejecting its label (src/review_labels.py).
+#   A tool, not a step: a local page for judging the label's fits by eye, each on its recess straightened, with 5 mm around it, all at one scale, those nearest the recess's middle first; your verdicts are saved to fits.json; a plastic fit found off can be demoted to almost, rejecting its label (src/review_labels.py).
 #
 #   make fit-by-hand
 #   A tool, not a step: a local page for placing the plastic and the label by hand where the fit is off, one photo at a time, those judged almost first: drag the recess's corners and the label into place; saved to fits.json as the photo's fit, placed by hand, which the steps keep (src/fit_by_hand.py).
