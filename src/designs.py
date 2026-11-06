@@ -84,6 +84,19 @@ class Designs:
         return self.design_of(name)[0]
 
 
+def stem_of(name):
+    """A photo's game stem, and whether it's Japanese: labels of one stem and side (Japan, or the rest of the world) are
+    expected to look alike. The stem is the code without its region letter: AXP for AGB-AXPE, -AXPP and -AXPJ; KY for
+    DMG-KY-USA, -KY-EUR and DMG-KYJ (the old Japanese and worldwide codes of three letters); with its system. Japanese:
+    the code's region letter J, or the region JPN. None for a serial not of that form."""
+    m = re.match(r"(DMG|CGB|AGB)-([A-Z0-9]+)(?:-([A-Z]{3}))?", photos.unprefixed(photos.serial_of(name)))
+    if not m:
+        return None
+    system, code, region = m.groups()
+    stem, letter = (code[:-1], code[-1]) if len(code) in (3, 4) else (code, "")
+    return f"{system}-{stem}", letter == "J" or region == "JPN"
+
+
 def release_of(design, release_of):
     """The release in gb-game-list a design's name is of (its note, prefix and region dropped), or None."""
     plain = photos.unprefixed(re.sub(r"\[[^]]*\]$", "", design))

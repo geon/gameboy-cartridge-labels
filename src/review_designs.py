@@ -9,7 +9,8 @@ from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
 # alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
 # placed by hand, with a current label image from make fit-colors). Three lists:
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
-#   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, and
+#   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, but for
+#     those expected alike (one game's stem and side, Japan or the rest of the world: designs.stem_of), and
 #     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
 #     (hidden with "hide confirmed"), partly when some are. The photos are shown by design (the serials already linked
 #     together), then by serial, each design with a checkbox, ticked to begin with (an unticked one stays so while the
@@ -90,7 +91,8 @@ class Review:
 
         # Similar designs, multiple serials.
         across = [(v, a, b) for v, a, b in self.alike if v >= SIMILAR and a in info and b in info
-                  and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])]
+                  and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])
+                  and (designs.stem_of(info[a]["name"]) is None or designs.stem_of(info[a]["name"]) != designs.stem_of(info[b]["name"]))]
         alike = []
         for shas in groups_of({s for _, a, b in across for s in (a, b)}, [(a, b) for _, a, b in across]):
             inside = set(shas)
