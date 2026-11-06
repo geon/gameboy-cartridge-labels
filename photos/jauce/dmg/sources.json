@@ -282,6 +282,11 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "611a859cffa2bffbf0b819eacab4d098019318ef"
  },
+ "DMG-AWSJ-JPN_2.jpg": {
+  "original_name": "i-img730x825-17330250461763jzrvzy45529.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "613dbf7b05fbc4ba30dcd00b7bb478aa37974adf"
+ },
  "DMG-AXAJ-JPN.jpg": {
   "original_name": "i-img1200x904-1753291070058660n8m1409.jpg",
   "serial_on_label": "DMG-AXAJ-JPN",
@@ -629,6 +634,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "d307506a409893fc91d666ee6e0b14cccc5a2fb5"
  },
+ "DMG-RGJ.jpg": {
+  "original_name": "i-img735x825-17667385093365rycxfm35998.jpg",
+  "serial_on_label": "DMG-RGJ",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "014a33d55452af707b6050cf8ca47916dbc95a03"
+ },
  "DMG-RNJ_3.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0511/user/291672dedaf984e72b69b146db3cf10009303c0dc171fb97ab77baddabd9bb41/i-img1200x1200-17325095890908jcjgzy285417.jpg",
   "page_url": "https://www.jauce.com/auction/s1162567945",
@@ -689,6 +700,12 @@
   "serial_on_label": "DMG-UEJ",
   "note": "named by the serial read on it (exact)",
   "sha1": "cdf34ef090cbb6c941dd364e79b9da3beba8b343"
+ },
+ "DMG-UGJ.jpg": {
+  "original_name": "i-img1200x1200-16320154422mcbcx292.jpg",
+  "serial_on_label": "DMG-UGJ",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "e600ec2d28e6ff67523bcb8fed689f3eb1fc3f6c"
  },
  "DMG-UJA_2.jpg": {
   "image_url": "https://www.jauce.com/read_yafile/https://auc-pctr.c.yimg.jp/i/auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0112/user/4de85e37f2cc010ee64b5d765ea5758a79581da8e31f1e79dbb068181bd11d56/i-img1200x900-176664434165343kurgr2209.jpg",

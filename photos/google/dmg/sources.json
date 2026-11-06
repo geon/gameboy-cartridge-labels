@@ -1,4 +1,9 @@
 {
+ "DMG-133-CHN.webp": {
+  "original_name": "s-l1600 (3).webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "cd98b5cdd5b49f7b22fccbae867ad2d66da00ad4"
+ },
  "DMG-155-CHN.webp": {
   "original_name": "s-l1200 (2).webp",
   "serial_on_label": "DMG-115-CHN",
@@ -88,6 +93,11 @@
   "sha1": "2808af84b3a373df9671021b3f28031d31ef8a13",
   "original_name": "images (26).jpeg"
  },
+ "DMG-A3VP-EUR_2.jpg": {
+  "original_name": "bust-a-move-3-dx-nintendo-gameboy-game.jpeg",
+  "note": "named by nothing: no serial read",
+  "sha1": "4fda4de331175af3327fce7179392ed2f609ded5"
+ },
  "DMG-A4MJ-JPN_2.jpg": {
   "original_name": "$_57.jpeg",
   "serial_on_label": "DMG-A4MJ-JPN",
@@ -165,6 +175,12 @@
   "sha1": "004ae0b2b68e3a88787f02d8878633731f6ae1d1",
   "original_name": "images (17).jpeg"
  },
+ "DMG-AB2E-USA_2.avif": {
+  "original_name": "il_fullxfull.7874745541_ksnt.avif",
+  "serial_on_label": "DMG-AB2E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "bfd2a9f777e3e4de68fbbe8a9495e1110364dc33"
+ },
  "DMG-AB2J-JPN_3.jpg": {
   "serial_on_label": "DMG-AB2J",
   "original_sha1": "73984c92b9df9f51ff2c544c92ff6d8cb8f3e179",
@@ -217,6 +233,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "3ebf3b752a2aa5a6bce02eacddda47af534e3c24"
  },
+ "DMG-ABRP-EUR.jpg": {
+  "original_name": "s-l1200 (3).jpg",
+  "serial_on_label": "DMG-ABRP-EUR",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "b599010d291e98a3add96a957993ff48d1d14b24"
+ },
  "DMG-ABSP-EUR.jpg": {
   "original_name": "fac2d707-8cc9-48da-a29f-1409fd866646.jpg",
   "note": "named by nothing: no serial read",
@@ -227,11 +249,46 @@
   "note": "named by nothing: no serial read",
   "sha1": "cfd221f1789e9b2cc68c29fb550915c9bd957464"
  },
+ "DMG-ABXE-USA.jpg": {
+  "original_name": "814oVnoRhoL.jpg",
+  "serial_on_label": "DMG-ABXE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "bb856a8af3e2aa741b794e71fcf6633b64070d02"
+ },
+ "DMG-AC3E-EUR.jpg": {
+  "original_name": "1034265-5-wm_1.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "213633bd029a84cfcac4129507984094617f5f6d"
+ },
+ "DMG-AC5E-USA.jpg": {
+  "original_name": "s-l1200 (1).jpg",
+  "serial_on_label": "DMG-AC5E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "55624ce7ae3cd7ceb408321c3340ee7a52cc3c0a"
+ },
  "DMG-ACCJ-JPN.jpg": {
   "serial_on_label": "DMG-ACCJ-JPN",
   "original_sha1": "6cfe738141188e348dd7c118fe86d06cd51d7c4f",
   "sha1": "21ddf0cfeba56bd06d071f3941e84737b1e4512d",
   "original_name": "s-l1200 (1).jpg"
+ },
+ "DMG-ACDX-EUR.jpg": {
+  "original_name": "619Ux+SDSKL.jpg",
+  "serial_on_label": "DMG-ACDX-EUR",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "50fb93d395851822c0df2a0f23be0bb35d9bf439"
+ },
+ "DMG-ACEE-USA_2.jpg": {
+  "original_name": "s-l1200 (2).jpg",
+  "serial_on_label": "DMG-ACEE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "d78a8a661eceb38fe8205366f6a212322a07f387"
+ },
+ "DMG-ACFE-USA.webp": {
+  "original_name": "il_fullxfull.3836392505_kuz2.webp",
+  "serial_on_label": "DMG-ACFE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "87a3fadfa05319523b0daee9acf9bca2ae260430"
  },
  "DMG-ACMJ-JPN_2.jpg": {
   "original_sha1": "1b6e1cae5e12c60ca9d058636d52fb5598cc96f3",
@@ -290,6 +347,12 @@
   "original_sha1": "2115addca3382cb4d7be2e1ed5863aebeff25797",
   "sha1": "f8c5fb212b93bd640aeeca6b2ea033b4fcbeae9f",
   "original_name": "1792780740.jpg"
+ },
+ "DMG-ADNP-EUR.webp": {
+  "original_name": "654245942_455ab573-7d1e-4753-9342-4e468ab86f29.webp",
+  "serial_on_label": "DMG-ADNP-EUR",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "3cfb59d48920fe962ec4a37f02bff7cac10b3490"
  },
  "DMG-ADOJ-JPN.jpg": {
   "original_name": "$_57 (1).jpeg",
@@ -595,6 +658,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c40b0928540b75ccce5846af237ebac5caafc7e9"
  },
+ "DMG-ANYE-USA.webp": {
+  "original_name": "s-l1200.webp",
+  "serial_on_label": "DMG-ANYE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "f95ea12d7279a044605a9e3a2ee0427f49d061bd"
+ },
  "DMG-AP7J-JPN.jpg": {
   "original_name": "images.jpeg",
   "serial_on_label": "DMG-AP7J-JPN",
@@ -618,6 +687,12 @@
   "serial_on_label": "DMG-APKJ-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "0db907ba6d815afc9c6045b118ca2dc1eff0a2b3"
+ },
+ "DMG-APXP.webp": {
+  "original_name": "s-l1600.webp",
+  "serial_on_label": "DMG-APXP",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "4fab8cfd6ed82138956d5e173a578d7cad553787"
  },
  "DMG-AQ2J-JPN.jpg": {
   "serial_on_label": "DMG-AQ2J-JPN",
@@ -987,6 +1062,12 @@
   "sha1": "ff4f78e632bd0c9697d530ec734ba83152e0e2ee",
   "original_name": "IMG_1703572834534.jpg"
  },
+ "DMG-BW-NOE.jpg": {
+  "original_name": "02474fad-d956-4a98-9dbb-66fa63897800.jpeg",
+  "serial_on_label": "DMG-BW-NOE",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "9bea52beab6360f8234c350f5324ff8490c582bc"
+ },
  "DMG-BZJ.jpg": {
   "serial_on_label": "DMG-BZJ",
   "original_sha1": "a46357e63d6ce30b6baf8aaeeb98f2cd8e7267b2",
@@ -1041,6 +1122,18 @@
   "sha1": "3c41c115da5810c9f5da33acf383d0ecd103a0dd",
   "original_name": "$_57 (3).jpeg"
  },
+ "DMG-CQ-USA.webp": {
+  "original_name": "crystal-quest-gameboy-gut.webp",
+  "serial_on_label": "DMG-CQ-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "3faaddd3dc562fde4da0c86d8c04ef755166ab5d"
+ },
+ "DMG-CT-USA.jpg": {
+  "original_name": "gdqect6b89xe1.jpg",
+  "serial_on_label": "DMG-CT-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "716459034d61bec7250ed527c5d4bc225ccb751c"
+ },
  "DMG-CUA.png": {
   "original_name": "r2_847494fd-3afa-441a-93ca-39b834c5160d.png",
   "serial_on_label": "DMG-CUA",
@@ -1052,6 +1145,12 @@
   "original_sha1": "1323f18eb00c42add56ec98b6df616678ef57d25",
   "sha1": "dc6f13949722e4725e6ec4e36c90a9d9f51a9605",
   "original_name": "400455655_7a39f286-02bb-4316-be23-b974325b4f20.webp"
+ },
+ "DMG-CZ-NOE.jpg": {
+  "original_name": "$_57.jpeg",
+  "serial_on_label": "DMG-CZ-NOE",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "2d361fdd1134377bd28da85abff6f66549264ea3"
  },
  "DMG-D9J_2.jpg": {
   "serial_on_label": "DMG-D9J",
@@ -1196,6 +1295,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "9982d49815ed58777fd44ff6eb9b7aa0d43dbbed"
  },
+ "DMG-GL-USA.webp": {
+  "original_name": "s-l1600 (2).webp",
+  "serial_on_label": "DMG-GL-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "1c63f08f255955ff6169917032e1f49c449ae1a3"
+ },
  "DMG-GQ-FAH.jpg": {
   "original_name": "s-l1200_sdsdsd.jpg",
   "note": "named by nothing: no serial read",
@@ -1229,6 +1334,12 @@
   "serial_on_label": "DMG-H3UJ-JPN",
   "note": "named by the serial read on it (exact)",
   "sha1": "9fc747ea27f7bf981adcf11291a0017188b263e0"
+ },
+ "DMG-H4-USA.jpg": {
+  "original_name": "s-l1200.jpg",
+  "serial_on_label": "DMG-H4-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "85f46a5baf2c6932716ea6205e4964ae15294e5b"
  },
  "DMG-HHJ.jpg": {
   "serial_on_label": "DMG-HHJ",
@@ -1281,6 +1392,12 @@
   "original_sha1": "3c5544aa03e6213fc979cb60da9fa1ed9638c08c",
   "sha1": "b47c5c50c6680549cb3076f4bff80acae50f98c8",
   "original_name": "s-l1200_yhyhyh.jpg"
+ },
+ "DMG-J6.webp": {
+  "original_name": "655139732_da6f3a08-73b8-4e32-aecb-0bd667440a3f.webp",
+  "serial_on_label": "DMG-J6",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "93bdaffa64950c08b9fca0e8e5d035e8c6b1eaa0"
  },
  "DMG-J8A.jpg": {
   "original_name": "$_57 (3).jpeg",
@@ -1424,6 +1541,12 @@
   "sha1": "62b315ace4502ab7dffe2bd827ef8d3f1899f7af",
   "original_name": "i6760828159.webp"
  },
+ "DMG-QC-UKV.jpg": {
+  "original_name": "s-l1200 (4).jpg",
+  "serial_on_label": "DMG-QC-UKV",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "ce06c32c7ea9fa829612a6cebc37494f46b0eb9a"
+ },
  "DMG-QEJ.jpg": {
   "original_name": "images (2).jpeg",
   "serial_on_label": "DMG-QEJ",
@@ -1511,6 +1634,18 @@
   "original_sha1": "fa2ec1638764f34b3da3d38823646ad2fb15b7be",
   "sha1": "982739738cb94fde85a73c1a1799fd5ebb60b9aa",
   "original_name": "s-l1200 (24).jpg"
+ },
+ "DMG-SQ-USA.webp": {
+  "original_name": "DSCN9050.webp",
+  "serial_on_label": "DMG-SQ-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "912b3406c1158b69c5684a8b677daecf7f01a6de"
+ },
+ "DMG-SQ-USA_3.webp": {
+  "original_name": "s-l1600 (4).webp",
+  "serial_on_label": "DMG-SQ-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "95be34e63b94050683b08be56c4a561feebbd268"
  },
  "DMG-T3-NOE[EUROPEAN].jpg": {
   "original_sha1": "9349eba3a2e53e694bbedb076d0aa2b12eb95de3",
@@ -1618,6 +1753,12 @@
   "sha1": "d7a10adb0e26cdc7cf4c23783ecb4bfb0de2ca3a",
   "original_name": "2922723577.jpg"
  },
+ "DMG-V4-ITA.jpg": {
+  "original_name": "$_57_ssd.jpeg",
+  "serial_on_label": "DMG-V4-ITA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "cdc66f55410526eaf7ba5f0799884756d293a8d5"
+ },
  "DMG-VGA.webp": {
   "original_name": "vattle-giuce-gb-used-loose-en.webp",
   "serial_on_label": "DMG-VGA",
@@ -1653,6 +1794,12 @@
   "serial_on_label": "DMG-WSASU",
   "note": "named by nothing: no serial read",
   "sha1": "7315f852759c59b99966e0251df598f65a7fcf63"
+ },
+ "DMG-WL-USA.jpg": {
+  "original_name": "$_10.jpeg",
+  "serial_on_label": "DMG-WL-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "a5f57f63c79cd8b33949fdab196749930c978d82"
  },
  "DMG-WQJ_3.jpg": {
   "serial_on_label": "DMG-20S0T",

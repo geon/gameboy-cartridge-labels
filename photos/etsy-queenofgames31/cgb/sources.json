@@ -1,0 +1,159 @@
+{
+ "CGB-AHYE-USA-1.jpg": {
+  "original_name": "il_1588xN.7811092121_2xd8.jpg",
+  "serial_on_label": "CGB-AHYE-USA-1",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "0424cb3306cf0b452430bc45e7fe79c589f46dc9"
+ },
+ "CGB-AIME-USA.webp": {
+  "original_name": "il_1588xN.7757787746_bzvu.webp",
+  "serial_on_label": "CGB-AIME-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "2d3a6fc5993d0911f1925a472b9cdd765946390d"
+ },
+ "CGB-ARNE-USA.webp": {
+  "original_name": "il_1588xN.7829213436_4stz.webp",
+  "serial_on_label": "CGB-ARNE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "80d13889171331e525e6099d5670da379cea90a3"
+ },
+ "CGB-AT7E-USA.webp": {
+  "original_name": "il_1588xN.7763095162_lvei.webp",
+  "serial_on_label": "CGB-AT7E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "2d2ddb511c3ce7a91cd010e0ba682e751805bde3"
+ },
+ "CGB-AT9E-USA.webp": {
+  "original_name": "il_1588xN.7877142741_gwc4.webp",
+  "serial_on_label": "CGB-AT9E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "c761464d462604894b542b5393dd2db82eb875ae"
+ },
+ "CGB-AV4E-USA.webp": {
+  "original_name": "il_1588xN.7811002455_9h18.webp",
+  "serial_on_label": "CGB-AV4E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "02ae5849f0b09c4a12967a1b1cd5841517f72247"
+ },
+ "CGB-AXGE-USA.webp": {
+  "original_name": "il_1588xN.7805502635_d1mn.webp",
+  "serial_on_label": "CGB-AXGE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "33578751adecbcbb6edf51fb0675a3917115f8b5"
+ },
+ "CGB-B7DE-USA.webp": {
+  "original_name": "il_1588xN.7877634307_iw2i.webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "e7fea6d7ce6fdb8df948e9270c138919b060b20d"
+ },
+ "CGB-BABE-USA.webp": {
+  "original_name": "il_1588xN.7805602133_8us3.webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "7db21bb657e1d311b04b75c807a865fd380204bd"
+ },
+ "CGB-BFDE-USA.webp": {
+  "original_name": "il_1588xN.7757636958_ecwn.webp",
+  "serial_on_label": "CGB-BFDE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "909d67357b976d23b7c9e22b18d2060f926e13ec"
+ },
+ "CGB-BH2E-USA.webp": {
+  "original_name": "il_1588xN.7877406195_s896.webp",
+  "serial_on_label": "CGB-BH2E-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "19c3fa54bd37be07ebfbc98ae9363fc04f80030c"
+ },
+ "CGB-BIJE-USA.webp": {
+  "original_name": "il_1588xN.7805750749_1bp8.webp",
+  "serial_on_label": "CGB-BIJE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "ee069f2b4c1a598948eba554b0f262c85f07d1cc"
+ },
+ "CGB-BJIE-USA.webp": {
+  "original_name": "il_1588xN.7757539374_mhv4.webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "d02cd36facfa1c193572786e860ad8211e7d13ee"
+ },
+ "CGB-BJJE-USA-2.webp": {
+  "original_name": "il_1588xN.7829409490_hhan.webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "c8bfa32164fa6f368cdf1aeda911b4a26c0e3dd9"
+ },
+ "CGB-BLQE-USA.webp": {
+  "original_name": "il_1588xN.7757587602_ppfy.webp",
+  "serial_on_label": "CGB-BLQE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "0f5359c5c7927920882d546526a1d25dac0b2a8f"
+ },
+ "CGB-BMIE-USA.webp": {
+  "original_name": "il_1588xN.7805544267_9zgw.webp",
+  "serial_on_label": "CGB-BMIE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "a7359942c9219866d6a5670cae9baa9fd5407107"
+ },
+ "CGB-BNHE-USA.webp": {
+  "original_name": "il_1588xN.3069858319_rexy.webp",
+  "serial_on_label": "CGB-BNHE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "f76fcfe2e6d2d006c5171a77bd007e97c8dfae5e"
+ },
+ "CGB-BNNE-USA.webp": {
+  "original_name": "il_1588xN.7829464058_c5c8.webp",
+  "serial_on_label": "CGB-BNNE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "a95e486e2ba6ed4b9a1d553f3d1253c50c974c89"
+ },
+ "CGB-BROE-USA.webp": {
+  "original_name": "il_1588xN.7757476034_bvox.webp",
+  "serial_on_label": "CGB-BROE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "9106e50211abdbd138d0a59da651298e3507a9f7"
+ },
+ "CGB-BRSE-USA.webp": {
+  "original_name": "il_1588xN.7805431481_tq2b.webp",
+  "serial_on_label": "CGB-BRSE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "170e7cddee2bd7f67a01ffd1111533d0d57244da"
+ },
+ "CGB-BSHE-USA.webp": {
+  "original_name": "il_1588xN.5146430092_4tp2.webp",
+  "serial_on_label": "CGB-BSHE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "36029b267c93446f282e3f33c3762e123122d99e"
+ },
+ "CGB-BTFE-USA.webp": {
+  "original_name": "il_1588xN.7805559469_b3kc.webp",
+  "serial_on_label": "CGB-BTFE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "d21a2c3da8e3fdb65320ec61c5c94657448ddb60"
+ },
+ "CGB-BUZE-USA.webp": {
+  "original_name": "il_1588xN.7757579378_8wdm.webp",
+  "serial_on_label": "CGB-BUZE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "500a9e74a82ce3771e54b0740cd4dafde9234170"
+ },
+ "CGB-BWPE-USA.webp": {
+  "original_name": "il_1588xN.7877394691_okz9.webp",
+  "note": "named by nothing: no serial read",
+  "sha1": "3470ac2249b1e971ee2654cb8041048a72ee9287"
+ },
+ "CGB-BWTE-USA.webp": {
+  "original_name": "il_1588xN.7757528970_sssd.webp",
+  "serial_on_label": "CGB-BWTE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "93998a04086ae836c39dfd70b630c9c53ad1c2c4"
+ },
+ "CGB-BXGE-USA.webp": {
+  "original_name": "il_1588xN.3076353587_4ohz.webp",
+  "serial_on_label": "CGB-BXGE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "b3b6489bc3a8e5cf0037ddecb25029075eb049a4"
+ },
+ "CGB-BXOE-USA.webp": {
+  "original_name": "il_1588xN.5146414618_drqr.webp",
+  "serial_on_label": "CGB-BXOE-USA",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "e7b6fc05d3d7386f370cd766c90e6e4f3757ee9e"
+ }
+}
