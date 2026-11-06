@@ -65,6 +65,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4a56f15eec1a926aa7337435f6a25641374db652"
  },
+ "CGB-AZ7P-EUR_3.jpg": {
+  "page_url": "https://zockbar.ch/products/the-legend-of-zelda-oracle-of-seasons",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/the-legend-of-zelda-oracle-of-seasons-gameboy-color-gebraucht.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "The Legend of Zelda: Oracle of Seasons",
+  "collection": "game-boy-color",
+  "original_name": "zockbar-the-legend-of-zelda-oracle-of-seasons.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_382",
+  "sha1": "626633e01491c39103daa6454f24105e24024a91",
+  "serial_on_label": "CGB-AZ7P-EUR"
+ },
  "CGB-BBZD-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/dragon-ball-z-legendaere-superkaempfer",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/dragon-ball-z-legendaere-superkaempfer-gameboy-gut.jpg",

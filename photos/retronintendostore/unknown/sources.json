@@ -1,54 +1,4 @@
 {
- "UNKNOWN_75.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/disneys-the-emperors-new-groove",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351461667.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "The Emperor's New Groove",
-  "category": "gameboy-color/games",
-  "original_name": "retronintendostore-351461667.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "a8e93d1485d9193aa253d5c56b4eddc226866df4"
- },
- "UNKNOWN_76.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/total-soccer-manager",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351461783.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Total Soccer Manager",
-  "category": "gameboy-color/games",
-  "original_name": "retronintendostore-351461783.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "f021554ec0ecf5dccda7f7651d08f6e771e7b555"
- },
- "UNKNOWN_77.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/ultimate-paintball",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351462077.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Ultimate Paintball",
-  "category": "gameboy-color/games",
-  "original_name": "retronintendostore-351462077.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "0335b5fec2eb162239ce1b5aec4bb04cbd528c3d"
- },
- "UNKNOWN_78.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/asterix-obelix",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351463609.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Asterix & Obelix",
-  "category": "gameboy-classic/games",
-  "original_name": "retronintendostore-351463609.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "66d053448f7ce38a9141fd89269a144c54e048db"
- },
- "UNKNOWN_79.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/burai-fighter-deluxe",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351470601.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Burai Fighter Deluxe",
-  "category": "gameboy-classic/games",
-  "original_name": "retronintendostore-351470601.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "f5300327fe3cd35752627863f210ab49bee62a05"
- },
  "UNKNOWN_80.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/godzilla",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351472877.jpg",
@@ -58,16 +8,6 @@
   "original_name": "retronintendostore-351472877.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "94e1216b018072e138ba218fdef6ac056cdf4a3f"
- },
- "UNKNOWN_81.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/the-lion-king",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351473437.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "The Lion King",
-  "category": "gameboy-classic/games",
-  "original_name": "retronintendostore-351473437.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "8602b252986a1fa49151f830cafa2ad2a234bb4b"
  },
  "UNKNOWN_82.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/super-mario-land-2",
@@ -88,16 +28,6 @@
   "original_name": "retronintendostore-351481111.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "a57aef190d80d003e036584df3f93c4e5eff1856"
- },
- "UNKNOWN_84.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/football-international",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351504867.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Football International",
-  "category": "gameboy-classic/games",
-  "original_name": "retronintendostore-351504867.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "6b6e68582ccb9400b3bfcf606d518a945297e80e"
  },
  "UNKNOWN_85.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/extreme-sports-with-the-berenstain-bears",
@@ -198,16 +128,6 @@
   "original_name": "retronintendostore-459485705.jpg",
   "note": "named by nothing: no serial read",
   "sha1": "2aaefcab292c89967ab5dd7fc47536aeb5a3ef1d"
- },
- "UNKNOWN_95.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/wave-race",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459486446.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Wave Race",
-  "category": "gameboy-classic/games",
-  "original_name": "retronintendostore-459486446.jpg",
-  "note": "named by nothing: no serial read",
-  "sha1": "9c91842468078621ff36bd8b987e536a7372d656"
  },
  "UNKNOWN_96.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/fifa-road-to-world-cup-98",

@@ -261,6 +261,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "09ce1d92afb3bb938dc586da8474de2b8d395c0a"
  },
+ "DMG-ALNP-EUR.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/the-lion-king",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351473437.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "The Lion King",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351473437.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_81",
+  "sha1": "8602b252986a1fa49151f830cafa2ad2a234bb4b",
+  "serial_on_label": "DMG-ALNP-EUR"
+ },
  "DMG-ALNP-FRA.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/the-lion-king-french",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2210517975.jpg",
@@ -535,6 +546,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ade8af6a0260a952d947a153fedf6f2a676551d2"
  },
+ "DMG-AXOP-FAH_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/asterix-obelix",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351463609.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Asterix & Obelix",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351463609.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "66d053448f7ce38a9141fd89269a144c54e048db"
+ },
  "DMG-AXQP-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/pokemon-trading-card-game-budget",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000178003.jpg",
@@ -677,6 +698,16 @@
   "serial_on_label": "DMG-BT-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "5763d2b8b23ca8d657f4b2466c969b00db199374"
+ },
+ "DMG-BU-SCN.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/burai-fighter-deluxe",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351470601.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Burai Fighter Deluxe",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351470601.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "f5300327fe3cd35752627863f210ab49bee62a05"
  },
  "DMG-C8-ESP.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/the-incredible-crash-dummies",
@@ -939,6 +970,17 @@
   "serial_on_label": "DMG-GR-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "11b91c2456eebf9785d1292bc50eea1bf380e20d"
+ },
+ "DMG-GS-FAH.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-classic/football-international",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351504867.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Football International",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-351504867.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_84",
+  "sha1": "6b6e68582ccb9400b3bfcf606d518a945297e80e",
+  "serial_on_label": "DMG-GS-FAH"
  },
  "DMG-H2-USA_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/nba-all-star-challenge-2",
@@ -1650,6 +1692,17 @@
   "serial_on_label": "DMG-W3-FAH",
   "note": "named by the serial read on it (exact)",
   "sha1": "d0f359a2f725cf8187901126c6d0c3ea059fef15"
+ },
+ "DMG-WA-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy-classic/games/wave-race",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/459486446.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Wave Race",
+  "category": "gameboy-classic/games",
+  "original_name": "retronintendostore-459486446.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_95",
+  "sha1": "9c91842468078621ff36bd8b987e536a7372d656",
+  "serial_on_label": "DMG-WA-EUR"
  },
  "DMG-WF-NOE.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-classic/games/glucksrad",

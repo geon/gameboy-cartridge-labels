@@ -1,4 +1,15 @@
 {
+ "DMG-108-CHN.jpg": {
+  "page_url": "https://zockbar.ch/products/ninja-spirit",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/ninja-spirit-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Ninja Spirit",
+  "collection": "game-boy",
+  "original_name": "zockbar-ninja-spirit.jpg",
+  "serial_on_label": "DMG-108-CHN",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_360",
+  "sha1": "a7139a24dabed5487d200717ae6548eabfea5a26"
+ },
  "DMG-110-CHN.jpg": {
   "page_url": "https://zockbar.ch/products/r-type-ii",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/r-type-2-chn-gb-gut.jpg",
@@ -20,6 +31,17 @@
   "serial_on_label": "DMG-119 CHN",
   "note": "named by the serial read on it (near)",
   "sha1": "c70eb71faec074bd41a8ac6e4b74cfa974e1ea1e"
+ },
+ "DMG-204-CHN.jpg": {
+  "page_url": "https://zockbar.ch/products/bonks-adventure",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/bonks-adventure-chn-gameboy-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Bonk's Adventure",
+  "collection": "game-boy",
+  "original_name": "zockbar-bonks-adventure.jpg",
+  "serial_on_label": "DMG-204-CHN",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_316",
+  "sha1": "b1b11c05b64829061a9140dacf8f8a3c3c945092"
  },
  "DMG-A7SP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/fifa-97",
@@ -53,6 +75,17 @@
   "serial_on_label": "DMG-AAUD-NOE",
   "note": "named by the serial read on it (exact)",
   "sha1": "d8dfaf00caa7295cc0151f39aa1228253f6fda3e"
+ },
+ "DMG-AAXD-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/pokemon-silber",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/pokemon-silber-gameboy-color-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Pokémon Silber",
+  "collection": "game-boy",
+  "original_name": "zockbar-pokemon-silber.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_364",
+  "sha1": "c4611d5e60da9311d0bf00ea2dab208ab23643e4",
+  "serial_on_label": "DMG-AAXD-NOE"
  },
  "DMG-AB8D-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/schiffe-versenken",
@@ -307,6 +340,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "45f46b9619d3f2a3683ab4d85063d24f195fabd2"
  },
+ "DMG-ALFP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/black-bass-lure-fishing",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/black-bass-lure-fishing-gameboy-color-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Black Bass Lure Fishing",
+  "collection": "game-boy",
+  "original_name": "zockbar-black-bass-lure-fishing.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_314",
+  "sha1": "7b9673482d5de882d377e5a08cee6aa9e5db2282",
+  "serial_on_label": "DMG-ALFP-EUR"
+ },
  "DMG-ALLP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/lucky-luke",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Lucky-Luke_GB_gut.jpg",
@@ -504,6 +548,17 @@
   "serial_on_label": "DMG-ASIP",
   "note": "named by the serial read on it (exact)",
   "sha1": "814a54a3341652cd03202c180a4fc234085be997"
+ },
+ "DMG-ASRP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/street-racer",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Street-Racer_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Street Racer",
+  "collection": "game-boy",
+  "original_name": "zockbar-street-racer.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_377",
+  "sha1": "de0e48cbfcb72954277db10c8a6c5b760e995a48",
+  "serial_on_label": "DMG-ASRP-EUR"
  },
  "DMG-AT6X-ITA.jpg": {
   "page_url": "https://zockbar.ch/products/tim-in-tibet-1",
@@ -934,6 +989,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "2ac78b4d6173433c7c0683a0ed2e925a18617c38"
  },
+ "DMG-E5-NOE_2.jpg": {
+  "page_url": "https://zockbar.ch/products/frank-joe-dirk-on-the-tiles",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/franky-joe-and-dirk-on-the-tiles-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Frank, Joe & Dirk: On the Tiles",
+  "collection": "game-boy",
+  "original_name": "zockbar-frank-joe-dirk-on-the-tiles.jpg",
+  "serial_on_label": "DMG-E5-NOE",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_332",
+  "sha1": "d8b29d0c39d8ec8932f0459e909ed541da0a8aef"
+ },
  "DMG-EE-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/wario-blast",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wario-blast-gameboy-gut.jpg",
@@ -1044,6 +1110,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e4f938322c186ec9566b64068fd81aad10cd30fb"
  },
+ "DMG-FL-USA_3.jpg": {
+  "page_url": "https://zockbar.ch/products/play-action-football",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Play-Action-Football_GB_gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Play Action Football",
+  "collection": "game-boy",
+  "original_name": "zockbar-play-action-football.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_363",
+  "sha1": "dab3a7e45c5e5c03fa99e7d216c312fb02d28cc7",
+  "serial_on_label": "DMG-FL-USA"
+ },
  "DMG-FU-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/dexterity",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/dexterity-gameboy.jpg",
@@ -1087,6 +1164,17 @@
   "serial_on_label": "DMG-G6-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "37fe31e760e396d2b626f9227f3b696fad95d41e"
+ },
+ "DMG-GB-USA.jpg": {
+  "page_url": "https://zockbar.ch/products/ghostbusters-2",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/ghostbusters-2-gb-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Ghostbusters 2",
+  "collection": "game-boy",
+  "original_name": "zockbar-ghostbusters-2.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_339",
+  "sha1": "f0db1d9e3b0e48d5cc497f531146d0f85239fc10",
+  "serial_on_label": "DMG-GB-USA"
  },
  "DMG-GH-USA.jpg": {
   "page_url": "https://zockbar.ch/products/the-game-of-harmony",
@@ -1802,6 +1890,17 @@
   "serial_on_label": "DMG-QR-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "9e49b842f6abc7ac85186f31e6bfdc5e82b7eeb7"
+ },
+ "DMG-QX-FRG.jpg": {
+  "page_url": "https://zockbar.ch/products/qix",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Qix_GB_gut_d7a250cc-ae67-4ead-8f26-b1a26243b292.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Qix",
+  "collection": "game-boy",
+  "original_name": "zockbar-qix.jpg",
+  "serial_on_label": "DMG-QX-FRG",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_368",
+  "sha1": "06e31fdcf1a17b08e8f908883eafe09490847ab9"
  },
  "DMG-R2-USA_2.jpg": {
   "page_url": "https://zockbar.ch/products/robocop-2",

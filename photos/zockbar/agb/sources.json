@@ -120,6 +120,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "8766e5863172465e23366400de928cdf46dcef46"
  },
+ "AGB-AC6D-NOE.jpg": {
+  "page_url": "https://zockbar.ch/products/spirit-der-wilde-mustang",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spirit-Der-wilde-Mustang_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Spirit: Der Wilde Mustang",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-spirit-der-wilde-mustang.jpg",
+  "serial_on_label": "AGB-AC6D-NOE",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_374",
+  "sha1": "1a933ef2acdd64408e1f9cc8704b2581abb3009a"
+ },
  "AGB-AC7P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/ct-special-forces",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/ct-special-forces-gameboy-advance.jpg",
@@ -152,6 +163,17 @@
   "serial_on_label": "AGB-ACEP-EUR-1",
   "note": "named by the serial read on it (exact)",
   "sha1": "b7eb6634fa37ffc66b7893d8ea442c6faff8b2ce"
+ },
+ "AGB-ACOP-UKV.jpg": {
+  "page_url": "https://zockbar.ch/products/crash-bandicoot-xs-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/crash-bandicoot-xs-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Crash Bandicoot XS",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-crash-bandicoot-xs-1.jpg",
+  "serial_on_label": "AGB-ACOP-UKV",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_320",
+  "sha1": "a8b707ce8f956235118aba66f0d5f0188660b151"
  },
  "AGB-ACRP-NOE.jpg": {
   "page_url": "https://zockbar.ch/products/chuchu-rocket-gba",
@@ -186,6 +208,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c5721eda45f99b6cd6c2d9b1d51b676d54e80940"
  },
+ "AGB-AEJP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/earthworm-jim-gba",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/earthworm-jim-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Earthworm Jim",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-earthworm-jim-gba.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_328",
+  "sha1": "e590a21850e5a9dd6f8fe8d1d7c3686dc771649b",
+  "serial_on_label": "AGB-AEJP-EUR"
+ },
  "AGB-AFFP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/final-fight-one",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/final-fight-one-gba-gut.jpg",
@@ -196,6 +229,17 @@
   "serial_on_label": "AGB-AFFP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "d173ca1c4721b68736ec1e97d0582739fab99b01"
+ },
+ "AGB-AFRP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/froggers-adventures",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/froggers-advantures-gameboy-advance.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Frogger's Adventures",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-froggers-adventures.jpg",
+  "serial_on_label": "AGB-AFRP-EUR",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_334",
+  "sha1": "b086bda17bebea9c97d34c44eadff76591db84bc"
  },
  "AGB-AFXP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/final-fantasy-tactics",
@@ -230,6 +274,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "bb8028ff144d6a1140bd708f14b945160bcd866c"
  },
+ "AGB-AH8P-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/hot-wheels-velocity-x-gba",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/hot-wheels-velocity-x-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Hot Wheels Velocity X",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-hot-wheels-velocity-x-gba.jpg",
+  "serial_on_label": "AGB-AH8P-EUR",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_342",
+  "sha1": "fecac51606a36937f76d5c16f22b272d402b9c8c"
+ },
  "AGB-AHJP-EUR_3.jpg": {
   "page_url": "https://zockbar.ch/products/hugo-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/hugo-advance-gba-gut.jpg",
@@ -262,6 +317,17 @@
   "serial_on_label": "AGB-AHRP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "9ec47fb12b726d4209c312ff835cf54bb68e2118"
+ },
+ "AGB-AIGP_2.jpg": {
+  "page_url": "https://zockbar.ch/products/inspector-gadget-advance-mission",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/inspector-gadget-advance-mission-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Inspector Gadget: Advance Mission",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-inspector-gadget-advance-mission.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_344",
+  "sha1": "6c7c953c80b38bc3a49337e67a362bd9f8e72b95",
+  "serial_on_label": "AGB-AIGP"
  },
  "AGB-AKKP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/kao-the-kangaroo",
@@ -350,6 +416,17 @@
   "serial_on_label": "AGB-ALRP",
   "note": "named by the serial read on it (exact)",
   "sha1": "e6f88cb236e57b88d9d6d956896cdcfaf073b39a"
+ },
+ "AGB-ALTP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/lilo-and-stitch",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/lilo-and-stitch-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Lilo & Stitch",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-lilo-and-stitch.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_349",
+  "sha1": "8faef619580381f11e186155e7144d6c3e34bfd8",
+  "serial_on_label": "AGB-ALTP-EUR"
  },
  "AGB-ALUP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/super-monkey-ball-jr",
@@ -449,6 +526,17 @@
   "serial_on_label": "AGB-AR9P",
   "note": "named by the serial read on it (exact)",
   "sha1": "c9901a85542fdd7480198c0bf5e2e16eb48b441e"
+ },
+ "AGB-AS6P.jpg": {
+  "page_url": "https://zockbar.ch/products/speedball-2",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/speedball-2-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Speedball 2",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-speedball-2.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_371",
+  "sha1": "f8983e795aeb2a71173da43181f2fc81379bc36a",
+  "serial_on_label": "AGB-AS6P"
  },
  "AGB-ASIP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/die-sims-brechen-aus-1",
@@ -626,6 +714,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "abff80e824263c3702ef81f24d51fcc37148ad18"
  },
+ "AGB-AZOP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/der-schatzplanet",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/der-schatzplanet-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Der Schatzplanet",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-der-schatzplanet.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_323",
+  "sha1": "8ffa1c97629cac53a8025c508de48fe1864357a6",
+  "serial_on_label": "AGB-AZOP-EUR"
+ },
  "AGB-AZPP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/zapper-gba",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/zapper-gba-gut.jpg",
@@ -669,6 +768,28 @@
   "serial_on_label": "AGB-B53P-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "351b756a389abe4bd07d0fe7945793080d86a664"
+ },
+ "AGB-B5NP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/namco-museum-50th-anniversary",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Namco-Museum-50th-Anniversary_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Namco Museum 50th Anniversary",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-namco-museum-50th-anniversary.jpg",
+  "serial_on_label": "AGB-B5NP-EUR",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_355",
+  "sha1": "c77cc157b1dfa207c3e83ce6c5caaf8844c00818"
+ },
+ "AGB-B69P-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/gauntlet-rampart",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Gauntlet-and-Rampart_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Gauntlet & Rampart",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-gauntlet-rampart.jpg",
+  "serial_on_label": "AGB-B69P-EUR",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_337",
+  "sha1": "c13b16d1c3aafc8cad700fe4105fc2db10e94a57"
  },
  "AGB-B8MP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/mario-party-advance",
@@ -824,6 +945,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "408bcff18c5eba09a7dd9bde6b74f5d9974f7e05"
  },
+ "AGB-BNFP-EUR.jpg": {
+  "page_url": "https://zockbar.ch/products/need-for-speed-underground-2-gba",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/need-for-speed-underground-2-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Need for Speed: Underground 2",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-need-for-speed-underground-2-gba.jpg",
+  "serial_on_label": "AGB-BNFP-EUR",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_357",
+  "sha1": "f05056795cb93b9eaea71d86b5aeb3e749ce3390"
+ },
  "AGB-BP8P.jpg": {
   "page_url": "https://zockbar.ch/products/pac-man-pinball-advance",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/pac-man-pinball-advance-gba-gut.jpg",
@@ -911,6 +1043,17 @@
   "serial_on_label": "AGB-BSPP-UKV",
   "note": "named by the serial read on it (exact)",
   "sha1": "13457364afe2e8c195fbdd2d76e64010816e693e"
+ },
+ "AGB-BSRP.jpg": {
+  "page_url": "https://zockbar.ch/products/wade-hixtons-counter-punch",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Wade-Hixtons-Counter-Punch_GBA.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Wade Hixton's Counter Punch",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-wade-hixtons-counter-punch.jpg",
+  "serial_on_label": "AGB-BSRP",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_386",
+  "sha1": "62946ed3a64c4a93315f8416e5d0e0282a49b925"
  },
  "AGB-BTMP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/mario-power-tennis-gba",

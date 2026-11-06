@@ -460,6 +460,16 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "a47660601096275683c1629a10c5ddc0089dcfae"
  },
+ "CGB-BENP-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/disneys-the-emperors-new-groove",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351461667.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "The Emperor's New Groove",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-351461667.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "a8e93d1485d9193aa253d5c56b4eddc226866df4"
+ },
  "CGB-BERP-EUR_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/et",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2334072611.jpg",
@@ -937,6 +947,26 @@
   "serial_on_label": "CGB-BUCP-EUR-1",
   "note": "named by the serial read on it (exact)",
   "sha1": "909fb4c4748333077249df75e2e6902431b8e61f"
+ },
+ "CGB-BUIP-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/total-soccer-manager",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351461783.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Total Soccer Manager",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-351461783.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "f021554ec0ecf5dccda7f7651d08f6e771e7b555"
+ },
+ "CGB-BUPP-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-color/ultimate-paintball",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351462077.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "Ultimate Paintball",
+  "category": "gameboy-color/games",
+  "original_name": "retronintendostore-351462077.jpg",
+  "note": "named by nothing: no serial read",
+  "sha1": "0335b5fec2eb162239ce1b5aec4bb04cbd528c3d"
  },
  "CGB-BVBP-EUR_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-color/games/beach-n-ball",

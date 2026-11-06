@@ -54,6 +54,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "0ccb92677d8b0750091369561193e714c60c7074"
  },
+ "DMG-A6BE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/nba-live-96-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/nbalive96.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "NBA Live 96 - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-nba-live-96-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_214",
+  "sha1": "6ae34678641ba766851d08cfe9a57c46476d9f17",
+  "serial_on_label": "DMG-A6BE-USA"
+ },
  "DMG-A6ME-USA.jpg": {
   "page_url": "https://retroravengames.com/products/madden-96-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/madden96_0c193384-e882-4227-b2c4-902d83fdb6ce.jpg",
@@ -230,6 +241,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "1b5e95f9b4fd0b9a9849fca38c70681d3541002e"
  },
+ "DMG-AE3E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/sesame-street-elmos-123s-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Sesame_Street_Elmo_s_123s.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Sesame Street: Elmo's 123s - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-sesame-street-elmos-123s-game-boy-color.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_250",
+  "sha1": "0a9ba5b9c08c2a43fddcf9a7cf72b1034f42009b",
+  "serial_on_label": "DMG-AE3E-USA"
+ },
  "DMG-AEAE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/sesame-street-elmos-abcs-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/elmosabcs.jpg",
@@ -284,6 +306,17 @@
   "serial_on_label": "DMG-AFCE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "dd4917f7cd59b0a8e88d653bf8385533623737e1"
+ },
+ "DMG-AFEE-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/foreman-for-real-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/foremanforreal_8f34976d-3104-44ff-a2aa-1b2e1257101a.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Foreman for Real - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-foreman-for-real-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_157",
+  "sha1": "cf344b83b7da0a6f5a2ca953c0998db57a5fbc10",
+  "serial_on_label": "DMG-AFEE-USA"
  },
  "DMG-AFKE-USA_3.jpg": {
   "page_url": "https://retroravengames.com/products/frank-thomas-big-hurt-baseball-game-boy-classic",
@@ -560,6 +593,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c51724f5f3a9ceabaa60404b2ccf14acbf4bf7f9"
  },
+ "DMG-AOCE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/ms-pac-man-special-color-edition-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/mspacman_e5752ee8-f7b5-49cc-a7be-1bdaf8e702d0.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Ms. Pac-Man: Special Color Edition - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-ms-pac-man-special-color-edition-game-boy-color.jpg",
+  "serial_on_label": "DMG-AOCE-USA",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_211",
+  "sha1": "bb0a553814fdf527cca5ef43f88b407d2483ff45"
+ },
  "DMG-AOQE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/disney-pixar-toy-story-2-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/toystory2_c53e4f74-8f8e-46d8-a54e-74c9aacf2aac.jpg",
@@ -669,6 +713,17 @@
   "serial_on_label": "DMG-AQHE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "7991efda61ba13500e4f6d3b410207caf7e4f5d3"
+ },
+ "DMG-AR4E-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/construction-zone-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Construction_Zone.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Construction Zone - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-construction-zone-game-boy-color.jpg",
+  "serial_on_label": "DMG-AR4E-USA",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_129",
+  "sha1": "12f4797b7c74c5681cfcf930f1eb499ad27d157d"
  },
  "DMG-AR9E-USA.jpg": {
   "page_url": "https://retroravengames.com/products/primal-rage-game-boy-classic",
@@ -1022,6 +1077,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e26a0137dc79b97e56af5f8f9b580957f6eb090b"
  },
+ "DMG-BA-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/batman-the-video-game-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/batman_7a1f67b3-7b5b-4551-bd3f-e60a0eb4ec94.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Batman: The Video Game - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-batman-the-video-game-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_113",
+  "sha1": "0584034599e6179a526769ba5f4b8b8729246e1c",
+  "serial_on_label": "DMG-BA-USA"
+ },
  "DMG-BB-USA.jpg": {
   "page_url": "https://retroravengames.com/products/the-bugs-bunny-crazy-castle-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/crazycastle.jpg",
@@ -1032,6 +1098,17 @@
   "serial_on_label": "DMG-BB-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "1de51041ec12baf39a9fdfcd5450406d2b9980ac"
+ },
+ "DMG-BFXE-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/titus-the-fox-game-boy-color",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/titusthefox.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Titus The Fox - Game Boy Color",
+  "collection": "game-boy-color-games",
+  "original_name": "retroraven-titus-the-fox-game-boy-color.jpg",
+  "serial_on_label": "DMG-BFXE-USA",
+  "note": "named by the serial read on it, upscaled 2-3x (not in gb-game-list); was UNKNOWN_289",
+  "sha1": "a1129a660ece5c1bbc259eb8afcd8fb818a1c70e"
  },
  "DMG-BK-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/bases-loaded-game-boy-classic",
@@ -1076,6 +1153,17 @@
   "serial_on_label": "DMG-BQLE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "53efbdbd8b48868382e20ccc3eb05a691c5ce0a2"
+ },
+ "DMG-BS-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/baseball-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/baseball.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Baseball - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-baseball-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_111",
+  "sha1": "ff71417d49655d8bfb52e26bc2087de77d61250c",
+  "serial_on_label": "DMG-BS-USA"
  },
  "DMG-BW-USA.jpg": {
   "page_url": "https://retroravengames.com/products/brainbender-game-boy-classic",
@@ -1440,6 +1528,39 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "79b00ce2e1ca5690f530447a0e290d15f8b963f3"
  },
+ "DMG-HK-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/fist-of-the-north-star-10-big-brawls-for-the-king-of-the-universe-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/fistofthenorthstar.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Fist Of the North Star: 10 Big Brawls for the King of the Universe! - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-fist-of-the-north-star-10-big-brawls-for-the-king-of-the-universe-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_156",
+  "sha1": "69f136dde7c4d656520443c40fb8d0695a4add67",
+  "serial_on_label": "DMG-HK-USA"
+ },
+ "DMG-HL-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/hyper-lode-runner-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Hyper_Lode_Runner.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Hyper Lode Runner - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-hyper-lode-runner-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_170",
+  "sha1": "aabbf33cf809eee6f1fd040c52c51d8ee6a9a194",
+  "serial_on_label": "DMG-HL-USA"
+ },
+ "DMG-HM-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/home-alone-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/homealone.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Home Alone - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-home-alone-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_168",
+  "sha1": "86982fe49964d6c755f665a0703fe58d00cc572a",
+  "serial_on_label": "DMG-HM-USA"
+ },
  "DMG-HW-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/hudson-hawk-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/hudsonhawk_00d71196-6da7-4b85-8c61-24b6f4a5fd54.jpg",
@@ -1583,6 +1704,28 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "02dc3dcf08a71f77f944bdebe9434d60b4f02d20"
  },
+ "DMG-LC-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/lock-n-chase-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/locknchase.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Lock n' Chase - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-lock-n-chase-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_187",
+  "sha1": "f204988f87f3770e3a3620b2f919e59fe654e517",
+  "serial_on_label": "DMG-LC-USA"
+ },
+ "DMG-LS-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/talespin-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/talespin_0e17d42f-2257-45cb-b3c3-da81acc8777c.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "TaleSpin - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-talespin-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_269",
+  "sha1": "d6e864f665147b20e1c1e8965b993039f77e0cb8",
+  "serial_on_label": "DMG-LS-USA"
+ },
  "DMG-LS.jpg": {
   "page_url": "https://retroravengames.com/products/jpn-super-mario-land-2-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Super_Mario_Land_2_JPN.jpg",
@@ -1594,6 +1737,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ffdb779690cd2854bca772ead650bbd978727ecb"
  },
+ "DMG-LW-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/wwf-superstars-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/WWFSuperStars.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "WWF Superstars - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-wwf-superstars-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_304",
+  "sha1": "3b7749b642e02b8feca86f245d38720db9925ce8",
+  "serial_on_label": "DMG-LW-USA"
+ },
  "DMG-M4-USA.jpg": {
   "page_url": "https://retroravengames.com/products/mr-do-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Mr.Do.jpg",
@@ -1604,6 +1758,17 @@
   "serial_on_label": "DMG-M4-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "b5ccda42378b48509bfb0715e5299c0293f1fd06"
+ },
+ "DMG-MC-USA_3.jpg": {
+  "page_url": "https://retroravengames.com/products/mickeys-dangerous-chase-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/mickeysdangerouschase.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Mickey's Dangerous Chase - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-mickeys-dangerous-chase-game-boy-classic.jpg",
+  "serial_on_label": "DMG-MC-USA",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_204",
+  "sha1": "1a4567985285dc8d3715c137489acda399c175c9"
  },
  "DMG-ML-USA.jpg": {
   "page_url": "https://retroravengames.com/products/super-mario-land-game-boy-classic",
@@ -1637,6 +1802,17 @@
   "serial_on_label": "DMG-MQ-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "26dd655a88b85da6f4f579c6d2d60ea2f012a5d5"
+ },
+ "DMG-MX-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/motocross-maniacs-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/motocrossmania.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Motocross Maniacs - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-motocross-maniacs-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_210",
+  "sha1": "c78f91301fb51c07f639910627eeec49ae20fccf",
+  "serial_on_label": "DMG-MX-USA"
  },
  "DMG-N4-USA_3.jpg": {
   "page_url": "https://retroravengames.com/products/ms-pac-man-game-boy-classic",
@@ -1737,6 +1913,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "12e81d62d2ea27cc0ab958b18d63fb15af08674e"
  },
+ "DMG-QD-USA_3.jpg": {
+  "page_url": "https://retroravengames.com/products/donkey-kong-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/donkeykong_ff8ba4df-f426-4336-9b5e-dcf5ad0189b1.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Donkey Kong - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-donkey-kong-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_145",
+  "sha1": "a21b79f641b2cdfddbfa8972322d70ce2d8dcc60",
+  "serial_on_label": "DMG-QD-USA"
+ },
  "DMG-QF-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/pit-fighter-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/pitfighter.jpg",
@@ -1780,6 +1967,39 @@
   "serial_on_label": "DMG-R7-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "68b3914d8a3b844737aa48bdce2411b58bc1d85e"
+ },
+ "DMG-RA-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/gargoyles-quest-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/gargoylesquest.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Gargoyle's Quest - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-gargoyles-quest-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_160",
+  "sha1": "77d98ee478f9e2742d799803f39b0306a9539104",
+  "serial_on_label": "DMG-RA-USA"
+ },
+ "DMG-RC-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/super-r-c-pro-am-game-boy-classic-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Super_RC_Pro_Am.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Super R.C. Pro-Am - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-super-r-c-pro-am-game-boy-classic-1.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_266",
+  "sha1": "68aecdcfebb64d78031511f903423305f6ea9ba7",
+  "serial_on_label": "DMG-RC-USA"
+ },
+ "DMG-RM-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/radar-mission-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/radarmission.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Radar Mission - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-radar-mission-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_244",
+  "sha1": "ab5f1e9f92b0861b868ba38dc81352f6ad2244ad",
+  "serial_on_label": "DMG-RM-USA"
  },
  "DMG-RR-USA-1.jpg": {
   "page_url": "https://retroravengames.com/products/who-framed-roger-rabbit-game-boy-classic",
@@ -1846,6 +2066,17 @@
   "serial_on_label": "DMG-S2-USA-1",
   "note": "named by the serial read on it (exact)",
   "sha1": "cb75facf29c579e18df4b609459e443e15d53989"
+ },
+ "DMG-S3-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/spot-the-video-game-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Spot.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Spot: The Video Game - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-spot-the-video-game-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_259",
+  "sha1": "beff09d064e8025cc7ecf76a7ec99a35996b576d",
+  "serial_on_label": "DMG-S3-USA"
  },
  "DMG-SA-USA-1_2.jpg": {
   "page_url": "https://retroravengames.com/products/the-final-fantasy-legend-game-boy-classic",
@@ -1967,6 +2198,17 @@
   "serial_on_label": "DMG-TX-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "1444c872c2f5ece0a7d55e241160dca029ed1b63"
+ },
+ "DMG-TZ-USA.jpg": {
+  "page_url": "https://retroravengames.com/products/t2-terminator-2-judgment-day-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/t2.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "T2: Terminator 2 - Judgment Day - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-t2-terminator-2-judgment-day-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_268",
+  "sha1": "5b329b89944e654157c3ef0914609f8c75950b02",
+  "serial_on_label": "DMG-TZ-USA"
  },
  "DMG-U2-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ultima-runes-of-virtue-ii-game-boy-classic",
@@ -2099,6 +2341,17 @@
   "serial_on_label": "DMG-XP-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "f8d98fd3cb1c565e41bf0a3e2220b6359bdd8762"
+ },
+ "DMG-XW-USA_2.jpg": {
+  "page_url": "https://retroravengames.com/products/riddick-bowe-boxing-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/riddickboweboxing_9ff61896-85de-48c1-9d88-338b06cc8016.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "Riddick Bowe Boxing - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-riddick-bowe-boxing-game-boy-classic.jpg",
+  "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_247",
+  "sha1": "835d7d0211c15facf6dd25d86769de31c2b2e005",
+  "serial_on_label": "DMG-XW-USA"
  },
  "DMG-YD-USA.jpg": {
   "page_url": "https://retroravengames.com/products/dennis-the-menace-game-boy-classic",
