@@ -148,7 +148,7 @@ def render(kind, release, path, shell, plastic_H, label_H, settings, out):
 
 
 def file_of(release):
-    return re.sub(r"[^A-Za-z0-9._()\[\]-]", "_", release) + ".avif"
+    return re.sub(r"[^A-Za-z0-9._()\[\]+-]", "_", release) + ".avif"
 
 
 def main(kind):

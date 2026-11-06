@@ -4,10 +4,17 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials
 
 # designs.json: which photos are of one label design (one art), where that isn't the default. Every photo is of one
-# design: by default its game stem's in its market, Japan, the USA or the rest of the world (stem_of: AGB-AXPP, -AXPD,
-# -AXPS are AGB-AXPP; AGB-AXPE is AGB-AXPE; AGB-AXPJ is AGB-AXPJ; DMG-KY-EUR is DMG-KY, DMG-KY-USA DMG-KYE, DMG-KYJ
-# DMG-KYJ), with its note (DMG-ATAJ[PINK]) and its prefix (DIS-CGB-AZ7) if it has one (default_key). That is implicit,
-# never stored. (The USA is a market of its own as labels there and in Europe differ about as often as not: 2026-11-06,
+# design: by default its game stem's in its market, Japan, the USA or the rest of the world (stem_of), named
+# (default_key):
+#   - the USA: the code with -USA (DMG-MC-USA, AGB-AXPE-USA, CGB-AW8A-USA);
+#   - Japan: the code with -JPN (DMG-KYJ-JPN, DMG-PMA-JPN, AGB-AXPJ-JPN);
+#   - the rest of the world: the stem, with + where the code's region letter was cut off (AGB-AXP+ for AGB-AXPP, -AXPD,
+#     -AXPS; DMG-A2J+ for DMG-A2JP), the code itself for the old codes of two letters and codes of numbers (DMG-MC,
+#     DMG-110);
+#   where a stem has several codes in a market (DMG-E6-USA and DMG-E6E-USA), the shortest (then the first) names it;
+#   with its prefix (DIS-CGB-AZ7E-USA) and note (DMG-ATAJ-JPN[PINK]). Rest-of-world names never end in a region, so
+#   they can't clash with the others (DMG-A2J, Shounen Ashibe, is DMG-A2J-JPN; DMG-A2JP, Jurassic Park 2, DMG-A2J+);
+#   + is never in a serial. That is implicit, never stored. (The USA is a market of its own as labels there and in Europe differ about as often as not: 2026-11-06,
 # of 107 games with labels from both, 46 alike, 45 different, 16 unclear.) A design
 # listed here is made of parts, each either
 #   - a default design (DMG-AG): its photos, but those of a serial listed in another design; or
@@ -43,7 +50,7 @@ def save(data):
         groups.append(g)
     # A serial in the design of its own default, a design of one default part, and one of one serial of Japan or the USA
     # (where a market's serials of a stem are all one), are implicit.
-    groups = [{p for p in g if not (is_serial(p) and default_key(p) in g)} for g in groups]
+    groups = [{p for p in g if not (is_serial(p) and default_key(p) != p and default_key(p) in g)} for g in groups]
     alone = lambda p: is_serial(p) and (stem_of(p) or (None, ""))[1] in ("J", "E")
     groups = [sorted(g, key=part_order) for g in groups if len(g) > 1 or g and is_serial(next(iter(g))) and not alone(next(iter(g)))]
     groups.sort(key=lambda g: part_order(g[0]))
@@ -73,21 +80,47 @@ def name_of(group):
     return re.sub(r"(-[A-Z]{3})-[0-9](?=$|\[)", r"\1", first)
 
 
+CODES = None
+
+
+def codes():
+    """The codes of each stem and market, (stem, market) -> the shortest (then the first), from gb-game-list's serials
+    and the photos' (read once)."""
+    global CODES
+    if CODES is None:
+        found = {s for r in json.load(open(serials.RELEASES)) for s in r["cartridgeSerials"] + [r["id"]]}
+        found |= {photos.serial_of(n) for _, _, n, _ in photos.all_sources()}
+        CODES = {}
+        for serial in found:
+            stem, code = stem_of(serial), code_of(serial)
+            if stem and (stem not in CODES or (len(code), code) < (len(CODES[stem]), CODES[stem])):
+                CODES[stem] = code
+    return CODES
+
+
+def code_of(name):
+    """A serial's code with its system (DMG-AXPE for AGB-AXPE-USA... DMG-MC for DMG-MC-USA), or None."""
+    m = re.match(r"(DMG|CGB|AGB)-[A-Z0-9]+", photos.unprefixed(photos.serial_of(name)))
+    return m.group(0) if m else None
+
+
 def default_key(name):
-    """A photo's default design (by its name, or a serial's): its game stem in its market (stem_of), the stem with J in
-    Japan (AGB-AXPJ, DMG-KYJ), with E in the USA (AGB-AXPE, DMG-KYE), elsewhere with P for a code of four letters
-    (AGB-AXPP), alone for the old codes (DMG-KY), so that the old codes' names (two or three letters) and the four-letter
-    ones' never clash (DMG-ADA's DMG-ADJ, DMG-ADJP's DMG-ADJP); with its prefix and note; for a serial not of that
-    form, the serial."""
+    """A photo's default design (by its name, or a serial's), named as above; for a serial not of the usual form, the
+    serial."""
     serial, note = photos.serial_of(name), photos.note_of(name)
     stem = stem_of(name)
     if stem is None:
         key = serial
     else:
         prefix = photos.prefix_of(serial)
-        code = re.match(r"(?:DMG|CGB|AGB)-([A-Z0-9]+)", photos.unprefixed(serial)).group(1)
-        four = len(code) == 4 and code[-1].isalpha()  # a code of four letters, its region letter cut off
-        key = (f"{prefix}-" if prefix else "") + stem[0] + (stem[1] or ("P" if four else ""))
+        code = codes().get(stem, code_of(name))
+        if stem[1] == "E":
+            key = f"{code}-USA"
+        elif stem[1] == "J":
+            key = f"{code}-JPN"
+        else:
+            key = stem[0] + ("+" if stem[0] != code_of(name) else "")  # the region letter cut off
+        key = (f"{prefix}-" if prefix else "") + key
     return key + (f"[{note}]" if note is not None else "")
 
 
