@@ -120,6 +120,14 @@ def auto(source, paper, white=None):
     return measured | {"black": color.DEFAULT_BLACK, "white": max(color.DEFAULT_BLACK + 1, measured["white"] - color.WHITE_LOWER)}
 
 
+def learned_model(colors, found, features):
+    """The model learned from the settings placed by hand (color.learn_settings) on the photos in found with a label's
+    features (stem -> color.label_features), or None if there are fewer than 20; (model, how many it learned from)."""
+    hand = [(features[s], [c[k] for k in color.SETTINGS]) for s, (_, _, sha1, _, _) in found.items() if s in features
+            and (c := color.colors_of(colors, s, sha1)) and c.get("source") == "hand-placed"]
+    return (color.learn_settings(*zip(*hand)) if len(hand) >= 20 else None), len(hand)
+
+
 if __name__ == "__main__":
     found = candidates()
     labels = label_images(found)
@@ -130,11 +138,8 @@ if __name__ == "__main__":
     features = {stem: color.label_features(label) for stem, label in labels.items()}
     model = None
     if LEARNED:
-        colors = color.load_colors()
-        hand = [(features[s], [c[k] for k in color.SETTINGS]) for s, (_, _, sha1, _, _) in found.items() if s in features
-                and (c := color.colors_of(colors, s, sha1)) and c.get("source") == "hand-placed"]
-        model = color.learn_settings(*zip(*hand)) if len(hand) >= 20 else None
-        print(f"settings learned from {len(hand)} placed by hand" if model else f"only {len(hand)} settings placed by hand: none learned")
+        model, hand = learned_model(color.load_colors(), found, features)
+        print(f"settings learned from {hand} placed by hand" if model else f"only {hand} settings placed by hand: none learned")
     kept = changed = 0
     with color.editing_colors() as colors:
         for stem in list(colors):
