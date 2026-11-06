@@ -1037,6 +1037,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "74435b9da33beb687922e58753d76ace021247e1"
  },
+ "AGB-BMTP-EUR_2.jpg": {
+  "page_url": "https://zockbar.ch/products/monster-truck-madness",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/monster-truck-madness-gba-gut.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Monster Truck Madness",
+  "collection": "game-boy-advance",
+  "original_name": "zockbar-monster-truck-madness.jpg",
+  "serial_on_label": "AGB-BWIP-EUR",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "832a7a8d3ca6096696b5cc1195877f2de3fc1bfc"
+ },
  "AGB-BMVP-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/super-mario-ball",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Super-Mario-Ball_GBA.jpg",
@@ -1168,17 +1179,6 @@
   "serial_on_label": "AGB-BTMP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "1d4a4b748c4c2de75b358c973524be0d4a7c7f2b"
- },
- "AGB-BWIP-EUR.jpg": {
-  "page_url": "https://zockbar.ch/products/monster-truck-madness",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/monster-truck-madness-gba-gut.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Monster Truck Madness",
-  "collection": "game-boy-advance",
-  "original_name": "zockbar-monster-truck-madness.jpg",
-  "serial_on_label": "AGB-BWIP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "832a7a8d3ca6096696b5cc1195877f2de3fc1bfc"
  },
  "AGB-BWIP-EUR_2.jpg": {
   "page_url": "https://zockbar.ch/products/winx-club",

@@ -877,17 +877,6 @@
   "sha1": "de8cc932bfca766158149503fccfa378c79403c3",
   "serial_on_label": "DMG-AVLP-NOE"
  },
- "DMG-AW.jpg": {
-  "page_url": "https://zockbar.ch/products/alleyway",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/alleyway-gameboy-gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Alleyway",
-  "collection": "game-boy",
-  "original_name": "zockbar-alleyway.jpg",
-  "serial_on_label": "DMG-AW",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "e4917c765eff45b6895ef0a9f23178d875c82b72"
- },
  "DMG-AW2P-EUR.jpg": {
   "page_url": "https://zockbar.ch/products/wario-land-2",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/wario-land-2-gameboy-gut.jpg",

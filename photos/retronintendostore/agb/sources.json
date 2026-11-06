@@ -43,17 +43,6 @@
   "note": "named by nothing: no serial read",
   "sha1": "8b87d5a6a193fad141e6f286f6b3d633c30763e6"
  },
- "AGB-A3DE-USA_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/disney-sports-football",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351419991.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Disney Sports Football",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-351419991.jpg",
-  "serial_on_label": "AGB-A3DE-USA",
-  "note": "named by nothing: no serial read",
-  "sha1": "b398a6bcaf07bc09b328657dbd5cd746eb8f7dd9"
- },
  "AGB-A3PP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/sega-smash-pack",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197221381.jpg",
@@ -207,17 +196,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "79d41d8eadef25360d426c22de87198c0900ad68"
  },
- "AGB-AAOE-USA_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/aero-the-acro-bat-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2329779740.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Aero the Acro-Bat - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2329779740.jpg",
-  "serial_on_label": "AGB-AAOE-USA",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "606dc685c1a45821e0b83b682580a9f9a2a6d2bb"
- },
  "AGB-ABJP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/broken-sword-the-shadow-of-the-templars",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2184797376.jpg",
@@ -240,17 +218,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "584b3603f86c7ae9157c2653179f36c52dc966d5"
  },
- "AGB-ABOP-EUR.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/david-beckham-soccer",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/460038695.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "David Beckham Soccer",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-460038695.jpg",
-  "serial_on_label": "AGB-ABOP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "695032190043cc842d4aba777fbabbf709924931"
- },
  "AGB-ABOP-UKV.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/boxing-fever",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2184777090.jpg",
@@ -261,6 +228,17 @@
   "serial_on_label": "AGB-ABOP-UKV",
   "note": "named by the serial read on it (exact)",
   "sha1": "d1a0c62b63153810b785ec290c2d76550a84b6f1"
+ },
+ "AGB-ABQP-EUR_2.jpg": {
+  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/david-beckham-soccer",
+  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/460038695.jpg",
+  "site": "www.retronintendostore.com",
+  "title_on_page": "David Beckham Soccer",
+  "category": "gameboy-advance/games",
+  "original_name": "retronintendostore-460038695.jpg",
+  "serial_on_label": "AGB-ABOP-EUR",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "695032190043cc842d4aba777fbabbf709924931"
  },
  "AGB-ABSP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/bomberman-tournament",
@@ -624,17 +602,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "b13a7e28aef7846fbb109b50b0adfb22fc4c3487"
  },
- "AGB-AGPP-EUR_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/no-rules-get-phat-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000187291.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "No Rules Get Phat - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2000187291.jpg",
-  "serial_on_label": "AGB-AGPP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "e6b0e346c079678b58a8ec3fab20e5f5e45dc565"
- },
  "AGB-AGPP-EUR_3.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/no-rules-get-phat",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351441451.jpg",
@@ -822,17 +789,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "224c073644d113b856cb4f097b456687978ada64"
  },
- "AGB-AJGE-USA_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/tarzan-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197168686.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Tarzan - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197168686.jpg",
-  "serial_on_label": "AGB-AJGE-USA",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "c5d3a73ca3eda759dd4f3425cd69c9b8a2c68644"
- },
  "AGB-AJGF.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/tarzan-french",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197223091.jpg",
@@ -876,17 +832,6 @@
   "serial_on_label": "AGB-AKRP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "b319255ea60c1b9adeb616b84109f4d4400e0b61"
- },
- "AGB-AKRP-EUR_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/kurukuru-kururin-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197224144.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Kurukuru Kururin - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197224144.jpg",
-  "serial_on_label": "AGB-AKRP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "a4c1502ec40fedeafd078243d9f5957835915e9c"
  },
  "AGB-AKWP-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/krazy-racers",
@@ -1273,17 +1218,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "74ff8307f0fa385ea3aab754cb9548c750fa1503"
  },
- "AGB-ASQP-EUR_3.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/snood-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197932429.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Snood - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197932429.jpg",
-  "serial_on_label": "AGB-ASQP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "a3845c9944f3822ab027f01d59a88f8f8b7c7b41"
- },
  "AGB-ASSP-UKV.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/high-heat-baseball",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197254783.jpg",
@@ -1547,17 +1481,6 @@
   "serial_on_label": "AGB-AWWP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "bffac31218eb157c827e55ca62b58aa47c1fba46"
- },
- "AGB-AWXP-EUR_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/winter-x-games-snowboarding-2-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000185875.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Winter X-Games Snowboarding 2 - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2000185875.jpg",
-  "serial_on_label": "AGB-AWXP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "8cd287123eea0a0057236ab37b1ed02d5554562c"
  },
  "AGB-AWXP-EUR_3.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/winter-x-games-snowboarding-2",
@@ -2086,17 +2009,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "4f6d0562c34edc2b4a9b7133cd2f8aabc604bbf7"
  },
- "AGB-BEYP.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/beyblade-v-force-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2000187540.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Beyblade V Force - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2000187540.jpg",
-  "serial_on_label": "AGB-BEYP",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "93f1e822eb2f39d0087ea91cd18e4a1d36a0b604"
- },
  "AGB-BEYP_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/beyblade-v-force",
   "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351414265.jpg",
@@ -2118,17 +2030,6 @@
   "serial_on_label": "AGB-BF5P-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "4e34025e4eaf02c2769dc5a4534732902185d721"
- },
- "AGB-BF5P-EUR_3.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/fifa-football-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197230180.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "FIFA Football - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197230180.jpg",
-  "serial_on_label": "AGB-BF5P-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "cf7dfb6d61362c4f6a201cfee14c7ff9d0163222"
  },
  "AGB-BF5P-EUR_4.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/fifa-2005",
@@ -2162,17 +2063,6 @@
   "serial_on_label": "AGB-BFIP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "8a1486d2a162f9f0d86476a0bd7c59ee9e0307e8"
- },
- "AGB-BFIP-EUR_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/fifa-2004-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197222065.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "FIFA 2004 - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197222065.jpg",
-  "serial_on_label": "AGB-BFIP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "91e774c21b0f7dc73e241b304cd9caac3f306209"
  },
  "AGB-BGZH-HOL_2.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/madagascar",
@@ -2305,17 +2195,6 @@
   "serial_on_label": "AGB-BIHP-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "ba7e0d35e02c0fb25cfa41f8b34a6b73b8883163"
- },
- "AGB-BIHP-EUR_2.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy-advance/games/bionicle-lego-heroes-budget",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/2197255056.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "Bionicle Lego Heroes - Budget",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-2197255056.jpg",
-  "serial_on_label": "AGB-BIHP-EUR",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "4c014a0625d03f0c5fe8f028fea07334439918e1"
  },
  "AGB-BINX-FAH.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/finding-nemo-the-incredibles",
@@ -2810,17 +2689,6 @@
   "serial_on_label": "AGB-BSZX-EUR",
   "note": "named by the serial read on it (exact)",
   "sha1": "90e8a882b0e287cf76625bc6a8772a606242e2ca"
- },
- "AGB-BT2E-USA.jpg": {
-  "page_url": "https://www.retronintendostore.com/gameboy/games/gameboy-advance-gba/ty-2-the-tasmanian-tiger",
-  "image_url": "https://www.retronintendostore.com/Files/2/40000/40305/ProductPhotos/1920x1080/351450059.jpg",
-  "site": "www.retronintendostore.com",
-  "title_on_page": "TY 2 The Tasmanian Tiger",
-  "category": "gameboy-advance/games",
-  "original_name": "retronintendostore-351450059.jpg",
-  "serial_on_label": "AGB-BT2E-USA",
-  "note": "named by nothing: no serial read",
-  "sha1": "54db58b42d1a4bd4942dfed21deff490e3d45fb1"
  },
  "AGB-BT8P-EUR.jpg": {
   "page_url": "https://www.retronintendostore.com/gameboy-advance/games/teenage-mutant-ninja-turtles-double-pack",

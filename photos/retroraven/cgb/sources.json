@@ -32,17 +32,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "744499180eee24cbf680d95abd56359e353be67d"
  },
- "CGB-AIME-USA_2.jpg": {
-  "page_url": "https://retroravengames.com/products/mission-impossible-game-boy-color",
-  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/missionimpossible_cafb24cd-6586-49c2-9247-22eefaab8c64.jpg",
-  "site": "retroravengames.com",
-  "title_on_page": "Mission: Impossible - Game Boy Color",
-  "collection": "game-boy-color-games",
-  "original_name": "retroraven-mission-impossible-game-boy-color.jpg",
-  "serial_on_label": "CGB-AIME-USA",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "183c2374d8d3d705ec27c52d801d68fa67f7b2ff"
- },
  "CGB-AIWE-USA.jpg": {
   "page_url": "https://retroravengames.com/products/walt-disneys-alice-in-wonderland-game-boy-color",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/alicewonderland.jpg",
@@ -724,17 +713,6 @@
   "serial_on_label": "CGB-BLPE-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "d0c81fc89d654e8b05a9ad49638552b4ad5419d6"
- },
- "CGB-BLQE-USA_2.jpg": {
-  "page_url": "https://retroravengames.com/products/looney-tunes-racing-game-boy-color",
-  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Looney_Tunes_Racing.jpg",
-  "site": "retroravengames.com",
-  "title_on_page": "Looney Tunes Racing - Game Boy Color",
-  "collection": "game-boy-color-games",
-  "original_name": "retroraven-looney-tunes-racing-game-boy-color.jpg",
-  "serial_on_label": "CGB-BLQE-USA",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "ce053512156e3e418e2527f757fc22fac4b52c50"
  },
  "CGB-BM5E-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/mat-hoffmans-pro-bmx-game-boy-color",
