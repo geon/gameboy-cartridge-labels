@@ -11,9 +11,9 @@ from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
 #   - Similar designs, multiple serials: the photos with different serials whose labels score at least THRESHOLD, and
 #     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
-#     (hidden with "hide confirmed"), partly when some are. Each photo has a checkbox, ticked to begin with: "Same design"
-#     makes the ticked photos' designs one (designs.merged); "Unlink" takes the ticked ones out of a design they share
-#     with others in the cluster (designs.unlinked: back to their releases' designs). Variants of a game (Pokémon Gold
+#     (hidden with "hide confirmed"), partly when some are. The photos are shown by serial, each serial with a checkbox, ticked to
+#     begin with: "Same design" makes the ticked serials' designs one (designs.merged); "Unlink" takes the ticked ones out
+#     of a design they share with others in the cluster (designs.unlinked: back to their releases' designs). Variants of a game (Pokémon Gold
 #     and Silver) are simply left as they are.
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
 #     at least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
@@ -250,12 +250,12 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
 let state = {alike: [], unalike: [], families: []}, tab = location.hash.slice(1) || "alike";
 const image = p => p.compared ? `/label?sha1=${p.sha1}` : `/photo?sha1=${p.sha1}`;
-// tick: a checkbox, ticked to begin with, for the photo's SHA-1 (the clusters of similar designs).
-const figure = (p, extra = "", tick = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
+const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
   `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${extra}</div>` +
-  `${tick ? `<input type="checkbox" class="tick" data-sha1="${tick}" checked title="included in Same design and Unlink">` : ""}` +
   `<button data-action="rename" data-path="${esc(p.path)}">Rename</button></figcaption></figure>`;
 const shas = ps => ps.map(p => p.sha1).join(" ");
+// Photos by serial (with its note): [[serial, photos]], in the order they come.
+const bySerial = ps => Object.entries(ps.reduce((by, p) => ((by[p.part] ||= []).push(p), by), {}));
 function render() {
   for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
   const shell = $("shell").value, hide = $("hide").checked;
@@ -268,7 +268,9 @@ function render() {
       `<span class="state">${c.confirmed === "yes" ? "one design" : c.confirmed ? "partly one design" : ""}</span>` +
       (c.confirmed !== "yes" ? `<button class="go" data-action="merge">Same design</button>` : "") +
       (c.confirmed ? `<button data-action="unlink">Unlink</button>` : "") +
-      `</div><div class="photos">` + c.photos.map(p => figure(p, `<span>${esc(p.design)} · ${p.best.toFixed(3)} with ${esc(p.with)}</span>`, p.sha1)).join("") + `</div></div>`).join("");
+      `</div><div class="photos">` + bySerial(c.photos).map(([part, ps]) => `<div class="group"><label><input type="checkbox" class="tick" data-shas="${shas(ps)}" checked> ` +
+        `<b>${esc(part)}</b> <span class="muted">· ${esc(ps[0].design)}</span></label>` +
+        `<div class="photos">${ps.map(p => figure(p, `<span>${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("")}</div></div>`).join("") + `</div></div>`).join("");
   } else if (tab === "unalike") {
     const shown = state.unalike.filter(u => !shell || u.shell === shell);
     n = shown.length;
@@ -301,7 +303,7 @@ $("items").onclick = async e => {
   if (!d.action || e.target.tagName === "SELECT") return;
   const item = e.target.closest("[data-cluster]");
   // In a cluster of similar designs: the ticked photos, and all of the cluster's.
-  const list = item ? [...item.querySelectorAll("input.tick:checked")].map(i => i.dataset.sha1) : d.shas ? d.shas.split(" ") : [];
+  const list = item ? [...item.querySelectorAll("input.tick:checked")].flatMap(i => i.dataset.shas.split(" ")) : d.shas ? d.shas.split(" ") : [];
   const cluster = item ? item.dataset.cluster.split(" ") : [];
   if (d.action === "rename") {
     const old = d.path.split("/").pop().replace(/\\.[^.]*$/, "").replace(/_\\d+$/, "");
