@@ -7,10 +7,11 @@ from fit_cartridge import load
 # add-photos: files the photos left in save-new-images-here/ into photos/ (src/photos.py). A subfolder names their
 # source (save-new-images-here/ebay-elrocinante/ -> photos/ebay-elrocinante/); photos straight in the folder go to
 # photos/unrecorded/. Each photo is stored as it came (never re-encoded) under the serial read on its label
-# (src/serials.py: exact, or one character off); without one, as UNKNOWN. A photo already in photos/ (the same file,
-# by SHA-1) is deleted; one that is the same picture as a photo in photos/, saved another way (re-encoded, another
-# format: see same_picture), stays in the folder, and is listed with that photo, for you to delete or keep; anything not
-# a photo stays too, and is listed. Otherwise the folder is left empty: filed photos and emptied subfolders are removed.
+# (src/serials.py: exact, or one character off), the better of its reads as it is and enlarged (see enlargement);
+# without one, as UNKNOWN. A photo already in photos/ (the same file, by SHA-1) is deleted; one that is the same picture
+# as a photo in photos/, saved another way (re-encoded, another format: see same_picture), stays in the folder, and is
+# listed with that photo, for you to delete or keep; anything not a photo stays too, and is listed. Otherwise the
+# folder is left empty: filed photos and emptied subfolders are removed.
 # A subfolder's listing.json (file name -> where the photo came from: its page, the image's URL..., as written by a
 # downloader such as src/retronintendostore.py) is copied into each photo's entry in sources.json; it is kept only for
 # the photos left in the folder.
@@ -31,6 +32,13 @@ def look(path):
     if photo is None:
         return None
     return photo.shape[1] / photo.shape[0], cv2.resize(cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY), (64, 64), interpolation=cv2.INTER_AREA)
+
+
+def enlargement(photo):
+    """How much a photo is enlarged for a second read of its text: 3 times up to 1500 px on its long side, 2 times up to
+    3000 px, not at all above."""
+    side = max(photo.shape[:2])
+    return 3 if side < 1500 else 2 if side < 3000 else 0
 
 
 def same_picture(a, b):
@@ -102,7 +110,21 @@ if incoming:
         links.append(os.path.join(WORK, "photos", f"p{k}{os.path.splitext(path)[1].lower()}"))
         os.symlink(os.path.abspath(path), links[-1])
     text.read(links, os.path.join(WORK, "ocr"))
-    reads = {row[0]: (row[1], row[2]) for row in serials.serials(os.path.join(WORK, "ocr"))}
+    # Each photo also enlarged, for the serial's small print: read in 48 more of 219 UNKNOWN photos (2026-11-06).
+    os.makedirs(os.path.join(WORK, "enlarged"))
+    enlarged = []
+    for k, (_, path, _) in enumerate(incoming):
+        photo = load(path)
+        factor = enlargement(photo) if photo is not None else 0
+        if factor:
+            enlarged.append(os.path.join(WORK, "enlarged", f"p{k}.png"))
+            cv2.imwrite(enlarged[-1], cv2.resize(photo, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC))
+    text.read(enlarged, os.path.join(WORK, "ocr-enlarged"))
+    for folder in ("ocr", "ocr-enlarged"):
+        for row in serials.serials(os.path.join(WORK, folder)):
+            best = reads.get(row[0])
+            if best is None or (serials.RANK.get(row[1], 3), -len(row[2])) < (serials.RANK.get(best[0], 3), -len(best[1])):
+                reads[row[0]] = (row[1], row[2])
     shutil.rmtree(WORK)
 
 filed = {}
