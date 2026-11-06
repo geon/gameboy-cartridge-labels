@@ -14,27 +14,23 @@ import photos, serials
 # one serial with different art are told apart by a note in their names (DMG-MQ-UKV[ALT].jpg: photos.py), which makes
 # a design of its own. A design is named after its first part, releases before serials (DMG-AG-FAH; DMG-AG-NOE-1's
 # part DMG-AG-NOE); one not listed, after its release key.
-# Also kept, from review-designs: "distinct", pairs of photos (SHA-1s) whose labels are alike but reviewed as different
-# designs (variants of a game: Pokémon Gold and Silver); "whole", sets of photos (SHA-1s) of one design whose labels
-# compare unalike, reviewed as one design all the same (a scratch, a sticker, a poor fit), as long as the design's
-# compared photos are those.
+# Only decisions are kept: how alike labels are is measured afresh (src/compare_labels.py, make review-designs), so a
+# similarity found is never rejected, and labels alike but not linked (variants of a game: Pokémon Gold and Silver)
+# simply stay in designs of their own.
 FILE = "designs.json"
 SERIAL_PART = re.compile(r".*-[A-Z]{3}(-[0-9])?(\[[^]]*\])?$")
 
 
 def load():
     found = json.load(open(FILE)) if os.path.exists(FILE) else {}
-    return {"designs": found.get("designs", []), "distinct": found.get("distinct", []), "whole": found.get("whole", [])}
+    return {"designs": found.get("designs", [])}
 
 
 def save(data):
-    """One design, pair or set per line, so that the file's history reads as decisions made."""
+    """One design per line, so that the file's history reads as decisions made."""
     groups = [sorted(set(g), key=part_order) for g in data["designs"]]
     groups = sorted((g for g in groups if len(g) > 1 or g and is_serial(g[0])), key=lambda g: part_order(g[0]))
-    lists = {"designs": groups, "distinct": sorted({tuple(sorted(p)) for p in data["distinct"]}),
-             "whole": sorted({tuple(sorted(w)) for w in data["whole"]})}
-    text = "{\n" + ",\n".join(f'"{k}": [' + ("\n" + ",\n".join(json.dumps(list(x), ensure_ascii=False) for x in v) + "\n" if v else "") + "]"
-                              for k, v in lists.items()) + "\n}\n"
+    text = '{\n"designs": [' + ("\n" + ",\n".join(json.dumps(g, ensure_ascii=False) for g in groups) + "\n" if groups else "") + "]\n}\n"
     open(FILE + ".tmp", "w").write(text)
     os.replace(FILE + ".tmp", FILE)
 
@@ -69,14 +65,19 @@ class Designs:
         self.group_of = {p: i for i, g in enumerate(self.data["designs"]) for p in g}
         self.names = [name_of(g) for g in self.data["designs"]]
 
+    def part_of(self, name):
+        """The part of a listed design a photo falls under (its serial, else its release's), or None."""
+        key = serials.release_key(name, self.release_of)[0]
+        note = f"[{photos.note_of(name)}]" if photos.note_of(name) is not None else ""
+        return next((p for p in (photos.serial_of(name) + note, serial_part(name), key) if p in self.group_of), None)
+
     def design_of(self, name):
         """A photo's design (by its name): (the design's name, its parts, the photo's release in gb-game-list or None)."""
         key, release = serials.release_key(name, self.release_of)
-        part = serial_part(name)
-        for p in (photos.serial_of(name) + (f"[{photos.note_of(name)}]" if photos.note_of(name) is not None else ""), part, key):
-            if p in self.group_of:
-                i = self.group_of[p]
-                return self.names[i], self.data["designs"][i], release
+        part = self.part_of(name)
+        if part is not None:
+            i = self.group_of[part]
+            return self.names[i], self.data["designs"][i], release
         return key, [key], release
 
     def key(self, name):
@@ -118,6 +119,12 @@ def split_off(data, parts):
     parts = set(parts)
     groups = [[p for p in g if p not in parts] for g in data["designs"]]
     return dict(data, designs=[g for g in groups if g] + [sorted(parts, key=part_order)])
+
+
+def unlinked(data, parts):
+    """data with the parts taken out of the designs they're in: back to their releases' designs."""
+    parts = set(parts)
+    return dict(data, designs=[[p for p in g if p not in parts] for g in data["designs"]])
 
 
 def dissolved(data, name, by_design):

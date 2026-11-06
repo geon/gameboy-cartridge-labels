@@ -8,15 +8,17 @@ from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
 # review-designs: a local page for telling the photos' label designs apart (src/designs.py, designs.json), from how
 # alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
 # placed by hand, with a current label image from make fit-colors). Three lists:
-#   - Alike across designs: the photos of different designs, with different serials, whose labels score at least
-#     THRESHOLD, and those joined through them (A+B, B+C and C+D make A+B+C+D), by best score. "Same design" makes their
-#     designs one (designs.merged); "Different designs" keeps them apart (variants of a game: Pokémon Gold and Silver),
-#     saved as reviewed pairs ("distinct"), hidden with the reviewed; "Not reviewed" undoes that.
-#   - Unalike within a design: the designs whose compared photos fall into separate groups (joined by pairs scoring at
-#     least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where it
-#     shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for. "One design"
-#     keeps it whole ("whole": as long as its compared photos are those); "Not reviewed" undoes that.
-#   - Designs listed: each design in designs.json, with the others of its releases (a family: the designs sharing a
+# What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
+#   - Similar designs, multiple serials: the photos with different serials whose labels score at least THRESHOLD, and
+#     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
+#     (hidden with "hide confirmed"), partly when some are. Each photo has a checkbox, ticked to begin with: "Same design"
+#     makes the ticked photos' designs one (designs.merged); "Unlink" takes the ticked ones out of a design they share
+#     with others in the cluster (designs.unlinked: back to their releases' designs). Variants of a game (Pokémon Gold
+#     and Silver) are simply left as they are.
+#   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
+#     at least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
+#     it shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for.
+#   - Designs: each design in designs.json, with the others of its releases (a family: the designs sharing a
 #     release), their photos by serial. A serial can be split off into a design of its own, a design joined with another
 #     of its family, or dissolved (its serials back to their releases' designs).
 # Each photo can be renamed to a corrected serial (photos.rename, as find-doubles does), its fits following it.
@@ -82,11 +84,9 @@ class Review:
         score = {}
         for v, a, b in self.alike:
             score[(a, b)] = score[(b, a)] = v
-        distinct = {tuple(sorted(p)) for p in data["distinct"]}
-        whole = {tuple(sorted(w)) for w in data["whole"]}
 
-        # Alike across designs.
-        across = [(v, a, b) for v, a, b in self.alike if a in info and b in info and info[a]["design"] != info[b]["design"]
+        # Similar designs, multiple serials.
+        across = [(v, a, b) for v, a, b in self.alike if a in info and b in info
                   and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])]
         alike = []
         for shas in groups_of({s for _, a, b in across for s in (a, b)}, [(a, b) for _, a, b in across]):
@@ -97,14 +97,14 @@ class Review:
                 for x, y in ((a, b), (b, a)):
                     if v > best.get(x, (-1, None))[0]:
                         best[x] = (v, y)
-            reviewed = sum(tuple(sorted((a, b))) in distinct for _, a, b in pairs)
+            linked = sum(info[a]["design"] == info[b]["design"] for _, a, b in pairs)
             alike.append({"score": max(v for v, _, _ in pairs), "shell": self.shell[shas[0]].upper(),
-                          "reviewed": "yes" if reviewed == len(pairs) else "partly" if reviewed else None,
+                          "confirmed": "yes" if len({info[x]["design"] for x in shas}) == 1 else "partly" if linked else None,
                           "same game": len({info[x]["game"] for x in shas}) == 1,
                           "photos": [dict(info[x], best=best[x][0], **{"with": info[best[x][1]]["name"]}) for x in sorted(shas, key=lambda x: info[x]["name"])]})
         alike.sort(key=lambda c: -c["score"])
 
-        # Unalike within a design.
+        # Different designs, one serial.
         by = {}
         for p in listed:
             by.setdefault(p["design"], []).append(p)
@@ -121,10 +121,9 @@ class Review:
             for g in sorted(parts, key=lambda g: (-len(g), min(info[x]["name"] for x in g))):
                 others = inside - set(g)
                 groups.append({"photos": [dict(info[x], best=max((score.get((x, y), -1) for y in others), default=-1)) for x in sorted(g, key=lambda x: info[x]["name"])]})
-            unalike.append({"design": design, "title": members[0]["title"], "shell": self.shell[compared[0]].upper(),
-                            "reviewed": tuple(sorted(compared)) in whole, "groups": groups})
+            unalike.append({"design": design, "title": members[0]["title"], "shell": self.shell[compared[0]].upper(), "groups": groups})
 
-        # Designs listed, with their families.
+        # Designs, with their families.
         family_pairs = [("d:" + p["design"], "r:" + (p["release"] or p["design"])) for p in listed]
         family_pairs += [("d:" + by_design.names[i], "r:" + ((designs.release_of(part, by_design.release_of) or {}).get("id") or part))
                          for i, g in enumerate(data["designs"]) for part in g]
@@ -166,18 +165,16 @@ class Review:
                 names = {info[s]["design"] for s in shas} | set(data.get("designs", []))
                 if len(names) < 2:
                     return "not several designs"
-                inside = set(shas)
                 d = designs.merged(d, names, by_design)
-                d["distinct"] = [p for p in d["distinct"] if not (p[0] in inside and p[1] in inside)]
-            elif action in ("distinct", "undistinct"):
-                inside = set(shas)
-                pairs = {tuple(sorted((a, b))) for _, a, b in self.alike if a in inside and b in inside}
-                kept = {tuple(sorted(p)) for p in d["distinct"]}
-                d["distinct"] = sorted(kept | pairs if action == "distinct" else kept - pairs)
-            elif action in ("whole", "unwhole"):
-                compared = tuple(sorted(p["sha1"] for p in listed if p["design"] == data.get("design") and p["compared"]))
-                kept = {tuple(sorted(w)) for w in d["whole"]}
-                d["whole"] = sorted(kept | {compared} if action == "whole" else kept - {compared})
+            elif action == "unlink":
+                # The ticked photos' parts, out of the designs they share with other photos of the cluster under another part.
+                cluster = [s for s in data.get("cluster", []) if s in info]
+                part = {s: by_design.part_of(info[s]["name"]) for s in cluster}
+                parts = {part[s] for s in shas if part.get(s) is not None
+                         and any(info[o]["design"] == info[s]["design"] and part[o] != part[s] for o in cluster)}
+                if not parts:
+                    return "none of the ticked photos shares a design with others in the cluster"
+                d = designs.unlinked(d, parts)
             elif action == "split":
                 design = data.get("design")
                 group = set(shas)
@@ -245,9 +242,9 @@ button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em;cursor:point
 button.go{background:#2a9d3a;color:#fff}
 </style>
 <header><b>Review designs</b>
-<nav><button data-tab="alike">Alike across designs</button> <button data-tab="unalike">Unalike within a design</button> <button data-tab="families">Designs listed</button></nav>
+<nav><button data-tab="alike">Similar designs, multiple serials</button> <button data-tab="unalike">Different designs, one serial</button> <button data-tab="families">Designs</button></nav>
 <label>shell <select id="shell"><option value="">all</option><option>DMG</option><option>CGB</option><option>AGB</option></select></label>
-<label><input type="checkbox" id="hide" checked> hide reviewed</label>
+<label><input type="checkbox" id="hide" checked> hide confirmed</label>
 <span id="count"></span></header>
 <main id="items"></main>
 <script>
@@ -255,8 +252,10 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
 let state = {alike: [], unalike: [], families: []}, tab = location.hash.slice(1) || "alike";
 const image = p => p.compared ? `/label?sha1=${p.sha1}` : `/photo?sha1=${p.sha1}`;
-const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
+// tick: a checkbox, ticked to begin with, for the photo's SHA-1 (the clusters of similar designs).
+const figure = (p, extra = "", tick = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
   `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${extra}</div>` +
+  `${tick ? `<input type="checkbox" class="tick" data-sha1="${tick}" checked title="included in Same design and Unlink">` : ""}` +
   `<button data-action="rename" data-path="${esc(p.path)}">Rename</button></figcaption></figure>`;
 const shas = ps => ps.map(p => p.sha1).join(" ");
 function render() {
@@ -264,22 +263,18 @@ function render() {
   const shell = $("shell").value, hide = $("hide").checked;
   let html = "", n = 0;
   if (tab === "alike") {
-    const shown = state.alike.filter(c => (!shell || c.shell === shell) && (!hide || c.reviewed !== "yes"));
+    const shown = state.alike.filter(c => (!shell || c.shell === shell) && (!hide || c.confirmed !== "yes"));
     n = shown.length;
-    html = shown.map(c => `<div class="item ${c.reviewed || ""}"><div class="top"><span class="score">${c.score.toFixed(3)}</span>` +
+    html = shown.map(c => `<div class="item ${c.confirmed || ""}" data-cluster="${shas(c.photos)}"><div class="top"><span class="score">${c.score.toFixed(3)}</span>` +
       `<span class="muted">${c.shell} · ${c.photos.length} photos</span>${c["same game"] ? '<span class="game">same game</span>' : ""}` +
-      `<span class="state">${c.reviewed === "yes" ? "different designs" : c.reviewed ? "partly reviewed" : ""}</span>` +
-      `<button class="go" data-action="merge" data-shas="${shas(c.photos)}">Same design</button>` +
-      (c.reviewed === "yes" ? `<button data-action="undistinct" data-shas="${shas(c.photos)}">Not reviewed</button>`
-                            : `<button data-action="distinct" data-shas="${shas(c.photos)}">Different designs</button>`) +
-      `</div><div class="photos">` + c.photos.map(p => figure(p, `<span>${esc(p.design)} · ${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("") + `</div></div>`).join("");
+      `<span class="state">${c.confirmed === "yes" ? "one design" : c.confirmed ? "partly one design" : ""}</span>` +
+      (c.confirmed !== "yes" ? `<button class="go" data-action="merge">Same design</button>` : "") +
+      (c.confirmed ? `<button data-action="unlink">Unlink</button>` : "") +
+      `</div><div class="photos">` + c.photos.map(p => figure(p, `<span>${esc(p.design)} · ${p.best.toFixed(3)} with ${esc(p.with)}</span>`, p.sha1)).join("") + `</div></div>`).join("");
   } else if (tab === "unalike") {
-    const shown = state.unalike.filter(u => (!shell || u.shell === shell) && (!hide || !u.reviewed));
+    const shown = state.unalike.filter(u => !shell || u.shell === shell);
     n = shown.length;
-    html = shown.map(u => `<div class="item ${u.reviewed ? "yes" : ""}"><div class="top"><b>${esc(u.design)}</b><span class="muted">${esc(u.title)} · ${u.shell}</span>` +
-      `<span class="state">${u.reviewed ? "one design" : ""}</span>` +
-      (u.reviewed ? `<button data-action="unwhole" data-design="${esc(u.design)}">Not reviewed</button>`
-                  : `<button data-action="whole" data-design="${esc(u.design)}">One design</button>`) + `</div><div class="photos">` +
+    html = shown.map(u => `<div class="item"><div class="top"><b>${esc(u.design)}</b><span class="muted">${esc(u.title)} · ${u.shell}</span></div><div class="photos">` +
       u.groups.map(g => `<div class="group"><div><button class="go" data-action="split" data-design="${esc(u.design)}" data-shas="${shas(g.photos)}">Split off</button></div>` +
         `<div class="photos">${g.photos.map(p => figure(p, `<span>best ${p.best.toFixed(3)} with the others</span>`)).join("")}</div></div>`).join("") + `</div></div>`).join("");
   } else {
@@ -307,7 +302,10 @@ async function act(body) {
 $("items").onclick = async e => {
   const d = e.target.dataset || {};
   if (!d.action || e.target.tagName === "SELECT") return;
-  const list = d.shas ? d.shas.split(" ") : [];
+  const item = e.target.closest("[data-cluster]");
+  // In a cluster of similar designs: the ticked photos, and all of the cluster's.
+  const list = item ? [...item.querySelectorAll("input.tick:checked")].map(i => i.dataset.sha1) : d.shas ? d.shas.split(" ") : [];
+  const cluster = item ? item.dataset.cluster.split(" ") : [];
   if (d.action === "rename") {
     const old = d.path.split("/").pop().replace(/\\.[^.]*$/, "").replace(/_\\d+$/, "");
     const name = (prompt(`The serial on the label of ${d.path}:`, old) || "").trim();
@@ -316,7 +314,7 @@ $("items").onclick = async e => {
     if (error) alert("Not renamed: " + error);
     return;
   }
-  let error = await act({action: d.action, shas: list, design: d.design, part: d.part});
+  let error = await act({action: d.action, shas: list, cluster, design: d.design, part: d.part});
   if (error === "needs a note") {
     const note = (prompt("These photos share a serial with the others: a note for their names, telling their design apart (e.g. ALT):") || "").trim();
     if (!note) return;
@@ -382,6 +380,6 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     review = Review()
     state = review.state()
-    print(f"{len(review.current)} labels compared: {len(state['alike'])} clusters alike across designs, {len(state['unalike'])} "
-          f"designs unalike within, {len(state['families'])} families of designs listed; review them at http://localhost:{PORT}/ (ctrl-C to stop)")
+    print(f"{len(review.current)} labels compared: {len(state['alike'])} clusters of similar designs with several serials, "
+          f"{len(state['unalike'])} designs with different designs within, {len(state['families'])} families of designs; review them at http://localhost:{PORT}/ (ctrl-C to stop)")
     ThreadingHTTPServer(("localhost", PORT), Handler).serve_forever()
