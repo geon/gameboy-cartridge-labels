@@ -85,7 +85,8 @@ def default_key(name):
         key = serial
     else:
         prefix = photos.prefix_of(serial)
-        four = len(stem[0].split("-")[1]) == 3
+        code = re.match(r"(?:DMG|CGB|AGB)-([A-Z0-9]+)", photos.unprefixed(serial)).group(1)
+        four = len(code) == 4 and code[-1].isalpha()  # a code of four letters, its region letter cut off
         key = (f"{prefix}-" if prefix else "") + stem[0] + (stem[1] or ("P" if four else ""))
     return key + (f"[{note}]" if note is not None else "")
 
@@ -129,7 +130,8 @@ def stem_of(name):
     if not m:
         return None
     system, code, region = m.groups()
-    stem, letter = (code[:-1], code[-1]) if len(code) in (3, 4) else (code, "")
+    # A code of numbers (DMG-110-CHN) has no region letter: it's all stem.
+    stem, letter = (code[:-1], code[-1]) if len(code) in (3, 4) and code[-1].isalpha() else (code, "")
     if region:
         market = "J" if region == "JPN" else "E" if region in ("USA", "CAN") else ""
     else:
