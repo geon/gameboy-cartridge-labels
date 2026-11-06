@@ -11,9 +11,9 @@ import photos
 # as its serials too. A misread can be another release's serial (DMG-UKJ, Yu Yu Hakusho, for DMG-HKJ, Hokuto no Ken), so
 # the matched release's titles are looked for in the photo's text: "title" when some run of 4 characters (3 for short
 # titles; letters and kana alike) of one was read, and a "near" match only counts with its title read; without it, the
-# read is "unknown". The text is normalized first: full-width characters, dashes read as ー, – or :, and spaces dropped
-# (vertical text on the strips is read with gaps, "DMG-Z G-NOE"), and also kept, for text after the serial ("DMG-PVJ
-# MADE IN JAPAN"). A region code read without its dash (AGB・A20JJPN for AGB-A2OJ-JPN) is read too, for the known region
+# read is "unknown". The text is normalized first: full-width characters, dashes read as ー, –, 一 or :, DMG read as
+# OMG, and spaces dropped (vertical text on the strips is read with gaps, "DMG-Z G-NOE"), and also kept, for text after
+# the serial ("DMG-PVJ MADE IN JAPAN"). A region code read without its dash (AGB・A20JJPN for AGB-A2OJ-JPN) is read too, for the known region
 # codes, and every read with a region also without it, as gb-game-list lists some serials only so (AGB-A2OJ).
 RELEASES = "../gb-game-list/database/releases.json"
 RANK = {"exact": 0, "near": 1, "unknown": 2}
@@ -63,7 +63,8 @@ def release_of_serial(serial, release_of):
 def reads(text):
     """The serial-like strings in a line of text."""
     t = unicodedata.normalize("NFKC", text).upper()
-    t = re.sub(r"[ー―–—:・.]", "-", t)
+    t = re.sub(r"[ー―–—一:・.]", "-", t)
+    t = re.sub(r"\bOMG(?=-)", "DMG", t)
     found = []
     for u in (t.replace(" ", ""), t):
         for m in [*SERIAL.finditer(u), *NO_DASH.finditer(u)]:
