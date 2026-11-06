@@ -1438,17 +1438,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "12f954442b8245dbaca18b4520028e9bf77e483a"
  },
- "DMG-GD-USA_2.jpg": {
-  "page_url": "https://retroravengames.com/products/infogenius-productivity-pak-frommers-travel-guide-game-boy-classic",
-  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/frommerstravelguide.jpg",
-  "site": "retroravengames.com",
-  "title_on_page": "InfoGenius Productivity Pak: Frommer's Travel Guide - Game Boy Classic",
-  "collection": "game-boy-games",
-  "original_name": "retroraven-infogenius-productivity-pak-frommers-travel-guide-game-boy-classic.jpg",
-  "serial_on_label": "DMG-GD-USA",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "f6605de9b0f0cf4c08d8d9162f6f6d719670e307"
- },
  "DMG-GN-USA.jpg": {
   "page_url": "https://retroravengames.com/products/top-gun-guts-glory-game-boy-classic-1",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/topgungutsandglory.jpg",
@@ -1713,6 +1702,17 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ef21198ee6e06a93d4a752c3e0479df82525e220"
  },
+ "DMG-L6J_4.jpg": {
+  "page_url": "https://retroravengames.com/products/jpn-super-mario-land-2-game-boy-classic",
+  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Super_Mario_Land_2_JPN.jpg",
+  "site": "retroravengames.com",
+  "title_on_page": "[JPN] Super Mario Land 2 - Game Boy Classic",
+  "collection": "game-boy-games",
+  "original_name": "retroraven-jpn-super-mario-land-2-game-boy-classic.jpg",
+  "serial_on_label": "DMG-LS",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "ffdb779690cd2854bca772ead650bbd978727ecb"
+ },
  "DMG-LB-USA_2.jpg": {
   "page_url": "https://retroravengames.com/products/bill-teds-excellent-game-boy-adventure-game-boy-classic",
   "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/billandted_98f62ec6-8da3-4ac7-b46a-8652ced0cd14.jpg",
@@ -1745,17 +1745,6 @@
   "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_269",
   "sha1": "d6e864f665147b20e1c1e8965b993039f77e0cb8",
   "serial_on_label": "DMG-LS-USA"
- },
- "DMG-LS.jpg": {
-  "page_url": "https://retroravengames.com/products/jpn-super-mario-land-2-game-boy-classic",
-  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/files/Super_Mario_Land_2_JPN.jpg",
-  "site": "retroravengames.com",
-  "title_on_page": "[JPN] Super Mario Land 2 - Game Boy Classic",
-  "collection": "game-boy-games",
-  "original_name": "retroraven-jpn-super-mario-land-2-game-boy-classic.jpg",
-  "serial_on_label": "DMG-LS",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "ffdb779690cd2854bca772ead650bbd978727ecb"
  },
  "DMG-LW-USA.jpg": {
   "page_url": "https://retroravengames.com/products/wwf-superstars-game-boy-classic",
@@ -2042,17 +2031,6 @@
   "note": "named by the serial read on it, upscaled 2-3x (in gb-game-list); was UNKNOWN_244",
   "sha1": "ab5f1e9f92b0861b868ba38dc81352f6ad2244ad",
   "serial_on_label": "DMG-RM-USA"
- },
- "DMG-RR-USA-1.jpg": {
-  "page_url": "https://retroravengames.com/products/who-framed-roger-rabbit-game-boy-classic",
-  "image_url": "https://cdn.shopify.com/s/files/1/0321/0680/7341/products/whoframedrogerabbit.jpg",
-  "site": "retroravengames.com",
-  "title_on_page": "Who Framed Roger Rabbit - Game Boy Classic",
-  "collection": "game-boy-games",
-  "original_name": "retroraven-who-framed-roger-rabbit-game-boy-classic.jpg",
-  "serial_on_label": "DMG-RR-USA-1",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "6d0f57d5725344b5672bd93e9a47656f1154b1ea"
  },
  "DMG-RU-USA.jpg": {
   "page_url": "https://retroravengames.com/products/ring-rage-game-boy-classic",

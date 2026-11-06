@@ -1634,7 +1634,7 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "c54c817fc548d3ff869bab419893cb99db3575b2"
  },
- "DMG-J5.jpg": {
+ "DMG-J5-UKV.jpg": {
   "page_url": "https://zockbar.ch/products/indiana-jones-and-the-last-crusade",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Indiana-Jones-and-the-Last-Crusade_UK_GB_gut.jpg",
   "site": "zockbar.ch",
@@ -2062,17 +2062,6 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "ceea199d6f596426ab85d87c1140ccddf6abae0c"
  },
- "DMG-OP-NOE.jpg": {
-  "page_url": "https://zockbar.ch/products/cool-spot-1",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/cool-spot-gameboy.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Cool Spot",
-  "collection": "game-boy",
-  "original_name": "zockbar-cool-spot-1.jpg",
-  "serial_on_label": "DMG-OP-NOE",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "52838d8388cfc26d449dca8964ba91d19d0584b4"
- },
  "DMG-OS-USA_2.jpg": {
   "page_url": "https://zockbar.ch/products/final-fantasy-legend-iii",
   "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Final-Fantasy-Legend-3_GB.jpg",
@@ -2225,6 +2214,17 @@
   "serial_on_label": "DMG-QD-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "f08ea0eddca083ca1af073ee81d65c16337a41ff"
+ },
+ "DMG-QP-NOE_2.jpg": {
+  "page_url": "https://zockbar.ch/products/cool-spot-1",
+  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/cool-spot-gameboy.jpg",
+  "site": "zockbar.ch",
+  "title_on_page": "Cool Spot",
+  "collection": "game-boy",
+  "original_name": "zockbar-cool-spot-1.jpg",
+  "serial_on_label": "DMG-OP-NOE",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "52838d8388cfc26d449dca8964ba91d19d0584b4"
  },
  "DMG-QR-USA_3.jpg": {
   "page_url": "https://zockbar.ch/products/quart",
@@ -2474,17 +2474,6 @@
   "serial_on_label": "DMG-SW-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "d83d9fbba8ac3b955c79c7414f31499b010cc9f5"
- },
- "DMG-SX.jpg": {
-  "page_url": "https://zockbar.ch/products/kung-fu-master",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Kung-Fu-Master_GB.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Kung Fu Master",
-  "collection": "game-boy",
-  "original_name": "zockbar-kung-fu-master.jpg",
-  "serial_on_label": "DMG-SX",
-  "note": "named by the serial read on it (exact)",
-  "sha1": "4b494e95e8b07afeff9e1dc07b6fc3d7920bb9fd"
  },
  "DMG-T8-USA_3.jpg": {
   "page_url": "https://zockbar.ch/products/tiny-toon-adventures-2-montanas-movie",
@@ -2825,17 +2814,6 @@
   "serial_on_label": "DMG-XC-USA",
   "note": "named by the serial read on it (exact)",
   "sha1": "4384bcbd8ceb0428002d4b57fbe5d3fd208b6072"
- },
- "DMG-XG-NOE.jpg": {
-  "page_url": "https://zockbar.ch/products/spider-man-x-men",
-  "image_url": "https://cdn.shopify.com/s/files/1/0622/5916/7480/files/Spider-Man-X-Men_GB_stark_gebraucht.jpg",
-  "site": "zockbar.ch",
-  "title_on_page": "Spider-Man and the X-Men in Arcade's Revenge",
-  "collection": "game-boy",
-  "original_name": "zockbar-spider-man-x-men.jpg",
-  "note": "named by the serial read on it, as it is, enlarged and line by line (exact); was UNKNOWN_373",
-  "sha1": "33898caff64d26f90758ecbc5626ea981092d0ed",
-  "serial_on_label": "DMG-XG-NOE"
  },
  "DMG-XP-FRG.jpg": {
   "page_url": "https://zockbar.ch/products/ferrari-grand-prix-challenge-1",
