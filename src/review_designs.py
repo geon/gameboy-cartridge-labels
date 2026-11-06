@@ -3,11 +3,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import designs, fits, photos
-from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
+from compare_labels import SAME, SIMILAR, all_scores, compared_photos
 
 # review-designs: a local page for telling the photos' label designs apart (src/designs.py, designs.json), from how
 # alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
-# placed by hand, with a current label image from make fit-colors). Three lists:
+# placed by hand, with a current label image from make fit-colors; and, roughly, those whose plastic alone is: their
+# label as fitted, or the label's model on the plastic, marked "rough" on the page). Three lists:
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
 #   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, but for
 #     those expected alike (one game's stem and market, Japan, the USA or the rest of the world: designs.stem_of), and
@@ -18,7 +19,8 @@ from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
 #     out of a design they share with others in the cluster (designs.unlinked: back to their releases' designs).
 #     Variants of a game (Pokémon Gold and Silver) are simply left as they are.
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
-#     at least SAME). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
+#     at least SAME), of the photos with a good label only (a rough label scoring low is no sign of another design).
+#     "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
 #     it shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for.
 #   - Designs: the designs whose photos are of several serials, of the releases in designs.json (a family: the designs
 #     sharing a release), their photos by serial. A serial can be split off into a design of its own, and a design in
@@ -81,7 +83,8 @@ class Review:
             found.append({"sha1": entry["sha1"], "path": os.path.join(photos.ROOT, source, system, name), "name": photos.stem(name),
                           "design": design, "release": release["id"] if release else None, "game": release["gameId"] if release else design,
                           "title": release["title"] if release else "(not in gb-game-list)", "part": designs.serial_part(name),
-                          "compared": entry["sha1"] in self.current})
+                          "compared": entry["sha1"] in self.current,
+                          "rough": entry["sha1"] in self.current and self.current[entry["sha1"]][4]})
         return found, by_design
 
     def state(self):
@@ -115,7 +118,7 @@ class Review:
             by.setdefault(p["design"], []).append(p)
         unalike = []
         for design, members in sorted(by.items()):
-            compared = [p["sha1"] for p in members if p["compared"]]
+            compared = [p["sha1"] for p in members if p["compared"] and not p["rough"]]
             if len(compared) < 2:
                 continue
             inside = set(compared)
@@ -183,7 +186,7 @@ class Review:
                 design = data.get("design")
                 group = set(shas)
                 parts = {info[s]["part"] for s in group}
-                rest = {p["part"] for p in listed if p["design"] == design and p["compared"] and p["sha1"] not in group}
+                rest = {p["part"] for p in listed if p["design"] == design and p["compared"] and not p["rough"] and p["sha1"] not in group}
                 note = (data.get("note") or "").strip().upper()
                 if parts & rest or not all(designs.is_serial(p) for p in parts):
                     if not note:
@@ -240,6 +243,7 @@ figure img{width:240px;aspect-ratio:200/174;object-fit:contain;display:block;bac
 figcaption{font-size:12px;color:#555;margin:4px 0;display:flex;gap:6px;align-items:flex-start}
 figcaption div{overflow:hidden;flex:1;min-width:0}figcaption div span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 figcaption b{color:#222}
+.rough{color:#a60}
 button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em;cursor:pointer;background:#e4e4e4}
 button.go{background:#2a9d3a;color:#fff}
 </style>
@@ -255,7 +259,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", 
 let state = {alike: [], unalike: [], families: []}, tab = location.hash.slice(1) || "alike";
 const image = p => p.compared ? `/label?sha1=${p.sha1}` : `/photo?sha1=${p.sha1}`;
 const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
-  `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${extra}</div>` +
+  `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${p.rough ? '<span class="rough">rough: label not accepted</span>' : ""}${extra}</div>` +
   `<button data-action="rename" data-path="${esc(p.path)}">Rename</button></figcaption></figure>`;
 const shas = ps => ps.map(p => p.sha1).join(" ");
 // The designs unticked in the clusters of similar designs, kept as the page is drawn again (after each change).
@@ -361,7 +365,7 @@ class Handler(BaseHTTPRequestHandler):
         elif url.path == "/state":
             self.send(review.state())
         elif url.path == "/label" and sha1 in review.current:
-            self.send(open(os.path.join(LABELS, review.current[sha1][0] + ".png"), "rb").read(), "image/png", cache=True)
+            self.send(open(review.current[sha1][3], "rb").read(), "image/png", cache=True)
         elif url.path == "/photo":
             path = next((os.path.join(photos.ROOT, s, sy, n) for s, sy, n, e in photos.all_sources() if e.get("sha1") == sha1), None)
             if not path:
