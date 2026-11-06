@@ -121,12 +121,16 @@ def label_px_per_mm(shell, label_H):
     return float(np.sqrt(abs(ax * by - ay * bx)) / 0.1)
 
 
-def cart_image(photo, shell, plastic_H):
-    # Framed on the shell's box, at least 0 to 57 mm across (the bodies are 56.8 wide, centered at 28.5), so that the DMG's
-    # and CGB's images are all one size.
+def cart_box(shell):
+    """The mm a cartridge's image shows (x0, y0, x1, y1): the shell's box, at least 0 to 57 mm across (the bodies are 56.8
+    wide, centered at 28.5), so that the DMG's and CGB's images are all one size, with CART_MARGIN around it."""
     x1, y1, x2, y2 = SHELLS[shell].box
-    box = (min(x1, 0.0) - CART_MARGIN, y1 - CART_MARGIN, max(x2, 57.0) + CART_MARGIN, y2 + CART_MARGIN)
-    size = (round((box[2] - box[0]) * CART_PX_PER_MM), round((box[3] - box[1]) * CART_PX_PER_MM))
+    return min(x1, 0.0) - CART_MARGIN, y1 - CART_MARGIN, max(x2, 57.0) + CART_MARGIN, y2 + CART_MARGIN
+
+
+def cart_image(photo, shell, plastic_H, px_per_mm=CART_PX_PER_MM):
+    box = cart_box(shell)
+    size = (round((box[2] - box[0]) * px_per_mm), round((box[3] - box[1]) * px_per_mm))
     return rendered(photo, frame(plastic_H, box, size, SUPERSAMPLE["carts"]), size, SUPERSAMPLE["carts"], alpha=True)
 
 

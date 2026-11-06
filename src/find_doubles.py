@@ -1,8 +1,9 @@
-import json, os, sys, threading, urllib.parse, cv2
+import hashlib, json, os, sys, threading, urllib.parse, cv2
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import fits, photos, serials
+import fits, photos, render, serials
+from cartridge import shell_of
 from fit_cartridge import load
 
 # find-doubles: a local page listing every photo in photos/, one release per row (the release its serial is filed
@@ -13,7 +14,8 @@ from fit_cartridge import load
 # following it. Clicking a photo makes it its release's preferred one (clicking it again unmakes it), saved in
 # preferred.json: release id -> the photo's SHA-1, so a renamed photo stays preferred; an entry whose photo is no longer
 # in its release (deleted, or renamed to another serial) is dropped on the next save. The fakes (photos.FAKES) are left
-# out: never worth preferring. The preferred photo comes first.
+# out: never worth preferring. The preferred photo comes first. A photo whose plastic fit is accepted or placed by hand
+# is shown cropped to it, as render-carts renders it.
 # The rows can be narrowed to the releases with several photos (one and one from otakaraou count as one: photos.only), and to those with no preferred photo (a release given
 # one stays shown until the rows are drawn again).
 # Usage: find_doubles.py [port]
@@ -21,16 +23,32 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8770
 lock = threading.Lock()
 
 
+def plastic_of(known, name, sha1):
+    """The photo's plastic fit if it's accepted or placed by hand, else None."""
+    plastic = fits.of(known, photos.stem(name), sha1)["fit"].get("plastic")
+    return plastic if fits.good(plastic) else None
+
+
 def image(path, longest):
-    """The photo, its longest side at most longest px, as JPEG bytes."""
+    """The photo, its longest side at most longest px, as WebP bytes; with an accepted or hand-placed
+    plastic, cropped to it as render-carts does (render.cart_image: straightened, 5 mm around it, off the photo
+    transparent)."""
     photo = load(path)
-    scale = min(1, longest / max(photo.shape[:2]))
-    small = cv2.resize(photo, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
-    return cv2.imencode(".jpg", small, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()
+    name = os.path.basename(path)
+    plastic = plastic_of(fits.load(), name, photos.sources(*path.split(os.sep)[1:3])[name].get("sha1"))
+    if plastic:
+        shell = shell_of(photos.serial_of(name)).name
+        x0, y0, x1, y1 = render.cart_box(shell)
+        small = render.cart_image(photo, shell, plastic["mm_to_photo"], longest / max(x1 - x0, y1 - y0))
+    else:
+        scale = min(1, longest / max(photo.shape[:2]))
+        small = cv2.resize(photo, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+    return cv2.imencode(".webp", small, [cv2.IMWRITE_WEBP_QUALITY, 85])[1].tobytes()
 
 
 def rows():
-    """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred"}],
+    """[{"release", "title", "photos": [{"path", "sha1", "source", "fitted": None, "plastic" or "label", "preferred",
+    "version": its image's (image)}],
     "single": whether it counts as having one photo (photos.only)}], by release, the preferred photo first, then by source."""
     release_of = serials.releases_by_serial()
     known, preferred = fits.load(), photos.load_preferred()
@@ -42,8 +60,11 @@ def rows():
         row = found.setdefault(key, {"release": key, "title": release["title"] if release else "(not in gb-game-list)", "photos": []})
         fit = fits.of(known, photos.stem(name), entry.get("sha1"))["fit"]
         fitted = "label" if fits.good(fit.get("label")) else "plastic" if fits.good(fit.get("plastic")) else None
+        plastic = plastic_of(known, name, entry.get("sha1"))
+        # The image's version: the photo, and the plastic it's cropped to.
+        version = entry.get("sha1") + (hashlib.sha1(json.dumps(plastic["mm_to_photo"]).encode()).hexdigest()[:8] if plastic else "")
         row["photos"].append({"path": os.path.join(photos.ROOT, source, system, name), "sha1": entry.get("sha1"), "source": source,
-                              "fitted": fitted, "preferred": preferred.get(key) == entry.get("sha1")})
+                              "fitted": fitted, "preferred": preferred.get(key) == entry.get("sha1"), "version": version})
     for row in found.values():
         row["photos"].sort(key=lambda p: (not p["preferred"], photos.rank(p["source"]), p["path"]))
         row["single"] = photos.only([p["source"] for p in row["photos"]]) is not None
@@ -98,8 +119,8 @@ function render() {
   $("count").textContent = `${shown.length} releases, ${shown.reduce((n, r) => n + r.photos.length, 0)} photos`;
   $("rows").innerHTML = shown.map(r => `<div class="row" data-release="${esc(r.release)}"><div class="release"><b>${esc(r.release)}</b><span>${esc(r.title)}</span></div><div class="photos">` +
     r.photos.map(p => `<figure data-path="${esc(p.path)}"${p.preferred ? ' class="preferred"' : ""}>${p.fitted ? `<span class="check ${p.fitted}" title="${p.fitted} fitted">✓</span>` : ""}` +
-      `<img loading="lazy" data-action="prefer" data-path="${esc(p.path)}" src="/image?size=1000&v=${p.sha1}&path=${encodeURIComponent(p.path)}" alt="">` +
-      `<figcaption title="${esc(p.path)}">${esc(p.source)} · <a href="/image?size=1600&v=${p.sha1}&path=${encodeURIComponent(p.path)}" target="_blank">open</a><br>${esc(p.path.split("/").pop())}</figcaption>` +
+      `<img loading="lazy" data-action="prefer" data-path="${esc(p.path)}" src="/image?size=1000&v=${p.version}&path=${encodeURIComponent(p.path)}" alt="">` +
+      `<figcaption title="${esc(p.path)}">${esc(p.source)} · <a href="/image?size=1600&v=${p.version}&path=${encodeURIComponent(p.path)}" target="_blank">open</a><br>${esc(p.path.split("/").pop())}</figcaption>` +
       `<button data-action="rename" data-path="${esc(p.path)}">Rename</button> <button class="delete" data-action="delete" data-path="${esc(p.path)}">Delete</button></figure>`).join("") + `</div></div>`).join("");
 }
 $("rows").onclick = async e => {
@@ -169,7 +190,7 @@ class Handler(BaseHTTPRequestHandler):
         elif url.path == "/rows":
             self.send(rows())
         elif url.path == "/image" and is_photo(path := query.get("path", [""])[0]):
-            self.send(image(path, min(1600, int(query.get("size", ["1000"])[0]))), "image/jpeg", cache=True)
+            self.send(image(path, min(1600, int(query.get("size", ["1000"])[0]))), "image/webp", cache=True)
         else:
             self.send_error(404)
 
