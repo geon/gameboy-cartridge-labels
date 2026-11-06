@@ -102,6 +102,12 @@ def serial_links(release):
                     for s in release["cartridgeSerials"])
 
 
+def region_free(key):
+    """A release key without its region if its release is split by region (CGB-AW8A for CGB-AW8A-JPN), else as it is."""
+    plain = re.sub(r"-[A-Z]{3}$", "", key)
+    return plain if plain in serials.SPLIT else key
+
+
 all_releases = json.load(open(RELEASES))
 nintendo_power = nintendo_power_only(all_releases)
 releases = [r for r in all_releases if r["system"] in SYSTEMS and (r["cartridgeSerials"] or r["id"] in nintendo_power)]
@@ -109,7 +115,8 @@ release_of = serials.releases_by_serial()
 covered, otakaraou, fake = set(), {}, set()  # otakaraou: release -> the URL of its otakaraou photo
 for source, _, name, entry in photos.all_sources():
     key, found = serials.release_key(name, release_of)
-    release = found["id"] if found and key == found["id"] else None  # a photo with a note is of another release
+    # A photo with a note is of another release; one of a release split by region (serials.SPLIT) covers it.
+    release = found["id"] if found and region_free(key) == found["id"] else None
     if release:
         if source == "otakaraou":
             otakaraou.setdefault(release, entry["image_url"])
@@ -146,7 +153,7 @@ sections = [f"<h2>Labels under {LOW_RESOLUTION} px per mm ({len(low)})</h2>"]
 for shell, system_name in SYSTEM_NAMES:
     rows = []
     for resolution, key, _ in sorted(l for l in low if l[2] == shell):
-        r = by_id.get(key)
+        r = by_id.get(region_free(key))
         title = (japanese_title(r) if japanese(r) else r["title"]) if r else ""
         serial = serial_links(r) if r and r["cartridgeSerials"] else html.escape(key)
         searches = "".join(f'<td><a href="{html.escape(link[1])}" target="_blank">{link[0]}</a></td>' if link else "<td></td>" for link in links(r)) if r else ""

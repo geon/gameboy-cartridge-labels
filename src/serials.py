@@ -16,6 +16,7 @@ import photos
 # the serial ("DMG-PVJ MADE IN JAPAN"). A region code read without its dash (AGB・A20JJPN for AGB-A2OJ-JPN) is read too, for the known region
 # codes, and every read with a region also without it, as gb-game-list lists some serials only so (AGB-A2OJ).
 RELEASES = "../gb-game-list/database/releases.json"
+SPLIT_BY_REGION = "split-by-region.tsv"
 RANK = {"exact": 0, "near": 1, "unknown": 2}
 REGIONS = ("ASI", "AUS", "BRA", "CAN", "CHN", "DAN", "ESA", "ESP", "EUB", "EUR", "EUU", "FAH", "FRA", "FRG", "GPS", "HKG",
            "HOL", "ITA", "JPG", "JPN", "KOR", "MSA", "NOE", "SCN", "SPA", "UKV", "USA")
@@ -37,19 +38,34 @@ def releases_by_serial():
     return release_of
 
 
+def split_by_region():
+    """The release ids in SPLIT_BY_REGION."""
+    rows = (line.split("\t")[0].strip() for line in open(SPLIT_BY_REGION) if not line.startswith("#"))
+    return {r for r in rows if r}
+
+
+SPLIT = split_by_region()
+
+
 def release_key(name, release_of):
     """A photo's release (release_of: releases_by_serial()), by its name: (the release's id, else its serial, with its
-    note if it has one, as DMG-ATAJ[PINK]: a release of its own, and so with a prefix, as DIS-CGB-AZ7E; the release in
-    gb-game-list, or None)."""
+    note if it has one, as DMG-ATAJ[PINK]: a release of its own, and so with a prefix, as DIS-CGB-AZ7E; with its region
+    if the release is split by region (SPLIT_BY_REGION), as CGB-AW8A-JPN; the release in gb-game-list, or None)."""
     serial, note = photos.serial_of(name), photos.note_of(name)
     release, prefix = release_of_serial(serial, release_of), photos.prefix_of(serial)
-    key = (f"{prefix}-{release['id']}" if prefix else release["id"]) if release else serial
+    key = release["id"] if release else photos.unprefixed(serial)
+    if release and release["id"] in SPLIT and (region := re.search(r"-([A-Z]{3})(?:-[0-9])?$", photos.unprefixed(serial))):
+        key += f"-{region.group(1)}"
+    key = f"{prefix}-{key}" if prefix and release else key if release else serial
     return (f"{key}[{note}]" if note is not None else key), release
 
 
 def plain_release(key):
-    """A release key's release id in gb-game-list, without its note and prefix (CGB-AZ7E for DIS-CGB-AZ7E[NOTE])."""
-    return photos.unprefixed(re.sub(r"\[[^]]*\]$", "", key))
+    """A release key's release id in gb-game-list, without its note, prefix and region (CGB-AZ7E for
+    DIS-CGB-AZ7E[NOTE], CGB-AW8A for CGB-AW8A-JPN, split by region)."""
+    key = photos.unprefixed(re.sub(r"\[[^]]*\]$", "", key))
+    plain = re.sub(r"-[A-Z]{3}$", "", key)
+    return plain if plain in SPLIT else key
 
 
 def release_of_serial(serial, release_of):

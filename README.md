@@ -14,6 +14,8 @@ Run `make setup` once: it creates the Python environment, `.venv/`, with the pac
   saying where each photo came from. A photo is named by the serial printed on its label; to correct one, rename it.
 - `special-shells.tsv`: the cartridges whose shell isn't the usual one (rumble, tilt sensor, infrared…), left out of the
   fitting. Edited by hand.
+- `split-by-region.tsv`: the releases in gb-game-list (one per ROM) whose regions' labels differ, each region a release
+  of its own here (CGB-AW8A-JPN). Edited by hand.
 - `colors.json`: each photo's own color settings (black, white, midtones, temperature, tint), made by `make fit-colors`,
   or set by hand in `make adjust-colors`.
 - `src/`: the scripts.

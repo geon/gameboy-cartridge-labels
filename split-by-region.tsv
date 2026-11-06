@@ -1,0 +1,4 @@
+# Releases in gb-game-list (one per ROM) whose regions' labels differ (different art): each region's photos are a
+# release of their own here, named by the release id and the region (CGB-AW8A-JPN), in every tool (serials.release_key).
+# A photo whose name has no region stays under the release id. Per row: the release id; the title.
+CGB-AW8A	Wario Land 3
