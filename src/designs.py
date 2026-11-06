@@ -4,9 +4,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials
 
 # designs.json: which photos are of one label design (one art), where that isn't the default. Every photo is of one
-# design: by default its game stem's, on its side, Japan or the rest of the world (stem_of: AGB-AXPE, -AXPP, -AXPD,
-# -AXPS are AGB-AXP; AGB-AXPJ is AGB-AXPJ; DMG-KY-USA and -KY-EUR are DMG-KY; DMG-KYJ is DMG-KYJ), with its note
-# (DMG-ATAJ[PINK]) and its prefix (DIS-CGB-AZ7) if it has one (default_key). That is implicit, never stored. A design
+# design: by default its game stem's in its market, Japan, the USA or the rest of the world (stem_of: AGB-AXPP, -AXPD,
+# -AXPS are AGB-AXPP; AGB-AXPE is AGB-AXPE; AGB-AXPJ is AGB-AXPJ; DMG-KY-EUR is DMG-KY, DMG-KY-USA DMG-KYE, DMG-KYJ
+# DMG-KYJ), with its note (DMG-ATAJ[PINK]) and its prefix (DIS-CGB-AZ7) if it has one (default_key). That is implicit,
+# never stored. (The USA is a market of its own as labels there and in Europe differ about as often as not: 2026-11-06,
+# of 107 games with labels from both, 46 alike, 45 different, 16 unclear.) A design
 # listed here is made of parts, each either
 #   - a default design (DMG-AG): its photos, but those of a serial listed in another design; or
 #   - a serial, with its note if it has one (DMG-AG-FAH, DMG-ATAJ-JPN[PINK]): its photos, those of its revisions too
@@ -39,9 +41,11 @@ def save(data):
             groups.remove(other)
             g |= other
         groups.append(g)
-    # A serial in the design of its own default, and a design of one default part, are implicit.
+    # A serial in the design of its own default, a design of one default part, and one of one serial of Japan or the USA
+    # (where a market's serials of a stem are all one), are implicit.
     groups = [{p for p in g if not (is_serial(p) and default_key(p) in g)} for g in groups]
-    groups = [sorted(g, key=part_order) for g in groups if len(g) > 1 or g and is_serial(next(iter(g)))]
+    alone = lambda p: is_serial(p) and (stem_of(p) or (None, ""))[1] in ("J", "E")
+    groups = [sorted(g, key=part_order) for g in groups if len(g) > 1 or g and is_serial(next(iter(g))) and not alone(next(iter(g)))]
     groups.sort(key=lambda g: part_order(g[0]))
     text = '{\n"designs": [' + ("\n" + ",\n".join(json.dumps(g, ensure_ascii=False) for g in groups) + "\n" if groups else "") + "]\n}\n"
     open(FILE + ".tmp", "w").write(text)
@@ -70,15 +74,19 @@ def name_of(group):
 
 
 def default_key(name):
-    """A photo's default design (by its name, or a serial's): its game stem on its side (stem_of), the stem with J on the
-    Japanese side (AGB-AXPJ, DMG-KYJ), with its prefix and note; for a serial not of that form, the serial."""
+    """A photo's default design (by its name, or a serial's): its game stem in its market (stem_of), the stem with J in
+    Japan (AGB-AXPJ, DMG-KYJ), with E in the USA (AGB-AXPE, DMG-KYE), elsewhere with P for a code of four letters
+    (AGB-AXPP), alone for the old codes (DMG-KY), so that the old codes' names (two or three letters) and the four-letter
+    ones' never clash (DMG-ADA's DMG-ADJ, DMG-ADJP's DMG-ADJP); with its prefix and note; for a serial not of that
+    form, the serial."""
     serial, note = photos.serial_of(name), photos.note_of(name)
     stem = stem_of(name)
     if stem is None:
         key = serial
     else:
         prefix = photos.prefix_of(serial)
-        key = (f"{prefix}-" if prefix else "") + stem[0] + ("J" if stem[1] else "")
+        four = len(stem[0].split("-")[1]) == 3
+        key = (f"{prefix}-" if prefix else "") + stem[0] + (stem[1] or ("P" if four else ""))
     return key + (f"[{note}]" if note is not None else "")
 
 
@@ -110,16 +118,23 @@ class Designs:
 
 
 def stem_of(name):
-    """A photo's game stem, and whether it's Japanese: labels of one stem and side (Japan, or the rest of the world) are
-    expected to look alike. The stem is the code without its region letter: AXP for AGB-AXPE, -AXPP and -AXPJ; KY for
-    DMG-KY-USA, -KY-EUR and DMG-KYJ (the old Japanese and worldwide codes of three letters); with its system. Japanese:
-    the code's region letter J, or the region JPN. None for a serial not of that form."""
+    """A photo's game stem and market: (stem, "J" for Japan, "E" for the USA, "" for the rest of the world). Labels of
+    one stem and market are expected to look alike. The stem is the code without its region letter: AXP for AGB-AXPE,
+    -AXPP and -AXPJ; KY for DMG-KY-USA, -KY-EUR and DMG-KYJ (the old Japanese and worldwide codes of three letters);
+    with its system. The market: by the serial's region (JPN; USA or CAN), else by the code's region letter (J, E;
+    in the old codes of three letters, A is Japanese too: DMG-PMA, DMG-B2A, all 249 photos of 2026-11-06 of releases
+    gb-game-list lists with a JPN serial, their labels unlike the USA's and Europe's). None for a serial not of that
+    form."""
     m = re.match(r"(DMG|CGB|AGB)-([A-Z0-9]+)(?:-([A-Z]{3}))?", photos.unprefixed(photos.serial_of(name)))
     if not m:
         return None
     system, code, region = m.groups()
     stem, letter = (code[:-1], code[-1]) if len(code) in (3, 4) else (code, "")
-    return f"{system}-{stem}", letter == "J" or region == "JPN"
+    if region:
+        market = "J" if region == "JPN" else "E" if region in ("USA", "CAN") else ""
+    else:
+        market = "J" if letter == "J" or letter == "A" and len(code) == 3 else "E" if letter == "E" else ""
+    return f"{system}-{stem}", market
 
 
 def preferred(key_of_sha1):

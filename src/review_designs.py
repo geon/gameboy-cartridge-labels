@@ -10,7 +10,7 @@ from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
 # placed by hand, with a current label image from make fit-colors). Three lists:
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
 #   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, but for
-#     those expected alike (one game's stem and side, Japan or the rest of the world: designs.stem_of), and
+#     those expected alike (one game's stem and market, Japan, the USA or the rest of the world: designs.stem_of), and
 #     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
 #     (hidden with "hide confirmed"), partly when some are. The photos are shown by design (the serials already linked
 #     together), then by serial, each design with a checkbox, ticked to begin with (an unticked one stays so while the
