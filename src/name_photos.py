@@ -14,7 +14,7 @@ from fit_cartridge import load
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8768
 # TEMPORARY (2026-11-06; remove when done): photos named by a release id, no region read on their label, to name by
 # hand (photos.py: a name is the serial printed on the label).
-TEMPORARY = {"AGB-A9NX", "AGB-AR2P", "AGB-BEYP_2", "AGB-BNLE", "AGB-ALDE", "AGB-A7SP", "AGB-AS6P", "AGB-BSRP", "AGB-TCHK"}
+TEMPORARY = {"AGB-A9NX", "AGB-AR2P", "AGB-BEYP_2", "AGB-BNLE", "AGB-ALDE", "AGB-A7SP", "AGB-AS6P", "AGB-BSRP"}
 
 
 def image(path, longest=1600):
