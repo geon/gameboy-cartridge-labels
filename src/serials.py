@@ -131,6 +131,15 @@ def serials(text_dir):
         # Of the best-matching reads, those whose title was read (DMG-UQJ, Ultra Quiz, rather than a misread DMG-UOJ),
         # the longest (DMG-AJYJ-JPN rather than DMG-AJYJ).
         status, _, serial = min(matches, key=lambda m: (RANK[m[0]], m[1], -len(m[2])))
+        # A photo is named by the serial printed on its label (photos.py), never by a release id: where the match is an
+        # id without a region (AGB-BNLE, gb-game-list listing no AGB-BNLE-USA) and the label's text has that code with
+        # a known region (AGB-BNLE-USA), the serial is that, region (and revision) as read.
+        if status in ("exact", "near") and not re.search(r"-[A-Z]{3}(-[0-9])?$", serial):
+            printed = sorted(r for r in found if (m := re.search(r"-([A-Z]{3})(-[0-9])?$", r)) and m.group(1) in REGIONS
+                             and match(r[:m.start()], release_of)[1] == serial)
+            if printed:
+                region = re.search(r"-[A-Z]{3}(-[0-9])?$", max(printed, key=len)).group(0)
+                serial += region
         r = release_of.get(photos.unprefixed(serial))
         seen = "title" if r and title_seen(r, label) else ""
         rows.append((name, status, serial, r["id"] if r else "", r["title"] if r else "", seen, " ".join(found)))

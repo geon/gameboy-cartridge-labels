@@ -6,9 +6,9 @@ from fit_cartridge import load
 
 # add-photos: files the photos left in save-new-images-here/ into photos/ (src/photos.py). A subfolder names their
 # source (save-new-images-here/ebay-elrocinante/ -> photos/ebay-elrocinante/); photos straight in the folder go to
-# photos/unrecorded/. Each photo is stored as it came (never re-encoded) under the serial read on its label
-# (src/serials.py: exact, or one character off), read as it is, enlarged, and line by line (see enlargement,
-# cut_out); without one, as UNKNOWN. A photo already in photos/ (the same file, by SHA-1) is deleted; one that is the
+# photos/unrecorded/. Each photo is stored as it came (never re-encoded) under the serial read on its label, as printed
+# (photos.py: never a release id or other short form, even where gb-game-list lists only that; src/serials.py: exact,
+# or one character off), read as it is, enlarged, and line by line (see enlargement, cut_out); without one, as UNKNOWN. A photo already in photos/ (the same file, by SHA-1) is deleted; one that is the
 # same picture as a photo in photos/, saved another way (re-encoded, another format: see same_picture), stays in the
 # folder, and is listed with that photo, for you to delete or keep; anything not a photo stays too, and is listed.
 # Otherwise the folder is left empty: filed photos and emptied subfolders are removed.
