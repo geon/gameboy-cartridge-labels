@@ -7,9 +7,12 @@ from fit_colors import LABELS, OUT as COLORS_OUT, candidates
 # shell (DMG with DMG, CGB with CGB, AGB with AGB). Only the photos whose label is accepted or placed by hand, from their
 # label images made by make fit-colors (generated/fit-colors/labels/<photo>.png: straightened, at render-labels' size,
 # the photo's colors as they are), so the comparison sees the label alone, nothing around it.
-# How alike two labels are: the correlation of their images (-1 to 1, 1 the same), made alike in lighting first:
+# How alike two labels are: the mean of three correlations of their images (-1 to 1, 1 the same), in gray and in two
+# color channels, made alike in lighting first:
 #   - gray, each pixel divided by the image blurred over LIGHTING px (about 5 mm), so that uneven lighting, the
 #     brightness and the contrast don't count;
+#   - color: Lab's a and b (green-red, blue-yellow), each less the channel blurred over LIGHTING px, so that a color
+#     cast doesn't count; labels printed on one template (the Classic NES Series) differ mostly in their art's colors;
 #   - shrunk to SCALE (about 1.2 px per mm): noise, JPEG artifacts and the fit's small errors don't count;
 #   - correlated over the whole label, the best of the shifts up to SHIFT px (about 1.7 mm) either way, so that a fit a
 #     little off doesn't count; a scratch, a sticker or a different serial covers a small part of the label, and so
@@ -18,18 +21,26 @@ from fit_colors import LABELS, OUT as COLORS_OUT, candidates
 # 0.91 (97.7 % of them above 0.7, some of those below misnamed); photos of different games above 0.7: 43 DMG pairs of
 # 1.3 million, 15 CGB of 22 thousand, 9 AGB of 68 thousand, the highest of them mostly misnamed photos or labels
 # alike in art. Subtracting each shell's mean label didn't help at 0.7 (CGB fewer, but same releases missed).
-# All of them, 3277 photos, compared in about 8 s (2026-11-06: 6 s reading the images), so nothing is kept between runs.
+# Color added 2026-11-06, measured on 3277 labels: pairs of photos of one serial score a median 0.91 either way; of
+# different games, 109 pairs scored 0.7 or more in gray alone, 40 with color (and 99.5 % of one serial's pairs, from
+# 98.8 %); at 0.78, 97 % of one serial's pairs and 22 of different games. Comparing at 2.4 px per mm didn't help more.
+# So SIMILAR, for labels of different serials alike (to link), is 0.78; SAME, for a design's photos alike (else
+# perhaps different designs), 0.7, forgiving a poor photo. All of them compared in about 20 s (6 s reading the
+# images), so nothing is kept between runs.
 LIGHTING = 25  # px at render-labels' 4.7 px per mm
 SCALE = 0.25
 SHIFT = 2  # px after SCALE
-THRESHOLD = 0.7
+SIMILAR = 0.78
+SAME = 0.7
 
 
 def features(image):
-    """A label image (BGR) made alike in lighting and shrunk, as float32."""
+    """A label image (BGR) made alike in lighting and shrunk: [gray, a, b], each as float32."""
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).astype(np.float32)
-    flat = gray / (cv2.GaussianBlur(gray, (0, 0), LIGHTING) + 1)
-    return cv2.resize(flat, None, fx=SCALE, fy=SCALE, interpolation=cv2.INTER_AREA)
+    channels = [gray / (cv2.GaussianBlur(gray, (0, 0), LIGHTING) + 1)]
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB).astype(np.float32)
+    channels += [lab[..., c] - cv2.GaussianBlur(lab[..., c], (0, 0), LIGHTING) for c in (1, 2)]
+    return [cv2.resize(c, None, fx=SCALE, fy=SCALE, interpolation=cv2.INTER_AREA) for c in channels]
 
 
 def normalized(x):
@@ -71,6 +82,7 @@ def all_scores(current):
     found = {}
     for shell in sorted({c[1] for c in current.values()}):
         shas = sorted(s for s in current if current[s][1] == shell)
-        f = np.stack([features(cv2.imread(os.path.join(LABELS, current[s][0] + ".png"))) for s in shas])
-        found[shell] = (shas, scores(f, f))
+        f = [features(cv2.imread(os.path.join(LABELS, current[s][0] + ".png"))) for s in shas]
+        channels = [np.stack([x[k] for x in f]) for k in range(len(f[0]))]
+        found[shell] = (shas, sum(scores(c, c) for c in channels) / len(channels))
     return found

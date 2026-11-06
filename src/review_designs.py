@@ -3,13 +3,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import designs, fits, photos
-from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
+from compare_labels import LABELS, SAME, SIMILAR, all_scores, compared_photos
 
 # review-designs: a local page for telling the photos' label designs apart (src/designs.py, designs.json), from how
 # alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
 # placed by hand, with a current label image from make fit-colors). Three lists:
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
-#   - Similar designs, multiple serials: the photos with different serials whose labels score at least THRESHOLD, and
+#   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, and
 #     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
 #     (hidden with "hide confirmed"), partly when some are. The photos are shown by design (the serials already linked
 #     together), then by serial, each design with a checkbox, ticked to begin with (an unticked one stays so while the
@@ -17,7 +17,7 @@ from compare_labels import LABELS, THRESHOLD, all_scores, compared_photos
 #     out of a design they share with others in the cluster (designs.unlinked: back to their releases' designs).
 #     Variants of a game (Pokémon Gold and Silver) are simply left as they are.
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
-#     at least THRESHOLD). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
+#     at least SAME). "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
 #     it shares a serial with another group, by a note in its photos' names (DMG-MQ-UKV[ALT].jpg), asked for.
 #   - Designs: the designs whose photos are of several serials, of the releases in designs.json (a family: the designs
 #     sharing a release), their photos by serial. A serial can be split off into a design of its own, and a design in
@@ -60,7 +60,7 @@ class Review:
         # The pairs alike: (score, sha1, sha1).
         self.alike = []
         for shell, (shas, m) in self.scores.items():
-            for i, j in zip(*((m >= THRESHOLD).nonzero())):
+            for i, j in zip(*((m >= SAME).nonzero())):
                 if i < j:
                     self.alike.append((float(m[i, j]), shas[i], shas[j]))
 
@@ -87,7 +87,7 @@ class Review:
             score[(a, b)] = score[(b, a)] = v
 
         # Similar designs, multiple serials.
-        across = [(v, a, b) for v, a, b in self.alike if a in info and b in info
+        across = [(v, a, b) for v, a, b in self.alike if v >= SIMILAR and a in info and b in info
                   and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])]
         alike = []
         for shas in groups_of({s for _, a, b in across for s in (a, b)}, [(a, b) for _, a, b in across]):
