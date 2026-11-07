@@ -12,6 +12,7 @@ import render
 # rounded corners and a drop shadow, on its shell's label rectangle (cartridge.LABEL, CGB_LABEL). The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
 # templates/cgb.png (framed the same way). Then the AGB-shell releases (Game Boy Advance), on templates/agb-gray.png
 # (1190 x 688 px, about 20 px per mm; framed on its box with the shoulders, 60 x 34.5 mm).
+# At the top, a summation: the labels in all, and by shell, each linking to its section.
 # The cards are all one width, and the cartridges drawn at one scale: the widest (the AGB's 60 mm) fills its card, the
 # DMG's and CGB's 57 mm bodies are centered in theirs.
 # The shell's color: black for the releases gb-game-list marks gameBoyColorEnhanced, gray for the others, but for
@@ -116,6 +117,14 @@ def main():
       font-weight: 600;
       margin: 0 0 4px;
     }}
+    .total {{
+      font-size: 15px;
+      color: #222;
+      margin-bottom: 24px;
+    }}
+    .total a {{
+      color: inherit;
+    }}
     h1 + p + main + h1 {{
       margin-top: 32px;
     }}
@@ -179,17 +188,18 @@ def main():
   </style>
 </head>
 <body>
-  <h1>DMG labels</h1>
+  <p class="total"><b>{len(cards) + len(cgb_cards) + len(agb_cards)} labels</b>: <a href="#dmg">{len(cards)} DMG</a>, <a href="#cgb">{len(cgb_cards)} CGB</a>, <a href="#agb">{len(agb_cards)} AGB</a>.</p>
+  <h1 id="dmg">DMG labels</h1>
   <p>{len(cards)} releases: {summary} (black: Game Boy Color enhanced in gb-game-list; other colors from {COLORS}, shown on the gray or black shell).</p>
   <main>
 {chr(10).join(cards)}
   </main>
-  <h1>CGB labels</h1>
+  <h1 id="cgb">CGB labels</h1>
   <p>{len(cgb_cards)} releases in the clear Game Boy Color only shell.</p>
   <main>
 {chr(10).join(cgb_cards)}
   </main>
-  <h1>AGB labels</h1>
+  <h1 id="agb">AGB labels</h1>
   <p>{len(agb_cards)} releases in the Game Boy Advance shell.</p>
   <main>
 {chr(10).join(agb_cards)}
