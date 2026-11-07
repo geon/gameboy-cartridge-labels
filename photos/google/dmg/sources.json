@@ -769,6 +769,12 @@
   "note": "named by the serial read on it (exact)",
   "sha1": "e0c535d922c9cfeeda5751df2ea090ef2d6c5e68"
  },
+ "DMG-ATJ.webp": {
+  "original_name": "pic_81c3b4ca-290a-450e-9fb4-b257a4e05bfb.webp",
+  "serial_on_label": "DMG-ATJ",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "e9eef8295d99af6acb563f03637d91dc849bc292"
+ },
  "DMG-ATJ_3.jpg": {
   "serial_on_label": "DMG-ATJ",
   "original_sha1": "246246183efd959b214ddc3b52ff231307f13400",
@@ -791,6 +797,12 @@
   "original_sha1": "f7505b5996a89436e2216dd21435e363faaa6567",
   "sha1": "dfff3958e3464742cf790093c733c4b3dce67f99",
   "original_name": "images (19).jpeg"
+ },
+ "DMG-ATVJ-JPN_2.webp": {
+  "original_name": "bakenou-tv-94-game-boy-japanese-39875-690233_1024x.webp",
+  "serial_on_label": "DMG-ATVJ-JPN",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "a34c495ea93b46c9be7b75a7770397aadc1ca92b"
  },
  "DMG-AUJ_2.jpg": {
   "original_sha1": "fefe1de10e77bc7aef456d3fce0dcfc4103b254c",
@@ -885,6 +897,12 @@
   "original_sha1": "190d568553077da7ae3e735115ff7590d9115ba1",
   "sha1": "416755202c76fdf8c12d24ce01b9b6933f305887",
   "original_name": "images (29).jpeg"
+ },
+ "DMG-AZPJ-JPN_2.jpg": {
+  "original_name": "$_57.jpeg",
+  "serial_on_label": "DMG-AZPJ-JPN",
+  "note": "named by the serial read on it (exact)",
+  "sha1": "0d268bc9c15bcb188b8efdc450513ac6b920b49c"
  },
  "DMG-B4-USA.avif": {
   "original_name": "il_fullxfull.7221950230_qdfg.avif",
