@@ -122,6 +122,43 @@ grade without anyone looking at it.
 Hosting the search: a server at home behind a Cloudflare Tunnel, the Worker forwarding the shrunk photo; SIFT could
 later move into the browser.
 
+## Fitting from the print
+
+Prints that recur across photos could replace most hand fitting: the photos whose automatic fit is good locate the
+print in the others, and the print straightens their whole cartridge face.
+
+1. Group the photos by print: SIFT on every photo, one index of all descriptors, each photo's candidates checked with
+   RANSAC; linked photos are one print. This finds designs, misnamed photos and variants by itself, and RANSAC run
+   repeatedly (each fit's inliers removed) finds several labels in one photo.
+2. Confirm fits: photos whose automatic label fit is good (about 20 %) register to each other by the print; the
+   inliers in the recess agree with the fits.
+3. Locate the print in the failed photos by RANSAC against the confirmed ones: a full homography from hundreds of
+   inliers.
+4. The label is flat in the cartridge face, so that homography straightens the whole face. The plastic is then a 2D
+   problem: a shift and a turn within the label's room in the recess (about 1.5 mm and 2°).
+5. Fit from there: the start goes into fits.json's "start" (as fit-by-hand's "Save for refit"), which fit-cartridge
+   fits from alone.
+
+- Not a consensus of the plastic: labels are stuck on shifted and turned per copy, so faces lined up by their print
+  blur the plastic's edges. Fit each photo in its straightened face; a plastic consensus needs the faces lined up by
+  the plastic instead.
+- Recess depth: the label lies behind the face, so at an angle the face is straightened with a small, almost uniform
+  offset (about 0.5 mm at 25° for a 1 mm deep recess), absorbed by the 2D fit's shift.
+- Cut edges: what recurs is the print, not the label's cut; the label's outline comes from the model once the print is
+  registered. Hand fitting would only remain for the real cut edges, if wanted.
+- Konsolenkost's badly cut-out labels register too: whatever part of the print shows. Their template cartridge photos
+  give no plastic fit.
+- Designs with no confirmed fit need the shell's template elements (logo strip, borders, side strips) as the anchor,
+  less precisely.
+
+Unlike the starts tried on 2026-11-04 (label art from fakes and other releases: no new fits; joint plastic and label
+fit: no gain), the match here is the same print in other real photos, and the plane comes from the print's homography,
+not an edge fit. It targets the fits never found (93 hand-placed DMG photos had no candidate within 1 mm), not the
+choice between candidates.
+
+Test with known answers: photos with hand-placed plastics treated as unfitted, each one's start derived from its print
+via the design's other photos, fit-cartridge run from it, compared with the hand fit (within 0.3 and 0.5 mm).
+
 ## First trial: DMG-APSJ-JPN
 
 On 10 photos with accepted labels, registration by the print works, but the consensus is softer than the sharpest
