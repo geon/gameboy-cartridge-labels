@@ -46,8 +46,13 @@ import photos, serials
 # So a default design is split by putting some of its serials in designs of their own (DMG-ALNP-FRA apart from the
 # rest of Europe), and designs whose labels are alike are linked by putting them in one design (DMG-KY with DMG-KY-USA).
 # Photos of one serial with different art are told apart by a note in their names (DMG-MQ-UKV[ALT].jpg: photos.py),
-# which makes a design of its own. A design is named after its first part, defaults before serials (DMG-AG-FAH;
-# DMG-AG-NOE-1's part DMG-AG-NOE); one not listed is its default. Saving leaves out what's implicit: a design of one
+# which makes a design of its own. A design joining whole markets of one stem (its parts all defaults, without a note
+# or a prefix) is named after the stem, with + and the regions it adds to the rest of the world, alphabetically
+# (agreed with the user 2026-11-07): AGB-A7K+USA (AGB-A7K+ and AGB-A7KE-USA), AGB-ATW+JPN, AGB-ATW+JPN+USA, DMG-AC+USA
+# (DMG-AC and DMG-AC-USA), DMG-KY+JPN (DMG-KY and DMG-KYJ-JPN); without the rest of the world, the stem, - and the
+# regions: AGB-A7K-JPN+USA. Such a name can't clash: + is never in a serial, and the defaults end in a region or a lone
+# +. Any other design is named after its first part, defaults before serials (DMG-AG-FAH; DMG-AG-NOE-1's part
+# DMG-AG-NOE); one not listed is its default. Saving leaves out what's implicit: a design of one
 # default part, a serial in the design of its own default, a design of one serial of Japan or the USA; designs sharing
 # a part are one.
 # Only decisions are kept: how alike labels are is measured afresh (src/compare_labels.py, make review-designs), so a
@@ -99,7 +104,28 @@ def serial_part(name):
     return plain + (f"[{note}]" if note is not None else "")
 
 
+def market_of(part):
+    """A part's (stem, market) where it's a whole market's default design (AGB-A7K+, AGB-A7KE-USA, DMG-AC, DMG-KYJ-JPN),
+    without a note or a prefix; else None."""
+    if photos.note_of(part) is not None or photos.prefix_of(part):
+        return None
+    if part.endswith("+"):  # stem_of can't read these: AGB-A7K+ would be the old code AGB-A7K's stem AGB-A7
+        return (part[:-1], "") if re.fullmatch(r"(DMG|CGB|AGB)-[A-Z0-9]+", part[:-1]) else None
+    stem = stem_of(part)
+    if stem is None or default_key(part) != part or (stem[1] == "" and is_serial(part)):
+        return None
+    return stem
+
+
+REGIONS = {"J": "JPN", "E": "USA"}
+
+
 def name_of(group):
+    markets = [market_of(p) for p in group]
+    if len(group) > 1 and all(markets) and len({s for s, _ in markets}) == 1 and len({m for _, m in markets}) == len(group):
+        stem, found = markets[0][0], {m for _, m in markets}
+        regions = "+".join(sorted(REGIONS[m] for m in found if m))
+        return stem + ("+" if "" in found else "-") + regions
     first = sorted(group, key=part_order)[0]
     return re.sub(r"(-[A-Z]{3})-[0-9](?=$|\[)", r"\1", first)
 

@@ -57,8 +57,10 @@ def colors():
 
 def color_of(release, listed):
     """The release's color in shell-colors.tsv (listed: colors()), or None: the longest row its id starts with, up to
-    a "-", a note's "[" or its end; a row with a note matches only that note's release."""
-    return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|$)", release) and ("[" in code or "[" not in release)), None)
+    a "-", a note's "[", a "+" and a region (a design joining markets: DMG-YT+USA; not a lone +, the rest of the world of
+    a four-letter code: DMG-ACD+ isn't the old code DMG-ACD) or its end; a row with a note matches only that
+    note's release."""
+    return next((c for code, c in listed if re.match(re.escape(code) + r"(-|\[|\+[A-Z]|$)", release) and ("[" in code or "[" not in release)), None)
 
 
 def card(classes, release, title, note=""):
