@@ -12,6 +12,9 @@ import render
 # rounded corners and a drop shadow, on its shell's label rectangle (cartridge.LABEL, CGB_LABEL). The CGB-shell releases (the clear Game Boy Color only cartridge) follow, on
 # templates/cgb.png (framed the same way). Then the AGB-shell releases (Game Boy Advance), on templates/agb-gray.png
 # (1190 x 688 px, about 20 px per mm; framed on its box with the shoulders, 60 x 34.5 mm).
+# A card whose label is rendered in high resolution too (make render-labels-high-resolution) opens it in a lightbox when
+# clicked, on the same empty cartridge, drawn at LIGHTBOX_PX_PER_MM: its label image (render.LABEL_HIGH_PX_PER_MM)
+# at 2 image pixels per CSS px; smaller where the window is (Escape or a click closes it).
 # At the top, a summation: the labels in all, and by shell, each linking to its section.
 # The cards are all one width, and the cartridges drawn at one scale: the widest (the AGB's 60 mm) fills its card, the
 # DMG's and CGB's 57 mm bodies are centered in theirs.
@@ -31,6 +34,8 @@ COLORS = "shell-colors.tsv"
 TEMPLATE_OF = {"gray": "gray", "black": "black", "white": "gray", "pink": "gray", "yellow": "gray", "red": "gray",
                "bright-blue": "gray", "blue": "black", "dark-blue": "black", "dark-gray": "black",
                "gold": "gray", "silver": "gray"}
+LABEL_HIGH = render.OUT["labels-high-resolution"]
+LIGHTBOX_PX_PER_MM = render.LABEL_HIGH_PX_PER_MM / 2
 LABEL_RADIUS = 1.4  # mm, as review-labels draws it
 # The cards' width on the page: the columns fill it, each at least CART_MIN px wide, so under 2 * CART_MIN + the gap
 # (else one more column would fit).
@@ -59,7 +64,9 @@ def color_of(release, listed):
 def card(classes, release, title, note=""):
     """A release's figure on the page: its label on the empty cartridge, its id and title under it."""
     src = html.escape(os.path.relpath(os.path.join(render.OUT["labels"], render.file_of(release)), os.path.dirname(OUT)))
-    return f"""    <figure class="{classes}">
+    high = os.path.join(LABEL_HIGH, render.file_of(release))
+    high = f' data-high="{html.escape(os.path.relpath(high, os.path.dirname(OUT)))}"' if os.path.exists(high) else ""
+    return f"""    <figure class="{classes}"{high}>
       <div class="cart"><img src="{src}" loading="lazy" alt=""></div>
       <figcaption><b>{html.escape(release)}</b> {html.escape(title)}{note}</figcaption>
     </figure>"""
@@ -180,6 +187,31 @@ def main():
       margin-top: 4px;
       overflow-wrap: anywhere;
     }}
+    [data-high] .cart {{
+      cursor: zoom-in;
+    }}
+    #lightbox {{
+      position: fixed;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(20, 20, 20, 0.85);
+      color: #eee;
+      cursor: zoom-out;
+    }}
+    #lightbox.open {{
+      display: flex;
+    }}
+    #lightbox > div {{
+      --mm: min({LIGHTBOX_PX_PER_MM:g}px, calc((100vw - 32px) / {CARD_MM:g}), calc((100vh - 80px) / {BODY[1]:g}));
+      width: calc({CARD_MM:g} * var(--mm));
+    }}
+    #lightbox .color {{
+      color: #bbb;
+    }}
     .color {{
       display: block;
       color: #555;
@@ -204,6 +236,26 @@ def main():
   <main>
 {chr(10).join(agb_cards)}
   </main>
+  <div id="lightbox"><div><div class="cart"><img alt=""></div></div><div class="caption"></div></div>
+  <script>
+    const box = document.getElementById("lightbox");
+    const shown = box.firstElementChild;
+    document.addEventListener("click", event => {{
+      const figure = event.target.closest("figure[data-high]");
+      if (figure) {{
+        shown.className = figure.className.replace("tall", "");
+        shown.querySelector("img").src = "";
+        shown.querySelector("img").src = figure.dataset.high;
+        box.querySelector(".caption").innerHTML = figure.querySelector("figcaption").innerHTML;
+        box.classList.add("open");
+      }} else if (box.contains(event.target)) {{
+        box.classList.remove("open");
+      }}
+    }});
+    document.addEventListener("keydown", event => {{
+      if (event.key === "Escape") box.classList.remove("open");
+    }});
+  </script>
 </body>
 </html>
 """
