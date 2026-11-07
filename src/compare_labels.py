@@ -29,12 +29,16 @@ from fit_colors import LABELS, OUT as COLORS_OUT, candidates
 # different games, 109 pairs scored 0.7 or more in gray alone, 40 with color (and 99.5 % of one serial's pairs, from
 # 98.8 %); at 0.78, 97 % of one serial's pairs and 22 of different games. Comparing at 2.4 px per mm didn't help more.
 # So SIMILAR, for labels of different serials alike (to link), is 0.78; SAME, for a design's photos alike (else
-# perhaps different designs), 0.7, forgiving a poor photo. All of them compared in about 20 s (6 s reading the
+# perhaps different designs), 0.7, forgiving a poor photo. SIMILAR_STEM, for labels of one game stem in different
+# markets (AGB-A7KE-USA and AGB-A7KP-EUR, 0.69: alike but for the bottom corners, the region's markings), 0.6: measured
+# 2026-11-07 on 1646 such pairs, no gap, those with a Japanese label nearly all below 0.45, 11.7 % at 0.6 or more (6.7 %
+# at 0.78); pairs of different stems are not affected. All of them compared in about 20 s (6 s reading the
 # images), so nothing is kept between runs.
 LIGHTING = 25  # px at render-labels' 4.7 px per mm
 SCALE = 0.25
 SHIFT = 2  # px after SCALE
 SIMILAR = 0.78
+SIMILAR_STEM = 0.6
 SAME = 0.7
 ROUGH_OUT = "generated/compare-labels"
 ROUGH = os.path.join(ROUGH_OUT, "labels")

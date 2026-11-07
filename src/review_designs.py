@@ -3,21 +3,23 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import designs, fits, photos
-from compare_labels import SAME, SIMILAR, all_scores, compared_photos
+from compare_labels import SAME, SIMILAR, SIMILAR_STEM, all_scores, compared_photos
 
 # review-designs: a local page for telling the photos' label designs apart (src/designs.py, designs.json), from how
 # alike their labels are (src/compare_labels.py, compared when the page starts: the photos whose label is accepted or
 # placed by hand, with a current label image from make fit-colors; and, roughly, those whose plastic alone is: their
 # label as fitted, or the label's model on the plastic, marked "rough" on the page). Three lists:
 # What the comparison finds is listed as found, never rejected: it changes only as the comparison does.
-#   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, but for
-#     those expected alike (one game's stem and market, Japan, the USA or the rest of the world: designs.stem_of), and
-#     those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
+#   - Similar designs, multiple serials: the photos with different serials whose labels score at least SIMILAR, or
+#     SIMILAR_STEM for one game's stem in different markets (Japan, the USA or the rest of the world: designs.stem_of;
+#     AGB-A7KE-USA and AGB-A7KP-EUR), but for those expected alike (one stem and market), and those joined through them (A+B, B+C and C+D make A+B+C+D), by best score; confirmed when they're all one design
 #     (hidden with "hide confirmed"), partly when some are. The photos are shown by design (the serials already linked
 #     together), then by serial, each design with a checkbox, ticked to begin with (an unticked one stays so while the
 #     page is open): "Same design" makes the ticked designs one (designs.merged); "Unlink" takes the ticked ones' serials
 #     out of a design they share with others in the cluster (designs.unlinked: back to their releases' designs).
-#     Variants of a game (Pokémon Gold and Silver) are simply left as they are.
+#     Variants of a game (Pokémon Gold and Silver) are simply left as they are. Serials or stems can also be entered
+#     (AGB-A7KE-USA AGB-A7KP-EUR, or AGB-A7K: its serials in every market): their photos, compared or not, are shown as
+#     one more cluster at the top, while the page is open, to be made one design or unlinked alike.
 #   - Different designs, one serial: the designs whose compared photos fall into separate groups (joined by pairs scoring
 #     at least SAME), of the photos with a good label only (a rough label scoring low is no sign of another design).
 #     "Split off" makes a group a design of its own: by its serials (designs.split_off), or, where
@@ -64,7 +66,7 @@ class Review:
         # The pairs alike: (score, sha1, sha1).
         self.alike = []
         for shell, (shas, m) in self.scores.items():
-            for i, j in zip(*((m >= SAME).nonzero())):
+            for i, j in zip(*((m >= min(SAME, SIMILAR_STEM)).nonzero())):
                 if i < j:
                     self.alike.append((float(m[i, j]), shas[i], shas[j]))
 
@@ -87,29 +89,64 @@ class Review:
                           "rough": entry["sha1"] in self.current and self.current[entry["sha1"]][4]})
         return found, by_design
 
+    @staticmethod
+    def similar(v, a, b):
+        """Whether two photos' labels (by name), scoring v, are alike enough to list: of different serials, not expected
+        alike (one stem and market), at least SIMILAR, or SIMILAR_STEM for one stem in different markets."""
+        if photos.serial_of(a) == photos.serial_of(b):
+            return False
+        sa, sb = designs.stem_of(a), designs.stem_of(b)
+        if sa is not None and sa == sb:
+            return False
+        return v >= (SIMILAR_STEM if sa is not None and sb is not None and sa[0] == sb[0] else SIMILAR)
+
+    def cluster(self, shas, info, pairs, score=None):
+        """A cluster of similar designs for the page: its photos (SHA-1s), each with its best pair (v, a, b) of pairs."""
+        best = {}
+        for v, a, b in pairs:
+            for x, y in ((a, b), (b, a)):
+                if v > best.get(x, (-1, None))[0]:
+                    best[x] = (v, y)
+        names = [info[x]["design"] for x in shas]
+        parts = [info[x]["part"] for x in shas]
+        linked = any(names[i] == names[j] and parts[i] != parts[j] for i in range(len(shas)) for j in range(i))
+        return {"score": max((v for v, _, _ in pairs), default=None) if score is None else score,
+                "shell": " ".join(sorted({photos.unprefixed(photos.serial_of(info[x]["name"]))[:3] for x in shas})),
+                "confirmed": "yes" if len(set(names)) == 1 else "partly" if linked else None,
+                "same game": len({info[x]["game"] for x in shas}) == 1,
+                "photos": [dict(info[x], best=best[x][0] if x in best else None, **{"with": info[best[x][1]]["name"] if x in best else None})
+                           for x in sorted(shas, key=lambda x: info[x]["name"])]}
+
+    def entered(self, query):
+        """The cluster of the photos of the serials or stems entered (spaces or commas between them), else None; and
+        the entries matching no photo."""
+        listed, _ = self.photos_now()
+        info = {p["sha1"]: p for p in listed}
+        entries = [e for e in query.replace(",", " ").upper().split() if e]
+        shas, unknown = [], []
+        for e in entries:
+            found = [p["sha1"] for p in listed if e in (photos.serial_of(p["name"]), photos.unprefixed(photos.serial_of(p["name"])))
+                     or (designs.stem_of(p["name"]) or (None,))[0] == e]
+            shas += [s for s in found if s not in shas]
+            if not found:
+                unknown.append(e)
+        if not shas:
+            return None, unknown
+        compared = [s for s in shas if s in self.current]
+        pairs = [(self.score(a, b), a, b) for i, a in enumerate(compared) for b in compared[:i] if self.shell[a] == self.shell[b]]
+        return self.cluster(shas, info, pairs, score="entered"), unknown
+
     def state(self):
         listed, by_design = self.photos_now()
         data = by_design.data
         info = {p["sha1"]: p for p in listed}
 
         # Similar designs, multiple serials.
-        across = [(v, a, b) for v, a, b in self.alike if v >= SIMILAR and a in info and b in info
-                  and photos.serial_of(info[a]["name"]) != photos.serial_of(info[b]["name"])
-                  and (designs.stem_of(info[a]["name"]) is None or designs.stem_of(info[a]["name"]) != designs.stem_of(info[b]["name"]))]
+        across = [(v, a, b) for v, a, b in self.alike if a in info and b in info and self.similar(v, info[a]["name"], info[b]["name"])]
         alike = []
         for shas in groups_of({s for _, a, b in across for s in (a, b)}, [(a, b) for _, a, b in across]):
             inside = set(shas)
-            pairs = [(v, a, b) for v, a, b in across if a in inside]
-            best = {}
-            for v, a, b in pairs:
-                for x, y in ((a, b), (b, a)):
-                    if v > best.get(x, (-1, None))[0]:
-                        best[x] = (v, y)
-            linked = sum(info[a]["design"] == info[b]["design"] for _, a, b in pairs)
-            alike.append({"score": max(v for v, _, _ in pairs), "shell": self.shell[shas[0]].upper(),
-                          "confirmed": "yes" if len({info[x]["design"] for x in shas}) == 1 else "partly" if linked else None,
-                          "same game": len({info[x]["game"] for x in shas}) == 1,
-                          "photos": [dict(info[x], best=best[x][0], **{"with": info[best[x][1]]["name"]}) for x in sorted(shas, key=lambda x: info[x]["name"])]})
+            alike.append(self.cluster(shas, info, [(v, a, b) for v, a, b in across if a in inside]))
         alike.sort(key=lambda c: -c["score"])
 
         # Different designs, one serial.
@@ -122,7 +159,7 @@ class Review:
             if len(compared) < 2:
                 continue
             inside = set(compared)
-            parts = groups_of(compared, [(a, b) for _, a, b in self.alike if a in inside and b in inside])
+            parts = groups_of(compared, [(a, b) for v, a, b in self.alike if v >= SAME and a in inside and b in inside])
             if len(parts) < 2:
                 continue
             groups = []
@@ -243,7 +280,7 @@ figure img{width:240px;aspect-ratio:200/174;object-fit:contain;display:block;bac
 figcaption{font-size:12px;color:#555;margin:4px 0;display:flex;gap:6px;align-items:flex-start}
 figcaption div{overflow:hidden;flex:1;min-width:0}figcaption div span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 figcaption b{color:#222}
-.rough{color:#a60}
+.rough{color:#a60}.item.entered{background:#fffbe6}#query{font:inherit}
 button{font:inherit;padding:2px 8px;border:none;border-radius:0.3em;cursor:pointer;background:#e4e4e4}
 button.go{background:#2a9d3a;color:#fff}
 </style>
@@ -251,12 +288,13 @@ button.go{background:#2a9d3a;color:#fff}
 <nav><button data-tab="alike">Similar designs, multiple serials</button> <button data-tab="unalike">Different designs, one serial</button> <button data-tab="families">Designs</button></nav>
 <label>shell <select id="shell"><option value="">all</option><option>DMG</option><option>CGB</option><option>AGB</option></select></label>
 <label><input type="checkbox" id="hide" checked> hide confirmed</label>
+<form id="enter"><input id="query" size="36" placeholder="serials or stems: AGB-A7KE-USA AGB-A7KP-EUR, AGB-A7K"> <button>Show</button></form>
 <span id="count"></span></header>
 <main id="items"></main>
 <script>
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
-let state = {alike: [], unalike: [], families: []}, tab = location.hash.slice(1) || "alike";
+let state = {alike: [], unalike: [], families: []}, entered = null, query = "", tab = location.hash.slice(1) || "alike";
 const image = p => p.compared ? `/label?sha1=${p.sha1}` : `/photo?sha1=${p.sha1}`;
 const figure = (p, extra = "") => `<figure><img loading="lazy" src="${image(p)}" alt="">` +
   `<figcaption><div><span title="${esc(p.path)}"><b>${esc(p.name)}</b> · ${esc(p.title)}</span>${p.rough ? '<span class="rough">rough: label not accepted</span>' : ""}${extra}</div>` +
@@ -268,14 +306,9 @@ const unticked = new Set();
 const bySerial = ps => Object.entries(ps.reduce((by, p) => ((by[p.part] ||= []).push(p), by), {}));
 // Photos by design: [[design, photos]], in the order they come.
 const byDesign = ps => Object.entries(ps.reduce((by, p) => ((by[p.design] ||= []).push(p), by), {}));
-function render() {
-  for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
-  const shell = $("shell").value, hide = $("hide").checked;
-  let html = "", n = 0;
-  if (tab === "alike") {
-    const shown = state.alike.filter(c => (!shell || c.shell === shell) && (!hide || c.confirmed !== "yes"));
-    n = shown.length;
-    html = shown.map(c => `<div class="item ${c.confirmed || ""}" data-cluster="${shas(c.photos)}"><div class="top"><span class="score">${c.score.toFixed(3)}</span>` +
+// A cluster of similar designs (or the one entered).
+const cluster = (c, isEntered = false) => `<div class="item ${c.confirmed || ""}${isEntered ? " entered" : ""}" data-cluster="${shas(c.photos)}"><div class="top">` +
+      (isEntered ? `<span class="score">entered</span>` : `<span class="score">${c.score.toFixed(3)}</span>`) +
       `<span class="muted">${c.shell} · ${c.photos.length} photos</span>${c["same game"] ? '<span class="game">same game</span>' : ""}` +
       `<span class="state">${c.confirmed === "yes" ? "one design" : c.confirmed ? "partly one design" : ""}</span>` +
       (c.confirmed !== "yes" ? `<button class="go" data-action="merge">Same design</button>` : "") +
@@ -284,7 +317,17 @@ function render() {
         `<label><input type="checkbox" class="tick" data-key="${esc(design)}" data-shas="${shas(ps)}"${unticked.has(design) ? "" : " checked"}> ` +
         (serials.length > 1 ? `<b>${esc(design)}</b> <span class="muted">· ${serials.length} serials linked</span>` : `<b>${esc(serials[0][0])}</b> <span class="muted">· ${esc(design)}</span>`) + `</label>` +
         serials.map(([part, sps]) => (serials.length > 1 ? `<div class="muted">${esc(part)}</div>` : "") +
-          `<div class="photos">${sps.map(p => figure(p, `<span>${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("")}</div>`).join("") + `</div>`; }).join("") + `</div></div>`).join("");
+          `<div class="photos">${sps.map(p => figure(p, p.best === null ? "" : `<span>${p.best.toFixed(3)} with ${esc(p.with)}</span>`)).join("")}</div>`).join("") + `</div>`; }).join("") + `</div></div>`;
+function render() {
+  for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
+  const shell = $("shell").value, hide = $("hide").checked;
+  let html = "", n = 0;
+  if (tab === "alike") {
+    const shown = state.alike.filter(c => (!shell || c.shell === shell) && (!hide || c.confirmed !== "yes"));
+    n = shown.length;
+    // The cluster entered (serials or stems), always shown, at the top.
+    html = entered ? cluster(entered, true) : "";
+    html += shown.map(c => cluster(c)).join("");
   } else if (tab === "unalike") {
     const shown = state.unalike.filter(u => !shell || u.shell === shell);
     n = shown.length;
@@ -304,7 +347,17 @@ function render() {
   $("count").textContent = `${n} shown`;
   $("items").innerHTML = html;
 }
-async function load() { state = await (await fetch("/state")).json(); render(); }
+async function load() {
+  state = await (await fetch("/state")).json();
+  entered = null;
+  if (query) {
+    const found = await (await fetch("/entered?q=" + encodeURIComponent(query))).json();
+    entered = found.cluster;
+    if (found.unknown.length) alert("No photos of " + found.unknown.join(", "));
+  }
+  render();
+}
+$("enter").onsubmit = e => { e.preventDefault(); query = $("query").value.trim(); tab = "alike"; location.hash = tab; load(); };
 async function act(body) {
   const response = await fetch("/act", {method: "POST", body: JSON.stringify(body)});
   const text = await response.text();
@@ -364,6 +417,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send(PAGE.encode(), "text/html; charset=utf-8")
         elif url.path == "/state":
             self.send(review.state())
+        elif url.path == "/entered":
+            cluster, unknown = review.entered(urllib.parse.parse_qs(url.query).get("q", [""])[0])
+            self.send({"cluster": cluster, "unknown": unknown})
         elif url.path == "/label" and sha1 in review.current:
             self.send(open(review.current[sha1][3], "rb").read(), "image/png", cache=True)
         elif url.path == "/photo":
