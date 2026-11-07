@@ -151,6 +151,53 @@ print in the others, and the print straightens their whole cartridge face.
 - Designs with no confirmed fit need the shell's template elements (logo strip, borders, side strips) as the anchor,
   less precisely.
 
+### A plastic consensus
+
+The plastic matters on its own: an image of each actual cartridge gives context when researching the photos later, and
+proves there is a real photo, not a synthetic image. The consensus is a tool for fitting; each photo keeps its own
+straightened cartridge image.
+
+- Scale comes from the plastic: the print's scale varies between copies by about 0.46 % (SD), about 0.2 mm across a
+  label. The mm frame is set by the plastic, the print registered within it.
+- One consensus per mold, shared by every photo of that shell: thousands for the DMG. Random errors shrink with the
+  square root of the number of photos (1000 photos: about 3 % of one photo's noise), and their different sub-pixel
+  offsets resolve the shell more finely than any one photo. The limit is how alike real shells are.
+- Built like an average template in medical imaging: straighten each face through its print; line the faces up by the
+  current plastic fits and average; re-align every face to the average and repeat until it settles; anchor the
+  absolute scale once to the calipers (56.8 mm wide). The 4500 photos with a plastic fit at least "almost" are enough
+  to start.
+- Aligned by edges and gradients, not brightness: plastic is smooth (little for SIFT) and its brightness is mostly
+  shading and reflections. Shell color then doesn't matter.
+- Fitting becomes registration to a nearly perfect template that includes the bevels, the embossed arrow, the recess
+  walls and the notch, not just the outline. Precision is then limited by each photo's sharpness; to be measured
+  (today's fits agree with hand fits to about 0.3 mm), by leaving a photo out of the consensus, or with two photos of
+  the same physical cart.
+- Outliers stand out: wrong fits, worn or damaged shells, reproduction shells.
+- Mold variants found, not assumed: group the photos by where they differ from the consensus (embossing, arrow, screw
+  hole, notch), one consensus per group.
+- Measured shells as a by-product: recess, bevels, arrow position from thousands of photos.
+- Mold cavities: a multi-cavity mold makes several shells per shot, each with tiny repeatable differences. Each
+  photo's difference from the consensus may carry its cavity's signature; grouping those could find the cavities and
+  assign shells to them, if the cavities differ more than noise and wear. Photos of a shell's inside, if it carries a
+  cavity number, could confirm the groups.
+
+### One joint fit
+
+Within each print, the print matches pin down the plane of every photo's cartridge face; together with the plastic
+consensus, everything can be fitted at once, like bundle adjustment.
+
+| | Per photo | Shared |
+| --- | --- | --- |
+| Unknowns | the face's plane (a homography, 8 numbers); where this cart's label sits on its plastic (shift and turn, 3) | one print per design; one plastic shape per mold |
+| Constraints | hundreds of print matches to the other photos of the print; the whole plastic face against its consensus | all photos of the print; thousands of photos of the mold |
+
+- The plane comes almost entirely from the print: a homography from hundreds of inliers (rotation between two prints
+  measured to 0.008°). The plastic only settles the label's offset against an extremely precise template.
+- The recess depth is one small extra unknown per photo, or a camera focal length: the label's plane is parallel to
+  the face, a known distance behind it.
+- The same cart photographed more than once (a relisting, or own photos) shares its label offset; such repeats show
+  as identical offsets and wear, and constrain the fit further.
+
 Unlike the starts tried on 2026-11-04 (label art from fakes and other releases: no new fits; joint plastic and label
 fit: no gain), the match here is the same print in other real photos, and the plane comes from the print's homography,
 not an edge fit. It targets the fits never found (93 hand-placed DMG photos had no candidate within 1 mm), not the
