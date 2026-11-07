@@ -235,5 +235,12 @@ photo, and the grades mix photo quality with condition.
 The sharpest photo differs partly because the consensus is softer, and the soft photos because they lack detail: the
 difference maps, not these numbers, show which is wear.
 
-Open: the agreeing-strongest rule for the fine bands; telling blur and glare apart from damage before grading; whether
+Second run (100 designs, 2026-11-07): the sharpest photo (by measured detail) is the base; only its defects (where it
+differs from the others' median, both blurred by 2 px) are replaced by the others' bands, scaled to its contrast per
+band; clipped highlights kept as data. The consensus keeps a median 96 % of the sharpest photo's fine detail (was 66 %
+with medians). A design can hold several prints (DMG-QX+USA: logos placed differently; joined markets): mixing them
+looks bad, so for production the consensus must be made per print, splitting a design's photos where the registered
+prints differ consistently.
+
+Open: the agreeing-strongest rule for the fine bands (replaced by the base-and-defects rule above); telling blur and glare apart from damage before grading; whether
 the lowest band defaults to the median of all photos or to a manual pick.
