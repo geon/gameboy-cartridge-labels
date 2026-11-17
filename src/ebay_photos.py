@@ -7,6 +7,7 @@ query list and takes in the search results, downloading each listing's first pho
     python3 src/ebay_photos.py ingest results.json queries.json
     python3 src/ebay_photos.py queries USA releases.json <pass> > queries.json   (given releases, a named pass)
     python3 src/ebay_photos.py ingest results.json queries.json <pass>
+    python3 src/ebay_photos.py store <listings.json> <store name>   (every listing of one seller's store)
 
 Photos go to downloaded-photos/ebay-search/ with a listing.json there; make move-downloads moves them to save-new-images-here/
 for make add-photos, when the user is ready to add them (the user, 2026-11-12: a running download must not land in an
@@ -195,9 +196,68 @@ def ingest(results_file, queries_file, pass_name=None):
         print(res["release"], len(res["items"]), "candidates,", kept, "kept,", small, "too small", flush=True)
 
 
+STORE_DROP = os.path.join(DOWNLOADED, "ebay-store")
+# Not a Game Boy cartridge, in a store's listing titles: manuals, other systems' games, cases and covers, books.
+# Lots and Japanese cartridges are kept (the user, 2026-11-17).
+NOT_CARTRIDGE = re.compile(r"\bmanual\b|famicom|\bcases?\b|dust cover|connector cover|strategy|\bbook\b|encyclopedia|"
+                           r"wonder ?swan", re.I)
+CIB = re.compile(r"\b(cib|complete|boxed|with box|w/ ?box|in box)\b", re.I)
+
+
+def store(listings_file, store_name):
+    """Every listing of one seller's store: listings [{item, title, image}], as the eBay tab collected them from the
+    store's search pages (the seller's own search, 240 a page). Each listing's first photo at eBay's largest size, those
+    not a Game Boy cartridge (NOT_CARTRIDGE) left out, complete-in-box ones last. A photo under MIN_SIDE is recorded as
+    too small (never downloaded again) and not kept."""
+    listings = [v for v in json.load(open(listings_file)) if not NOT_CARTRIDGE.search(v["title"])]
+    listings.sort(key=lambda v: bool(CIB.search(v["title"])))
+    sources = load(SOURCES)
+    have_items = {v["listing"].rsplit("/", 1)[1] for v in sources.values()}
+    listing_path = os.path.join(STORE_DROP, "listing.json")
+    today = datetime.date.today().isoformat()
+    done = kept = small = 0
+    for it in listings:
+        if it["item"] in have_items or not it.get("image"):
+            continue
+        name = f"ebay-{it['item']}.jpg"
+        os.makedirs(STORE_DROP, exist_ok=True)
+        path = os.path.join(STORE_DROP, name)
+        url = f"https://i.ebayimg.com/images/g/{it['image']}/s-l1600.jpg"
+        ok = subprocess.run(["curl", "-sSf", "-o", path, url]).returncode == 0
+        time.sleep(1)
+        if not ok:
+            if os.path.exists(path):
+                os.remove(path)
+            print("failed", it["item"], url, flush=True)
+            continue
+        wh = size(path)
+        record = {"store": store_name, "listing": f"https://www.ebay.com/itm/{it['item']}", "listing_title": it["title"],
+                  "image": url, "size": wh, "fetched": today}
+        if max(wh) < MIN_SIDE:
+            os.remove(path)
+            sources[name] = {**record, "too_small": True}
+            small += 1
+        else:
+            sources[name] = record
+            with locked(STORE_DROP):
+                listing = load(listing_path)
+                listing[name] = {"page_url": record["listing"], "image_url": url, "title_on_page": it["title"],
+                                 "store": store_name, "fetched": today}
+                save(listing_path, listing)
+            kept += 1
+        have_items.add(it["item"])
+        save(SOURCES, sources)
+        done += 1
+        if done % 50 == 0:
+            print(done, "done,", kept, "kept,", small, "too small", flush=True)
+    print(done, "done,", kept, "kept,", small, "too small", flush=True)
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "queries":  # queries <region> [<releases.json> <pass name>]
         releases = json.load(open(sys.argv[3])) if len(sys.argv) > 3 else None
         json.dump(queries(sys.argv[2], releases, sys.argv[4] if len(sys.argv) > 4 else None), sys.stdout, ensure_ascii=False)
     elif sys.argv[1] == "ingest":  # ingest <results> <queries> [<pass name>]
         ingest(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else None)
+    elif sys.argv[1] == "store":  # store <listings.json> <store name>
+        store(sys.argv[2], sys.argv[3])
