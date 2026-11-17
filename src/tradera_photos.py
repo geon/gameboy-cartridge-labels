@@ -5,6 +5,10 @@ page's embedded data has every listing's itemId, shortDescription (the title), i
 (https://img.tradera.net/{format}/...). Crawled 2026-11-17: Game Boy games (300201, 2314 listings, 29 pages) and
 Game Boy Advance (300306, 1923 listings, 25 pages), one page every 3 to 5 s, never blocked. The listings, one record
 each, are in downloaded-photos/tradera-listings.json.
+Sold listings too (the same pages with itemStatus=Sold, 2026-11-17): 2008 Game Boy, 1904 GBA, ended 2026-04-05 to
+2026-11-17 (as far back as Tradera shows), in downloaded-photos/tradera-sold-listings.json. Their photos still load at
+full size. The page's data is Next.js flight data: the strings of its self.__next_f.push([1, "..."]) calls, each to be
+decoded as JSON (a plain replace of \\" breaks on titles with quotes), then the "items":[{"itemId"... array.
 
 The format "images" is the stored photo at full size (as the link on the listing page; 1536x2048 seen); the page's own
 formats (250-square, 500-square, 750-square) are crops. Only each listing's first photo is downloaded, one a second.
