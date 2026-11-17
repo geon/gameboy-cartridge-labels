@@ -126,6 +126,11 @@
    "datetime": "2026-11-17T21:03:20+01:00",
    "why": "no label photo left"
   },
+  "AGB-A3VP-EUR-hugo": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "into": "AGB-B5AP-EUR-luke",
+   "why": "merged"
+  },
   "AGB-A3XE-joe": {
    "datetime": "2026-11-16T22:17:10+01:00",
    "into": "AGB-AKE-USA-joe",
@@ -1230,6 +1235,10 @@
   },
   "AGB-AN-dave": {
    "datetime": "2026-11-17T21:03:20+01:00",
+   "why": "no label photo left"
+  },
+  "AGB-AN2J-JPN-frank": {
+   "datetime": "2026-11-17T22:09:02+01:00",
    "why": "no label photo left"
   },
   "AGB-AN8E-USA-dora": {
@@ -2806,6 +2815,10 @@
    "datetime": "2026-11-17T21:03:20+01:00",
    "why": "no label photo left"
   },
+  "AGB-BLWE-USA-joe": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "why": "no label photo left"
+  },
   "AGB-BLWP-EUR-nora": {
    "datetime": "2026-11-17T21:03:20+01:00",
    "into": "AGB-BLWP-EUR-lucy",
@@ -3033,6 +3046,11 @@
    "datetime": "2026-11-17T21:03:20+01:00",
    "why": "no label photo left"
   },
+  "AGB-BPOP-UKV-luke": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "into": "AGB-B5AP-EUR-luke",
+   "why": "renamed"
+  },
   "AGB-BPPE-USA-karl": {
    "datetime": "2026-11-15T19:36:50+01:00",
    "why": "no label photo left"
@@ -3050,6 +3068,11 @@
   "AGB-BPPE-USA-tess": {
    "datetime": "2026-11-14T21:40:36+01:00",
    "why": "no label photo left"
+  },
+  "AGB-BPPE-USA-vera": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "into": "AGB-BZ4E-USA-vera",
+   "why": "renamed"
   },
   "AGB-BPRE-emma": {
    "datetime": "2026-11-17T21:03:20+01:00",
@@ -6196,6 +6219,14 @@
    "datetime": "2026-11-17T21:03:20+01:00",
    "why": "no label photo left"
   },
+  "DMG-AKBJ-JPN-ella": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "why": "no label photo left"
+  },
+  "DMG-AKBJ-paul": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "why": "no label photo left"
+  },
   "DMG-AKCJ-JPN-eve": {
    "datetime": "2026-11-17T21:03:20+01:00",
    "why": "no label photo left"
@@ -8268,6 +8299,11 @@
    "datetime": "2026-11-15T19:36:50+01:00",
    "into": "DMG-LY-USA-mary",
    "why": "merged"
+  },
+  "DMG-M8-FAH-mark": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "into": "AGB-BFFE-USA-mark",
+   "why": "renamed"
   },
   "DMG-M9J-mark": {
    "datetime": "2026-11-15T19:36:50+01:00",
@@ -10819,6 +10855,10 @@
    "datetime": "2026-11-14T16:08:09+01:00",
    "why": "no label photo left"
   },
+  "UNKNOWN-eve-max": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "why": "no label photo left"
+  },
   "UNKNOWN-eve-paul": {
    "datetime": "2026-11-14T16:08:09+01:00",
    "why": "no label photo left"
@@ -10893,6 +10933,10 @@
   },
   "UNKNOWN-frank-mark": {
    "datetime": "2026-11-17T21:03:20+01:00",
+   "why": "no label photo left"
+  },
+  "UNKNOWN-frank-max": {
+   "datetime": "2026-11-17T22:09:02+01:00",
    "why": "no label photo left"
   },
   "UNKNOWN-frank-mike": {
@@ -11496,6 +11540,10 @@
   },
   "UNKNOWN-jane-vera": {
    "datetime": "2026-11-17T21:03:20+01:00",
+   "why": "no label photo left"
+  },
+  "UNKNOWN-jane-zoe": {
+   "datetime": "2026-11-17T22:09:02+01:00",
    "why": "no label photo left"
   },
   "UNKNOWN-jeff": {
@@ -12213,6 +12261,11 @@
   "UNKNOWN-lucy-dan": {
    "datetime": "2026-11-13T17:46:37+01:00",
    "why": "no label photo left"
+  },
+  "UNKNOWN-lucy-eve": {
+   "datetime": "2026-11-17T22:09:02+01:00",
+   "into": "AGB-BF4E-USA-dave",
+   "why": "merged"
   },
   "UNKNOWN-lucy-frank": {
    "datetime": "2026-11-13T17:46:37+01:00",
@@ -13813,6 +13866,12 @@
     "bb4877434b3fc12204828add333dc6cd572c63f6@53,30"
    ]
   },
+  "AGB-A-rick": {
+   "created": "2026-11-17T22:09:02+01:00",
+   "keys": [
+    "b995734386781d28346d541afaebbeeae49470ac@53,66"
+   ]
+  },
   "AGB-A24J-JPN-paul": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
@@ -14210,12 +14269,6 @@
     "2991d4f46498ceba9f85c2eb623403aa90a7168c@67,56"
    ]
   },
-  "AGB-A3VP-EUR-hugo": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "adc161032d8753aca89b77ab80479b5d375d02cf@52,68"
-   ]
-  },
   "AGB-A3WJ-JPN-rick": {
    "created": "2026-11-16T21:13:04+01:00",
    "keys": [
@@ -14412,7 +14465,6 @@
   "AGB-A57J-JPN-mary": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
-    "4d61c9ab75d25297064e187928fa38a5868ca46f@30,82",
     "a952be4762aee68b7418f4017ec61b0e702c2024@31,47"
    ]
   },
@@ -17438,7 +17490,6 @@
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
     "0e8e31f9b24fc21d98fe2495ce5252f2eb4290d4@56,37",
-    "2b5908d4c6c2114ecfd51f0cf03e0210c693e8b3@36,69",
     "3b08de205984e625a91dbca16af1ed43b76465c6@49,35",
     "727f952c573a76c54af2d3007f307654ef36dfeb@54,39",
     "769101122b95e480ade11080865a1e9ee3d92d68@51,37",
@@ -19451,7 +19502,6 @@
     "0a421d44582d09aa4552cf11312e84eba73c2de3@39,68",
     "34342bd378794c8604c1a0c350c35342904054b5@47,69",
     "38d78d991b7a8ffbb36101764274a5b4d4c49d27@49,63",
-    "59af3615e7d86c70ceb58649e4b985ac6a461135@55,27",
     "6ed564b8b02801925d05788314ac9698200f733f@39,51",
     "7270c59fe53707e3726da9e93e21297abbe424a6@48,60",
     "76b2e0adff8355dacf86f3519623d8c3fa4d3696@55,47",
@@ -19647,12 +19697,6 @@
    "keys": [
     "1af0edf5d3a5a6a7442ffb4a73b521ed9bcd098b@66,70",
     "b81796fd60f9c44c851adb81d218bf4e69f1849a@66,73"
-   ]
-  },
-  "AGB-AN2J-JPN-frank": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "def7baf41245a4db52bd64fca3ec37364de897f2@40,75"
    ]
   },
   "AGB-AN3E-ivan": {
@@ -21159,7 +21203,6 @@
   "AGB-ASSP-UKV-jane": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
-    "4435bae3dbc3d232bc0a1ace368993fe60e26810@54,87",
     "5a0f1cb4e7567aa08747b7c4921f0a721bf504b0@48,59",
     "9494632069c695c0e80274c438e861166942eb3e@68,60"
    ]
@@ -22997,6 +23040,13 @@
     "f146ec7073210ce89fabcff23fede23e7c28ffaf@49,60"
    ]
   },
+  "AGB-AZPE-USA-tina": {
+   "created": "2026-11-17T22:09:02+01:00",
+   "keys": [
+    "ac1494f314535dce8eab52990d0a1bd8654d0dd3@58,56",
+    "bf6a5e96dd416c2fd2c9808cdea61b01c5141992@72,69"
+   ]
+  },
   "AGB-AZPP-EUF-tina": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
@@ -24000,6 +24050,14 @@
    "keys": [
     "c8afb0a0af0c498943fe5b2c0db18c1d32a878ae@38,59"
    ]
+  },
+  "AGB-B5AP-EUR-luke": {
+   "created": "2026-11-16T22:17:10+01:00",
+   "keys": [
+    "32d0056e038ba47881e06bed62775f82b309d466@49,24",
+    "adc161032d8753aca89b77ab80479b5d375d02cf@52,68"
+   ],
+   "renamed_from": "AGB-BPOP-UKV-luke"
   },
   "AGB-B5NE-USA-sara": {
    "created": "2026-11-13T13:41:17+01:00",
@@ -25895,6 +25953,7 @@
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
     "29b3e4b34bfe4731ec14ae5303144ad9a34ae680@65,59",
+    "4413d4352e74b6934786a7fed4b764a6db593ef4@36,62",
     "52fe9629729525d618d2973c1d111f059c9a8003@68,60",
     "942d537da616d2ba94b12870882d3af4f4b307d6@64,88",
     "95f05e0188da32a9e34bf87db0d92975e3898638@51,70",
@@ -26036,6 +26095,13 @@
     "b30bbd2247c3df34504fe20edc5005c581b512c6@47,73",
     "e9cec0c4d91fcded8b75503818a67f262ad1032b@62,63"
    ]
+  },
+  "AGB-BFFE-USA-mark": {
+   "created": "2026-11-16T22:17:10+01:00",
+   "keys": [
+    "d92eba0b80a3f64294fe9abc2b947e14dee40388@18,41"
+   ],
+   "renamed_from": "DMG-M8-FAH-mark"
   },
   "AGB-BFFJ-JPN-dora": {
    "created": "2026-11-13T13:41:17+01:00",
@@ -27916,12 +27982,6 @@
     "559c3e444f62b2db819aeed242798261a7c0737d@66,41"
    ]
   },
-  "AGB-BLWE-USA-joe": {
-   "created": "2026-11-17T21:03:20+01:00",
-   "keys": [
-    "0a07c1ea7a5100a45dc8ce67cbe8a9e1cd8873cd@61,54"
-   ]
-  },
   "AGB-BLWJ-JPN-meg": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
@@ -29026,12 +29086,6 @@
     "484b15eeca6818cca7d695169b51baf58d591cd7@38,61"
    ]
   },
-  "AGB-BPOP-UKV-luke": {
-   "created": "2026-11-16T22:17:10+01:00",
-   "keys": [
-    "32d0056e038ba47881e06bed62775f82b309d466@49,24"
-   ]
-  },
   "AGB-BPOP-luke": {
    "created": "2026-11-17T18:36:05+01:00",
    "keys": [
@@ -29049,12 +29103,6 @@
     "c20adc772efab282666df3e765b9f2efc3c5e873@69,63",
     "f7df1248d8ba0fb330572dac979d93143b176b25@52,57",
     "fe2a856460a5a71ffedb833a87e90019bf4a9ba3@67,78"
-   ]
-  },
-  "AGB-BPPE-USA-vera": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "ca0edfb0c3b314a0d6b5f2ae9dee3b2973311c05@75,67"
    ]
   },
   "AGB-BPPJ-JPN-meg": {
@@ -30744,6 +30792,12 @@
     "e87e33a92ac3d05ecafa2f3fbf3d28d1c8eb55b5@36,39"
    ]
   },
+  "AGB-BW4P-EUR-meg": {
+   "created": "2026-11-17T22:09:02+01:00",
+   "keys": [
+    "99c6ebf5917db091c3733f1fdf60c98ba5be6a2a@51,64"
+   ]
+  },
   "AGB-BW5E-USA-greg": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
@@ -31320,6 +31374,13 @@
     "fea00bc4e0061a86266a9fdf6ecae8f8e771f5b5@73,63"
    ]
   },
+  "AGB-BZ4E-USA-vera": {
+   "created": "2026-11-17T18:36:05+01:00",
+   "keys": [
+    "ca0edfb0c3b314a0d6b5f2ae9dee3b2973311c05@75,67"
+   ],
+   "renamed_from": "AGB-BPPE-USA-vera"
+  },
   "AGB-BZ4E-fred": {
    "created": "2026-11-17T18:36:05+01:00",
    "keys": [
@@ -31501,7 +31562,6 @@
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
     "00f22f89c1c3293263c70c5c56863d16e5f22ae8@49,37",
-    "07964af749432cb2a4d536c71464ab336dbe516a@43,76",
     "0e4e89853f41100f6b1f96d37316580d32fd5097@53,41",
     "2496ec71ce512fbb4c909d167e8679e6ab710864@53,40",
     "5f30a7aa13d12546ccd8f5f05d4b805e66e3aaa7@54,48",
@@ -42269,18 +42329,6 @@
     "d97068bfaa536ff28035353bb685cd268292872a@40,29"
    ]
   },
-  "DMG-AKBJ-JPN-ella": {
-   "created": "2026-11-17T21:03:20+01:00",
-   "keys": [
-    "e1c9b9ca97a31a17cd48b88340c8141d3262e9f3@21,59"
-   ]
-  },
-  "DMG-AKBJ-paul": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "e1c9b9ca97a31a17cd48b88340c8141d3262e9f3@29,86"
-   ]
-  },
   "DMG-AKBP-AUS-tess": {
    "created": "2026-11-14T10:33:38+01:00",
    "keys": [
@@ -52728,12 +52776,6 @@
     "bc9bbf361537372aec4721276380e98ba55fd51b@71,70"
    ]
   },
-  "DMG-M8-FAH-mark": {
-   "created": "2026-11-16T22:17:10+01:00",
-   "keys": [
-    "d92eba0b80a3f64294fe9abc2b947e14dee40388@18,41"
-   ]
-  },
   "DMG-M8-NOE-alex": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
@@ -54022,7 +54064,6 @@
   "DMG-OSJ-lucy": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
-    "325f3dc4f5486aaaedd2fa9e98d7144683ec35dd@77,67",
     "9bc92b0896d15567878bc431be765a7a275291d5@66,36",
     "b3c86bdc1b11124f3d5eb2da9736402859570ff0@63,35",
     "b5d846e5f51f3726edef1b190e223f623d0f9543@67,34",
@@ -54493,7 +54534,6 @@
   "DMG-PUJ-lee": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
-    "040a6696bf101f6f2c77c5b9d2d6ef6ff4f6e633@79,56",
     "3b7bbd1ca34be188ae93e9b473101ca83d3a1f9b@70,35",
     "876a2217b24826d2058832893e6fea67f2d8af08@65,40",
     "f7c72044630781520022c1fc52574806b142fdf9@65,34",
@@ -58887,6 +58927,12 @@
     "c3f2939dc15728ba7a94f9a606da2be110948dff@57,45"
    ]
   },
+  "UNKNOWN-dan-lucy": {
+   "created": "2026-11-17T22:09:02+01:00",
+   "keys": [
+    "260674e1319403908cc2ec609acc7fbcc3b95a33@56,65"
+   ]
+  },
   "UNKNOWN-dan-nick": {
    "created": "2026-11-17T18:36:05+01:00",
    "keys": [
@@ -58971,22 +59017,10 @@
     "59d576a09de3bc60e09f402ab62c9f930f8a72e8@51,54"
    ]
   },
-  "UNKNOWN-eve-max": {
-   "created": "2026-11-17T21:03:20+01:00",
-   "keys": [
-    "a44168901ec1e7765b6b06685a75bc1877fe3d09@66,27"
-   ]
-  },
   "UNKNOWN-frank": {
    "created": "2026-11-13T13:41:17+01:00",
    "keys": [
     "3d7c5ee8fbe78442513b39233146dcdb6493041b@34,49"
-   ]
-  },
-  "UNKNOWN-frank-max": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "83e429a3046b10078eb9d82acbfd3e6bc087adb4@17,23"
    ]
   },
   "UNKNOWN-frank-meg": {
@@ -59054,12 +59088,6 @@
    "created": "2026-11-17T18:36:05+01:00",
    "keys": [
     "a41947aa05c8aebc9b675f125ab5abc139ef40d1@46,48"
-   ]
-  },
-  "UNKNOWN-jane-zoe": {
-   "created": "2026-11-17T18:36:05+01:00",
-   "keys": [
-    "a44168901ec1e7765b6b06685a75bc1877fe3d09@33,42"
    ]
   },
   "UNKNOWN-jeff-lee": {
@@ -59189,13 +59217,6 @@
    "keys": [
     "255ffb1887a903211f4c7ab388ba58443959e28e@54,47"
    ]
-  },
-  "UNKNOWN-lucy-eve": {
-   "created": "2026-11-17T21:03:20+01:00",
-   "keys": [
-    "4413d4352e74b6934786a7fed4b764a6db593ef4@36,62"
-   ],
-   "split_from": "AGB-BF4E-USA-dave"
   },
   "UNKNOWN-lucy-john": {
    "created": "2026-11-17T18:36:05+01:00",
