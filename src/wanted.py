@@ -10,7 +10,8 @@
 #   more likely one more photo makes a good image, the higher.
 # wanted.json per print: title, system, serials (its own as read; else the release's in its region group), the photos
 # it has (their sources), the numbers ranked by, and search links (eBay by title, Google Images by serial).
-# wanted.html: plain, for the people helping: title, system, serials, search links, in rank order.
+# wanted.html: plain, for the people helping: a section per system (Game Boy, Color, Advance), linked from the top
+# (the user, 2026-11-17); in each, title, serials, search links, in rank order.
 import html, json, os, re, sys, unicodedata
 import urllib.parse
 import numpy as np
@@ -100,11 +101,18 @@ def search_links(release, serial_list, group):
 def page(out_dir, wanted):
     """wanted.html: the wanted prints, best first, kept plain for the people helping (the user, 2026-11-16: no talk of
     agreement or of the photos already there)."""
-    rows = []
-    for e in wanted:
-        links = " · ".join(f'<a href="{html.escape(l["url"])}">{html.escape(l["label"])}</a>' for l in e["search"])
-        rows.append(f'<tr><td><b>{html.escape(e["title"])}</b><br><span class="dim">{SYSTEMS[e["system"]]}</span></td>'
-                    f'<td>{"<br>".join(html.escape(s) for s in e["serials"])}</td><td>{links}</td></tr>')
+    toc, sections = [], []
+    for system, name in SYSTEMS.items():
+        rows = []
+        for e in wanted:
+            if e["system"] != system:
+                continue
+            links = " · ".join(f'<a href="{html.escape(l["url"])}">{html.escape(l["label"])}</a>' for l in e["search"])
+            rows.append(f'<tr><td><b>{html.escape(e["title"])}</b></td>'
+                        f'<td>{"<br>".join(html.escape(s) for s in e["serials"])}</td><td>{links}</td></tr>')
+        if rows:
+            toc.append(f'<a href="#{system}">{name}</a> ({len(rows)})')
+            sections.append(f'<h2 id="{system}">{name}</h2>\n<table><tr><th>Game</th><th>Serial</th><th>Search</th></tr>{"".join(rows)}</table>')
     with open(os.path.join(out_dir, "wanted.html"), "w") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wanted photos</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} a{{color:#9cf}} .dim{{color:#bbb;font-size:12px}}
@@ -113,4 +121,5 @@ table{{border-collapse:collapse}} td,th{{padding:4px 8px;border-bottom:1px solid
 <h1>Wanted photos</h1>
 <p>Photos of these cartridges help the most, top of the list first. Sharp photos showing the whole label are best.</p>
 <p>If you take or find some photos, please upload them here: <a href="https://www.dropbox.com/request/9pv35ozb0iieahq3z3uf">https://www.dropbox.com/request/9pv35ozb0iieahq3z3uf</a>
-<table><tr><th>Game</th><th>Serial</th><th>Search</th></tr>{"".join(rows)}</table>""")
+<p>{" · ".join(toc)}</p>
+{chr(10).join(sections)}""")
