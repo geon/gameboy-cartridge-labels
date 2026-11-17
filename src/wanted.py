@@ -11,7 +11,8 @@
 # wanted.json per print: title, system, serials (its own as read; else the release's in its region group), the photos
 # it has (their sources), the numbers ranked by, and search links (eBay by title, Google Images by serial).
 # wanted.html: plain, for the people helping: a section per system (Game Boy, Color, Advance), linked from the top
-# (the user, 2026-11-17); in each, title, serials, search links, in rank order.
+# (the user, 2026-11-17); in each, one row per game and region group (the user, 2026-11-17: a game's prints of
+# one region group were rows that looked alike), at its best print's rank: title, serials, search links (games()).
 import html, json, os, re, sys, unicodedata
 import urllib.parse
 import numpy as np
@@ -98,13 +99,31 @@ def search_links(release, serial_list, group):
     return [{"label": l, "url": u} for l, u in links]
 
 
+def games(wanted):
+    """The wanted prints as rows, one per game and region group, at its best print's place: title (the best print's),
+    system, region, serials (all its prints', best first), search links, prints."""
+    rows = {}
+    for e in wanted:
+        row = rows.setdefault((e["system"], game({"system": e["system"], "title": e["title"]})[1], e["region"]),
+                              {"title": e["title"], "system": e["system"], "region": e["region"], "serials": [],
+                               "search": [], "prints": []})
+        row["prints"].append(e)
+        for s in e["serials"]:
+            if s not in row["serials"]:
+                row["serials"].append(s)
+        for l in e["search"]:
+            if l not in row["search"]:
+                row["search"].append(l)
+    return list(rows.values())
+
+
 def page(out_dir, wanted):
     """wanted.html: the wanted prints, best first, kept plain for the people helping (the user, 2026-11-16: no talk of
     agreement or of the photos already there)."""
     toc, sections = [], []
     for system, name in SYSTEMS.items():
         rows = []
-        for e in wanted:
+        for e in games(wanted):
             if e["system"] != system:
                 continue
             links = " · ".join(f'<a href="{html.escape(l["url"])}">{html.escape(l["label"])}</a>' for l in e["search"])

@@ -13,6 +13,8 @@ Writes a Markdown list of the cartridges to ask photos of, one per line, those t
 first, then by wanted.html's rank; a game with several wanted prints (different print runs) is one line.
 """
 import collections, json, os, re, sqlite3, sys, tempfile, unicodedata, zipfile
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import wanted as wanted_module
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WANTED = os.path.join(ROOT, "generated", "publish", "wanted.json")
@@ -46,7 +48,7 @@ def owned(ged):
 
 
 def matches(rows, wanted):
-    rank = {e["print"]: i + 1 for i, e in enumerate(wanted)}
+    rank = {p["print"]: i + 1 for i, row in enumerate(wanted_module.games(wanted)) for p in row["prints"]}
     by_game = collections.defaultdict(list)
     for e in wanted:
         by_game[(e["system"], norm(e["title"]))].append(e)
