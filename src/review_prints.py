@@ -19,8 +19,8 @@
 # holding no other label photo (find's) is deleted from photos/ (photos.delete: the file and its record in
 # photo-sources.json); else the label photo's area is marked in find's NOT_LABELS as fit-by-hand's "Not a label" does
 # (solve's cut and find's outline, in the photo's pixels; "why": "deleted in review-prints"), and the next make find
-# makes no label photo there. Not a frozen print's. The label photo stays on the page, marked deleted; the next make all
-# drops it.
+# makes no label photo there. Not a frozen print's. A deleted label photo leaves the page at once (and stays gone on
+# reload), as does a print left with none (the user, 2026-11-17).
 # Each print's serial typed in by hand ("Set serial", the user 2026-11-14): every label photo of the print gets it in
 # serial-corrections.json (read_serials.CORRECTIONS, which make read-serials applies last; the page shows it at once);
 # not a frozen print's. Joining leaves a hole of the same size where each joined print sat, so the page doesn't move
@@ -105,23 +105,26 @@ class Tool:
         self.decisions = print_corrections.load()["decisions"]
         mapped = self.mapper(self.decisions)
         groups, self.applied = print_corrections.apply([p["keys"] for p in self.auto], self.decisions, mapped, self.frozen_of)
-        out = []
-        for g in groups:
-            g = sorted(g)
+        out, self.whole = [], {}
+        for whole in groups:
+            p = self.by_keys.get(frozenset(whole))
+            g = sorted(k for k in whole if k.split("@")[0] in self.present and k not in marked)  # deleted ones gone
+            if not g:
+                continue
+            self.whole[frozenset(g)] = sorted(whole)  # decisions are recorded with the deleted ones too
             read = lambda k, f: (self.serials.get(k) or {}).get(f)
             ser = Counter(read(k, "serial") for k in g if read(k, "serial"))
             rel = Counter(read(k, "release") for k in g if read(k, "release"))
             serial = ser.most_common(1)[0][0] if ser else None
-            p = self.by_keys.get(frozenset(g))
             frozen_ids = {self.frozen_of[k] for k in g if k in self.frozen_of}
             restored = p and os.path.exists(os.path.join(GEN, "restore", straighten.file_name(p["id"])))
             image = p and (os.path.exists(frozen.image_path(p["id"])) if p["id"] in entries else restored)
             disagree = sum(1 for k in g if read(k, "serial") and read(k, "serial") != serial)
             tiles = max((self.tiles.get((a, b), 0) for i, a in enumerate(g) for b in g[i + 1:]), default=0)
             out.append({"keys": [{"key": k, "serial": read(k, "serial"), "release": read(k, "release"),
-                                  "by_hand": k in hand, "deleted": k.split("@")[0] not in self.present or k in marked} for k in g],
+                                  "by_hand": k in hand} for k in g],
                         "id": p["id"] if p else None,
-                        "from": sorted({self.id_of_key[k] for k in g if k in self.id_of_key}) if not p else [],
+                        "from": sorted({self.id_of_key[k] for k in whole if k in self.id_of_key}) if not p else [],
                         "serial": serial, "release": rel.most_common(1)[0][0] if rel else None,
                         "shape": self.solved[g[0]]["shape"] if g[0] in self.solved else None,
                         "families": len({self.solved[k]["family"] for k in g if k in self.solved}),
@@ -140,7 +143,7 @@ class Tool:
         for s, idx in by_serial.items():
             if len(idx) < 2:
                 continue
-            now = {frozenset(k["key"] for k in out[i]["keys"]) for i in idx}
+            now = {frozenset(self.whole[frozenset(k["key"] for k in out[i]["keys"])]) for i in idx}
             same.append({"serial": s, "prints": idx, "looked_at": now in apart.get(s, [])})
         same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
         worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
@@ -161,7 +164,7 @@ class Tool:
                 return "Tick two or more prints (the page may be out of date: reload)."
             if sum(1 for g in gs if g["frozen"]) > 1:
                 return "Two frozen prints can't be joined: unfreeze one first."
-            d = {"kind": "join", "prints": decision["prints"]}
+            d = {"kind": "join", "prints": [self.whole[frozenset(g)] for g in decision["prints"]]}
         elif kind == "split":
             keys, rest = decision.get("keys", []), decision.get("rest", [])
             g = self.group_of(keys + rest)
@@ -169,11 +172,11 @@ class Tool:
                 return "Tick some of a print's label photos, not all (the page may be out of date: reload)."
             if g["frozen"]:
                 return "A frozen print can't be split: unfreeze it first."
-            d = {"kind": "split", "keys": keys, "rest": rest}
+            d = {"kind": "split", "keys": keys, "rest": sorted(set(self.whole[frozenset(keys + rest)]) - set(keys))}
         elif kind == "apart":
             if not decision.get("serial") or any(self.group_of(g) is None for g in decision.get("prints", [])):
                 return "The page may be out of date: reload."
-            d = {"kind": "apart", "serial": decision["serial"], "prints": decision["prints"]}
+            d = {"kind": "apart", "serial": decision["serial"], "prints": [self.whole[frozenset(g)] for g in decision["prints"]]}
         else:
             return "Unknown decision."
         data = print_corrections.load()
@@ -196,7 +199,9 @@ class Tool:
                 return "Already frozen."
             if not g["id"] or not g["restored"]:
                 return "Only a print with its image from make restore can be frozen (after make prints restore)."
-            p = self.by_keys[frozenset(keys)]
+            p = self.by_keys.get(frozenset(keys))
+            if p is None:
+                return "A label photo of this print was deleted: freeze it after the next make all."
             frozen.freeze(p["id"], p, self.solved, self.outlines, os.path.join(GEN, "restore", straighten.file_name(p["id"])[:-5]))
             print(f"frozen {p['id']}", flush=True)
         self.compute()
@@ -281,9 +286,7 @@ button:disabled{opacity:.4;cursor:default}
 .lp img{width:160px;display:block}
 .lp.ticked img{outline:3px solid #fa0}
 .lp .odd{color:#f96}
-.lp.deleted img{opacity:.25}
 .lp .del{font-size:11px;padding:1px 6px;margin-top:2px}
-.lp .gone{color:#f66}
 .frozen{color:#6bf}
 .note{color:#aaa;font-size:12px}
 #bar{position:fixed;bottom:0;left:0;right:0;background:#1d1d1d;padding:10px 16px;display:flex;gap:10px;align-items:center;z-index:2}
@@ -357,11 +360,10 @@ function printCard(p) {
   for (const k of p.keys) {
     const box = el("input", {type: "checkbox"});
     box.checked = lpTicks.has(k.key);
-    const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "") + (k.deleted ? " deleted" : "")},
+    const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "")},
       el("label", {}, el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(k.key)}),
         box, el("span", {class: (k.serial && k.serial !== p.serial) ? "odd" : ""}, " " + (k.serial || k.release || "no serial read"))));
-    if (k.deleted) lp.append(el("div", {class: "gone"}, "deleted"));
-    else if (!p.frozen.length) lp.append(el("div", {}, el("button", {class: "del", onclick: () => post("/delete", {key: k.key})}, "Delete label photo")));
+    if (!p.frozen.length) lp.append(el("div", {}, el("button", {class: "del", onclick: () => post("/delete", {key: k.key})}, "Delete label photo")));
     box.onchange = () => { if (box.checked) lpTicks.add(k.key); else lpTicks.delete(k.key); lp.classList.toggle("ticked", box.checked); split.disabled = !canSplit(); };
     lps.append(lp);
   }
