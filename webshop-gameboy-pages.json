@@ -42,7 +42,8 @@
    "GBA": "https://www.player2gamestore.nl/c-3306908/gameboy-advance-games/"
   },
   "found_by": "browser",
-  "note": "checked in the browser: listings (about 50, 50, 80 products on the first page)"
+  "note": "checked in the browser: listings (about 50, 50, 80 products on the first page)",
+  "not_crawled": "MyOnlineStore: photos at most 800x530 (its 'full' size too), under the 1000 px minimum (2026-11-18)"
  },
  {
   "name": "Press Start Games",
@@ -72,7 +73,8 @@
    ]
   },
   "found_by": "browser",
-  "note": "the games pages are hubs; listings per subcategory: cart only (European, USA, Japan), then boxed; GBA boxed pages not identified"
+  "note": "the games pages are hubs; listings per subcategory: cart only (European, USA, Japan), then boxed; GBA boxed pages not identified",
+  "not_crawled": "MyOnlineStore (as Player 2): photos likely at most 800 px (2026-11-18)"
  },
  {
   "name": "RetroSoulsBorne",
@@ -107,7 +109,8 @@
    ]
   },
   "note": "the games pages are hubs; listings per subcategory: cartridge PAL, cartridge USA, then boxed PAL, boxed USA (GBA: cartridges only found)",
-  "found_by": "the user, then the browser"
+  "found_by": "the user, then the browser",
+  "not_crawled": "MyOnlineStore (as Player 2): photos likely at most 800 px (2026-11-18)"
  },
  {
   "name": "Retero",
@@ -157,7 +160,8 @@
    "GBA": "https://gameshopenter.com/sv/gba-spel"
   },
   "found_by": "browser",
-  "note": "checked in the browser: listings"
+  "note": "checked in the browser: listings",
+  "not_crawled": "photos 800x800, under the 1000 px minimum (2026-11-18)"
  },
  {
   "name": "Gameland Groningen",
@@ -208,7 +212,8 @@
    "GBC": "https://gameshop-twente.nl/nintendo/gbc/games",
    "GB": "https://gameshop-twente.nl/nintendo/gameboy/games"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "not_crawled": "photos named by EAN barcode (likely stock pictures) (2026-11-18)"
  },
  {
   "name": "Replay Games",
@@ -293,7 +298,8 @@
    "GBA": "https://www.nedgame.nl/zoek/systeem:gameboy-advance/type:games/"
   },
   "note": "per-system search filtered to games (187, 97, 232 items on 2026-11-18)",
-  "found_by": "browser"
+  "found_by": "browser",
+  "not_crawled": "photos named .cover.jpg (likely cover art) and refused to curl (403) (2026-11-18)"
  },
  {
   "name": "Timmy's Vintage Finds",
@@ -369,7 +375,8 @@
    "GBA": "https://www.retrogameland.be/c-5163215/game-boy-advance-games/"
   },
   "found_by": "the user",
-  "note": "checked in the browser: listings (15 different products on each first page)"
+  "note": "checked in the browser: listings (15 different products on each first page)",
+  "not_crawled": "MyOnlineStore (as Player 2): photos likely at most 800 px (2026-11-18)"
  },
  {
   "name": "Konsolenkost",
@@ -799,7 +806,8 @@
    "GBA": "https://www.estarland.com/preowned/platforms/GameBoyAdv/33"
   },
   "found_by": "browser",
-  "note": "checked in the browser: listings (Game Boy: 261 items); prices filled in by script"
+  "note": "checked in the browser: listings (Game Boy: 261 items); prices filled in by script",
+  "not_crawled": "photos named by UPC barcode (likely stock pictures) (2026-11-18)"
  },
  {
   "name": "DK Oldies",
@@ -833,7 +841,8 @@
    "GBA": "https://www.goatstore.com/store/#!/c/263/nintendo/game-boy-advance/"
   },
   "note": "categories are #! links (the page loads them by script); GBA has no games subcategory",
-  "found_by": "browser"
+  "found_by": "browser",
+  "not_crawled": "product grid didn't load in the browser tab (2026-11-18)"
  },
  {
   "name": "Luna Video Games",
