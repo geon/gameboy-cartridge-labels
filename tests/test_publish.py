@@ -22,3 +22,15 @@ def test_sources_by_sha1(tmp_path):
 def test_poor_fits_from_solve():
     solved = {"a@1,1": {"fallback": "a poor fit: kept"}, "b@1,1": {"fallback": None}, "c@1,1": {}}
     assert publish.poor_fits(solved) == {"a@1,1"}
+
+
+def test_the_plain_page_links_to_the_browse_page_and_the_browse_page_reads_the_published_files():
+    browse = open(os.path.join(os.path.dirname(publish.__file__), "browse.html"), encoding="utf-8").read()
+    assert 'fetch' in browse and '"index.json"' in browse and '"wanted.json"' in browse
+    assert "https://github.com/geon/gameboy-cartridge-labels" in browse
+    assert "localhost" not in browse and "afsenovilla" not in browse
+
+
+def test_index_html_links_to_browse_html(tmp_path):
+    publish.page(str(tmp_path), {"prints": {}, "label_photos": {}}, 3)
+    assert 'href="browse.html"' in (tmp_path / "index.html").read_text()

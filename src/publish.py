@@ -9,6 +9,9 @@
 #     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (print-ids.json); keys hold within a run only.
 #   missing.json, unknown-serials.json (read-serials), few-photos.json (prints): the lists, copied as they are.
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
+#   browse.html: a page for browsing the images (src/browse.html, copied as it is): the wanted prints first, then the
+#     restored labels, with search, system, region and A-Z filters, pages, and a button to report a bad label. It reads
+#     index.json, wanted.json and prints/ beside it.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
 #     with its label photos' sources.
 # Prints of a single label photo (poor fits counted) are left out, with their label photo (the user, 2026-11-15).
@@ -115,6 +118,7 @@ def main():
         if os.path.exists(os.path.join(gen, step, f)):
             shutil.copyfile(os.path.join(gen, step, f), os.path.join(out_dir, f))
     steps.write_json(os.path.join(out_dir, "index.json"), index)
+    shutil.copyfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "browse.html"), os.path.join(out_dir, "browse.html"))
     differences = {}
     for name, tiles in prints_step.load_pairs(os.path.join(gen, "prints", "pairs.npz"), prints_step.comparison_version()).items():
         a, b = name.split("|")[:2]
@@ -164,6 +168,7 @@ def page(out_dir, index, wanted_count):
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax({MIN_COLUMN}px,1fr));gap:16px;align-items:start}}
 figure{{margin:0;min-width:0}} figure img{{display:block;width:100%;height:auto;margin:0 auto}} figcaption{{font-size:12px;margin:4px 0}}
 .src{{font-size:11px;color:#bbb;margin-top:2px}} .poor{{color:#fa0}} a{{color:#9cf}} h2{{margin-top:32px}}</style>
+<p><a href="browse.html">Browse and search the images</a></p>
 <p><a href="wanted.html">Wanted photos</a>: help find photos of {wanted_count} cartridges</p>
 <ul>{"".join(links)}</ul>
 {"".join(sections)}""")
