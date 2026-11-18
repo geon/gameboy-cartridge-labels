@@ -176,7 +176,6 @@
   "region": "Netherlands",
   "shop": "https://www.game-outlet.nl/",
   "pages": {
-   "GBC": "https://www.game-outlet.nl/gameboy-color-roswell-conspiracies.html",
    "GB": "https://www.game-outlet.nl/nintendo-retro/gameboy/gameboy-games/"
   },
   "found_by": "front page"
@@ -212,7 +211,8 @@
    "GBC": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gbc-games",
    "GBA": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gba-games"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "note": "pages answer HTTP 404 to curl (from the sitemap); not confirmed"
  },
  {
   "name": "BMM Games 'n Vinyl",
@@ -287,10 +287,9 @@
   "pages": {
    "GBA": "https://www.timmysvintagefinds.nl/nintendo/gameboy/gameboy-advance",
    "GBC": "https://www.timmysvintagefinds.nl/nintendo/gameboy/gameboy-color",
-   "GB": "https://www.timmysvintagefinds.nl/nintendo/gameboy"
+   "GB": "https://www.timmysvintagefinds.nl/nintendo/gameboy/gameboy-classic"
   },
-  "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "found_by": "front page"
  },
  {
   "name": "Retro Nintendo Kopen",
@@ -339,12 +338,11 @@
   "region": "Belgium",
   "shop": "https://retrogamecollector.be/",
   "pages": {
-   "GBA": "https://retrogamecollector.be/product-category/nintendo/gameboy-advance/",
-   "GBC": "https://retrogamecollector.be/product-category/nintendo/gameboy-color/",
-   "GB": "https://retrogamecollector.be/product-category/nintendo/gameboy-classic/"
+   "GB": "https://retrogamecollector.be/product-category/nintendo/gameboy-classic/gameboy-classic-games/",
+   "GBC": "https://retrogamecollector.be/product-category/nintendo/gameboy-color/gameboy-color-games/",
+   "GBA": "https://retrogamecollector.be/product-category/nintendo/gameboy-advance/gameboy-advance-games/"
   },
-  "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "found_by": "front page"
  },
  {
   "name": "Retro Gameland",
@@ -362,9 +360,9 @@
   "region": "Germany",
   "shop": "https://www.konsolenkost.de/",
   "pages": {
-   "GBA": "https://www.konsolenkost.de/gameboy-advance/",
-   "GBC": "https://www.konsolenkost.de/gameboy-color/",
-   "GB": "https://www.konsolenkost.de/suche/?refinementList%5Btype%5D%5B0%5D=Spiele&refinementList%5Bavailability%5D%5B0%5D=Sofort%20lieferbar&query=gameboy%20spiele%20jap"
+   "GB": "https://www.konsolenkost.de/gameboy-classic/spiele/",
+   "GBC": "https://www.konsolenkost.de/gameboy-color/spiele/",
+   "GBA": "https://www.konsolenkost.de/gameboy-advance/spiele/"
   },
   "found_by": "front page"
  },
@@ -384,12 +382,26 @@
   "region": "Germany",
   "shop": "https://www.retrogamecollectorheaven.de/",
   "pages": {
-   "GBA": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_7",
-   "GBC": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6",
-   "GB": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4"
+   "GB": [
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4_18",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4_250_17",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4_250_251",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4_16"
+   ],
+   "GBC": [
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6_25",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6_248_24",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6_248_249",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6_23"
+   ],
+   "GBA": [
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_7_22",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_7_21",
+    "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_7_20"
+   ]
   },
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "per system: Spiele ohne OVP (loose), Spiele mit OVP (EUR/US, JPN), Neue Spiele"
  },
  {
   "name": "Netgames",
@@ -480,11 +492,10 @@
   "shop": "https://www.playnplay.net/",
   "pages": {
    "GBA": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-advance/",
-   "GBC": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-color/",
-   "GB": "https://www.playnplay.net/mudanca-de-pilha-cartuchos-game-boy"
+   "GBC": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-color/"
   },
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "no Game Boy (classic) games page found; the earlier one was a battery-change service"
  },
  {
   "name": "Sore Thumbs Retro Games",
@@ -516,11 +527,10 @@
   "region": "United Kingdom",
   "shop": "https://consolepassion.co.uk/",
   "pages": {
-   "GB": "https://consolepassion.co.uk/products/nintendo-gameboy",
-   "GBC": "https://consolepassion.co.uk/products/nintendo-gameboy-colour",
-   "GBA": "https://consolepassion.co.uk/products/nintendo-gameboy-advance"
+   "GB": "https://consolepassion.co.uk/products/nintendo-gameboy/games",
+   "GBC": "https://consolepassion.co.uk/products/nintendo-gameboy-colour/games",
+   "GBA": "https://consolepassion.co.uk/products/nintendo-gameboy-advance/games"
   },
-  "note": "/products/ pages: may be single items, not lists",
   "found_by": "browser"
  },
  {
@@ -528,7 +538,11 @@
   "region": "Switserland",
   "shop": "https://retrogameworld.ch/",
   "pages": {
-   "GBA": "https://retrogameworld.ch/produkt-kategorie/nintendo/gba/spiele-ovp-advance/",
+   "GBA": [
+    "https://retrogameworld.ch/produkt-kategorie/nintendo/gba/module-advance-nintendo/",
+    "https://retrogameworld.ch/produkt-kategorie/nintendo/gba/import-usa-japan-advance/",
+    "https://retrogameworld.ch/produkt-kategorie/nintendo/gba/spiele-ovp-advance/"
+   ],
    "GBC": "https://retrogameworld.ch/produkt-kategorie/nintendo/gameboy/module-color/",
    "GB": "https://retrogameworld.ch/produkt-kategorie/nintendo/gameboy/module/"
   },
@@ -773,11 +787,11 @@
   "region": "United States",
   "shop": "https://www.dkoldies.com/",
   "pages": {
-   "GBA": "https://www.dkoldies.com/game-boy-advance/",
-   "GB": "https://www.dkoldies.com/game-boy/"
+   "GB": "https://www.dkoldies.com/game-boy-games/",
+   "GBA": "https://www.dkoldies.com/game-boy-advance-games/"
   },
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "prices are filled in by script; /game-boy-color-games/ is 404"
  },
  {
   "name": "Lukie Games",
