@@ -41,18 +41,38 @@
    "GBC": "https://www.player2gamestore.nl/c-3321263/gameboy-color-games/",
    "GBA": "https://www.player2gamestore.nl/c-3306908/gameboy-advance-games/"
   },
-  "found_by": "browser"
+  "found_by": "browser",
+  "note": "checked in the browser: listings (about 50, 50, 80 products on the first page)"
  },
  {
   "name": "Press Start Games",
   "region": "Netherlands",
   "shop": "https://www.press-startgames.com/",
   "pages": {
-   "GB": "https://www.press-startgames.com/c-3099195/gameboy-games/",
-   "GBC": "https://www.press-startgames.com/c-3099235/gameboy-color-games/",
-   "GBA": "https://www.press-startgames.com/c-3099450/gameboy-advance-games/"
+   "GB": [
+    "https://www.press-startgames.com/c-3099208/cart-only-european/",
+    "https://www.press-startgames.com/c-3099215/cart-only-usa/",
+    "https://www.press-startgames.com/c-3494500/cart-only-japan/",
+    "https://www.press-startgames.com/c-3099198/boxed-cib-european/",
+    "https://www.press-startgames.com/c-3099199/boxed-cib-usa/",
+    "https://www.press-startgames.com/c-3554016/boxed-cib-japan/"
+   ],
+   "GBC": [
+    "https://www.press-startgames.com/c-3099265/cart-only-european/",
+    "https://www.press-startgames.com/c-3760368/cart-only-usa/",
+    "https://www.press-startgames.com/c-3760370/cart-only-japan/",
+    "https://www.press-startgames.com/c-3099253/boxed-cib-european/",
+    "https://www.press-startgames.com/c-3760367/boxed-cib-usa/",
+    "https://www.press-startgames.com/c-3099259/boxed-cib-japan/"
+   ],
+   "GBA": [
+    "https://www.press-startgames.com/c-3099455/cart-only-european/",
+    "https://www.press-startgames.com/c-3760391/cart-only-usa/",
+    "https://www.press-startgames.com/c-3760392/cart-only-japan/"
+   ]
   },
-  "found_by": "browser"
+  "found_by": "browser",
+  "note": "the games pages are hubs; listings per subcategory: cart only (European, USA, Japan), then boxed; GBA boxed pages not identified"
  },
  {
   "name": "RetroSoulsBorne",
@@ -139,7 +159,8 @@
    "GB+GBC": "https://gameshopenter.com/sv/game-boy-spel",
    "GBA": "https://gameshopenter.com/sv/gba-spel"
   },
-  "found_by": "browser"
+  "found_by": "browser",
+  "note": "checked in the browser: listings"
  },
  {
   "name": "Gameland Groningen",
@@ -206,13 +227,9 @@
   "name": "Games & Gifts by Haniel",
   "region": "Netherlands",
   "shop": "https://www.hanielonline.nl/",
-  "pages": {
-   "GB": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gameboy-games",
-   "GBC": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gbc-games",
-   "GBA": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gba-games"
-  },
+  "pages": {},
   "found_by": "sitemap",
-  "note": "pages answer HTTP 404 to curl (from the sitemap); not confirmed"
+  "note": "the sitemap's pages are 404 (checked in the browser); no Game Boy pages found"
  },
  {
   "name": "BMM Games 'n Vinyl",
@@ -273,11 +290,11 @@
   "region": "Netherlands",
   "shop": "https://www.nedgame.nl/",
   "pages": {
-   "GB": "https://www.nedgame.nl/zoek/systeem:gameboy/",
-   "GBC": "https://www.nedgame.nl/zoek/systeem:gameboy-color/",
-   "GBA": "https://www.nedgame.nl/zoek/systeem:gameboy-advance/"
+   "GB": "https://www.nedgame.nl/zoek/systeem:gameboy/type:games/",
+   "GBC": "https://www.nedgame.nl/zoek/systeem:gameboy-color/type:games/",
+   "GBA": "https://www.nedgame.nl/zoek/systeem:gameboy-advance/type:games/"
   },
-  "note": "per-system search, may include accessories",
+  "note": "per-system search filtered to games (187, 97, 232 items on 2026-11-18)",
   "found_by": "browser"
  },
  {
@@ -353,7 +370,8 @@
    "GBC": "https://www.retrogameland.be/c-5163212/game-boy-color-games/",
    "GBA": "https://www.retrogameland.be/c-5163215/game-boy-advance-games/"
   },
-  "found_by": "the user"
+  "found_by": "the user",
+  "note": "checked in the browser: listings (15 different products on each first page)"
  },
  {
   "name": "Konsolenkost",
@@ -421,7 +439,8 @@
    "GBC": "https://www.tradergames.fr/fr/419-game-boy-color",
    "GBA": "https://www.tradergames.fr/fr/420-game-boy-advance"
   },
-  "found_by": "the user"
+  "found_by": "the user",
+  "note": "from the user; not checked (Cloudflare check page)"
  },
  {
   "name": "Gamecash",
@@ -729,7 +748,7 @@
   "pages": {
    "GB": "https://www.reloadshop.fi/c/retro/game-boy"
   },
-  "note": "system page, may include consoles",
+  "note": "system page; built by script, not checked",
   "found_by": "sitemap"
  },
  {
@@ -780,7 +799,8 @@
    "GBC": "https://www.estarland.com/preowned/platforms/GameBoyColor/51",
    "GBA": "https://www.estarland.com/preowned/platforms/GameBoyAdv/33"
   },
-  "found_by": "browser"
+  "found_by": "browser",
+  "note": "checked in the browser: listings (Game Boy: 261 items); prices filled in by script"
  },
  {
   "name": "DK Oldies",
@@ -809,9 +829,11 @@
   "region": "United States",
   "shop": "https://www.goatstore.com/",
   "pages": {
-   "GB+GBC": "https://www.goatstore.com/store/"
+   "GB": "https://www.goatstore.com/store/#!/c/274/nintendo/game-boy-color/game-boy-games/",
+   "GBC": "https://www.goatstore.com/store/#!/c/262/nintendo/game-boy-color/game-boy-color-games/",
+   "GBA": "https://www.goatstore.com/store/#!/c/263/nintendo/game-boy-advance/"
   },
-  "note": "only a combined store link found",
+  "note": "categories are #! links (the page loads them by script); GBA has no games subcategory",
   "found_by": "browser"
  },
  {
