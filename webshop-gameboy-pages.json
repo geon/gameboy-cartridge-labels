@@ -274,7 +274,7 @@
    "GBC": "https://www.game-shock.nl/gameboy-gebruikt/gameboy-color-gebruikt/",
    "GBA": "https://www.game-shock.nl/gameboy-advance-gebruikt/spel-losse-cartridge/"
   },
-  "note": "GB: only a boxed-games category found",
+  "note": "photos about 800 px (larger CDN sizes are upscaled copies)",
   "found_by": "sitemap"
  },
  {
@@ -724,21 +724,22 @@
   "region": "Finland",
   "shop": "https://www.vpd.fi/",
   "pages": {
-   "GBA": "https://www.vpd.fi/pelit/3ds/gba-pelit-ja-tarvikkeet.html",
+   "GBA": "https://www.vpd.fi/pelit/retropelit-ja-tarvikkeet/gba.html",
    "GBC": "https://www.vpd.fi/pelit/retropelit-ja-tarvikkeet/gbc.html",
    "GB": "https://www.vpd.fi/pelit/retropelit-ja-tarvikkeet/gb.html"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "note": "pages mix games with accessories and consoles; src/shops/vpd.py keeps titles with a system tag"
  },
  {
   "name": "Porvoonpelikauppa",
   "region": "Finland",
   "shop": "https://porvoonpelikauppa.fi/",
   "pages": {
-   "GB": "https://porvoonpelikauppa.fi/gameboy-pelit",
-   "GBA": "https://porvoonpelikauppa.fi/gameboy-advance-kaytetty"
+   "GB": "https://porvoonpelikauppa.fi/gameboy-pelit"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "note": "the Game Boy games page also holds the GBA games; the old GBA link was a console's product page"
  },
  {
   "name": "Pelikauppias",
