@@ -47,14 +47,14 @@ SOURCES_DIR = os.path.join(OUT, "shop-sources")  # one records file per shop, so
 MIN_SIDE = 1000
 # Shops whose photos are all smaller, kept anyway (the user, 2026-11-18).
 SMALL_OK = {"Player 2 Gamestore", "Press Start Games", "Mad Gameshop", "Retro Gameland", "Gameshop Enter", "Gamewalhalla",
-            "Retro Game World", "DK Oldies"}
+            "Retro Game World"}
 MAX_PAGES = 400
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
 # Not crawled by curl: shops that refuse it (403/Cloudflare: done through the browser instead), shops whose pages are
 # not certain yet (webshop-gameboy-pages.json notes), Konsolenkost (its photos are already in, as composites).
 SKIP = {"Tradergames", "Gameretro", "Lukie Games", "Konsolenkost", "RetroWorld", "Player 2 Gamestore", "Press Start Games",
         "Mad Gameshop", "Gameshop Enter", "Nedgame", "Retro Gameland", "eStarland", "Goat Store",
-        "Gameshop Twente"}  # Gameshop Twente: photos named by EAN barcode, likely stock box pictures (held back, 2026-11-18)
+        "Gameshop Twente", "DK Oldies"}  # DK Oldies: no actual cartridge photos (the user, 2026-11-18)  # Gameshop Twente: photos named by EAN barcode, likely stock box pictures (held back, 2026-11-18)
 sources_lock = threading.Lock()
 DRY = False  # dry: find the products but open only 2 product pages per listing page, download nothing
 

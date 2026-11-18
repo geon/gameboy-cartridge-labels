@@ -818,7 +818,8 @@
    "GBA": "https://www.dkoldies.com/game-boy-advance-games/"
   },
   "found_by": "front page",
-  "note": "prices are filled in by script; /game-boy-color-games/ is 404"
+  "note": "prices are filled in by script; /game-boy-color-games/ is 404",
+  "not_crawled": "no actual cartridge photos, skipped (the user, 2026-11-18)"
  },
  {
   "name": "Lukie Games",
