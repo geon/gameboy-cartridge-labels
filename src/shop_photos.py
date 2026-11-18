@@ -99,6 +99,8 @@ def full_size(u):
     if "webshopapp.com" in p.netloc:
         path = re.sub(r"/\d+x\d+x\d/", "/", path)
         return urlunparse(p._replace(path=path))
+    if "/image/cache/catalog/" in path:                                                             # OpenCart
+        path = re.sub(r"-\d{2,4}x\d{2,4}(?=\.\w+$)", "", path.replace("/image/cache/catalog/", "/image/catalog/"))
     path = re.sub(r"-\d{2,4}x\d{2,4}(?=\.\w+$)", "", path)                                         # WordPress
     path = re.sub(r"-(large|medium|home|small|cart|thickbox)_default(?=/)", "", path)               # PrestaShop
     q = {k: v for k, v in parse_qs(p.query).items() if k.lower() not in ("width", "height", "w", "h", "size", "resize", "fit", "quality", "q")}
