@@ -27,7 +27,8 @@
   "shop": "https://www.retro-gamingshop.nl/",
   "pages": {
    "GBA": "https://www.retro-gamingshop.nl/gameboy-advance-games/",
-   "GB": "https://www.retro-gamingshop.nl/nintendo-gameboy-games/"
+   "GB": "https://www.retro-gamingshop.nl/nintendo-gameboy-games/",
+   "GBC": "https://www.retro-gamingshop.nl/gameboy-color-games/"
   },
   "found_by": "front page"
  },
@@ -402,7 +403,7 @@
   "region": "France",
   "shop": "https://www.gamecash.fr/",
   "pages": {
-   "GB": "https://www.gamecash.fr/jeux-occasion-game-boy-u29.html",
+   "GB+GBC": "https://www.gamecash.fr/jeux-occasion-game-boy-u29.html",
    "GBA": "https://www.gamecash.fr/jeux-occasion-game-boy-advance-u30.html"
   },
   "found_by": "sitemap"
@@ -570,10 +571,9 @@
   "region": "Sweden",
   "shop": "https://gameshop.se/",
   "pages": {
-   "GB": "https://gameshop.se/produkt-kategori/gameboy/"
+   "GB+GBC+GBA": "https://gameshop.se/produkt-kategori/gameboy/"
   },
-  "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "found_by": "front page"
  },
  {
   "name": "Retroplay",
@@ -600,7 +600,8 @@
   "shop": "https://www.gameretro.se/sv/",
   "pages": {
    "GBA": "https://www.gameretro.se/sv/gameboy-advance/spel/",
-   "GBC": "https://www.gameretro.se/sv/gameboy-color/spel/"
+   "GBC": "https://www.gameretro.se/sv/gameboy-color/spel/",
+   "GB": "https://www.gameretro.se/sv/gameboy-gameboy-pocket/spel/"
   },
   "found_by": "front page"
  },
