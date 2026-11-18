@@ -15,7 +15,8 @@
 #     takes its release (DMG-APSJ-jeff), else UNKNOWN (UNKNOWN-jeff); an id with a serial isn't renamed to a release or
 #     UNKNOWN (that's less known, not a correction).
 # A name is picked at random (seeded by the print's label photos, so a run is repeatable) among NAMES not yet used with
-# that serial, gone ids included (never reused); a serial with every name used gets two (-lisa-bob).
+# that serial, gone ids included (never reused); a serial with every name used gets two (-lisa-bob), with every pair
+# used three (-lisa-bob-tom).
 import datetime, json, os, random, re
 
 IDS_FILE = "print-ids.json"
@@ -52,7 +53,14 @@ def new_name(part, used, seed):
     if free:
         return rng.choice(free)
     pairs = [f"{a}-{b}" for a in NAMES for b in NAMES if a != b and f"{a}-{b}" not in used]
-    return rng.choice(pairs)
+    if pairs:
+        return rng.choice(pairs)
+    for words in range(3, 10):  # every pair used too (UNKNOWN ran out, 2026-11-19): three names, then more
+        for _ in range(1000):
+            name = "-".join(rng.sample(NAMES, words))
+            if name not in used:
+                return name
+    raise RuntimeError(f"no free name for {part}")
 
 
 def same_label_photo(old_key, new_keys_of_photo, outlines, sizes):
