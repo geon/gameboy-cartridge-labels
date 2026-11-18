@@ -45,6 +45,9 @@ OUT = ebay_photos.DOWNLOADED
 LISTINGS = os.path.join(OUT, "shop-listings")
 SOURCES_DIR = os.path.join(OUT, "shop-sources")  # one records file per shop, so shops can run as separate processes
 MIN_SIDE = 1000
+# Shops whose photos are all smaller, kept anyway (the user, 2026-11-18).
+SMALL_OK = {"Player 2 Gamestore", "Press Start Games", "Mad Gameshop", "Retro Gameland", "Gameshop Enter", "Gamewalhalla",
+            "Retro Game World", "DK Oldies"}
 MAX_PAGES = 400
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
 # Not crawled by curl: shops that refuse it (403/Cloudflare: done through the browser instead), shops whose pages are
@@ -340,7 +343,7 @@ def download(shop, items):
             continue
         img, name, path, wh = ok
         record.update(image=img, size=wh, file=name)
-        if max(wh) < MIN_SIDE:
+        if max(wh) < MIN_SIDE and shop.name not in SMALL_OK:
             os.remove(path)
             record["too_small"] = True
             small += 1
