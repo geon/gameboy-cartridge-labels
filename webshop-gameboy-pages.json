@@ -69,12 +69,25 @@
   "region": "Netherlands",
   "shop": "https://www.mad-gameshop.com/",
   "pages": {
-   "GB": "https://www.mad-gameshop.com/c-3680367/gameboy-games/",
-   "GBC": "https://www.mad-gameshop.com/c-3680389/gameboy-color-games/",
-   "GBA": "https://www.mad-gameshop.com/c-3680372/gameboy-advance-games/"
+   "GB": [
+    "https://www.mad-gameshop.com/c-3754744/gameboy-european-pal/",
+    "https://www.mad-gameshop.com/c-3754812/gameboy-usa/",
+    "https://www.mad-gameshop.com/c-3758994/gameboy-european/",
+    "https://www.mad-gameshop.com/c-5564149/gameboy-usa/"
+   ],
+   "GBC": [
+    "https://www.mad-gameshop.com/c-3754791/gameboy-color-european-pal/",
+    "https://www.mad-gameshop.com/c-3754879/gameboy-color-usa/",
+    "https://www.mad-gameshop.com/c-3762426/gameboy-european-pal/",
+    "https://www.mad-gameshop.com/c-3781032/gameboy-usa-ntsc/"
+   ],
+   "GBA": [
+    "https://www.mad-gameshop.com/c-3754893/gameboy-advance-european-pal/",
+    "https://www.mad-gameshop.com/c-3766505/gameboy-advance-usa-ntsc/"
+   ]
   },
-  "note": "also cart-only subcategories: /c-3754742/gameboy-cart-only/, /c-3754786/gameboy-color-cart-only/, /c-3754892/gameboy-advance-cart-only/",
-  "found_by": "browser"
+  "note": "the games pages are hubs; listings per subcategory: cartridge PAL, cartridge USA, then boxed PAL, boxed USA (GBA: cartridges only found)",
+  "found_by": "the user, then the browser"
  },
  {
   "name": "Retero",
