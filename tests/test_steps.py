@@ -18,7 +18,7 @@ def test_writes_leave_no_temporary_files(tmp_path):
     steps.write_json(str(tmp_path / "a.json"), {"x": "ゲーム"})
     steps.write_npz(str(tmp_path / "a.npz"), x=np.arange(3))
     assert sorted(os.listdir(tmp_path)) == ["a.json", "a.npz"]
-    assert json.load(open(tmp_path / "a.json")) == {"x": "ゲーム"}
+    assert json.load(open(tmp_path / "a.json", encoding="utf-8")) == {"x": "ゲーム"}
     assert np.load(tmp_path / "a.npz")["x"].tolist() == [0, 1, 2]
 
 

@@ -13,7 +13,7 @@ def stale(out, code):
 
 def write_json(path, data):
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, ensure_ascii=False)
     os.replace(tmp, path)
 

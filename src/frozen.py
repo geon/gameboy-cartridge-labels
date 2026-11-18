@@ -16,13 +16,13 @@ DIR = "frozen"
 
 def load(path=None):
     path = path or FILE
-    return json.load(open(path)) if os.path.exists(path) else {}
+    return json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
 
 
 def save(entries, path=None):
     path = path or FILE
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(entries, f, indent=1, sort_keys=True)
         f.write("\n")
     os.replace(tmp, path)
@@ -35,7 +35,7 @@ def image_path(pid, folder=None):
 def freeze(pid, print_entry, solved, found_outlines, restored_base, path=None, folder=None):
     """Freezes a print: its entry from prints.json (print_entry), its label photos' records from solve.json (solved),
     find's outlines (key -> outline), restore's output (restored_base + .avif, .json)."""
-    desc = json.load(open(restored_base + ".json"))
+    desc = json.load(open(restored_base + ".json", encoding="utf-8"))
     os.makedirs(folder or DIR, exist_ok=True)
     shutil.copyfile(restored_base + ".avif", image_path(pid, folder) + ".tmp")
     os.replace(image_path(pid, folder) + ".tmp", image_path(pid, folder))
@@ -55,7 +55,7 @@ def refreeze(pid, restored_base, path=None, folder=None):
     """A frozen print's image replaced by restore's output (restored_base + .avif, .json; restored with its frozen crop):
     its "image", "restored_from" and "paper" updated, "refrozen" the date; the rest (label photos, poses, crop, the
     freeze's "datetime") kept."""
-    desc = json.load(open(restored_base + ".json"))
+    desc = json.load(open(restored_base + ".json", encoding="utf-8"))
     shutil.copyfile(restored_base + ".avif", image_path(pid, folder) + ".tmp")
     os.replace(image_path(pid, folder) + ".tmp", image_path(pid, folder))
     entries = load(path)

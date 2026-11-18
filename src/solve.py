@@ -74,7 +74,7 @@ MEDIAN_WIDTHS = {"dmg": 42.15, "cgb": 41.45, "agb": 43.0}
 WIDTH_SPREAD = 0.3    # mm: the width softly held to about this from the median
 MIN_SUPPORT = 0.4     # the least share of the model's samples along segments for a fit to count
 MIN_FACE = 0.4        # and of the cartridge's outline: a label placed far off still finds label- and recess-like lines
-MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json")))["shapes"]
+MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json"), encoding="utf-8"))["shapes"]
 MAX_SHIFT = 4.0       # mm: a link's shift between two stickers' frames that still counts
 MAX_TURN = 4.0        # degrees
 MIN_LINK_POINTS = 8
@@ -382,7 +382,7 @@ def fit_label_photo(job):
     shape = lp["shape"]
     e = np.load(os.path.join(edges_dir, lp["photo"] + ".npz"))
     segs, size = e["segments"].astype(np.float64), tuple(int(v) for v in e["size"])
-    lines = json.load(open(os.path.join(text_dir, lp["photo"] + ".json")))["lines"]
+    lines = json.load(open(os.path.join(text_dir, lp["photo"] + ".json"), encoding="utf-8"))["lines"]
     found = []
     if lp.get("placed_by") and len(lp["outline"]) == 4:
         mm = corners_mm(shape)
@@ -527,7 +527,7 @@ def load_candidates(cache_dir, lp, version, edges_dir):
     p = cache_file(cache_dir, lp["key"])
     if not os.path.exists(p):
         return None
-    d = json.load(open(p))
+    d = json.load(open(p, encoding="utf-8"))
     if d.get("version") != version or d.get("inputs") != json.loads(json.dumps(fitting_inputs(lp, edges_dir))):
         return None
     cands = [{k: (np.array(v) if k in ("cut_to_photo", "plastic_to_photo") else v) for k, v in c.items()} for c in d["candidates"]]
@@ -726,7 +726,7 @@ def stage1_edges(lps, fits, photo_paths, workers=8):
             continue
         p = cache_file(cache_dir, key)
         if os.path.exists(p):
-            d = json.load(open(p))
+            d = json.load(open(p, encoding="utf-8"))
             if d.get("version") == version and d.get("job") == list(job[3:]):
                 done[key] = d["edge"]
                 continue
@@ -1339,7 +1339,7 @@ def from_frozen_match(out, lps, failed, photo_paths, frozen_entries):
         ink = img_to_ink @ np.float64(lp["frozen_match"])
         cut = np.linalg.inv(ink)
         cut /= cut[2, 2]
-        path, image = photo_paths.get(lp["photo"]), cv2.imread(frozen.image_path(P))
+        path, image = photo_paths.get(lp["photo"]), photos.imread(frozen.image_path(P))
         photo = photos.load(path) if path else None
         if photo is None or image is None or not usable(cut, shape):
             continue
@@ -1604,7 +1604,7 @@ def page(out_dir, chosen, result, sizes):
     for r in lps.values():
         kind = r["start"].split(" ")[0]
         starts[kind] = starts.get(kind, 0) + 1
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>solve</title>
 <style>body{{font:14px system-ui;margin:16px}} figure{{display:inline-block;margin:6px;vertical-align:top;width:280px}}
 .ph{{position:relative;display:inline-block}} .ph img{{max-width:280px;max-height:280px;display:block}} .ph svg{{position:absolute;inset:0;width:100%;height:100%}} figcaption{{font-size:11px}}</style>
@@ -1635,16 +1635,16 @@ def main():
         sys.exit(f"{len(missing)} inputs missing: run make find and make edges first")
     code = [__file__, edge_fit.__file__] + [os.path.join(edge_fit.MODELS, f) for f in os.listdir(edge_fit.MODELS) if f.endswith(".onnx")]
     # done again for a deleted photo too (remove-photos): a deletion makes no input newer, and find isn't redone for it
-    deleted = os.path.exists(out) and any(r["photo"] not in chosen for r in json.load(open(out))["label_photos"].values())
+    deleted = os.path.exists(out) and any(r["photo"] not in chosen for r in json.load(open(out, encoding="utf-8"))["label_photos"].values())
     if deleted or any(steps.stale(out, c) for c in code) or os.path.getmtime(out) < max(os.path.getmtime(p) for p in inputs):
-        found = json.load(open(found_file))
+        found = json.load(open(found_file, encoding="utf-8"))
         found["label_photos"] = [lp for lp in found["label_photos"] if lp["photo"] in chosen]  # deleted since find ran: left out
         entries = frozen.load()
         fz = {k: {**r, "frozen": pid} for k, (pid, r) in frozen.label_photos(entries, set(chosen)).items()}
         result = solve(found, match.read_matches(os.path.join(gen, "match"), list(chosen)), os.path.join(gen, "edges"), chosen, fz, entries)
         steps.write_json(out, result)
-    result = json.load(open(out))
-    sizes = {s: json.load(open(os.path.join(gen, "read-text", s + ".json")))["size"] or [1, 1] for s in chosen}
+    result = json.load(open(out, encoding="utf-8"))
+    sizes = {s: json.load(open(os.path.join(gen, "read-text", s + ".json"), encoding="utf-8"))["size"] or [1, 1] for s in chosen}
     page(out_dir, chosen, result, sizes)
     print(f"{len(result['label_photos'])} solved, {len(result['unsolved'])} not; page: {os.path.join(out_dir, 'index.html')}")
 

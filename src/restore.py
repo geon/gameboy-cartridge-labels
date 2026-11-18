@@ -245,7 +245,7 @@ def restore_print(job):
     size, px_to_mm = straighten.canvas(shape)
 
     def load(key, path):  # (image 0..1 BGR cropped, valid mask, px/mm) or None
-        img = cv2.imread(path)
+        img = photos.imread(path)
         if img is None:
             return None
         valid = img.max(2) > 1    # straighten's border outside the photo is black
@@ -315,7 +315,7 @@ def canonical_crop(shape):
 
 def write_avif(path, img):
     tmp = path + ".tmp.avif"
-    cv2.imwrite(tmp, (np.clip(img, 0, 1) * 255).round().astype(np.uint8), [cv2.IMWRITE_AVIF_QUALITY, QUALITY])
+    photos.write_avif(tmp, (np.clip(img, 0, 1) * 255).round().astype(np.uint8), QUALITY)
     os.replace(tmp, path)
 
 
@@ -391,8 +391,8 @@ def main():
     for p in (prints_file, solve_file):
         if not os.path.exists(p):
             sys.exit(f"{p} missing: run make prints first")
-    result = json.load(open(prints_file))
-    solved = json.load(open(solve_file))["label_photos"]
+    result = json.load(open(prints_file, encoding="utf-8"))
+    solved = json.load(open(solve_file, encoding="utf-8"))["label_photos"]
     out_dir = os.path.join(gen, "restore")
     os.makedirs(out_dir, exist_ok=True)
     base = lambda pid: os.path.join(out_dir, straighten.file_name(pid)[:-5])
@@ -485,7 +485,7 @@ def page(out_dir, result, gen):
         b = straighten.file_name(p["id"])[:-5]
         if not os.path.exists(os.path.join(out_dir, b + ".avif")):
             continue
-        desc = json.load(open(os.path.join(out_dir, b + ".json"))) if os.path.exists(os.path.join(out_dir, b + ".json")) else {}
+        desc = json.load(open(os.path.join(out_dir, b + ".json"), encoding="utf-8")) if os.path.exists(os.path.join(out_dir, b + ".json")) else {}
         c = desc.get("crop") or canonical_crop(p["shape"])
         (cw, ch), _ = straighten.canvas(p["shape"])
         # a straightened label photo cropped by CSS: the image scaled so the crop is 160 px wide
@@ -498,7 +498,7 @@ def page(out_dir, result, gen):
                     f'<figcaption><b>{html.escape(str(p["serial"] or p["release"] or "?"))}</b>: {len(desc.get("keys", []))} label photos ({len(desc.get("approximate", []))} approximate cuts)'
                     f'{"" if desc.get("paper") else "; no paper found: median colours"}; label photos per band, finest first: {desc.get("bands")}</figcaption>'
                     f'<div class="sources">{sources}</div></figure>')
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>restore</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} figure{{display:block;margin:12px 0 24px}} .pair img{{width:340px;margin-right:6px}}
 figcaption{{font-size:12px;margin:4px 0}} .src{{display:inline-block;overflow:hidden;margin:2px}} .src img{{display:block}}</style>

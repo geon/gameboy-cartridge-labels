@@ -156,12 +156,12 @@ def assign(prints, registry, key_map, when=None, forced=None):
 
 
 def load(path=IDS_FILE):
-    return json.load(open(path)) if os.path.exists(path) else {"prints": {}, "gone": {}}
+    return json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"prints": {}, "gone": {}}
 
 
 def save(registry, path=IDS_FILE):
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(registry, f, indent=1, sort_keys=True)
         f.write("\n")
     os.replace(tmp, path)

@@ -5,7 +5,7 @@
 import json, os
 import cv2, numpy as np
 
-MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json")))["shapes"]
+MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json"), encoding="utf-8"))["shapes"]
 MAX_TILT = 50.0  # main: of 2,326 fits accepted or placed by hand, all but 4 within 45 degrees of upright
 
 

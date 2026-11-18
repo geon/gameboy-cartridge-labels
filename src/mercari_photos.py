@@ -52,10 +52,10 @@ def queries(releases, pass_name):
 def ingest(results_file, queries_file):
     """results: {release: [{id, title}]}, filtered in the tab."""
     sources, searches = load(SOURCES), load(SEARCHES)
-    query_of = {q["release"]: q for q in json.load(open(queries_file))}
+    query_of = {q["release"]: q for q in json.load(open(queries_file, encoding="utf-8"))}
     have = {v["item"] for v in sources.values()}
     today = datetime.date.today().isoformat()
-    for release, items in json.load(open(results_file)).items():
+    for release, items in json.load(open(results_file, encoding="utf-8")).items():
         q = query_of.get(release)
         if q is None or q["pass"] in searches.get(release, {}):
             continue
@@ -101,6 +101,6 @@ def ingest(results_file, queries_file):
 
 if __name__ == "__main__":
     if sys.argv[1] == "queries":  # queries <releases.json> <pass name>
-        json.dump(queries(json.load(open(sys.argv[2])), sys.argv[3]), sys.stdout, ensure_ascii=False)
+        json.dump(queries(json.load(open(sys.argv[2], encoding="utf-8")), sys.argv[3]), sys.stdout, ensure_ascii=False)
     elif sys.argv[1] == "ingest":  # ingest <results> <queries>
         ingest(sys.argv[2], sys.argv[3])

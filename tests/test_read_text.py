@@ -63,7 +63,7 @@ def test_read_photo_writes_size_engine_and_lines(tmp_path):
     p, out = tmp_path / "a.png", tmp_path / "a.json"
     cv2.imwrite(str(p), text_image())
     read_text.read_photo(("a", str(p), str(out)))
-    result = json.load(open(out))
+    result = json.load(open(out, encoding="utf-8"))
     assert result["size"] == [600, 200]
     assert result["engine"].startswith("rapidocr ")
     assert [l["text"] for l in result["lines"]] == [TEXT]
@@ -74,4 +74,4 @@ def test_unreadable_photo_gets_an_empty_result(tmp_path):
     p, out = tmp_path / "broken.jpg", tmp_path / "broken.json"
     p.write_bytes(b"not an image")
     read_text.read_photo(("broken", str(p), str(out)))
-    assert json.load(open(out)) == {"size": None, "engine": json.load(open(out))["engine"], "lines": []}
+    assert json.load(open(out, encoding="utf-8")) == {"size": None, "engine": json.load(open(out, encoding="utf-8"))["engine"], "lines": []}

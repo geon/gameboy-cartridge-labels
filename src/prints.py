@@ -40,7 +40,7 @@ MIN_DIFF_TILES = 3
 def tile_views(image_path, shape):
     """A straightened label photo's tiles: (lighting-evened gray per tile, flattened; gray spread per tile)."""
     P, M = straighten.PX_PER_MM, straighten.MARGIN
-    img = cv2.imread(image_path).astype(np.float32)
+    img = photos.imread(image_path).astype(np.float32)
     lw, lh = shapes.LABEL_MM[shape]
     x0, y0, x1, y1 = int((M + 1) * P), int((M + 1) * P), int((M + lw - 1) * P), int((M + lh - 1) * P)
     g = cv2.GaussianBlur(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (0, 0), 0.25 * P)
@@ -162,7 +162,7 @@ def photo_sizes(shas, gen):
     for s in shas:
         f = os.path.join(gen, "read-text", s + ".json")
         if os.path.exists(f):
-            sizes[s] = json.load(open(f))["size"]
+            sizes[s] = json.load(open(f, encoding="utf-8"))["size"]
     return sizes
 
 
@@ -171,7 +171,7 @@ def corrected(auto, solved, frozen_of, gen):
     decisions = print_corrections.load()["decisions"]
     if not decisions:
         return auto
-    found = json.load(open(os.path.join(gen, "find", "label-photos.json")))["label_photos"]
+    found = json.load(open(os.path.join(gen, "find", "label-photos.json"), encoding="utf-8"))["label_photos"]
     keys = {k for p in auto for k in p["keys"]}
     old = {k for d in decisions for k in d.get("keys", []) + [k for g in d.get("prints", []) for k in g]} - keys
     mapped = print_corrections.key_mapper(keys, {lp["key"]: lp["outline"] for lp in found}, photo_sizes({k.split("@")[0] for k in old}, gen))
@@ -190,7 +190,7 @@ def corrected(auto, solved, frozen_of, gen):
 def keep_ids(all_prints, ids_file, gen):
     """Each print's persistent id (print_ids), the registry in ids_file updated; this run's changes."""
     registry = print_ids.load(ids_file)
-    found = json.load(open(os.path.join(gen, "find", "label-photos.json")))["label_photos"]
+    found = json.load(open(os.path.join(gen, "find", "label-photos.json"), encoding="utf-8"))["label_photos"]
     outlines = {lp["key"]: lp["outline"] for lp in found}
     new_keys = {k for p in all_prints for k in p["keys"]}
     of_photo = {}
@@ -220,8 +220,8 @@ def main():
     out_dir = os.path.join(gen, "prints")
     out = os.path.join(out_dir, "prints.json")
     os.makedirs(out_dir, exist_ok=True)
-    solved = json.load(open(solve_file))["label_photos"]
-    serial = json.load(open(serials_file))
+    solved = json.load(open(solve_file, encoding="utf-8"))["label_photos"]
+    serial = json.load(open(serials_file, encoding="utf-8"))
     frozen_entries = frozen.load()
     inputs = [solve_file, serials_file, __file__, print_ids.__file__] + [f for f in (frozen.FILE, print_corrections.FILE) if os.path.exists(f)]
     if not os.path.exists(out) or os.path.getmtime(out) < max(os.path.getmtime(p) for p in inputs):
@@ -303,7 +303,7 @@ def main():
                                "differences": differences})
         steps.write_json(os.path.join(out_dir, "few-photos.json"), sorted(p["id"] for p in all_prints if len(p["keys"]) < FEW and not p.get("frozen")))
         steps.write_json(os.path.join(out_dir, "id-changes.json"), changes)
-    result = json.load(open(out))
+    result = json.load(open(out, encoding="utf-8"))
     page(out_dir, result, gen)
     print(f"{len(result['prints'])} prints of {sum(len(p['keys']) for p in result['prints'])} label photos; page: {os.path.join(out_dir, 'index.html')}")
 
@@ -348,14 +348,14 @@ def page(out_dir, result, gen):
     n = len(result["prints"])
     multi = sum(1 for ps in by_family.values() if len(ps) > 1)
     changes_file = os.path.join(out_dir, "id-changes.json")
-    changes = json.load(open(changes_file)) if os.path.exists(changes_file) else []
+    changes = json.load(open(changes_file, encoding="utf-8")) if os.path.exists(changes_file) else []
     counts = Counter(c["kind"] for c in changes)
     words = {"split": lambda c: f'{c["id"]} split from {c["from"]}', "merged": lambda c: f'{c["id"]} merged into {c["into"]}',
              "renamed": lambda c: f'{c["from"]} renamed {c["id"]}', "gone": lambda c: f'{c["id"]}: no label photo left'}
     listed = "".join(f"<li>{html.escape(words[c['kind']](c))}</li>" for c in changes if c["kind"] in words)
     ids = (f'<p>Print ids this run: {", ".join(f"{v} {k}" for k, v in sorted(counts.items()))}.</p>'
            + (f"<ul>{listed}</ul>" if listed else "")) if changes else ""
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>prints</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} .print{{display:inline-block;vertical-align:top;margin:4px 12px 12px 0;padding:4px;border:1px solid #666}}
 .ph{{position:relative;display:inline-block;margin:2px}} .ph img{{width:150px;display:block}} .ph svg, .stack svg{{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}}

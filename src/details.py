@@ -9,6 +9,7 @@
 # Seals and the CE have too few keypoints for this (18); they're found later, in straightened label photos.
 import json, os
 import cv2, numpy as np
+import photos
 
 import steps, match
 
@@ -31,7 +32,7 @@ def load_details(folder=DETAILS):
         for name in sorted(os.listdir(folder)):
             if not name.lower().endswith(".png"):
                 continue
-            img = cv2.imread(os.path.join(folder, name))
+            img = photos.imread(os.path.join(folder, name))
             kp, des = sift.detectAndCompute(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), None)
             if des is not None and len(kp) >= MIN_INLIERS:
                 _details.append((name, (img.shape[1], img.shape[0]), np.float32([k.pt for k in kp]), des.astype(np.float32)))
@@ -92,7 +93,7 @@ def detections(gen, chosen, workers=8, folder=DETAILS):
     jobs = [(s, os.path.join(gen, "features", s + ".npz"), out(s)) for s in chosen
             if not os.path.exists(out(s)) or os.path.getmtime(out(s)) < newest]
     steps.run(detect_photo, jobs, workers, what="details searched in")
-    return {s: json.load(open(out(s))) for s in chosen}
+    return {s: json.load(open(out(s), encoding="utf-8")) for s in chosen}
 
 
 # Details at one place on every label of their shape (details/places.json): such a detail, found, places the whole label.
@@ -102,7 +103,7 @@ PLACES = "places.json"
 def load_places(folder=DETAILS):
     """Detail name -> {"shape", "centre_mm"}."""
     path = os.path.join(folder, PLACES)
-    return json.load(open(path))["places"] if os.path.exists(path) else {}
+    return json.load(open(path, encoding="utf-8"))["places"] if os.path.exists(path) else {}
 
 
 def label_mm_to_detail_px(centre_mm, detail_size):

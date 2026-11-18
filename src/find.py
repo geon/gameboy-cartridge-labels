@@ -110,7 +110,7 @@ NOT_LABELS = "not-labels.json"  # {label photo key: {"photo", "area", "found" ([
 def load_not_labels(path=NOT_LABELS):
     """photo -> [polygons (float32)] marked not a label."""
     out = {}
-    for e in (json.load(open(path)) if os.path.exists(path) else {}).values():
+    for e in (json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}).values():
         for poly in (e.get("area"), e.get("found")):
             if poly:
                 out.setdefault(e["photo"], []).append(np.float32(poly))
@@ -428,7 +428,7 @@ def page(out_dir, chosen, result, texts):
                 f'<figcaption><code>{s[:10]}</code><br>{label}</figcaption></figure>')
 
     rejected = "".join(f'<li><code>{r["photo"][:10]}</code>: {html.escape(", ".join(t["text"] for t in r["strings"]))}</li>' for r in result["rejected"])
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>find</title>
 <style>body{{font:14px system-ui;margin:16px}} figure{{display:inline-block;margin:6px;vertical-align:top;width:260px}}
 .ph{{position:relative;display:inline-block}} .ph img{{max-width:260px;max-height:260px;display:block}} .ph svg{{position:absolute;inset:0;width:100%;height:100%}}
@@ -464,7 +464,7 @@ def main():
     places_file = os.path.join(details.DETAILS, details.PLACES)
     newest = max(os.path.getmtime(p) for p in list(text_files.values()) + match_files + detail_files + [places_file]
                  + [f for f in (NOT_LABELS, frozen.FILE) if os.path.exists(f)])
-    texts = {s: json.load(open(p)) for s, p in text_files.items()}
+    texts = {s: json.load(open(p, encoding="utf-8")) for s, p in text_files.items()}
     if steps.stale(out, __file__) or os.path.getmtime(out) < newest:
         result = find(chosen, texts, match.read_matches(os.path.join(gen, "match"), list(chosen), frozen.images()), serials.load_database(),
                       found, use_strings=not args.no_strings, places=details.load_places(), not_labels=load_not_labels(),
@@ -472,7 +472,7 @@ def main():
                       frozen_lps={k: {"photo": r["photo"], "cut": frozen.cut_corners(r), "found": r.get("found"), "shape": r["shape"]}
                                   for k, (pid, r) in frozen.label_photos(frozen.load()).items()})
         steps.write_json(out, result)
-    result = json.load(open(out))
+    result = json.load(open(out, encoding="utf-8"))
     page(out_dir, chosen, result, texts)
     print(f"{len(result['label_photos'])} label photos; page: {os.path.join(out_dir, 'index.html')}")
 

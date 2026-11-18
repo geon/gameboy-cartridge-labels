@@ -20,7 +20,7 @@ import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, steps, shapes, cuts
-MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json")))["shapes"]
+MODELS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json"), encoding="utf-8"))["shapes"]
 
 PX_PER_MM = 20
 MARGIN = 5.0
@@ -75,9 +75,9 @@ def do_one(job):
             return key
         img = straightened(photo, r["photo_to_ink"], r["shape"])
         tmp = out + ".tmp.avif"
-        cv2.imwrite(tmp, img, [cv2.IMWRITE_AVIF_QUALITY, QUALITY])
+        photos.write_avif(tmp, img, QUALITY)
         os.replace(tmp, out)
-    img = cv2.imread(out)
+    img = photos.imread(out)
     if img is not None:
         steps.write_json(cut_file(out), find_cut(img, r))
         steps.write_json(drawn_file(out), record)
@@ -135,7 +135,7 @@ def moved_mm(a, b):
 def load_cut(gen, key):
     """A label photo's cut found by straighten (cuts.find's), or None."""
     p = cut_file(os.path.join(gen, "straighten", file_name(key)))
-    return json.load(open(p)) if os.path.exists(p) else None
+    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
 
 
 def page(out_dir, solved):
@@ -158,7 +158,7 @@ def page(out_dir, solved):
             rect += f'<polygon points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in q)}" fill="none" stroke="#0ff" stroke-width="2"/>'
         figs.append(f'<figure><div class="ph"><img loading="lazy" src="{file_name(key)}"><svg viewBox="0 0 {w} {h}">{rect}</svg></div>'
                     f'<figcaption><code>{html.escape(key[:14])}</code> {html.escape(r["start"].split(" (")[0])}, error {r.get("error_mm")} mm</figcaption></figure>')
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>straighten</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} figure{{display:inline-block;margin:6px;vertical-align:top;width:300px}}
 .ph{{position:relative;display:inline-block}} .ph img{{width:300px;display:block}} .ph svg{{position:absolute;inset:0;width:100%;height:100%}} figcaption{{font-size:11px}}</style>
@@ -200,7 +200,7 @@ def cuts_page(out_dir, solved):
                              f'<svg width="{W:.0f}" height="{H:.0f}">{svg}</svg></div>'
                              f'<figcaption><code>{html.escape(key[:14])}</code> moved from the fitted cut (outward negative): {note}</figcaption></figure>'))
     figs.sort(key=lambda f: f[0])
-    with open(os.path.join(out_dir, "cuts.html"), "w") as f:
+    with open(os.path.join(out_dir, "cuts.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>cuts</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} figure{{margin:12px 0 24px}}
 .ph{{position:relative}} .ph svg{{position:absolute;inset:0}} figcaption{{font-size:12px;margin-top:4px}}</style>
@@ -220,7 +220,7 @@ def main():
     solve_file = os.path.join(gen, "solve", "solve.json")
     if not os.path.exists(solve_file):
         sys.exit("no solve.json: run make solve first")
-    solved = json.load(open(solve_file))["label_photos"]
+    solved = json.load(open(solve_file, encoding="utf-8"))["label_photos"]
     out_dir = os.path.join(gen, "straighten")
     os.makedirs(out_dir, exist_ok=True)
     wanted = {file_name(k) for k in solved} | {file_name(k)[:-5] + e for k in solved for e in (".json", ".drawn.json")}
@@ -235,7 +235,7 @@ def main():
     for k, r in solved.items():
         if r["photo"] not in chosen:
             continue
-        drawn = json.load(open(drawn_file(out(k)))) if os.path.exists(drawn_file(out(k))) else None
+        drawn = json.load(open(drawn_file(out(k)), encoding="utf-8")) if os.path.exists(drawn_file(out(k))) else None
         draw = (not os.path.exists(out(k)) or drawn is None or drawn.get("version") != version
                 or moved_px(drawn["photo_to_ink"], r["photo_to_ink"], r["shape"]) >= REDRAW_PX)
         refind = draw or stale(cut_file(out(k)), max(cuts_code, os.path.getmtime(out(k))))

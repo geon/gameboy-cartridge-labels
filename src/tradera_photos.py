@@ -44,7 +44,7 @@ def is_cib(title):
 
 
 def download(listings_file):
-    listings = json.load(open(listings_file))
+    listings = json.load(open(listings_file, encoding="utf-8"))
     listings.sort(key=lambda v: is_cib(v["shortDescription"]))  # stable: page order otherwise
     sources = load(SOURCES)
     today = datetime.date.today().isoformat()

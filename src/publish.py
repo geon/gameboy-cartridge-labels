@@ -45,7 +45,7 @@ def cut(img, shape, crop=None):
 def sources(path=SOURCES):
     """SHA-1 -> {source, page_url, image_url}, from photo-sources.json (src/add_photos.py)."""
     return {k: {"source": e.get("source"), "page_url": e.get("page_url"), "image_url": e.get("image_url")}
-            for k, e in json.load(open(path)).items()}
+            for k, e in json.load(open(path, encoding="utf-8")).items()}
 
 
 def poor_fits(solved):
@@ -65,11 +65,11 @@ def main():
     for f in need:
         if not os.path.exists(f):
             sys.exit(f"no {f}: run the steps before publish")
-    prints = json.load(open(need[0]))
-    solved = json.load(open(need[1]))["label_photos"]
-    serials = json.load(open(need[2]))
+    prints = json.load(open(need[0], encoding="utf-8"))
+    solved = json.load(open(need[1], encoding="utf-8"))["label_photos"]
+    serials = json.load(open(need[2], encoding="utf-8"))
     src = sources()
-    titles = {r["id"]: r["title"] for r in json.load(open(serials_module.DATABASE))}
+    titles = {r["id"]: r["title"] for r in json.load(open(serials_module.DATABASE, encoding="utf-8"))}
     poor = poor_fits(solved)
     out_dir = args.out
     os.makedirs(os.path.join(out_dir, "prints"), exist_ok=True)
@@ -87,7 +87,7 @@ def main():
             continue
         restored = os.path.join(gen, "restore", name)
         desc_file = restored[:-5] + ".json"
-        desc = json.load(open(desc_file)) if os.path.exists(desc_file) else {}
+        desc = json.load(open(desc_file, encoding="utf-8")) if os.path.exists(desc_file) else {}
         if p.get("frozen") in frozen_entries:  # the frozen image, as it is
             restored = frozen.image_path(p["frozen"])
             e = frozen_entries[p["frozen"]]
@@ -119,7 +119,7 @@ def main():
     for name, tiles in prints_step.load_pairs(os.path.join(gen, "prints", "pairs.npz"), prints_step.comparison_version()).items():
         a, b = name.split("|")[:2]
         differences[a, b] = differences[b, a] = int(tiles.sum())
-    releases = {r["id"]: r for r in json.load(open(serials_module.DATABASE))}
+    releases = {r["id"]: r for r in json.load(open(serials_module.DATABASE, encoding="utf-8"))}
     wanted_list = wanted.entries(prints["prints"], has_image, solved, serials, releases, src, differences)
     steps.write_json(os.path.join(out_dir, "wanted.json"), wanted_list)
     wanted.page(out_dir, wanted_list)
@@ -158,7 +158,7 @@ def page(out_dir, index, wanted_count):
                         f'<div class="src">{sources}</div></figcaption></figure>')
         links.append(f'<li><a href="#{shape}">{platform}</a>: {len(ps)} images</li>')
         sections.append(f'<h2 id="{shape}">{platform} ({len(ps)})</h2><div class="grid">{"".join(figs)}</div>')
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>publish</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax({MIN_COLUMN}px,1fr));gap:16px;align-items:start}}

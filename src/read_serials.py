@@ -47,7 +47,7 @@ def fit_file(ocr_path):
 
 def ocr_job(job):
     image_path, out, photo_to_ink = job
-    img = cv2.imread(image_path)
+    img = photos.imread(image_path)
     lines = read_text.read(img) if img is not None else []
     steps.write_json(out, lines)
     steps.write_json(fit_file(out), {"photo_to_ink": photo_to_ink})
@@ -59,7 +59,7 @@ def reread(ocr_path, r, code_time):
     more since."""
     if not os.path.exists(ocr_path) or os.path.getmtime(ocr_path) < code_time or not os.path.exists(fit_file(ocr_path)):
         return True
-    old = json.load(open(fit_file(ocr_path)))["photo_to_ink"]
+    old = json.load(open(fit_file(ocr_path), encoding="utf-8"))["photo_to_ink"]
     return straighten.moved_px(old, r["photo_to_ink"], r["shape"]) / straighten.PX_PER_MM >= REREAD_MM
 
 
@@ -168,7 +168,7 @@ def page(out_dir, result, missing, unknown, gen):
         figs.append(f'<figure><img loading="lazy" src="{rel}/{straighten.file_name(k)}"><figcaption><code>{html.escape(k[:14])}</code> '
                     f'<b>{html.escape(str(v["serial"] or v["release"]))}</b> ({html.escape(v["decided_by"])})<br>{reads}</figcaption></figure>')
     figs = "".join(figs)
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>read-serials</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} figure{{display:inline-block;margin:6px;vertical-align:top;width:280px}} img{{width:280px}} figcaption{{font-size:11px}}</style>
 <h1>read-serials</h1>
@@ -186,8 +186,8 @@ def main():
     for p in (solve_file, find_file):
         if not os.path.exists(p):
             sys.exit(f"{p} missing: run make find, solve and straighten first")
-    solved = json.load(open(solve_file))["label_photos"]
-    found = {lp["key"]: lp for lp in json.load(open(find_file))["label_photos"]}
+    solved = json.load(open(solve_file, encoding="utf-8"))["label_photos"]
+    found = {lp["key"]: lp for lp in json.load(open(find_file, encoding="utf-8"))["label_photos"]}
     out_dir = os.path.join(gen, "read-serials")
     ocr_dir = os.path.join(out_dir, "ocr")
     os.makedirs(ocr_dir, exist_ok=True)
@@ -210,11 +210,11 @@ def main():
     release_of = serials.load_database()
     if not os.path.exists(out) or os.path.getmtime(out) < newest:
         regions = serials.by_region(release_of)
-        index = serials.TitleIndex(json.load(open(serials.DATABASE)))
+        index = serials.TitleIndex(json.load(open(serials.DATABASE, encoding="utf-8")))
         by_id = {}
         for r_ in release_of.values():
             by_id.setdefault(r_["id"], r_)
-        ocr = {k: json.load(open(ocr_out[k])) for k in solved}
+        ocr = {k: json.load(open(ocr_out[k], encoding="utf-8")) for k in solved}
         strings = lambda k: [t for m in [k] + solved[k].get("merged", []) for t in found.get(m, {}).get("strings", [])]  # merged: the same sticker
         reads = {k: own_reads(ocr[k], strings(k), release_of, regions, solved[k]["shape"]) for k in solved}
         photo_lines = {}
@@ -223,7 +223,7 @@ def main():
             lines = [l["text"] for l in ocr[k]]
             if lp is not None:
                 if lp["photo"] not in photo_lines:
-                    photo_lines[lp["photo"]] = json.load(open(os.path.join(gen, "read-text", lp["photo"] + ".json")))["lines"]
+                    photo_lines[lp["photo"]] = json.load(open(os.path.join(gen, "read-text", lp["photo"] + ".json"), encoding="utf-8"))["lines"]
                 c, rad = lp["centre"], lp["radius"]
                 for l in photo_lines[lp["photo"]]:
                     m = [sum(p[0] for p in l["corners"]) / 4, sum(p[1] for p in l["corners"]) / 4]
@@ -248,14 +248,14 @@ def main():
             result[k] = {"reads": reads[k], "serial": serial, "release": release, "decided_by": how, "family": family_of[k],
                          "title_score": round(title(release), 2) if release else None,
                          "title_guess": (by_title[1] if by_title else game) if not release else None}
-        corrections = json.load(open(CORRECTIONS)).get("corrections", {}) if os.path.exists(CORRECTIONS) else {}
+        corrections = json.load(open(CORRECTIONS, encoding="utf-8")).get("corrections", {}) if os.path.exists(CORRECTIONS) else {}
         for k, serial in corrections.items():
             if k in result:
                 r_ = serials.release(serial, release_of)
                 result[k].update(serial=serial, release=r_["id"] if r_ else None, decided_by="corrected by hand")
         steps.write_json(out, result)
         covered = {v["release"] for v in result.values() if v["release"]}
-        everything = sorted({r["id"] for r in json.load(open(serials.DATABASE))})
+        everything = sorted({r["id"] for r in json.load(open(serials.DATABASE, encoding="utf-8"))})
         steps.write_json(os.path.join(out_dir, "missing.json"), [r for r in everything if r not in covered])
         unknown = {}
         for k, v in result.items():
@@ -263,8 +263,8 @@ def main():
                 if r["kind"] == "unknown":
                     unknown.setdefault(r["serial"], []).append(k)
         steps.write_json(os.path.join(out_dir, "unknown-serials.json"), {s: sorted(set(ks)) for s, ks in sorted(unknown.items())})
-    result = json.load(open(out))
-    page(out_dir, result, json.load(open(os.path.join(out_dir, "missing.json"))), json.load(open(os.path.join(out_dir, "unknown-serials.json"))), gen)
+    result = json.load(open(out, encoding="utf-8"))
+    page(out_dir, result, json.load(open(os.path.join(out_dir, "missing.json"), encoding="utf-8")), json.load(open(os.path.join(out_dir, "unknown-serials.json"), encoding="utf-8")), gen)
     print(f"{sum(1 for v in result.values() if v['release'])} of {len(result)} with a release; page: {os.path.join(out_dir, 'index.html')}")
 
 

@@ -23,7 +23,7 @@ TODO = "todo.md"
 
 def items():
     """[(the first line, the note)] from todo.md."""
-    blocks = [b.strip().splitlines() for b in re.split(r"\n\s*\n", open(TODO).read()) if b.strip()]
+    blocks = [b.strip().splitlines() for b in re.split(r"\n\s*\n", open(TODO, encoding="utf-8").read()) if b.strip()]
     return [(b[0].strip(), " ".join(l.strip() for l in b[1:])) for b in blocks if b[0].strip().lower() != "todo"]
 
 
@@ -41,9 +41,9 @@ def versions():
 
 
 def make_version(name, note, from_restore, workers):
-    result = json.load(open(os.path.join(GEN, "prints", "prints.json")))
-    solved = json.load(open(os.path.join(GEN, "solve", "solve.json")))["label_photos"]
-    serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json")))
+    result = json.load(open(os.path.join(GEN, "prints", "prints.json"), encoding="utf-8"))
+    solved = json.load(open(os.path.join(GEN, "solve", "solve.json"), encoding="utf-8"))["label_photos"]
+    serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json"), encoding="utf-8"))
     wanted = {p["id"]: p for item, _ in items() for p in prints_of(item, result, serials)}
     done = versions()
     folder = os.path.join(OUT, f"{int(done[-1].split('-', 1)[0]) + 1 if done else 0}-{re.sub(r'[^A-Za-z0-9_.-]+', '-', name)}")
@@ -80,10 +80,10 @@ def facts(desc):
 
 
 def page():
-    result = json.load(open(os.path.join(GEN, "prints", "prints.json")))
-    serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json")))
+    result = json.load(open(os.path.join(GEN, "prints", "prints.json"), encoding="utf-8"))
+    serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json"), encoding="utf-8"))
     vs = versions()
-    meta = {v: json.load(open(os.path.join(OUT, v, "version.json"))) for v in vs}
+    meta = {v: json.load(open(os.path.join(OUT, v, "version.json"), encoding="utf-8")) for v in vs}
     rel = os.path.relpath(os.path.join(GEN, "straighten"), OUT)
     head = "".join(f'<th>{html.escape(v)}<br><span class="m">{html.escape(meta[v].get("note") or "")}<br>{html.escape(meta[v]["made"])}, {html.escape(meta[v]["commit"])}</span></th>' for v in vs)
     rows = []
@@ -96,7 +96,7 @@ def page():
             cells, last = [], None
             for v in vs:
                 f = os.path.join(OUT, v, b)
-                desc = json.load(open(f + ".json")) if os.path.exists(f + ".json") else None
+                desc = json.load(open(f + ".json", encoding="utf-8")) if os.path.exists(f + ".json") else None
                 last = desc or last
                 img = f'<img loading="lazy" src="{v}/{b}.avif">' if os.path.exists(f + ".avif") else '<div class="none">none</div>'
                 cells.append(f'<td>{img}<div class="m">{html.escape(facts(desc))}</div></td>')
@@ -108,7 +108,7 @@ def page():
                                   f'margin:{-c["y"] * scale:.0f}px 0 0 {-c["x"] * scale:.0f}px"></div>')
             sources = "".join(src(k, "own") for k in (last or {}).get("keys", p["keys"])) + "".join(src(k, "pooled") for k in (last or {}).get("pooled", []))
             rows.append(f'<tr><td class="p"><code>{html.escape(b)}</code><div class="sources">{sources}</div></td>{"".join(cells)}</tr>')
-    with open(os.path.join(OUT, "index.html"), "w") as f:
+    with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>todo report</title>
 <style>body{{font:13px system-ui;margin:16px;background:#333;color:#eee}} table{{border-collapse:collapse}} td,th{{vertical-align:top;padding:4px 6px;text-align:left}}
 td img{{width:300px;display:block}} .m{{font-size:11px;color:#bbb;font-weight:normal;max-width:300px}} .item{{padding-top:18px;font-size:14px;border-top:1px solid #666}}

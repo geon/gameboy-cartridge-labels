@@ -63,7 +63,7 @@ def page(out_dir, chosen):
     rows = "\n".join(f'<tr><td>{c}</td><td><code>{s[:10]}</code><br>{w} x {h}</td>'
                      f'<td><a href="{rel}/{p}"><img loading="lazy" src="{rel}/{p}"></a></td></tr>'
                      for c, s, p, (w, h) in steps.few(counts))
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>features</title>
 <style>body{{font:14px system-ui;margin:16px}} img{{max-width:240px;max-height:240px}} td{{vertical-align:top;padding:4px 8px;border-top:1px solid #ccc}}</style>
 <h1>features</h1>

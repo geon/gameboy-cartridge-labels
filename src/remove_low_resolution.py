@@ -39,11 +39,11 @@ def main():
         print("no solve.json yet: nothing measured, nothing deleted")
         return
     present = photos.chosen(args.sample)
-    low = low_resolution(json.load(open(solve_file))["label_photos"], present)
+    low = low_resolution(json.load(open(solve_file, encoding="utf-8"))["label_photos"], present)
     log_file = os.path.join(gen, "remove-low-resolution", "deleted.json")
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
-    log = json.load(open(log_file)) if os.path.exists(log_file) else {}
-    sources = json.load(open(SOURCES)) if os.path.exists(SOURCES) else {}
+    log = json.load(open(log_file, encoding="utf-8")) if os.path.exists(log_file) else {}
+    sources = json.load(open(SOURCES, encoding="utf-8")) if os.path.exists(SOURCES) else {}
     today = datetime.date.today().isoformat()
     for s, ppm in sorted(low.items()):
         log[s] = {"px_per_mm": ppm, "source": sources.get(s), "date": today}

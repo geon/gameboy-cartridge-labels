@@ -68,7 +68,7 @@ def page(out_dir, chosen, drawn=steps.PAGE_FIGURES):
         lines = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.0f}" y2="{d:.0f}"/>' for a, b, c, d in longest)
         figures.append(f'<figure><div class="ph"><img loading="lazy" src="{rel}/{path}"><svg viewBox="0 0 {w} {h}" preserveAspectRatio="none">'
                        f'<g stroke="#f0f" stroke-width="{max(w, h) / 400:.1f}">{lines}</g></svg></div><figcaption><code>{sha1[:10]}</code> {len(seg)} segments</figcaption></figure>')
-    with open(os.path.join(out_dir, "index.html"), "w") as fh:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(f"""<!doctype html><meta charset="utf-8"><title>edges</title>
 <style>body{{font:14px system-ui;margin:16px}} figure{{display:inline-block;margin:6px;vertical-align:top}}
 .ph{{position:relative;display:inline-block}} .ph img{{max-width:300px;max-height:300px;display:block}} .ph svg{{position:absolute;inset:0;width:100%;height:100%}}</style>

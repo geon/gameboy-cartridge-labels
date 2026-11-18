@@ -24,7 +24,7 @@ import photos  # noqa: E402
 
 DROP_OFF = "save-new-images-here"
 SOURCES = "photo-sources.json"
-KEEP = {"README.md", "listing.json", ".DS_Store"}
+KEEP = {"README.md", "listing.json", ".DS_Store", "Thumbs.db", "desktop.ini"}
 
 
 def sha1(path):
@@ -37,21 +37,23 @@ def sha1(path):
 
 def save(path, data):
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, indent=1, ensure_ascii=False, sort_keys=True)
         f.write("\n")
     os.replace(tmp, path)
 
 
 def main():
-    sources = json.load(open(SOURCES)) if os.path.exists(SOURCES) else {}
+    os.makedirs(photos.ROOT, exist_ok=True)
+    os.makedirs(DROP_OFF, exist_ok=True)
+    sources = json.load(open(SOURCES, encoding="utf-8")) if os.path.exists(SOURCES) else {}
     have = photos.all_photos()
     added, duplicates, left = 0, 0, []
     folders = [("unrecorded", DROP_OFF)] + [(d, os.path.join(DROP_OFF, d)) for d in sorted(os.listdir(DROP_OFF))
                                              if os.path.isdir(os.path.join(DROP_OFF, d))]
     for source, folder in folders:
         listing_path = os.path.join(folder, "listing.json")
-        listing = json.load(open(listing_path)) if os.path.exists(listing_path) else {}
+        listing = json.load(open(listing_path, encoding="utf-8")) if os.path.exists(listing_path) else {}
         for name in sorted(os.listdir(folder)):
             path = os.path.join(folder, name)
             if os.path.isdir(path) or name in KEEP:
@@ -81,7 +83,7 @@ def main():
                 save(listing_path, listing)
             elif os.path.exists(listing_path):
                 os.remove(listing_path)
-            rest = [f for f in os.listdir(folder) if f != ".DS_Store"]
+            rest = [f for f in os.listdir(folder) if f not in KEEP - {"README.md", "listing.json"}]
             if not rest:
                 shutil.rmtree(folder)
     save(SOURCES, sources)

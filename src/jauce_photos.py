@@ -96,7 +96,7 @@ def queries(releases, pass_name=None, short=False):
     """The queries for the Japanese releases among the given ones, not yet searched (in the named pass): by the
     Japanese-script title and the system's Japanese name; short, by the title's first word and the numbers in it and
     the system's short name (GBA, GBC, GB), a release without a Japanese-script title by its romanized one."""
-    db = {r["id"]: r for r in json.load(open(serials.DATABASE))}
+    db = {r["id"]: r for r in json.load(open(serials.DATABASE, encoding="utf-8"))}
     searched = load(SEARCHES)
     out = []
     for i in releases:
@@ -121,11 +121,11 @@ def ingest(results_file, queries_file, pass_name=None):
     """results: {release: [{id, title, image (the path after auctions.c.yimg.jp/), w, h}]}, filtered in the tab. With
     a pass name, a release searched before is searched again: the pass is recorded under its "passes"."""
     sources, searches = load(SOURCES), load(SEARCHES)
-    query_of = {q["release"]: q for q in json.load(open(queries_file))}
+    query_of = {q["release"]: q for q in json.load(open(queries_file, encoding="utf-8"))}
     have = {v["auction"] for v in sources.values()}
     today = datetime.date.today().isoformat()
     given = pass_name
-    for release, items in json.load(open(results_file)).items():
+    for release, items in json.load(open(results_file, encoding="utf-8")).items():
         if release not in query_of:
             continue
         q = query_of[release]
@@ -177,7 +177,7 @@ def ingest(results_file, queries_file, pass_name=None):
 
 if __name__ == "__main__":
     if sys.argv[1] == "queries":  # queries <releases.json> [<pass name> [short]]
-        json.dump(queries(json.load(open(sys.argv[2])), sys.argv[3] if len(sys.argv) > 3 else None,
+        json.dump(queries(json.load(open(sys.argv[2], encoding="utf-8")), sys.argv[3] if len(sys.argv) > 3 else None,
                           len(sys.argv) > 4 and sys.argv[4] == "short"), sys.stdout, ensure_ascii=False)
     elif sys.argv[1] == "ingest":  # ingest <results> <queries> [<pass name>]
         ingest(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else None)

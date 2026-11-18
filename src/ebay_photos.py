@@ -16,7 +16,6 @@ downloaded-photos/searches.json: every release searched, so a run can be stopped
 """
 import contextlib
 import datetime
-import fcntl
 import json
 import os
 import re
@@ -54,12 +53,12 @@ OTHER_SYSTEMS = {"agb": r"\b(gbc|game ?boy colou?r|nds|ds|3ds|psp|gamecube|sega)
 
 
 def load(path):
-    return json.load(open(path)) if os.path.exists(path) else {}
+    return json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
 
 
 def save(path, data):
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, indent=1, ensure_ascii=False)
     os.replace(tmp, path)
 
@@ -69,9 +68,24 @@ def locked(folder):
     """Holds folder's lock, so a downloader adding to its listing.json and make move-downloads taking from it don't
     overwrite each other's changes."""
     os.makedirs(folder, exist_ok=True)
-    with open(os.path.join(folder, ".lock"), "w") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        yield
+    with open(os.path.join(folder, ".lock"), "w", encoding="utf-8", newline="\n") as f:
+        if sys.platform == "win32":
+            import msvcrt
+            while True:  # LK_LOCK gives up after ten seconds; keep waiting like flock does
+                try:
+                    msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+                    break
+                except OSError:
+                    pass
+            try:
+                yield
+            finally:
+                f.seek(0)
+                msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(f, fcntl.LOCK_EX)
+            yield
 
 
 def query_title(title):
@@ -83,10 +97,10 @@ def queries(region, releases=None, pass_name=None, searched=None):
     """The queries for the region's releases no label photo has (missing.json), not yet searched; or for the given
     releases (a list of database ids, in that order), not yet searched in the named pass. searched: the record of
     searches done (eBay's when not given; mercari_photos gives an empty one and keeps its own)."""
-    db = json.load(open(serials.DATABASE))
+    db = json.load(open(serials.DATABASE, encoding="utf-8"))
     searched = load(SEARCHES) if searched is None else searched
     if releases is None:
-        missing = set(json.load(open(MISSING)))
+        missing = set(json.load(open(MISSING, encoding="utf-8")))
         wanted = [r for r in db if r["id"] in missing and r["id"] not in searched]
     else:
         by_id = {r["id"]: r for r in db}
@@ -132,19 +146,20 @@ def region_of(r):
 
 
 def size(path):
-    o = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", path], capture_output=True, text=True).stdout
-    w, h = (int(re.search(rf"{k}: (\d+)", o).group(1)) for k in ("pixelWidth", "pixelHeight"))
-    return [w, h]
+    """[width, height] as stored in the file (EXIF turn not applied)."""
+    import photos
+    with photos.pil_open(path) as img:
+        return list(img.size)
 
 
 def ingest(results_file, queries_file, pass_name=None):
     """results: {release: [{item, title, image}]}, items already filtered and ranked in the eBay tab. With a pass name,
     a release searched before is searched again: the pass is recorded under its "passes"."""
     sources, searches = load(SOURCES), load(SEARCHES)
-    query_of = {q["release"]: q for q in json.load(open(queries_file))}
+    query_of = {q["release"]: q for q in json.load(open(queries_file, encoding="utf-8"))}
     have_items = {v["listing"].rsplit("/", 1)[1] for v in sources.values()}
     today = datetime.date.today().isoformat()
-    for release, items in json.load(open(results_file)).items():
+    for release, items in json.load(open(results_file, encoding="utf-8")).items():
         if release not in query_of:  # taken in before the query file was made again
             continue
         res = dict(query_of[release], items=items)
@@ -197,7 +212,7 @@ def ingest(results_file, queries_file, pass_name=None):
 
 if __name__ == "__main__":
     if sys.argv[1] == "queries":  # queries <region> [<releases.json> <pass name>]
-        releases = json.load(open(sys.argv[3])) if len(sys.argv) > 3 else None
+        releases = json.load(open(sys.argv[3], encoding="utf-8")) if len(sys.argv) > 3 else None
         json.dump(queries(sys.argv[2], releases, sys.argv[4] if len(sys.argv) > 4 else None), sys.stdout, ensure_ascii=False)
     elif sys.argv[1] == "ingest":  # ingest <results> <queries> [<pass name>]
         ingest(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else None)

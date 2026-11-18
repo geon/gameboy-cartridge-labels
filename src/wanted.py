@@ -105,7 +105,7 @@ def page(out_dir, wanted):
         links = " · ".join(f'<a href="{html.escape(l["url"])}">{html.escape(l["label"])}</a>' for l in e["search"])
         rows.append(f'<tr><td><b>{html.escape(e["title"])}</b><br><span class="dim">{SYSTEMS[e["system"]]}</span></td>'
                     f'<td>{"<br>".join(html.escape(s) for s in e["serials"])}</td><td>{links}</td></tr>')
-    with open(os.path.join(out_dir, "wanted.html"), "w") as f:
+    with open(os.path.join(out_dir, "wanted.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wanted photos</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}} a{{color:#9cf}} .dim{{color:#bbb;font-size:12px}}
 table{{border-collapse:collapse}} td,th{{padding:4px 8px;border-bottom:1px solid #555;text-align:left;vertical-align:top}}</style>

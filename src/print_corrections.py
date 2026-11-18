@@ -24,12 +24,12 @@ def now():
 
 
 def load(path=FILE):
-    return json.load(open(path)) if os.path.exists(path) else {"decisions": []}
+    return json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"decisions": []}
 
 
 def save(data, path=FILE):
     tmp = path + ".tmp"
-    with open(tmp, "w") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, indent=1, ensure_ascii=False)
         f.write("\n")
     os.replace(tmp, path)

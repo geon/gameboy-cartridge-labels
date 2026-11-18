@@ -18,6 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cv2, numpy as np
+import photos
 import solve as solve_step, straighten, cuts, shapes, steps, find as find_step
 
 GEN = "generated"
@@ -43,21 +44,21 @@ def photo_to_view(photo_to_ink, pts):
 class Hand:
     def __init__(self, shape):
         self.shape = shape
-        self.solved = json.load(open(os.path.join(GEN, "solve", "solve.json")))["label_photos"]
-        self.hand = json.load(open(HAND_FILE)) if os.path.exists(HAND_FILE) else {}
+        self.solved = json.load(open(os.path.join(GEN, "solve", "solve.json"), encoding="utf-8"))["label_photos"]
+        self.hand = json.load(open(HAND_FILE, encoding="utf-8")) if os.path.exists(HAND_FILE) else {}
         conf = lambda r: (r.get("edge") or {}).get("label_confidence") or 0.0
-        marked = json.load(open(find_step.NOT_LABELS)) if os.path.exists(find_step.NOT_LABELS) else {}  # gone once find runs again
+        marked = json.load(open(find_step.NOT_LABELS, encoding="utf-8")) if os.path.exists(find_step.NOT_LABELS) else {}  # gone once find runs again
         keys = [k for k, r in self.solved.items() if r["shape"] == shape and solve_step.approximate_cut(r)
                 and k not in marked and os.path.exists(self.base(k) + ".drawn.json")]
         self.order = sorted(keys, key=lambda k: (conf(self.solved[k]), k))
         self.conf = {k: conf(self.solved[k]) for k in keys}
-        self.found = {lp["key"]: lp["outline"] for lp in json.load(open(os.path.join(GEN, "find", "label-photos.json")))["label_photos"]}
+        self.found = {lp["key"]: lp["outline"] for lp in json.load(open(os.path.join(GEN, "find", "label-photos.json"), encoding="utf-8"))["label_photos"]}
 
     def base(self, key):
         return os.path.join(GEN, "straighten", straighten.file_name(key)[:-5])
 
     def drawn(self, key):
-        return json.load(open(self.base(key) + ".drawn.json"))
+        return json.load(open(self.base(key) + ".drawn.json", encoding="utf-8"))
 
     def item(self, key):
         r, d = self.solved[key], self.drawn(key)
@@ -76,7 +77,7 @@ class Hand:
         return {"key": key, "corners": np.round(corners, 2).tolist(), "label_mm": [w, h], "px_per_mm": straighten.PX_PER_MM, "notes": notes}
 
     def image(self, key):
-        img = cv2.imread(os.path.join(GEN, "straighten", straighten.file_name(key)))
+        img = photos.imread(os.path.join(GEN, "straighten", straighten.file_name(key)))
         return cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 92])[1].tobytes()
 
     def save(self, key, corners_view):
@@ -90,7 +91,7 @@ class Hand:
         w, h = shapes.LABEL_MM[r["shape"]]
         area = cv2.perspectiveTransform(np.float64([[[0, 0]], [[w, 0]], [[w, h]], [[0, h]]]), np.float64(r["cut_to_photo"])).reshape(-1, 2)
         with lock:
-            marked = json.load(open(find_step.NOT_LABELS)) if os.path.exists(find_step.NOT_LABELS) else {}
+            marked = json.load(open(find_step.NOT_LABELS, encoding="utf-8")) if os.path.exists(find_step.NOT_LABELS) else {}
             marked[key] = {"photo": r["photo"], "area": np.round(area, 1).tolist(), "found": found, "datetime": now()}
             steps.write_json(find_step.NOT_LABELS, marked)
             if self.hand.pop(key, None):

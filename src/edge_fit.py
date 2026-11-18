@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from outlines import corners_of, project
 
 MODELS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "edge-models")
-SHAPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json")))["shapes"]  # recess, label
+SHAPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "shape-models.json"), encoding="utf-8"))["shapes"]  # recess, label
 HALF, PER_MM = 10.0, 10  # the strip: +-10 mm, 10 samples per mm
 FINE = 20  # the photo brought down to at most this many px per mm first, as in training
 STEP, END = 1.0, 1.5  # strips 1 mm apart, 1.5 mm clear of the corners

@@ -29,7 +29,7 @@ def reads(text):
 
 def load_database(path=DATABASE):
     """Each serial the database knows (its cartridges' serials, its releases' ids and game ids) -> its release."""
-    releases = json.load(open(path))
+    releases = json.load(open(path, encoding="utf-8"))
     release_of = {}
     for r in releases:
         for s in r["cartridgeSerials"]:

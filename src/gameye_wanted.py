@@ -73,6 +73,6 @@ def markdown(carts, ged):
 
 if __name__ == "__main__":
     ged, out = sys.argv[1:3]
-    carts = matches(owned(ged), json.load(open(WANTED)))
-    open(out, "w").write(markdown(carts, ged))
+    carts = matches(owned(ged), json.load(open(WANTED, encoding="utf-8")))
+    open(out, "w", encoding="utf-8", newline="\n").write(markdown(carts, ged))
     print(f"{len(carts)} cartridges -> {out}")

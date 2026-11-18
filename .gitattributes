@@ -1,0 +1,17 @@
+# Text files with LF line endings on every system (Windows' autocrlf would turn the JSON, TSV and shell scripts into CRLF).
+* text=auto
+*.py text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.tsv text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+Makefile text eol=lf
+*.avif binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.heic binary
+*.npz binary
+*.onnx binary

@@ -28,13 +28,13 @@ def main():
     if unknown:
         sys.exit(f"not frozen: {' '.join(unknown)}")
     wanted = set(args.ids or entries)
-    solved = json.load(open(solve_file))["label_photos"]
+    solved = json.load(open(solve_file, encoding="utf-8"))["label_photos"]
     info = restore.fit_info(gen, solved)
     out_dir = os.path.join(gen, "refreeze")
     os.makedirs(out_dir, exist_ok=True)
     base = lambda pid: os.path.join(out_dir, straighten.file_name(pid)[:-5])
     jobs, kept = [], []
-    by_frozen = {p["frozen"]: p for p in json.load(open(prints_file))["prints"] if p.get("frozen")}
+    by_frozen = {p["frozen"]: p for p in json.load(open(prints_file, encoding="utf-8"))["prints"] if p.get("frozen")}
     for pid in sorted(wanted):
         p = by_frozen.get(pid)
         job = p and restore.job_of({**p, "id": pid}, info, entries[pid]["crop"])

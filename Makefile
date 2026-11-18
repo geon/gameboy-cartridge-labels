@@ -3,7 +3,7 @@
 # step works on the photos in sample.txt only, into generated-sample/ instead of generated/.
 #
 #   make setup
-#   Creates the Python environment, .venv/, with the packages in requirements.txt.
+#   (or python run.py setup, where there's no make) Creates the Python environment, .venv/, with the packages in requirements.txt.
 #
 #   make test
 #   Runs the unit tests (tests/).
@@ -101,7 +101,10 @@
 #
 # Plain make lists these.
 
-PYTHON := .venv/bin/python
+# Windows (Git Bash, MSYS2 or any shell with make): the environment's python is .venv/Scripts/python.exe. Without make at
+# all, python run.py <step> does the same (run.py).
+PYTHON = $(if $(wildcard .venv/Scripts/python.exe),.venv/Scripts/python.exe,.venv/bin/python)
+SYSTEM_PYTHON ?= $(if $(OS),python,python3)
 GENERATED := $(if $(SAMPLE),generated-sample,generated)
 SAMPLE_FLAG := $(if $(SAMPLE),--sample,)
 
@@ -110,7 +113,7 @@ help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
 setup:
-	python3 -m venv .venv
+	$(SYSTEM_PYTHON) -m venv .venv
 	$(PYTHON) -m pip install -r requirements.txt
 
 test:

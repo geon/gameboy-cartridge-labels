@@ -65,12 +65,12 @@ def pair_tiles(gen):
 class Tool:
     def __init__(self):
         P = os.path.join(GEN, "prints")
-        self.result = json.load(open(os.path.join(P, "prints.json")))
+        self.result = json.load(open(os.path.join(P, "prints.json"), encoding="utf-8"))
         auto_file = os.path.join(P, "automatic.json")
-        self.auto = json.load(open(auto_file))["prints"] if os.path.exists(auto_file) else [p for p in self.result["prints"] if p["keys"]]
-        self.serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json")))
-        self.solved = json.load(open(os.path.join(GEN, "solve", "solve.json")))["label_photos"]
-        found = json.load(open(os.path.join(GEN, "find", "label-photos.json")))["label_photos"]
+        self.auto = json.load(open(auto_file, encoding="utf-8"))["prints"] if os.path.exists(auto_file) else [p for p in self.result["prints"] if p["keys"]]
+        self.serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json"), encoding="utf-8"))
+        self.solved = json.load(open(os.path.join(GEN, "solve", "solve.json"), encoding="utf-8"))["label_photos"]
+        found = json.load(open(os.path.join(GEN, "find", "label-photos.json"), encoding="utf-8"))["label_photos"]
         self.outlines = {lp["key"]: lp["outline"] for lp in found}
         self.by_keys = {frozenset(p["keys"]): p for p in self.result["prints"] if p["keys"]}
         self.id_of_key = {k: p["id"] for p in self.result["prints"] for k in p["keys"]}
@@ -88,10 +88,10 @@ class Tool:
         return print_corrections.key_mapper(keys, self.outlines, prints_step.photo_sizes({k.split("@")[0] for k in old}, GEN))
 
     def corrections(self):
-        return json.load(open(CORRECTIONS)) if os.path.exists(CORRECTIONS) else {"corrections": {}}
+        return json.load(open(CORRECTIONS, encoding="utf-8")) if os.path.exists(CORRECTIONS) else {"corrections": {}}
 
     def not_labels(self):
-        return json.load(open(find_step.NOT_LABELS)) if os.path.exists(find_step.NOT_LABELS) else {}
+        return json.load(open(find_step.NOT_LABELS, encoding="utf-8")) if os.path.exists(find_step.NOT_LABELS) else {}
 
     def compute(self):
         entries = frozen.load()
@@ -215,7 +215,7 @@ class Tool:
         data = self.corrections()
         data["corrections"] = dict(sorted({**data["corrections"], **{k: serial for k in keys}}.items()))
         tmp = CORRECTIONS + ".tmp"
-        with open(tmp, "w") as f:
+        with open(tmp, "w", encoding="utf-8", newline="\n") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         os.replace(tmp, CORRECTIONS)
         print(f"serial {serial}: {len(keys)} label photos", flush=True)

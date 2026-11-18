@@ -76,7 +76,7 @@ def page(out_dir, chosen, release_of):
     """index.html: the counts, then the photos with no serial-looking string, then those with none the database knows."""
     none, unknown, known = [], [], 0
     for sha1, path in chosen.items():
-        lines = json.load(open(os.path.join(out_dir, sha1 + ".json")))["lines"]
+        lines = json.load(open(os.path.join(out_dir, sha1 + ".json"), encoding="utf-8"))["lines"]
         found = [s for l in lines for s in serials.reads(l["text"])]
         if not found:
             none.append((sha1, path, lines, found))
@@ -94,7 +94,7 @@ def page(out_dir, chosen, release_of):
                        f'<td><code>{sha1[:10]}</code><br>{html.escape(", ".join(found))}</td><td>{texts}</td></tr>')
         return "\n".join(out)
 
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>read-text</title>
 <style>body{{font:14px system-ui;margin:16px}} img{{max-width:240px;max-height:240px}} td{{vertical-align:top;padding:4px 8px;border-top:1px solid #ccc}}</style>
 <h1>read-text</h1>
