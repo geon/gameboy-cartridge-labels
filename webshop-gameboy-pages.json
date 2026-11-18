@@ -880,5 +880,28 @@
   },
   "found_by": "front page",
   "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "DKretro",
+  "region": "Denmark",
+  "shop": "https://www.dkretro.dk/",
+  "pages": {
+   "GB": "https://www.dkretro.dk/collections/gameboy-classic",
+   "GBC": "https://www.dkretro.dk/collections/gameboy-color-spil",
+   "GBA": "https://www.dkretro.dk/collections/gameboy-advance"
+  },
+  "found_by": "web search"
+ },
+ {
+  "name": "Retro MTL",
+  "region": "Canada",
+  "shop": "https://retromtl.com/",
+  "pages": {
+   "GB": "https://retromtl.com/collections/game-boy?filter.p.product_type=Jeu%20/%20Game",
+   "GBC": "https://retromtl.com/collections/game-boy-color?filter.p.product_type=Jeu%20/%20Game",
+   "GBA": "https://retromtl.com/collections/game-boy-advance?filter.p.product_type=Jeu%20/%20Game"
+  },
+  "found_by": "web search",
+  "note": "collections mix in manuals and accessories: product type Jeu / Game only"
  }
 ]
