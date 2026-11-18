@@ -124,13 +124,9 @@
   "name": "Joydo",
   "region": "Netherlands",
   "shop": "https://www.joydo.nl/",
-  "pages": {
-   "GBA": "https://www.joydo.nl/artikelbrowser/i_5_9_74",
-   "GBC": "https://www.joydo.nl/artikelbrowser/i_5_9_7",
-   "GB": "https://www.joydo.nl/artikelbrowser/i_5_9_6"
-  },
+  "pages": {},
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "skipped: very few games (the user, 2026-11-18)"
  },
  {
   "name": "GameshopX",
@@ -149,7 +145,8 @@
    "GBC": "https://gameplayer.nl/product-category/nintendo/gameboy-color/",
    "GBA": "https://gameplayer.nl/product-category/nintendo/gameboy-advance/"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "note": "Game Boy page has lots of games (the user, 2026-11-18); GBC and GBA pages have 1–3"
  },
  {
   "name": "Gameshop Enter",
@@ -197,9 +194,10 @@
   "region": "Netherlands",
   "shop": "https://www.game-outlet.nl/",
   "pages": {
-   "GB": "https://www.game-outlet.nl/nintendo-retro/gameboy/gameboy-games/"
+   "GB+GBC+GBA": "https://www.game-outlet.nl/nintendo-retro/gameboy/gameboy-games/"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "note": "one page for all three (the user, 2026-11-18)"
  },
  {
   "name": "Gameshop Twente",
@@ -279,11 +277,11 @@
   "region": "Netherlands",
   "shop": "https://www.gameshop.nl/webshop/index.php",
   "pages": {
-   "GBA": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy+Advance",
-   "GB": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy"
+   "GB+GBC": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy",
+   "GBA": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy+Advance"
   },
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "the Gameboy page mixes Game Boy and Game Boy Color (the user, 2026-11-18)"
  },
  {
   "name": "Nedgame",
@@ -333,11 +331,11 @@
   "region": "Belgium",
   "shop": "https://www.gamesenco.com/",
   "pages": {
-   "GBA": "https://www.gamesenco.com/collections/gameboy-advance-1",
-   "GB": "https://www.gamesenco.com/collections/nintendo-gameboy"
+   "GB+GBC": "https://www.gamesenco.com/collections/nintendo-gameboy",
+   "GBA": "https://www.gamesenco.com/collections/gameboy-advance-1?filter.p.product_type=Cartridge+Only"
   },
   "found_by": "front page",
-  "note": "system pages (not game-only): may include consoles and accessories"
+  "note": "the Gameboy page mixes Game Boy and Game Boy Color; the GBA page has a Cartridge Only filter (the user, 2026-11-18)"
  },
  {
   "name": "Retro Gaming Fun",
@@ -481,18 +479,20 @@
   "region": "Spain",
   "shop": "https://latiendadevideojuegos.com/",
   "pages": {
-   "GB": "https://latiendadevideojuegos.com/juegos-nintendo-game-boy/"
+   "GB+GBC+GBA": "https://latiendadevideojuegos.com/juegos-nintendo-game-boy/"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "note": "one page for all three (the user, 2026-11-18)"
  },
  {
   "name": "El Rincon Del Retro",
   "region": "Spain",
   "shop": "https://elrincondelretro.com/",
   "pages": {
-   "GB": "https://elrincondelretro.com/c/videojuegos-retro/nintendo-gameboy"
+   "GB+GBC+GBA": "https://elrincondelretro.com/c/videojuegos-retro/nintendo-gameboy"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "note": "one page for all three, paged with ?page=N (the user, 2026-11-18)"
  },
  {
   "name": "Game Play Stores",
@@ -514,7 +514,7 @@
    "GBC": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-color/"
   },
   "found_by": "front page",
-  "note": "no Game Boy (classic) games page found; the earlier one was a battery-change service"
+  "note": "very little Game Boy Color, probably no Game Boy (the user, 2026-11-18)"
  },
  {
   "name": "Sore Thumbs Retro Games",
@@ -528,10 +528,9 @@
   "name": "Retro Games Swindon",
   "region": "United Kingdom",
   "shop": "https://retrogames-swindon.co.uk/home",
-  "pages": {
-   "GB": "https://retrogames-swindon.co.uk/home/f/amazing-gameboy-games"
-  },
-  "found_by": "sitemap"
+  "pages": {},
+  "found_by": "sitemap",
+  "note": "not a webshop (the user, 2026-11-18)"
  },
  {
   "name": "Retro World",
@@ -610,7 +609,8 @@
    "GBC": "https://www.spelochsant.se/kategori/retro/nintendo/gameboy-color/spel",
    "GBA": "https://www.spelochsant.se/kategori/retro/nintendo/gameboy-advance/spel"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "note": "products are loaded by script; the page's Nuxt data has the category ids (71, 76, 81) and counts: 114, 21, 94 games (2026-11-18)"
  },
  {
   "name": "Gameshop",
@@ -745,10 +745,8 @@
   "name": "Reloadshop",
   "region": "Finland",
   "shop": "https://www.reloadshop.fi/",
-  "pages": {
-   "GB": "https://www.reloadshop.fi/c/retro/game-boy"
-  },
-  "note": "system page; built by script, not checked",
+  "pages": {},
+  "note": "offline (the user, 2026-11-18)",
   "found_by": "sitemap"
  },
  {
@@ -788,7 +786,8 @@
   "pages": {
    "GB": "https://retroworld.no/collections/nintendo-game-boy-spill"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "note": "out of stock (the user, 2026-11-18)"
  },
  {
   "name": "eStarland",
