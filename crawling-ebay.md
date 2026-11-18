@@ -325,3 +325,11 @@ document.body.prepend(inp);
 - A store's search (`_ssn=<seller>&_nkw=gameboy`) on ebay.co.uk: curl gets HTTP 403 there too; from inside the tab, `fetch()` of the same URL with `_ipg=240&_pgn=<n>` works: 467 listings in 2 pages (a third page repeats the second), each with an image id. Not blocked.
 - This seller: Japanese cartridges, the serial in most titles (DMG-PMA, AGB-ARZJ-JPN). 64 listings left out by title: manuals (most), Famicom games, cartridge cases, DS Lite connector covers, guide books. None complete in box. 28 had been downloaded by an earlier search.
 - `python3 src/ebay_photos.py store <listings.json> <store name>`: the first photo of each listing, to downloaded-photos/ebay-store/ (listing.json there, `store` in each entry); records in downloaded-photos/sources.json with `store` instead of `release`, too-small photos recorded with `too_small`. The listings: downloaded-photos/ebay-store-sumomo-syoukai.json.
+
+## 2026-11-18: two German stores (ebay.de)
+
+- The user picked them from search results: retrospielewelt 80er 90er 2000er (https://www.ebay.de/str/retrospielewelt80er90er2000er, seller `retrospielewelt`) and chronogamesretro (seller `chrono-games`). The seller id for `_ssn` is in the store page's HTML (`_ssn=` links, `"username"`), not the store's URL name.
+- Searched from an ebay.de tab with `_ssn=<seller>&_nkw=gameboy` and `_nkw=game boy` (same results both ways), `_ipg=240`: 35 and 23 listings, one page each. Not blocked.
+- The extension returns at most about 1000 characters per call: listings come out as a browser download (Chrome asks once to allow several downloads).
+- Left out by hand (NOT_CARTRIDGE doesn't catch them): other systems' games (N64, SNES, NES, Mega Drive), a games guide, two consoles without games. A console bundle with 2 games kept (a lot).
+- Kept: retrospielewelt 23 of 28 (5 too small), chronogamesretro 19 of 20 (1 too small). Listings: downloaded-photos/ebay-store-retrospielewelt.json, downloaded-photos/ebay-store-chrono-games.json.
