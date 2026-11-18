@@ -103,7 +103,8 @@
   "region": "Netherlands",
   "shop": "https://www.gameshopx.nl/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Gameplayer",
@@ -142,7 +143,8 @@
   "region": "Netherlands",
   "shop": "https://www.mariowii.nl/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Retro Gameking",
@@ -203,14 +205,19 @@
   "region": "Netherlands",
   "shop": "https://www.bmmgames.nl/shop/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "2 HG",
   "region": "Netherlands",
   "shop": "https://2hg.nl/en/",
-  "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "pages": {
+   "GB": "https://2hg.nl/en/145-game-boy-loose-cassettes",
+   "GBC": "https://2hg.nl/en/146-game-boy-color-loose-games",
+   "GBA": "https://2hg.nl/en/149-game-boy-advance-loose-cassettes"
+  },
+  "found_by": "the user"
  },
  {
   "name": "A-Retrogame.nl",
@@ -329,8 +336,12 @@
   "name": "Retro Gameland",
   "region": "Belgium",
   "shop": "https://www.retrogameland.be/",
-  "pages": {},
-  "note": "did not load (403 to curl; the tab stayed on the previous page)"
+  "pages": {
+   "GB": "https://www.retrogameland.be/c-5160633/game-boy-games/",
+   "GBC": "https://www.retrogameland.be/c-5163212/game-boy-color-games/",
+   "GBA": "https://www.retrogameland.be/c-5163215/game-boy-advance-games/"
+  },
+  "found_by": "the user"
  },
  {
   "name": "Konsolenkost",
@@ -379,8 +390,12 @@
   "name": "Tradergames",
   "region": "France",
   "shop": "https://www.tradergames.fr/fr/",
-  "pages": {},
-  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+  "pages": {
+   "GB": "https://www.tradergames.fr/fr/418-game-boy",
+   "GBC": "https://www.tradergames.fr/fr/419-game-boy-color",
+   "GBA": "https://www.tradergames.fr/fr/420-game-boy-advance"
+  },
+  "found_by": "the user"
  },
  {
   "name": "Gamecash",
@@ -462,7 +477,8 @@
   "region": "United Kingdom",
   "shop": "https://sorethumbretrogames.com/",
   "pages": {},
-  "note": "Facebook page / no Game Boy pages found"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Retro Games Swindon",
@@ -478,7 +494,8 @@
   "region": "United Kingdom",
   "shop": "https://www.retro-world.co.uk/",
   "pages": {},
-  "note": "domain parked (retro-world.co.uk)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Console Passion",
@@ -563,7 +580,8 @@
   "region": "Sweden",
   "shop": "https://www.retroplay.se/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Conceptentertainment",
@@ -603,28 +621,32 @@
   "region": "Sweden",
   "shop": "https://www.coolshop.se/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Niotek",
   "region": "Sweden",
   "shop": "https://niotek.se/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 503, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Retro Game Tycoon",
   "region": "Finland",
   "shop": "https://retrogametycoon.com/en/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Puolenkuunpelit",
   "region": "Finland",
   "shop": "https://www.puolenkuunpelit.com/kauppa/default.php",
   "pages": {},
-  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Pelimies",
@@ -640,7 +662,8 @@
   "region": "Finland",
   "shop": "https://www.konsolinet.fi/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "VPD",
@@ -668,7 +691,8 @@
   "region": "Finland",
   "shop": "https://www.pelikauppias.fi/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 000, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Reloadshop",
@@ -767,7 +791,8 @@
   "region": "United States",
   "shop": "http://www.lunavideogames.com/",
   "pages": {},
-  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+  "note": "no Game Boy pages (checked by the user, 2026-11-18)",
+  "found_by": "the user"
  },
  {
   "name": "Steel Collectibles",
