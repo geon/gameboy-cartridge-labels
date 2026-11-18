@@ -128,6 +128,32 @@ def search_part(job):
     return sha1
 
 
+def search(features_dir, shas, todo, neighbours, workers):
+    """The index of shas' photos (plan_index) searched for the keypoints of todo's photos, one part at a time, into
+    their files in neighbours (a NeighbourFiles, its folder made and empty); workers 0: in this process. Returns the
+    index's (parts, owner, which)."""
+    global _part
+    parts, owner, which = plan_index(features_dir, shas)
+    print(f"index: {len(owner)} keypoints in {len(parts)} parts", flush=True)
+    bounds = np.concatenate([[0], np.cumsum(np.bincount(owner, minlength=len(shas)))])
+    which_of = [which[bounds[i]:bounds[i + 1]] for i in range(len(shas))]
+    k = NEIGHBOURS + SELF_EXTRA
+    for p, (start, members) in enumerate(parts):
+        _part = (build_part(features_dir, shas, members, which_of), start, features_dir)
+        searches = [(s, neighbours.path(s), k, p == 0) for s in todo]
+        if workers:
+            with multiprocessing.get_context("fork").Pool(workers) as pool:  # the workers share the part built here
+                for n, _ in enumerate(pool.imap_unordered(search_part, searches, chunksize=4), 1):
+                    if n % 500 == 0 or n == len(searches):
+                        print(f"part {p + 1} of {len(parts)}: searched {n} of {len(searches)}", flush=True)
+        else:
+            for job in searches:
+                search_part(job)
+        _part = None
+        gc.collect()
+    return parts, owner, which
+
+
 def knn(parts, des, k):
     """Each descriptor's k nearest among all parts of the index: [[Neighbour, nearest first]], from the photo's
     neighbours file (parts is a NeighbourFiles; the photo is _query)."""
@@ -279,7 +305,7 @@ def page(out_dir, chosen):
 
 
 def main():
-    global _index, _part
+    global _index
     ap = argparse.ArgumentParser()
     ap.add_argument("--sample", action="store_true")
     ap.add_argument("--workers", type=int, default=8)
@@ -313,30 +339,13 @@ def main():
     done = images + done
     if todo:
         print(f"indexing {len(shas)} photos", flush=True)
-        parts, owner, which = plan_index(features_dir, shas)
-        print(f"index: {len(owner)} keypoints in {len(parts)} parts", flush=True)
-        which_of, r = [], 0
-        counts = np.bincount(owner, minlength=len(shas))
-        for c in counts:
-            which_of.append(which[r:r + c])
-            r += c
         neighbours = NeighbourFiles(os.path.join(out_dir, "neighbours"))
         shutil.rmtree(neighbours.folder, ignore_errors=True)
         os.makedirs(neighbours.folder)
-        ctx = multiprocessing.get_context("fork")  # the workers share the part (or the owners) built here
-        k = NEIGHBOURS + SELF_EXTRA
-        for p, (start, members) in enumerate(parts):
-            _part = (build_part(features_dir, shas, members, which_of), start, features_dir)
-            searches = [(s, neighbours.path(s), k, p == 0) for s in todo]
-            with ctx.Pool(args.workers) as pool:
-                for n, _ in enumerate(pool.imap_unordered(search_part, searches, chunksize=4), 1):
-                    if n % 500 == 0 or n == len(searches):
-                        print(f"part {p + 1} of {len(parts)}: searched {n} of {len(searches)}", flush=True)
-            _part = None
-            gc.collect()
+        _, owner, which = search(features_dir, shas, todo, neighbours, args.workers)
         _index = (neighbours, owner, which, shas, features_dir)
         jobs = [(len(done) + k, out(s)) for k, s in enumerate(todo)]
-        with ctx.Pool(args.workers) as pool:
+        with multiprocessing.get_context("fork").Pool(args.workers) as pool:  # the workers share the owners built here
             for n, _ in enumerate(pool.imap_unordered(match_job, jobs), 1):
                 if n % 50 == 0 or n == len(jobs):
                     print(f"matched {n} of {len(jobs)}", flush=True)

@@ -59,10 +59,12 @@ def test_matches_a_pasted_patch_and_not_another_photo(tmp_path):
     for name, img in (("a", a), ("b", b), ("c", c)):
         steps.write_npz(str(feats / f"{name}.npz"), **features.features(img))
     shas = ["a", "b", "c"]
-    flann, owner, which = match.build_index(str(feats), shas)
-    match._index = (flann, owner, which, shas, str(feats))
+    neighbours = match.NeighbourFiles(str(tmp_path / "neighbours"))
+    os.makedirs(neighbours.folder)
+    _, owner, which = match.search(str(feats), shas, shas, neighbours, 0)
+    match._index = (neighbours, owner, which, shas, str(feats))
     for i, s in enumerate(shas):
-        match.match_photo((i, str(out / f"{s}.npz")))
+        match.match_job((i, str(out / f"{s}.npz")))
     found = match.read_matches(str(out), shas)
     pairs = {(x, y) for x, y, _, _ in found}
     assert ("b", "a") in pairs                   # stored once, in the later photo's file
@@ -79,11 +81,16 @@ def test_an_index_in_parts_finds_the_nearest_neighbours(tmp_path, monkeypatch):
         d = rng.normal(0, 1, (300, 128)).astype(np.float32)
         np.savez(tmp_path / (s + ".npz"), points=np.zeros((300, 2)), responses=rng.random(300), descriptors=d, size=np.array([100, 100]))
     monkeypatch.setattr(match, "INDEX_ROWS", 650)   # 2 photos per part: 3 parts
-    parts, owner, which = match.build_index(str(tmp_path), shas)
-    assert len(parts) == 3 and len(owner) == 1800
     whole = np.concatenate([match.load_features(str(tmp_path), s)["descriptors"][np.argsort(-match.load_features(str(tmp_path), s)["responses"])] for s in shas])
     q = whole[::37] + rng.normal(0, 0.05, whole[::37].shape).astype(np.float32)
-    found = match.knn(parts, q, 3)
+    query = "f" * 40  # a photo searched for, not in the index
+    np.savez(tmp_path / (query + ".npz"), points=np.zeros((len(q), 2)), responses=np.zeros(len(q)), descriptors=q, size=np.array([100, 100]))
+    neighbours = match.NeighbourFiles(str(tmp_path / "neighbours"))
+    os.makedirs(neighbours.folder)
+    parts, owner, which = match.search(str(tmp_path), shas, [query], neighbours, 0)
+    assert len(parts) == 3 and len(owner) == 1800
+    monkeypatch.setattr(match, "_query", neighbours.path(query))
+    found = match.knn(neighbours, q, 3)
     exact = cv2.BFMatcher(cv2.NORM_L2).knnMatch(q, whole, k=3)
     same = np.mean([f[0].trainIdx == e[0].trainIdx for f, e in zip(found, exact)])
     assert same > 0.95
