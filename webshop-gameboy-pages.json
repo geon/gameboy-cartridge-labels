@@ -1,0 +1,795 @@
+[
+ {
+  "name": "Dutch Game Boys",
+  "region": "Netherlands",
+  "shop": "https://www.dutchgameboys.com/",
+  "pages": {
+   "GBA": "https://www.dutchgameboys.com/product-categorie/nintendo/nintendo-gameboy/nintendo-gameboy-advance/games-nintendo-gameboy-advance/",
+   "GBC": "https://www.dutchgameboys.com/product-categorie/nintendo/nintendo-gameboy/nintendo-gameboy-color/games-nintendo-gameboy-color/",
+   "GB": "https://www.dutchgameboys.com/product-categorie/nintendo/nintendo-gameboy/nintendo-gameboy-classic/games-nintendo-gameboy-classic/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Blazebit",
+  "region": "Netherlands",
+  "shop": "https://blazebit.nl/",
+  "pages": {
+   "GBA": "https://blazebit.nl/product-category/game-boy-advance/games-game-boy-advance/",
+   "GBC": "https://blazebit.nl/product-category/game-boy-color/games-game-boy-color/",
+   "GB": "https://blazebit.nl/product-category/game-boy/games-game-boy/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Retro Gamingshop",
+  "region": "Netherlands",
+  "shop": "https://www.retro-gamingshop.nl/",
+  "pages": {
+   "GBA": "https://www.retro-gamingshop.nl/gameboy-advance-games/",
+   "GB": "https://www.retro-gamingshop.nl/nintendo-gameboy-games/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Player 2 Gamestore",
+  "region": "Netherlands",
+  "shop": "https://www.player2gamestore.nl/",
+  "pages": {
+   "GB": "https://www.player2gamestore.nl/c-3326268/gameboy-games/",
+   "GBC": "https://www.player2gamestore.nl/c-3321263/gameboy-color-games/",
+   "GBA": "https://www.player2gamestore.nl/c-3306908/gameboy-advance-games/"
+  },
+  "found_by": "browser"
+ },
+ {
+  "name": "Press Start Games",
+  "region": "Netherlands",
+  "shop": "https://www.press-startgames.com/",
+  "pages": {
+   "GB": "https://www.press-startgames.com/c-3099195/gameboy-games/",
+   "GBC": "https://www.press-startgames.com/c-3099235/gameboy-color-games/",
+   "GBA": "https://www.press-startgames.com/c-3099450/gameboy-advance-games/"
+  },
+  "found_by": "browser"
+ },
+ {
+  "name": "RetroSoulsBorne",
+  "region": "Netherlands",
+  "shop": "https://www.retrosoulsborne.nl/",
+  "pages": {
+   "GBA": "https://www.retrosoulsborne.nl/categorie/retro-nintendo/gameboy-advance/gameboy-advance-games/",
+   "GB": "https://www.retrosoulsborne.nl/categorie/retro-nintendo/gameboy/gameboy-games/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Mad Gameshop",
+  "region": "Netherlands",
+  "shop": "https://www.mad-gameshop.com/",
+  "pages": {
+   "GB": "https://www.mad-gameshop.com/c-3680367/gameboy-games/",
+   "GBC": "https://www.mad-gameshop.com/c-3680389/gameboy-color-games/",
+   "GBA": "https://www.mad-gameshop.com/c-3680372/gameboy-advance-games/"
+  },
+  "note": "also cart-only subcategories: /c-3754742/gameboy-cart-only/, /c-3754786/gameboy-color-cart-only/, /c-3754892/gameboy-advance-cart-only/",
+  "found_by": "browser"
+ },
+ {
+  "name": "Retero",
+  "region": "Netherlands",
+  "shop": "https://www.retero.nl/",
+  "pages": {
+   "GBA": "https://www.retero.nl/games/game-boy-advance/",
+   "GBC": "https://www.retero.nl/games/game-boy-color/",
+   "GB": "https://www.retero.nl/games/game-boy-classic/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Joydo",
+  "region": "Netherlands",
+  "shop": "https://www.joydo.nl/",
+  "pages": {
+   "GBA": "https://www.joydo.nl/artikelbrowser/i_5_9_74",
+   "GBC": "https://www.joydo.nl/artikelbrowser/i_5_9_7",
+   "GB": "https://www.joydo.nl/artikelbrowser/i_5_9_6"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "GameshopX",
+  "region": "Netherlands",
+  "shop": "https://www.gameshopx.nl/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "Gameplayer",
+  "region": "Netherlands",
+  "shop": "https://www.gameplayer.nl/games/",
+  "pages": {
+   "GB": "https://gameplayer.nl/product-category/nintendo/gameboy/",
+   "GBC": "https://gameplayer.nl/product-category/nintendo/gameboy-color/",
+   "GBA": "https://gameplayer.nl/product-category/nintendo/gameboy-advance/"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Gameshop Enter",
+  "region": "Netherlands",
+  "shop": "https://gameshopenter.com/",
+  "pages": {
+   "GB+GBC": "https://gameshopenter.com/sv/game-boy-spel",
+   "GBA": "https://gameshopenter.com/sv/gba-spel"
+  },
+  "found_by": "browser"
+ },
+ {
+  "name": "Gameland Groningen",
+  "region": "Netherlands",
+  "shop": "https://www.gameland-groningen.nl/nl/",
+  "pages": {
+   "GBA": "https://www.gameland-groningen.nl/nl/nintendo/gameboy-advance/gba-games/",
+   "GBC": "https://www.gameland-groningen.nl/nl/nintendo/gameboy-color/gbc-games/",
+   "GB": "https://www.gameland-groningen.nl/nl/nintendo/gameboy/gameboy-games/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Mario Wii",
+  "region": "Netherlands",
+  "shop": "https://www.mariowii.nl/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "Retro Gameking",
+  "region": "Netherlands",
+  "shop": "https://www.retrogameking.com/",
+  "pages": {
+   "GBA": "https://www.retrogameking.com/product-category/game-boy-advance/game-game-boy-advance/",
+   "GBC": "https://www.retrogameking.com/product-category/game-boy-color/game-game-boy-color/",
+   "GB": "https://www.retrogameking.com/product-category/game-boy/game-game-boy/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Game Outlet",
+  "region": "Netherlands",
+  "shop": "https://www.game-outlet.nl/",
+  "pages": {
+   "GBC": "https://www.game-outlet.nl/gameboy-color-roswell-conspiracies.html",
+   "GB": "https://www.game-outlet.nl/nintendo-retro/gameboy/gameboy-games/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Gameshop Twente",
+  "region": "Netherlands",
+  "shop": "https://gameshop-twente.nl/",
+  "pages": {
+   "GBA": "https://gameshop-twente.nl/nintendo/gba/games",
+   "GBC": "https://gameshop-twente.nl/nintendo/gbc/games",
+   "GB": "https://gameshop-twente.nl/nintendo/gameboy/games"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Replay Games",
+  "region": "Netherlands",
+  "shop": "https://www.replaygames.nl/",
+  "pages": {
+   "GBA": "https://www.replaygames.nl/gameboy/gameboy-advance/gba-games",
+   "GBC": "https://www.replaygames.nl/gameboy/gameboy-color/gbc-games",
+   "GB": "https://www.replaygames.nl/gameboy/gameboy-classic/gb-games"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Games & Gifts by Haniel",
+  "region": "Netherlands",
+  "shop": "https://www.hanielonline.nl/",
+  "pages": {
+   "GB": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gameboy-games",
+   "GBC": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gbc-games",
+   "GBA": "https://www.hanielonline.nl/tweedehands/tweedehands-nintendo-games/tweedehands-nintendo-gba-games"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "BMM Games 'n Vinyl",
+  "region": "Netherlands",
+  "shop": "https://www.bmmgames.nl/shop/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "2 HG",
+  "region": "Netherlands",
+  "shop": "https://2hg.nl/en/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "A-Retrogame.nl",
+  "region": "Netherlands",
+  "shop": "https://a-retrogame.nl/",
+  "pages": {
+   "GBA": "https://a-retrogame.nl/index.php?id_category=34&controller=category",
+   "GBC": "https://a-retrogame.nl/index.php?id_category=33&controller=category",
+   "GB": "https://a-retrogame.nl/index.php?id_category=8&controller=category"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Gameshock",
+  "region": "Netherlands",
+  "shop": "https://game-shock.nl/",
+  "pages": {
+   "GB": "https://www.game-shock.nl/gameboy-gebruikt/spel-boxed/",
+   "GBC": "https://www.game-shock.nl/gameboy-gebruikt/gameboy-color-gebruikt/",
+   "GBA": "https://www.game-shock.nl/gameboy-advance-gebruikt/spel-losse-cartridge/"
+  },
+  "note": "GB: only a boxed-games category found",
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Gameshop",
+  "region": "Netherlands",
+  "shop": "https://www.gameshop.nl/webshop/index.php",
+  "pages": {
+   "GBA": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy+Advance",
+   "GB": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Nedgame",
+  "region": "Netherlands",
+  "shop": "https://www.nedgame.nl/",
+  "pages": {
+   "GB": "https://www.nedgame.nl/zoek/systeem:gameboy/",
+   "GBC": "https://www.nedgame.nl/zoek/systeem:gameboy-color/",
+   "GBA": "https://www.nedgame.nl/zoek/systeem:gameboy-advance/"
+  },
+  "note": "per-system search, may include accessories",
+  "found_by": "browser"
+ },
+ {
+  "name": "Timmy's Vintage Finds",
+  "region": "Netherlands",
+  "shop": "https://www.timmysvintagefinds.nl",
+  "pages": {
+   "GBA": "https://www.timmysvintagefinds.nl/nintendo/gameboy/gameboy-advance",
+   "GBC": "https://www.timmysvintagefinds.nl/nintendo/gameboy/gameboy-color",
+   "GB": "https://www.timmysvintagefinds.nl/nintendo/gameboy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Retro Nintendo Kopen",
+  "region": "Netherlands",
+  "shop": "https://www.retronintendokopen.nl/",
+  "pages": {
+   "GBA": "https://www.retronintendokopen.nl/gameboy-advance/games",
+   "GBC": "https://www.retronintendokopen.nl/gameboy-color/games",
+   "GB": "https://www.retronintendokopen.nl/gameboy/games"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Gamewalhalla",
+  "region": "Belgium",
+  "shop": "https://www.gamewalhalla.be",
+  "pages": {
+   "GB": "https://www.gamewalhalla.be/Nintendo/Gameboy/Gameboy-Games"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Games & Co",
+  "region": "Belgium",
+  "shop": "https://www.gamesenco.com/",
+  "pages": {
+   "GBA": "https://www.gamesenco.com/collections/gameboy-advance-1",
+   "GB": "https://www.gamesenco.com/collections/nintendo-gameboy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Retro Gaming Fun",
+  "region": "Belgium",
+  "shop": "https://www.retrogamingfun.be/",
+  "pages": {
+   "GB": "https://www.retrogamingfun.be/product-categorie/games/nintendo/gameboy-classic/gameboy-classic-games/",
+   "GBC": "https://www.retrogamingfun.be/product-categorie/games/nintendo/gameboy-color/gameboy-color-games/",
+   "GBA": "https://www.retrogamingfun.be/product-categorie/games/nintendo/gameboy-advance/gameboy-advance-games/"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Retro Game Collector",
+  "region": "Belgium",
+  "shop": "https://retrogamecollector.be/",
+  "pages": {
+   "GBA": "https://retrogamecollector.be/product-category/nintendo/gameboy-advance/",
+   "GBC": "https://retrogamecollector.be/product-category/nintendo/gameboy-color/",
+   "GB": "https://retrogamecollector.be/product-category/nintendo/gameboy-classic/"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Retro Gameland",
+  "region": "Belgium",
+  "shop": "https://www.retrogameland.be/",
+  "pages": {},
+  "note": "did not load (403 to curl; the tab stayed on the previous page)"
+ },
+ {
+  "name": "Konsolenkost",
+  "region": "Germany",
+  "shop": "https://www.konsolenkost.de/",
+  "pages": {
+   "GBA": "https://www.konsolenkost.de/gameboy-advance/",
+   "GBC": "https://www.konsolenkost.de/gameboy-color/",
+   "GB": "https://www.konsolenkost.de/suche/?refinementList%5Btype%5D%5B0%5D=Spiele&refinementList%5Bavailability%5D%5B0%5D=Sofort%20lieferbar&query=gameboy%20spiele%20jap"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Better Used Gaming",
+  "region": "Germany",
+  "shop": "https://better-used.de/",
+  "pages": {
+   "GBA": "https://better-used.de/nintendo/gameboy-advance/spiele",
+   "GBC": "https://better-used.de/nintendo/gameboy-color/spiele",
+   "GB": "https://better-used.de/nintendo/gameboy/spiele"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Retro Game Collector Heaven",
+  "region": "Germany",
+  "shop": "https://www.retrogamecollectorheaven.de/",
+  "pages": {
+   "GBA": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_7",
+   "GBC": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_6",
+   "GB": "https://retrogamecollectorheaven.de/index.php?main_page=index&cPath=210_4"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Netgames",
+  "region": "Germany",
+  "shop": "https://netgames.de/",
+  "pages": {
+   "GB+GBC+GBA": "https://netgames.de/RETRO/RETRO-Spiele/nintendo-gb-gbc-gba/"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Tradergames",
+  "region": "France",
+  "shop": "https://www.tradergames.fr/fr/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+ },
+ {
+  "name": "Gamecash",
+  "region": "France",
+  "shop": "https://www.gamecash.fr/",
+  "pages": {
+   "GB": "https://www.gamecash.fr/jeux-occasion-game-boy-u29.html",
+   "GBA": "https://www.gamecash.fr/jeux-occasion-game-boy-advance-u30.html"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Chollogames",
+  "region": "Spain",
+  "shop": "https://www.chollogames.es/",
+  "pages": {
+   "GBA": "https://www.chollogames.es/26-gameboy-advance",
+   "GBC": "https://www.chollogames.es/27-game-boy-color",
+   "GB": "https://www.chollogames.es/24-game-boy-b-n"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Americans Game Ocio",
+  "region": "Spain",
+  "shop": "https://americansgameocio.com/es/",
+  "pages": {
+   "GBA": "https://americansgameocio.com/es/119-game-boy-advance",
+   "GBC": "https://americansgameocio.com/es/118-game-boy-color",
+   "GB": "https://americansgameocio.com/es/66-game-boy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "La Tienda de Videojuegos",
+  "region": "Spain",
+  "shop": "https://latiendadevideojuegos.com/",
+  "pages": {
+   "GB": "https://latiendadevideojuegos.com/juegos-nintendo-game-boy/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "El Rincon Del Retro",
+  "region": "Spain",
+  "shop": "https://elrincondelretro.com/",
+  "pages": {
+   "GB": "https://elrincondelretro.com/c/videojuegos-retro/nintendo-gameboy"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Game Play Stores",
+  "region": "Spain",
+  "shop": "https://www.gameplaystores.es/",
+  "pages": {
+   "GBA": "https://www.gameplaystores.es/1087-juegos-gameboy-advance",
+   "GBC": "https://www.gameplaystores.es/1083-juegos-gameboy-color",
+   "GB": "https://www.gameplaystores.es/1078-juegos-gameboy"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Play 'n Play",
+  "region": "Portugal",
+  "shop": "https://www.playnplay.net/",
+  "pages": {
+   "GBA": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-advance/",
+   "GBC": "https://www.playnplay.net/categoria-produto/retrogaming/game-boy-color/",
+   "GB": "https://www.playnplay.net/mudanca-de-pilha-cartuchos-game-boy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Sore Thumbs Retro Games",
+  "region": "United Kingdom",
+  "shop": "https://sorethumbretrogames.com/",
+  "pages": {},
+  "note": "Facebook page / no Game Boy pages found"
+ },
+ {
+  "name": "Retro Games Swindon",
+  "region": "United Kingdom",
+  "shop": "https://retrogames-swindon.co.uk/home",
+  "pages": {
+   "GB": "https://retrogames-swindon.co.uk/home/f/amazing-gameboy-games"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Retro World",
+  "region": "United Kingdom",
+  "shop": "https://www.retro-world.co.uk/",
+  "pages": {},
+  "note": "domain parked (retro-world.co.uk)"
+ },
+ {
+  "name": "Console Passion",
+  "region": "United Kingdom",
+  "shop": "https://consolepassion.co.uk/",
+  "pages": {
+   "GB": "https://consolepassion.co.uk/products/nintendo-gameboy",
+   "GBC": "https://consolepassion.co.uk/products/nintendo-gameboy-colour",
+   "GBA": "https://consolepassion.co.uk/products/nintendo-gameboy-advance"
+  },
+  "note": "/products/ pages: may be single items, not lists",
+  "found_by": "browser"
+ },
+ {
+  "name": "Retro Game World",
+  "region": "Switserland",
+  "shop": "https://retrogameworld.ch/",
+  "pages": {
+   "GBA": "https://retrogameworld.ch/produkt-kategorie/nintendo/gba/spiele-ovp-advance/",
+   "GBC": "https://retrogameworld.ch/produkt-kategorie/nintendo/gameboy/module-color/",
+   "GB": "https://retrogameworld.ch/produkt-kategorie/nintendo/gameboy/module/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Game Paradise",
+  "region": "Switserland",
+  "shop": "https://www.gameparadise.ch/",
+  "pages": {
+   "GB": "https://www.gameparadise.ch/nintendo/game-boy/game-boy-old-style/spiele-gebraucht/",
+   "GBC": "https://www.gameparadise.ch/nintendo/game-boy/game-boy-color/spiele-gebraucht/",
+   "GBA": "https://www.gameparadise.ch/nintendo/game-boy/game-boy-advancesp/spiele-gebraucht/"
+  },
+  "note": "also spiele-fabrikneu (new) for each",
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Retrospelbutiken",
+  "region": "Sweden",
+  "shop": "https://retrospelbutiken.se/store/main.php",
+  "pages": {
+   "GBA": "https://retrospelbutiken.se/store/category.php?category=26",
+   "GBC": "https://retrospelbutiken.se/store/category.php?category=27",
+   "GB": "https://retrospelbutiken.se/store/category.php?category=28"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Nostalgibutiken",
+  "region": "Sweden",
+  "shop": "https://nostalgibutiken.com/",
+  "pages": {
+   "GB+GBC": "https://nostalgibutiken.com/plattform/gameboy_gameboy-color/spel_227/",
+   "GBA": "https://nostalgibutiken.com/plattform/gameboy-advance/spel_232/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Spel & Sånt",
+  "region": "Sweden",
+  "shop": "https://www.spelochsant.se/",
+  "pages": {
+   "GB": "https://www.spelochsant.se/kategori/retro/nintendo/gameboy/spel",
+   "GBC": "https://www.spelochsant.se/kategori/retro/nintendo/gameboy-color/spel",
+   "GBA": "https://www.spelochsant.se/kategori/retro/nintendo/gameboy-advance/spel"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Gameshop",
+  "region": "Sweden",
+  "shop": "https://gameshop.se/",
+  "pages": {
+   "GB": "https://gameshop.se/produkt-kategori/gameboy/"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Retroplay",
+  "region": "Sweden",
+  "shop": "https://www.retroplay.se/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "Conceptentertainment",
+  "region": "Sweden",
+  "shop": "https://conceptentertainment.se/",
+  "pages": {
+   "GBA": "https://conceptentertainment.se/produkt-kategori/tv-spel/nintendo/nintendo-game-boy-advance/",
+   "GBC": "https://conceptentertainment.se/produkt-kategori/tv-spel/nintendo/nintendo-game-boy-color/",
+   "GB": "https://conceptentertainment.se/produkt-kategori/tv-spel/nintendo/nintendo-game-boy/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Gameretro",
+  "region": "Sweden",
+  "shop": "https://www.gameretro.se/sv/",
+  "pages": {
+   "GBA": "https://www.gameretro.se/sv/gameboy-advance/spel/",
+   "GBC": "https://www.gameretro.se/sv/gameboy-color/spel/"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Kaptenkrok",
+  "region": "Sweden",
+  "shop": "https://www.kaptenkrok.se/",
+  "pages": {
+   "GBA": "https://www.kaptenkrok.se/product-category/gameboy-advance-gba-main-category/",
+   "GBC": "https://www.kaptenkrok.se/product-category/nintendo/game-boy/gameboy-color-main-category/",
+   "GB": "https://www.kaptenkrok.se/product-category/nintendo/game-boy/"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Coolshop",
+  "region": "Sweden",
+  "shop": "https://www.coolshop.se/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "Niotek",
+  "region": "Sweden",
+  "shop": "https://niotek.se/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 503, sitemap had none)"
+ },
+ {
+  "name": "Retro Game Tycoon",
+  "region": "Finland",
+  "shop": "https://retrogametycoon.com/en/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+ },
+ {
+  "name": "Puolenkuunpelit",
+  "region": "Finland",
+  "shop": "https://www.puolenkuunpelit.com/kauppa/default.php",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 403, sitemap had none)"
+ },
+ {
+  "name": "Pelimies",
+  "region": "Finland",
+  "shop": "https://pelimies.fi/",
+  "pages": {
+   "GB+GBC+GBA": "https://pelimies.fi/tuoteryhmat/retropelit-laitteet/nintendo-game-boy-gb-gbc-gba/nintendo-gameboy-retropelit/"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Konsolinet",
+  "region": "Finland",
+  "shop": "https://www.konsolinet.fi/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "VPD",
+  "region": "Finland",
+  "shop": "https://www.vpd.fi/",
+  "pages": {
+   "GBA": "https://www.vpd.fi/pelit/3ds/gba-pelit-ja-tarvikkeet.html",
+   "GBC": "https://www.vpd.fi/pelit/retropelit-ja-tarvikkeet/gbc.html",
+   "GB": "https://www.vpd.fi/pelit/retropelit-ja-tarvikkeet/gb.html"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Porvoonpelikauppa",
+  "region": "Finland",
+  "shop": "https://porvoonpelikauppa.fi/",
+  "pages": {
+   "GB": "https://porvoonpelikauppa.fi/gameboy-pelit",
+   "GBA": "https://porvoonpelikauppa.fi/gameboy-advance-kaytetty"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Pelikauppias",
+  "region": "Finland",
+  "shop": "https://www.pelikauppias.fi/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 000, sitemap had none)"
+ },
+ {
+  "name": "Reloadshop",
+  "region": "Finland",
+  "shop": "https://www.reloadshop.fi/",
+  "pages": {
+   "GB": "https://www.reloadshop.fi/c/retro/game-boy"
+  },
+  "note": "system page, may include consoles",
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Retropelitarvike",
+  "region": "Finland",
+  "shop": "https://retropelitarvike.fi/",
+  "pages": {
+   "GB": "https://retropelitarvike.fi/c10344/nintendo-game-boy",
+   "GBC": "https://retropelitarvike.fi/c10392/nintendo-game-boy-color"
+  },
+  "note": "system pages; this shop is mostly parts",
+  "found_by": "sitemap"
+ },
+ {
+  "name": "Retrospillkongen",
+  "region": "Norway",
+  "shop": "https://retrospillkongen.no/",
+  "pages": {
+   "GB+GBC+GBA": "https://retrospillkongen.no/collections/gameboy-gameboy-color-gamboy-advance-spill"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Retro Gaming.no",
+  "region": "Norway",
+  "shop": "https://retrogaming.no/",
+  "pages": {
+   "GB": "https://retrogaming.no/collections/game-boy-spill",
+   "GB+GBC+GBA": "https://retrogaming.no/collections/game-boy-gb-gbc-gba"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "RetroWorld",
+  "region": "Norway",
+  "shop": "https://retroworld.no/",
+  "pages": {
+   "GB": "https://retroworld.no/collections/nintendo-game-boy-spill"
+  },
+  "found_by": "sitemap"
+ },
+ {
+  "name": "eStarland",
+  "region": "United States",
+  "shop": "https://www.estarland.com/",
+  "pages": {
+   "GB": "https://www.estarland.com/preowned/platforms/GameBoy/50",
+   "GBC": "https://www.estarland.com/preowned/platforms/GameBoyColor/51",
+   "GBA": "https://www.estarland.com/preowned/platforms/GameBoyAdv/33"
+  },
+  "found_by": "browser"
+ },
+ {
+  "name": "DK Oldies",
+  "region": "United States",
+  "shop": "https://www.dkoldies.com/",
+  "pages": {
+   "GBA": "https://www.dkoldies.com/game-boy-advance/",
+   "GB": "https://www.dkoldies.com/game-boy/"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Lukie Games",
+  "region": "United States",
+  "shop": "https://www.lukiegames.com/",
+  "pages": {
+   "GBA": "https://www.lukiegames.com/buy-gba-games.html",
+   "GBC": "https://www.lukiegames.com/gameboy-color-games",
+   "GB": "https://www.lukiegames.com/game-boy-gameboy.html"
+  },
+  "found_by": "front page"
+ },
+ {
+  "name": "Goat Store",
+  "region": "United States",
+  "shop": "https://www.goatstore.com/",
+  "pages": {
+   "GB+GBC": "https://www.goatstore.com/store/"
+  },
+  "note": "only a combined store link found",
+  "found_by": "browser"
+ },
+ {
+  "name": "Luna Video Games",
+  "region": "United States",
+  "shop": "http://www.lunavideogames.com/",
+  "pages": {},
+  "note": "no Game Boy pages found (front page 200, sitemap had none)"
+ },
+ {
+  "name": "Steel Collectibles",
+  "region": "United States",
+  "shop": "https://steelcollectibles.com/",
+  "pages": {
+   "GBA": "https://steelcollectibles.com/collections/gameboy-advance",
+   "GBC": "https://steelcollectibles.com/collections/gameboy-color",
+   "GB": "https://steelcollectibles.com/collections/gameboy"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ },
+ {
+  "name": "Video Game Trader",
+  "region": "United States",
+  "shop": "https://videogametrader.com/",
+  "pages": {
+   "GB+GBC": "https://videogametrader.com/collections/nintendo-gameboy-gameboy-color",
+   "GBA": "https://videogametrader.com/collections/nintendo-gameboy-advance"
+  },
+  "found_by": "front page",
+  "note": "system pages (not game-only): may include consoles and accessories"
+ }
+]
