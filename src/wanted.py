@@ -11,7 +11,7 @@
 # wanted.json per print: title, system, serials (its own as read; else the release's in its region group), the photos
 # it has (their sources), the numbers ranked by, and search links (eBay by title, Google Images by serial).
 # wanted.html: plain, for the people helping: a section per system (Game Boy, Color, Advance), linked from the top
-# (the user, 2026-11-17); in each, one row per game and region group (the user, 2026-11-17: a game's prints of
+# with its count, and the total, listed as on index.html (the user, 2026-11-17, 2026-11-18); in each, one row per game and region group (the user, 2026-11-17: a game's prints of
 # one region group were rows that looked alike), at its best print's rank: title, serials, search links (games()).
 import html, json, os, re, sys, unicodedata
 import urllib.parse
@@ -130,7 +130,7 @@ def page(out_dir, wanted):
             rows.append(f'<tr><td><b>{html.escape(e["title"])}</b></td>'
                         f'<td>{"<br>".join(html.escape(s) for s in e["serials"])}</td><td>{links}</td></tr>')
         if rows:
-            toc.append(f'<a href="#{system}">{name}</a> ({len(rows)})')
+            toc.append((f'<li><a href="#{system}">{name}</a>: {len(rows)} cartridges</li>', len(rows)))
             sections.append(f'<h2 id="{system}">{name}</h2>\n<table><tr><th>Game</th><th>Serial</th><th>Search</th></tr>{"".join(rows)}</table>')
     with open(os.path.join(out_dir, "wanted.html"), "w") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wanted photos</title>
@@ -140,5 +140,5 @@ table{{border-collapse:collapse}} td,th{{padding:4px 8px;border-bottom:1px solid
 <h1>Wanted photos</h1>
 <p>Photos of these cartridges help the most, top of the list first. Sharp photos showing the whole label are best.</p>
 <p>If you take or find some photos, please upload them here: <a href="https://www.dropbox.com/request/9pv35ozb0iieahq3z3uf">https://www.dropbox.com/request/9pv35ozb0iieahq3z3uf</a>
-<p>{" · ".join(toc)}</p>
+<ul>{"".join(t for t, _ in toc)}<li>Total: {sum(n for _, n in toc)} cartridges</li></ul>
 {chr(10).join(sections)}""")

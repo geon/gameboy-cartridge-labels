@@ -135,7 +135,7 @@ MIN_COLUMN = 260  # px: the grid's columns at least this wide, as many as fit, s
 
 
 def page(out_dir, index, wanted_count):
-    """index.html: per platform (linked from the top, with its image count) the prints with an image, by game title
+    """index.html: per platform (linked from the top, with its image count, and the total) the prints with an image, by game title
     (prints without one last, by serial), in a grid of as many columns as fit (MIN_COLUMN); each image at most half
     its pixel width wide, so it shows at 2x pixel density or more."""
     lp = index["label_photos"]
@@ -165,7 +165,7 @@ def page(out_dir, index, wanted_count):
 figure{{margin:0;min-width:0}} figure img{{display:block;width:100%;height:auto;margin:0 auto}} figcaption{{font-size:12px;margin:4px 0}}
 .src{{font-size:11px;color:#bbb;margin-top:2px}} .poor{{color:#fa0}} a{{color:#9cf}} h2{{margin-top:32px}}</style>
 <p><a href="wanted.html">Wanted photos</a>: help find photos of {wanted_count} cartridges</p>
-<ul>{"".join(links)}</ul>
+<ul>{"".join(links)}<li>Total: {sum(1 for p in shown if p["shape"] in dict(PLATFORMS))} images</li></ul>
 {"".join(sections)}""")
 
 
