@@ -9,11 +9,14 @@ Per shop, one request at a time (a second apart); shops run in parallel. How a s
 - Anything else (generic): the listing page and its numbered pages (page links found on the page: ?page=N, /page/N,
   ?p=N, ...); product links are the largest group of links sharing one URL shape that aren't menu links (links that also
   appear on another of the shop's pages); each product page's photo from og:image or its JSON-LD Product image.
+- A shop with its own module, src/shops/<slug>.py (slug with underscores): its collect(shop, system, url).
 Photo URLs are turned into the full-size original where the platform's pattern is known (WordPress -300x300 suffixes,
 Shopify _600x sizes, PrestaShop -large_default, Lightspeed /600x600x2/ folders, width parameters); the URL as found if
 that fails.
 
     python3 src/shop_photos.py run [<shop name> ...]      (all certain shops when none given)
+    python3 src/shop_photos.py dry [<shop name> ...]      (find products, open 2 product pages per listing, no downloads)
+    python3 src/shop_photos.py ingest <shop name> <items.json>   (products collected in a browser tab, for shops that refuse curl)
 
 Listings: downloaded-photos/shop-listings/<slug>.json (every product found, so a run can be checked or resumed).
 Photos: downloaded-photos/shop-<slug>/<slug>-<n>.<ext> with listing.json (page_url, image_url, title_on_page, shop, system),
@@ -355,6 +358,19 @@ def download(shop, items):
     return kept, small, failed
 
 
+def custom_collector(shop):
+    """src/shops/<slug>.py's collect(shop, system, url) -> [{url, title, image, system}], for shops the generic way
+    can't read; None from it falls back to the usual ways."""
+    path = os.path.join(os.path.dirname(__file__), "shops", shop.slug.replace("-", "_") + ".py")
+    if not os.path.exists(path):
+        return None
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("shop_" + shop.slug.replace("-", "_"), path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.collect
+
+
 def run_shop(rec):
     shop = Shop(rec)
     try:
@@ -370,9 +386,12 @@ def run_shop(rec):
                 seen.append(set(links(u, s or "")))
             menu = seen[0] & seen[1]
         items, how = [], {}
+        custom = custom_collector(shop)
         for system, u in flat:
             got, kind = None, None
-            if "/collections/" in u:
+            if custom:
+                got, kind = custom(shop, system, u), "custom"
+            if got is None and "/collections/" in u:
                 got, kind = shopify(shop, system, u), "shopify"
             if got is None and getattr(shop, "is_woo", None) is not False:
                 if shop.is_woo is None:
@@ -412,6 +431,12 @@ def run(names=None):
 
 
 if __name__ == "__main__":
-    if sys.argv[1] in ("run", "dry"):
+    if sys.argv[1] == "ingest":  # ingest <shop name> <items.json>: products collected in a browser tab
+        rec = next(r for r in json.load(open(PAGES)) if r["name"] == sys.argv[2])
+        shop, items = Shop(rec), json.load(open(sys.argv[3]))
+        os.makedirs(LISTINGS, exist_ok=True)
+        save(os.path.join(LISTINGS, shop.slug + ".json"), {"shop": rec["name"], "pages": "browser", "products": items})
+        download(shop, items)
+    elif sys.argv[1] in ("run", "dry"):
         DRY = sys.argv[1] == "dry"
         run(sys.argv[2:] or None)
