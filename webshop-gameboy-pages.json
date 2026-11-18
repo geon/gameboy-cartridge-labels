@@ -286,7 +286,8 @@
    "GBA": "https://www.gameshop.nl/webshop/?portlet=webshop&page=producten/index&platform=Gameboy+Advance"
   },
   "found_by": "front page",
-  "note": "the Gameboy page mixes Game Boy and Game Boy Color (the user, 2026-11-18)"
+  "note": "the Gameboy page mixes Game Boy and Game Boy Color (the user, 2026-11-18)",
+  "not_crawled": "photos under 600 px, many Amazon stock pictures (2026-11-18)"
  },
  {
   "name": "Nedgame",
@@ -433,7 +434,8 @@
   "pages": {
    "GB+GBC+GBA": "https://netgames.de/RETRO/RETRO-Spiele/nintendo-gb-gbc-gba/"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "not_crawled": "photos don't show the cartridge (the user, 2026-11-18)"
  },
  {
   "name": "Tradergames",
@@ -455,7 +457,8 @@
    "GB+GBC": "https://www.gamecash.fr/jeux-occasion-game-boy-u29.html",
    "GBA": "https://www.gamecash.fr/jeux-occasion-game-boy-advance-u30.html"
   },
-  "found_by": "sitemap"
+  "found_by": "sitemap",
+  "not_crawled": "photos 290–620 px; now answers 403 to curl (2026-11-18)"
  },
  {
   "name": "Chollogames",
@@ -626,7 +629,8 @@
   "pages": {
    "GB+GBC+GBA": "https://gameshop.se/produkt-kategori/gameboy/"
   },
-  "found_by": "front page"
+  "found_by": "front page",
+  "not_crawled": "photos don't show the cartridge (the user, 2026-11-18)"
  },
  {
   "name": "Retroplay",
