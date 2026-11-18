@@ -123,7 +123,7 @@ def main():
     wanted_list = wanted.entries(prints["prints"], has_image, solved, serials, releases, src, differences)
     steps.write_json(os.path.join(out_dir, "wanted.json"), wanted_list)
     wanted.page(out_dir, wanted_list)
-    page(out_dir, index, len(wanted_list))
+    page(out_dir, index, len(wanted.games(wanted_list)))  # the rows of wanted.html: one per game and region group
     print(f"{single} prints of a single label photo left out")
     print(f"{len(copies)} prints, {len(index['label_photos'])} label photos listed ({len(poor & set(index['label_photos']))} poor fits)")
     print(f"{len(wanted_list)} prints wanted (wanted.html)")
