@@ -54,7 +54,11 @@ UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
 # not certain yet (webshop-gameboy-pages.json notes), Konsolenkost (its photos are already in, as composites).
 SKIP = {"Tradergames", "Gameretro", "Lukie Games", "Konsolenkost", "RetroWorld", "Player 2 Gamestore", "Press Start Games",
         "Mad Gameshop", "Gameshop Enter", "Nedgame", "Retro Gameland", "eStarland", "Goat Store",
-        "Gameshop Twente", "DK Oldies", "Netgames", "Gamecash", "Gameshop"}  # Netgames, gameshop.se: no cartridge photos; gameshop.nl: small stock pictures (the user, 2026-11-18); Gamecash: same style, small  # DK Oldies: no actual cartridge photos (the user, 2026-11-18)  # Gameshop Twente: photos named by EAN barcode, likely stock box pictures (held back, 2026-11-18)
+        "Gameshop Twente",  # photos named by EAN barcode, likely stock box pictures (held back, 2026-11-18)
+        "DK Oldies",        # no actual cartridge photos (the user, 2026-11-18)
+        "Netgames",         # photos don't show the cartridge (the user, 2026-11-18)
+        "Gameshop",         # gameshop.se: photos don't show the cartridge (the user); gameshop.nl: small stock pictures
+        "Gamecash"}         # photos 290-620 px, same style as gameshop.se; answers 403 to curl now
 sources_lock = threading.Lock()
 DRY = False  # dry: find the products but open only 2 product pages per listing page, download nothing
 
