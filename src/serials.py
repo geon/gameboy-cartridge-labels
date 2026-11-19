@@ -27,12 +27,19 @@ def reads(text):
     return list(dict.fromkeys(found))
 
 
+def cartridge_serials(r):
+    """A database record's cartridge serials as strings ({"serial", "sources", "misprintOf"?} in releases.json), its
+    misprinted ones (DMT-DT-USA on DuckTales) last."""
+    entries = r.get("cartridgeSerials", [])
+    return [e["serial"] for e in entries if "misprintOf" not in e] + [e["serial"] for e in entries if "misprintOf" in e]
+
+
 def load_database(path=DATABASE):
     """Each serial the database knows (its cartridges' serials, its releases' ids and game ids) -> its release."""
     releases = json.load(open(path))
     release_of = {}
     for r in releases:
-        for s in r["cartridgeSerials"]:
+        for s in cartridge_serials(r):
             release_of.setdefault(s, r)
     for key in ("id", "gameId"):  # a release's own id before another's game id
         for r in releases:

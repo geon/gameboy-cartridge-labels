@@ -95,7 +95,7 @@ def queries(region, releases=None, pass_name=None, searched=None):
     out = []
     for r in wanted:
         if releases is None:
-            cart = [s for s in r.get("cartridgeSerials", []) if s.endswith("-" + region)]
+            cart = [s for s in serials.cartridge_serials(r) if s.endswith("-" + region)]
             if not cart:
                 continue
             serial, group = cart[0], "USA" if region == "USA" else None
@@ -125,7 +125,7 @@ def search_title(r):
 def region_of(r):
     """(serial, region group) of a database record: its first cartridge serial with a known region, else its game
     id's last letter (serial: the id)."""
-    for s in r.get("cartridgeSerials", []):
+    for s in serials.cartridge_serials(r):
         group = REGION_GROUP.get(s.rsplit("-", 1)[-1])
         if "-" in s and group:
             return s, group

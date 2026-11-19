@@ -8,9 +8,9 @@ def rec(**kw):
 
 
 def test_wanted_skips_a_game_with_an_image_in_its_region_group_and_ranks_agreeing_first():
-    releases = {"DMG-A": {"id": "DMG-A", "title": "Game A", "system": "dmg", "cartridgeSerials": ["DMG-A-USA", "DMG-A-NOE"]},
-                "DMG-B": {"id": "DMG-B", "title": "Game B", "system": "dmg", "cartridgeSerials": ["DMG-B-JPN"]},
-                "DMG-C": {"id": "DMG-C", "title": "Game C", "system": "dmg", "cartridgeSerials": ["DMG-C-USA"]}}
+    releases = {"DMG-A": {"id": "DMG-A", "title": "Game A", "system": "dmg", "cartridgeSerials": [{"serial": "DMG-A-USA"}, {"serial": "DMG-A-NOE"}]},
+                "DMG-B": {"id": "DMG-B", "title": "Game B", "system": "dmg", "cartridgeSerials": [{"serial": "DMG-B-JPN"}]},
+                "DMG-C": {"id": "DMG-C", "title": "Game C", "system": "dmg", "cartridgeSerials": [{"serial": "DMG-C-USA"}]}}
     prints = [{"id": "a-usa", "keys": ["1@1,1", "2@1,1", "3@1,1"], "release": "DMG-A", "serial": "DMG-A-USA"},
               {"id": "a-noe", "keys": ["4@1,1", "5@1,1"], "release": "DMG-A", "serial": "DMG-A-NOE"},  # USA has an image
               {"id": "b", "keys": ["6@1,1", "7@1,1"], "release": "DMG-B", "serial": "DMG-B-JPN"},

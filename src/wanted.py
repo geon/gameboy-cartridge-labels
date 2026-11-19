@@ -80,7 +80,7 @@ def entries(prints, has_image, solved, serials, releases, sources, pair_differen
         if p["serial"]:
             serial_list = [p["serial"]]
         else:
-            serial_list = [s for s in r.get("cartridgeSerials", []) if region_group(s, None) in (group, None)] or [r["id"]]
+            serial_list = [s for s in serials_module.cartridge_serials(r) if region_group(s, None) in (group, None)] or [r["id"]]
         out.append({"print": p["id"], "release": r["id"], "title": r["title"], "system": r["system"],
                     "region": group, "serials": serial_list, "needed": n, "photos": len(p["keys"]), "agree": agree,
                     "px_per_mm": round(min(px_per_mm(solved[k]) for k in p["keys"]), 1),

@@ -106,7 +106,7 @@ def queries(releases, pass_name=None, short=False):
         title = japanese_title(r) or (r["title"].split(" - ")[0] if short else None)
         if title is None:
             continue
-        serial = next((s for s in r.get("cartridgeSerials", []) if s.endswith("-JPN")), i)
+        serial = next((s for s in serials.cartridge_serials(r) if s.endswith("-JPN")), i)
         if short:
             words = short_parts(title)
             q = {"parts": [w.lower() for w in words], "query": f"{' '.join(words)} {SHORT_SYSTEM[r['system']]}"}

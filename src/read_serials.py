@@ -149,11 +149,11 @@ def find_by_title(text_plain, shape, reads, index, release_of):
         r = best[0]
     else:
         regions = {serials.region_of(x["serial"]) for x in reads if x["serial"]}
-        pick = [r for r in best if any(s.endswith("-" + g) for s in r.get("cartridgeSerials", []) for g in regions if g)]
+        pick = [r for r in best if any(s.endswith("-" + g) for s in serials.cartridge_serials(r) for g in regions if g)]
         if len(pick) != 1:
             return None, game
         r = pick[0]
-    serial = (r.get("cartridgeSerials") or [r["id"]])[0]
+    serial = (serials.cartridge_serials(r) or [r["id"]])[0]
     return (r["id"], serial), game
 
 
