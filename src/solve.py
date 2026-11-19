@@ -905,35 +905,85 @@ def pixel_agreement(va, vb, theta_deg, t_mm, shape):
     return (agree / textured if textured else 0.0), textured
 
 
-def view_job(job):
-    k, path, cut, shape = job
-    img = photos.load(path) if path else None
-    return k, (compare_view(img, cut, shape) if img is not None else None)
-
-
-# Stage 2's link workers load the drawn views from files (<generated>/solve/views/), each keeping the latest in
-# memory: forking workers that share them deadlocked on the full set (macOS: a fork after other pools and OpenCV's
-# threads can leave the children waiting on a lock forever).
-_VIEW_DIR = None
+# Stage 2's drawn views are cached in <generated>/solve/view-cache/, one file per label photo, named by what the view
+# depends on (view_name): a label photo is drawn again only when its photo, fit or shape or the drawing changes. A
+# photo that can't be loaded gets no file (drawn again next run). Files of views no longer wanted are removed after
+# each run. The link workers load the views from these files, each keeping the latest in memory: forking workers that
+# share them deadlocked on the full set (macOS: a fork after other pools and OpenCV's threads can leave the children
+# waiting on a lock forever).
+_VIEW_FILES = {}  # key -> its view's file (the link workers')
 _VIEWS = {}
 
 
-def view_file(view_dir, key):
-    return os.path.join(view_dir, key.replace("@", "_").replace(",", "_") + ".npy")
+def view_version():
+    """A fingerprint of the drawing (compare_view and its settings)."""
+    import hashlib, inspect
+    h = hashlib.sha1(inspect.getsource(compare_view).encode())
+    h.update(repr((COMPARE_PX_PER_MM, COMPARE_MARGIN, shapes.LABEL_MM)).encode())
+    return h.hexdigest()[:16]
 
 
-def init_link_worker(view_dir):
-    global _VIEW_DIR
-    _VIEW_DIR = view_dir
+def view_name(key, path, cut_to_photo, shape, version):
+    """A view's cache file name: its key (readable) and a hash of its photo file (size, time), fit, shape and version."""
+    import hashlib
+    st = os.stat(path) if path and os.path.exists(path) else None
+    h = hashlib.sha1(repr((key, path, (st.st_size, st.st_mtime_ns) if st else None, shape, version)).encode())
+    h.update(np.ascontiguousarray(cut_to_photo, dtype=np.float64).tobytes())
+    return key.replace("@", "_").replace(",", "_").replace("/", "_") + "-" + h.hexdigest()[:16] + ".npy"
+
+
+def view_job(job):
+    """Draws one label photo's view into its cache file (written whole, then renamed: a stopped run leaves no half
+    file). True if drawn."""
+    k, path, cut, shape, file = job
+    img = photos.load(path) if path else None
+    if img is None:
+        return k, False
+    tmp = file[:-4] + f".{os.getpid()}.tmp.npy"
+    np.save(tmp, compare_view(img, cut, shape))
+    os.replace(tmp, file)
+    return k, True
+
+
+def init_link_worker(view_files):
+    global _VIEW_FILES
+    _VIEW_FILES = view_files
+
+
+def load_view(file):
+    return np.load(file) if file and os.path.exists(file) else None
 
 
 def get_view(key):
     if key not in _VIEWS:
         if len(_VIEWS) > 3000:
             _VIEWS.clear()
-        p = view_file(_VIEW_DIR, key) if _VIEW_DIR else None
-        _VIEWS[key] = np.load(p) if p and os.path.exists(p) else None
+        _VIEWS[key] = load_view(_VIEW_FILES.get(key))
     return _VIEWS[key]
+
+
+class CachedViews:
+    """The views by key, loaded from their cache files when asked for (all of them in memory would be gigabytes)."""
+    def __init__(self, files):
+        self.files = files
+        self.recent = {}  # the latest loaded (a family's members are asked for several times in a row)
+
+    def get(self, key, default=None):
+        if key not in self.recent:
+            if len(self.recent) > 500:
+                self.recent.clear()
+            self.recent[key] = load_view(self.files.get(key))
+        v = self.recent[key]
+        return default if v is None else v
+
+    def __getitem__(self, key):
+        v = self.get(key)
+        if v is None:
+            raise KeyError(key)
+        return v
+
+    def __contains__(self, key):
+        return self.get(key) is not None
 
 
 def judge_link(job):
@@ -948,20 +998,30 @@ def judge_link(job):
     return i, leftover, theta, t, share, textured
 
 
-_GEN_DIR = None  # set by solve(): where stage 2 writes its drawn views
+_GEN_DIR = None  # set by solve(): where stage 2 keeps its drawn views
 
 
 def stage2(lps, fits, candidates, photo_paths, workers=8):
     """Offsets (sticker's cut -> ink) per family; families; poor fits; the links judged."""
     shape_of = {lp["key"]: lp["shape"] for lp in lps}
     photo_of = {lp["key"]: lp["photo"] for lp in lps}
-    views = {}
+    cache_dir = os.path.join(_GEN_DIR or "generated", "solve", "view-cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    version = view_version()
+    view_files = {k: os.path.join(cache_dir, view_name(k, photo_paths.get(photo_of[k]), f["cut_to_photo"], shape_of[k], version))
+                  for k, f in fits.items()}
+    jobs_v = [(k, photo_paths.get(photo_of[k]), f["cut_to_photo"], shape_of[k], view_files[k])
+              for k, f in fits.items() if not os.path.exists(view_files[k])]
+    print(f"stage 2: {len(fits) - len(jobs_v)} of {len(fits)} label photos' views cached", flush=True)
     with Pool(workers) as pool:
-        jobs_v = [(k, photo_paths.get(photo_of[k]), f["cut_to_photo"], shape_of[k]) for k, f in fits.items()]
-        for n, (k, v) in enumerate(pool.imap_unordered(view_job, jobs_v, chunksize=4), 1):
-            views[k] = v
+        for n, _ in enumerate(pool.imap_unordered(view_job, jobs_v, chunksize=4), 1):
             if n % 200 == 0 or n == len(jobs_v):
                 print(f"stage 2: drew {n} of {len(jobs_v)} label photos for the pixel comparison", flush=True)
+    wanted = {os.path.basename(f) for f in view_files.values()}
+    for f in os.listdir(cache_dir):  # views of fits, photos or drawings no longer wanted; half files of a stopped run
+        if f not in wanted:
+            os.remove(os.path.join(cache_dir, f))
+    views = CachedViews(view_files)
     jobs = []
     for i, (a, b, pa, pb) in enumerate(candidates):
         if a in fits and b in fits and shape_of[a] == shape_of[b]:
@@ -969,21 +1029,11 @@ def stage2(lps, fits, candidates, photo_paths, workers=8):
             mb = project(np.linalg.inv(fits[b]["cut_to_photo"]), pb)
             jobs.append((i, a, b, ma, mb, shape_of[a]))
     judged = {}
-    view_dir = os.path.join(_GEN_DIR, "solve", "views") if _GEN_DIR else os.path.join("generated", "solve", "views")
-    os.makedirs(view_dir, exist_ok=True)
-    for f in os.listdir(view_dir):
-        os.remove(os.path.join(view_dir, f))
-    for k, v in views.items():
-        if v is not None:
-            np.save(view_file(view_dir, k), v)
-    with Pool(workers, initializer=init_link_worker, initargs=(view_dir,)) as pool:
+    with Pool(workers, initializer=init_link_worker, initargs=(view_files,)) as pool:
         for n, (i, leftover, theta, t, share, textured) in enumerate(pool.imap_unordered(judge_link, jobs, chunksize=8), 1):
             judged[i] = (leftover, theta, t, share, textured)
             if n % 2000 == 0 or n == len(jobs):
                 print(f"stage 2: compared {n} of {len(jobs)} link candidates", flush=True)
-    for f in os.listdir(view_dir):  # the drawn views are only for the comparison
-        os.remove(os.path.join(view_dir, f))
-    os.rmdir(view_dir)
     label_tiles = {sh: int(w // COMPARE_TILE_MM) * int(h // COMPARE_TILE_MM) for sh, (w, h) in shapes.LABEL_MM.items()}
     shape_of_link = {i: shape_of[candidates[i][0]] for i in judged}
     pixel_ok = lambda i, j: (j[3] >= AGREE_SHARE and j[4] >= max(MIN_TEXTURED_TILES, MIN_COVERAGE * label_tiles[shape_of_link[i]])
