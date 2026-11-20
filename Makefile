@@ -62,10 +62,16 @@
 #   An image of every print from its label photos (bands, the median), cropped 0.3 mm inside its family's cuts, paper white
 #   where found, into generated/restore/; the page generated/restore/index.html. Needs make prints.
 #
+#   make select-visually-distinct
+#   Of each game's prints, the ones that look different enough to browse: every pair of one game's restored prints
+#   compared (the share of 2 mm tiles differing in colour or detail), a print left out when under 60 % differs from
+#   one kept, into generated/select-visually-distinct/ (scores.json, selected.json); the page
+#   generated/select-visually-distinct/index.html (src/select_visually_distinct.py). Needs make restore.
+#
 #   make build
 #   The site, made anew in generated/publish/: prints/ (the restored prints), index.json (source and URLs from
 #   photo-sources.json), the lists, the page generated/publish/index.html and wanted.html (the prints a photo or two
-#   short of an image, best chances first: src/wanted.py) (src/publish.py). Needs make restore.
+#   short of an image, best chances first: src/wanted.py) (src/publish.py). Needs make select-visually-distinct.
 #
 #   make publish
 #   Not in make all: generated/publish/ as it is (make build) committed to the gh-pages branch, replacing all it held,
@@ -105,7 +111,7 @@ PYTHON := .venv/bin/python
 GENERATED := $(if $(SAMPLE),generated-sample,generated)
 SAMPLE_FLAG := $(if $(SAMPLE),--sample,)
 
-.PHONY: help setup test all todo-report add-photos move-downloads remove-low-resolution read-text clean-read-text features clean-features edges clean-edges match clean-match find clean-find solve clean-solve straighten clean-straighten read-serials clean-read-serials prints clean-prints restore clean-restore build clean-build publish remove-photos review-prints refreeze fit-by-hand
+.PHONY: help setup test all todo-report add-photos move-downloads remove-low-resolution read-text clean-read-text features clean-features edges clean-edges match clean-match find clean-find solve clean-solve straighten clean-straighten read-serials clean-read-serials prints clean-prints restore clean-restore select-visually-distinct clean-select-visually-distinct build clean-build publish remove-photos review-prints refreeze fit-by-hand
 help:
 	@awk '/^#   /{line = substr($$0, 5); if (line ~ /^make / && n++) print ""; print line}' Makefile
 
@@ -125,7 +131,7 @@ move-downloads:
 todo-report:
 	$(PYTHON) src/todo_report.py $(if $(NAME),$(NAME) --note "$(NOTE)",--page)
 
-STEPS := remove-low-resolution read-text features edges match find solve straighten read-serials prints restore build
+STEPS := remove-low-resolution read-text features edges match find solve straighten read-serials prints restore select-visually-distinct build
 
 all:
 	set -e; for step in $(STEPS); do $(MAKE) $$step; done
@@ -192,6 +198,12 @@ restore:
 
 clean-restore:
 	rm -rf $(GENERATED)/restore
+
+select-visually-distinct:
+	$(PYTHON) src/select_visually_distinct.py $(SAMPLE_FLAG)
+
+clean-select-visually-distinct:
+	rm -rf $(GENERATED)/select-visually-distinct
 
 build:
 	rm -rf $(GENERATED)/publish

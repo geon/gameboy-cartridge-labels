@@ -12,8 +12,9 @@
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
 #     with its label photos' sources.
-#   browse.html: the same, but one print per game per family (browse()): prints for browsing, without the ones that
-#     differ only by serial, region or a moved logo (the user, 2026-11-20). Linked from index.html and back.
+#   browse.html: the same, but only the prints select-visually-distinct selected (its selected.json): prints for
+#     browsing, without the ones that differ only by serial, region or a moved logo (the user, 2026-11-20). Linked from
+#     index.html and back.
 # Prints of a single label photo (poor fits counted) are left out, with their label photo (the user, 2026-11-15).
 # The source and URLs come from photo-sources.json (by SHA-1): for output only, never read by a detection step.
 # The folder starts empty (make build removes it first), so every file is written anew.
@@ -64,7 +65,8 @@ def main():
     args = ap.parse_args()
     gen = photos.generated(args.sample)
     need = [os.path.join(gen, "prints", "prints.json"), os.path.join(gen, "solve", "solve.json"),
-            os.path.join(gen, "read-serials", "serials.json"), os.path.join(gen, "restore", "index.html")]
+            os.path.join(gen, "read-serials", "serials.json"), os.path.join(gen, "restore", "index.html"),
+            os.path.join(gen, "select-visually-distinct", "selected.json")]
     for f in need:
         if not os.path.exists(f):
             sys.exit(f"no {f}: run the steps before publish")
@@ -130,9 +132,9 @@ def main():
     wanted.page(out_dir, wanted_list)
     wanted_count = len(wanted.games(wanted_list))  # the rows of wanted.html: one per game and region group
     shown = [p for p in index["prints"].values() if p["image"]]
-    chosen = browse(index)
-    page(out_dir, index, wanted_count, shown, "index.html", f'<a href="browse.html">Browse</a>: {len(chosen)} of these prints, one per game and look (no other serials, regions or moved logos)')
-    page(out_dir, index, wanted_count, chosen, "browse.html", f'One print per game and look: {len(chosen)} of the {len(shown)} prints (<a href="index.html">all of them</a>). Prints of one game that look alike, differing only by serial, region or a moved logo, are shown once.')
+    chosen = browse(index, json.load(open(need[4])))
+    page(out_dir, index, wanted_count, shown, "index.html", f'<a href="browse.html">Browse</a>: {len(chosen)} of these prints, the visually distinct ones (no other serials, regions or moved logos)')
+    page(out_dir, index, wanted_count, chosen, "browse.html", f'The visually distinct prints: {len(chosen)} of the {len(shown)} (<a href="index.html">all of them</a>). Prints of one game that look alike, differing only by serial, region or a moved logo, are shown once.')
     print(f"{single} prints of a single label photo left out")
     print(f"{len(copies)} prints, {len(index['label_photos'])} label photos listed ({len(poor & set(index['label_photos']))} poor fits)")
     print(f"{len(wanted_list)} prints wanted (wanted.html)")
@@ -149,20 +151,15 @@ def used_photos(index, p):
     return sum(1 for k in p["label_photos"] if not index["label_photos"][k]["poor_fit"])
 
 
-def browse(index):
-    """The prints with an image, one per game per family: of a family's prints of one game (the database's game id:
-    its regions' releases), the one restored from the most label photos (then the lowest id). A family is label photos
-    that look alike (solve), so its prints of one game differ by little: a serial, a region, a moved logo. Prints of
-    different games are all kept (a series sharing a layout: AGB-A3EJ and AGB-A3WJ), and so are prints of an unknown
-    game."""
-    best = {}
-    for pid, p in sorted(index["prints"].items()):
-        if not p["image"]:
-            continue
-        group = (p["family"], p["game"]) if p["game"] else ("print", pid)
-        if group not in best or used_photos(index, p) > used_photos(index, best[group]):
-            best[group] = p
-    return list(best.values())
+def browse(index, selection):
+    """The prints with an image that select-visually-distinct selected (selection: its selected.json). Fails if it
+    hasn't seen one of them (it reads the same prints and images: run it again)."""
+    seen = set(selection["selected"]) | set(selection["left_out"])
+    missing = [pid for pid, p in index["prints"].items() if p["image"] and pid not in seen]
+    if missing:
+        sys.exit(f"{len(missing)} prints with an image not in select-visually-distinct's selected.json ({missing[0]}, ...): run make select-visually-distinct")
+    selected = set(selection["selected"])
+    return [p for pid, p in sorted(index["prints"].items()) if p["image"] and pid in selected]
 
 
 def page(out_dir, index, wanted_count, shown, file, note):
