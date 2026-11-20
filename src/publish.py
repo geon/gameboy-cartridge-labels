@@ -4,13 +4,16 @@
 #   No label photo images (the user, 2026-11-10: the straightened photos aren't worth distributing, over 1 GB): each
 #     label photo is in index.json, with where it came from. Poor fits (solve.poor_fit) are listed with
 #     poor_fit true; restore leaves them out.
-#   index.json: {"prints": {id: {serial, release, title (the database's), shape, image, size (its w, h px), paper,
+#   index.json: {"prints": {id: {serial, release, game (the release's game id in the database), family (solve's: label
+#     photos that look alike), title (the database's), shape, image, size (its w, h px), paper,
 #     label_photos, frozen, restored_from (the label photos its image was restored from)}}, "label_photos": {key: {print,
 #     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (print-ids.json); keys hold within a run only.
 #   missing.json, unknown-serials.json (read-serials), few-photos.json (prints): the lists, copied as they are.
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
 #     with its label photos' sources.
+#   browse.html: the same, but one print per game per family (browse()): prints for browsing, without the ones that
+#     differ only by serial, region or a moved logo (the user, 2026-11-20). Linked from index.html and back.
 # Prints of a single label photo (poor fits counted) are left out, with their label photo (the user, 2026-11-15).
 # The source and URLs come from photo-sources.json (by SHA-1): for output only, never read by a detection step.
 # The folder starts empty (make build removes it first), so every file is written anew.
@@ -69,7 +72,8 @@ def main():
     solved = json.load(open(need[1]))["label_photos"]
     serials = json.load(open(need[2]))
     src = sources()
-    titles = {r["id"]: r["title"] for r in serials_module.releases()}
+    releases = {r["id"]: r for r in serials_module.releases()}
+    titles = {i: r["title"] for i, r in releases.items()}
     poor = poor_fits(solved)
     out_dir = args.out
     os.makedirs(os.path.join(out_dir, "prints"), exist_ok=True)
@@ -97,7 +101,9 @@ def main():
             image = "prints/" + name  # the id starts with the serial
             copies.append((restored, os.path.join(out_dir, image)))
         crop = desc.get("crop") or {}
-        index["prints"][p["id"]] = {"serial": p["serial"], "release": p["release"], "title": titles.get(p["release"]),
+        index["prints"][p["id"]] = {"serial": p["serial"], "release": p["release"],
+                                    "game": (releases.get(p["release"]) or {}).get("gameId"), "family": p["family"],
+                                    "title": titles.get(p["release"]),
                                     "shape": p["shape"], "image": image,
                                     "size": [crop["w"], crop["h"]] if image and crop else None,
                                     "paper": desc.get("paper") is not None if desc else None, "label_photos": p["keys"],
@@ -119,14 +125,18 @@ def main():
     for name, tiles in prints_step.load_pairs(os.path.join(gen, "prints", "pairs.npz"), prints_step.comparison_version()).items():
         a, b = name.split("|")[:2]
         differences[a, b] = differences[b, a] = int(tiles.sum())
-    releases = {r["id"]: r for r in serials_module.releases()}
     wanted_list = wanted.entries(prints["prints"], has_image, solved, serials, releases, src, differences)
     steps.write_json(os.path.join(out_dir, "wanted.json"), wanted_list)
     wanted.page(out_dir, wanted_list)
-    page(out_dir, index, len(wanted.games(wanted_list)))  # the rows of wanted.html: one per game and region group
+    wanted_count = len(wanted.games(wanted_list))  # the rows of wanted.html: one per game and region group
+    shown = [p for p in index["prints"].values() if p["image"]]
+    chosen = browse(index)
+    page(out_dir, index, wanted_count, shown, "index.html", f'<a href="browse.html">Browse</a>: {len(chosen)} of these prints, one per game and look (no other serials, regions or moved logos)')
+    page(out_dir, index, wanted_count, chosen, "browse.html", f'One print per game and look: {len(chosen)} of the {len(shown)} prints (<a href="index.html">all of them</a>). Prints of one game that look alike, differing only by serial, region or a moved logo, are shown once.')
     print(f"{single} prints of a single label photo left out")
     print(f"{len(copies)} prints, {len(index['label_photos'])} label photos listed ({len(poor & set(index['label_photos']))} poor fits)")
     print(f"{len(wanted_list)} prints wanted (wanted.html)")
+    print(f"{len(chosen)} prints for browsing (browse.html)")
     print(f"page: {os.path.join(out_dir, 'index.html')}")
 
 
@@ -134,13 +144,34 @@ PLATFORMS = [("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy A
 MIN_COLUMN = 260  # px: the grid's columns at least this wide, as many as fit, stretched to the page's width
 
 
-def page(out_dir, index, wanted_count):
-    """index.html: per platform (linked from the top, with its image count, and the total) the prints with an image, by game title
-    (prints without one last, by serial), in a grid of as many columns as fit (MIN_COLUMN); each image at most half
-    its pixel width wide, so it shows at 2x pixel density or more."""
+def used_photos(index, p):
+    """The label photos a print is restored from (poor fits aren't used)."""
+    return sum(1 for k in p["label_photos"] if not index["label_photos"][k]["poor_fit"])
+
+
+def browse(index):
+    """The prints with an image, one per game per family: of a family's prints of one game (the database's game id:
+    its regions' releases), the one restored from the most label photos (then the lowest id). A family is label photos
+    that look alike (solve), so its prints of one game differ by little: a serial, a region, a moved logo. Prints of
+    different games are all kept (a series sharing a layout: AGB-A3EJ and AGB-A3WJ), and so are prints of an unknown
+    game."""
+    best = {}
+    for pid, p in sorted(index["prints"].items()):
+        if not p["image"]:
+            continue
+        group = (p["family"], p["game"]) if p["game"] else ("print", pid)
+        if group not in best or used_photos(index, p) > used_photos(index, best[group]):
+            best[group] = p
+    return list(best.values())
+
+
+def page(out_dir, index, wanted_count, shown, file, note):
+    """A page of prints (index.html: all with an image; browse.html: browse()'s): per platform (linked from the top,
+    with its image count, and the total) by game title (prints without one last, by serial), in a grid of as many
+    columns as fit (MIN_COLUMN); each image at most half its pixel width wide, so it shows at 2x pixel density or
+    more. note: a line at the top."""
     lp = index["label_photos"]
-    used = lambda p: sum(1 for k in p["label_photos"] if not lp[k]["poor_fit"])  # poor fits aren't used
-    shown = [p for p in index["prints"].values() if p["image"]]
+    used = lambda p: used_photos(index, p)
     order = lambda p: (p["title"] is None, (p["title"] or "").casefold(), str(p["serial"] or p["release"] or ""))
     sections, links = [], []
     for shape, platform in PLATFORMS:
@@ -158,13 +189,14 @@ def page(out_dir, index, wanted_count):
                         f'<div class="src">{sources}</div></figcaption></figure>')
         links.append(f'<li><a href="#{shape}">{platform}</a>: {len(ps)} images</li>')
         sections.append(f'<h2 id="{shape}">{platform} ({len(ps)})</h2><div class="grid">{"".join(figs)}</div>')
-    with open(os.path.join(out_dir, "index.html"), "w") as f:
+    with open(os.path.join(out_dir, file), "w") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>publish</title>
 <style>body{{font:14px system-ui;margin:16px;background:#333;color:#eee}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax({MIN_COLUMN}px,1fr));gap:16px;align-items:start}}
 figure{{margin:0;min-width:0}} figure img{{display:block;width:100%;height:auto;margin:0 auto}} figcaption{{font-size:12px;margin:4px 0}}
 .src{{font-size:11px;color:#bbb;margin-top:2px}} .poor{{color:#fa0}} a{{color:#9cf}} h2{{margin-top:32px}}</style>
 <p><a href="wanted.html">Wanted photos</a>: help find photos of {wanted_count} cartridges</p>
+<p>{note}</p>
 <ul>{"".join(links)}<li>Total: {sum(1 for p in shown if p["shape"] in dict(PLATFORMS))} images</li></ul>
 {"".join(sections)}""")
 
