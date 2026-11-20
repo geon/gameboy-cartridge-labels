@@ -27,6 +27,31 @@ def reads(text):
     return list(dict.fromkeys(found))
 
 
+def title_text(t):
+    """A title field's text: {"title", "language"?, "sources"} in releases.json since 2026-11-20 (a string before)."""
+    return t["title"] if isinstance(t, dict) else t
+
+
+def releases(path=DATABASE):
+    """The database's releases, each with "title" a string (its Latin title if it has one, else its title as printed:
+    for display and search words) and "titles" all its titles that may be printed on a label ({"title", "language"}:
+    its title, Latin title and localized titles; not a source's translation). The record's own title fields are kept
+    under "titleRecord"."""
+    out = []
+    for r in json.load(open(path)):
+        r = dict(r)
+        names = [r.get("title"), r.get("titleLatin")] + list(r.get("localizedTitles") or [])
+        titles = {}
+        for t in names:
+            if t:
+                titles.setdefault(title_text(t), {"title": title_text(t), "language": t.get("language") if isinstance(t, dict) else None})
+        r["titleRecord"] = r.get("title")
+        r["title"] = title_text(r.get("titleLatin") or r.get("title") or "")
+        r["titles"] = list(titles.values())
+        out.append(r)
+    return out
+
+
 def cartridge_serials(r):
     """A database record's cartridge serials as strings ({"serial", "sources", "misprintOf"?} in releases.json), its
     misprinted ones (DMT-DT-USA on DuckTales) last."""
@@ -36,13 +61,13 @@ def cartridge_serials(r):
 
 def load_database(path=DATABASE):
     """Each serial the database knows (its cartridges' serials, its releases' ids and game ids) -> its release."""
-    releases = json.load(open(path))
+    all_releases = releases(path)
     release_of = {}
-    for r in releases:
+    for r in all_releases:
         for s in cartridge_serials(r):
             release_of.setdefault(s, r)
     for key in ("id", "gameId"):  # a release's own id before another's game id
-        for r in releases:
+        for r in all_releases:
             release_of.setdefault(r[key], r)
     return release_of
 
@@ -111,8 +136,10 @@ def near(text, regions):
 
 # Titles: the database's titles of a release (several, in Latin and Japanese) found in a label's text.
 def plain(text):
-    """Letters and digits only, upper case, full width folded (NFKC): Latin, kana, kanji."""
-    return re.sub(r"[^0-9A-Z぀-ヿ一-鿿]", "", unicodedata.normalize("NFKC", text).upper())
+    """Letters and digits only, upper case, full width folded (NFKC), Latin accents dropped (Pokémon: POKEMON; kana's
+    voicing marks kept): Latin, kana, kanji."""
+    t = re.sub(r"[\u0300-\u036f]", "", unicodedata.normalize("NFKD", text))
+    return re.sub(r"[^0-9A-Z぀-ヿ一-鿿]", "", unicodedata.normalize("NFKC", t).upper())
 
 
 # Words printed on every label of a platform (and in some titles: "Game Boy Color", "Jinsei Game Advance", "Ninja

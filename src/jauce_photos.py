@@ -96,7 +96,7 @@ def queries(releases, pass_name=None, short=False):
     """The queries for the Japanese releases among the given ones, not yet searched (in the named pass): by the
     Japanese-script title and the system's Japanese name; short, by the title's first word and the numbers in it and
     the system's short name (GBA, GBC, GB), a release without a Japanese-script title by its romanized one."""
-    db = {r["id"]: r for r in json.load(open(serials.DATABASE))}
+    db = {r["id"]: r for r in serials.releases()}
     searched = load(SEARCHES)
     out = []
     for i in releases:

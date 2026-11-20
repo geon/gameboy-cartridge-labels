@@ -21,7 +21,7 @@
 # right ones: logos, stylised titles, Japanese against romanised titles) and, without a release, "title_guess".
 # The family (solve: label photos joined by links whose points and pixels agree) only settles a label photo's own
 # doubt: families can hold a series' games sharing a layout, and nearly-same prints have serials of their own.
-# Done again when serials.json is older than this file, solve.json or find's label-photos.json; the OCR of a
+# Done again when serials.json is older than this file, serials.py, the database (releases.json), solve.json or find's label-photos.json; the OCR of a
 # straightened label photo is cached in <generated>/read-serials/ocr/<file>.json, the fit it was read from beside it
 # (<file>.fit.json); redone when read_text is newer, or its fit has moved the straightened image by REREAD_MM or more
 # since (the user, 2026-11-12: text isn't in the label's outer mm, and the image has straighten.MARGIN around it).
@@ -205,12 +205,12 @@ def main():
     threads = max(1, (os.cpu_count() or 4) // args.workers)
     steps.run(ocr_job, jobs, args.workers, read_text.init_worker, (threads,), "straightened label photos read:")
     out = os.path.join(out_dir, "serials.json")
-    newest = max(os.path.getmtime(p) for p in [solve_file, find_file, __file__] + list(ocr_out.values()) +
+    newest = max(os.path.getmtime(p) for p in [solve_file, find_file, __file__, serials.__file__, serials.DATABASE] + list(ocr_out.values()) +
                  ([CORRECTIONS] if os.path.exists(CORRECTIONS) else []))
     release_of = serials.load_database()
     if not os.path.exists(out) or os.path.getmtime(out) < newest:
         regions = serials.by_region(release_of)
-        index = serials.TitleIndex(json.load(open(serials.DATABASE)))
+        index = serials.TitleIndex(serials.releases())
         by_id = {}
         for r_ in release_of.values():
             by_id.setdefault(r_["id"], r_)
@@ -255,7 +255,7 @@ def main():
                 result[k].update(serial=serial, release=r_["id"] if r_ else None, decided_by="corrected by hand")
         steps.write_json(out, result)
         covered = {v["release"] for v in result.values() if v["release"]}
-        everything = sorted({r["id"] for r in json.load(open(serials.DATABASE))})
+        everything = sorted({r["id"] for r in serials.releases()})
         steps.write_json(os.path.join(out_dir, "missing.json"), [r for r in everything if r not in covered])
         unknown = {}
         for k, v in result.items():

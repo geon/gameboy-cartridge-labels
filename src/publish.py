@@ -69,7 +69,7 @@ def main():
     solved = json.load(open(need[1]))["label_photos"]
     serials = json.load(open(need[2]))
     src = sources()
-    titles = {r["id"]: r["title"] for r in json.load(open(serials_module.DATABASE))}
+    titles = {r["id"]: r["title"] for r in serials_module.releases()}
     poor = poor_fits(solved)
     out_dir = args.out
     os.makedirs(os.path.join(out_dir, "prints"), exist_ok=True)
@@ -119,7 +119,7 @@ def main():
     for name, tiles in prints_step.load_pairs(os.path.join(gen, "prints", "pairs.npz"), prints_step.comparison_version()).items():
         a, b = name.split("|")[:2]
         differences[a, b] = differences[b, a] = int(tiles.sum())
-    releases = {r["id"]: r for r in json.load(open(serials_module.DATABASE))}
+    releases = {r["id"]: r for r in serials_module.releases()}
     wanted_list = wanted.entries(prints["prints"], has_image, solved, serials, releases, src, differences)
     steps.write_json(os.path.join(out_dir, "wanted.json"), wanted_list)
     wanted.page(out_dir, wanted_list)
