@@ -339,9 +339,10 @@ function printCard(p) {
   const keys = p.keys.map(k => k.key);
   const card = el("div", {class: "print" + (joinTicks.has(handle(p)) ? " ticked" : "")});
   card.handle = handle(p);
+  card.keys = keys;  // the label photos left: deleting one takes it out
   const tick = el("input", {type: "checkbox"});
   tick.checked = joinTicks.has(handle(p));
-  tick.onchange = () => { if (tick.checked) joinTicks.set(handle(p), keys); else joinTicks.delete(handle(p)); card.classList.toggle("ticked", tick.checked); bar(); };
+  tick.onchange = () => { if (tick.checked) joinTicks.set(card.handle, keys); else joinTicks.delete(card.handle); card.classList.toggle("ticked", tick.checked); bar(); };
   const name = p.id ? p.id : "new print, from " + (p.from.join(" + ") || "?");
   const count = el("span", {}, `${p.keys.length}`);
   const head = el("div", {class: "head"}, el("label", {}, tick, " join"), el("b", {}, name),
@@ -416,17 +417,19 @@ function render() {
     m.append(el("p", {class: "note"}, `${list.length} serials (or releases) of several prints` + ($("looked").checked ? "" : `; ${S.same.length - list.length} looked at, hidden`) + ". The most prints first."), pager(list.length, per));
     for (const e of list.slice(page * per, (page + 1) * per)) {
       const ps = e.prints.map(i => S.prints[i]);
-      const apart = el("button", {onclick: () => post("/decide", {kind: "apart", serial: e.serial, prints: ps.map(p => p.keys.map(k => k.key))})}, "All different");
+      const cards = ps.map(printCard);
+      const left = () => cards.filter(c => c.isConnected);  // a print whose label photos were all deleted is a hole
+      const apart = el("button", {onclick: () => post("/decide", {kind: "apart", serial: e.serial, prints: left().map(c => c.keys)})}, "All different");
       apart.title = "these prints are different prints: hide this serial while its prints are these";
       const box = el("div", {class: "serial"}, el("h2", {}, `${e.serial}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "")));
-      ps.forEach(p => box.append(printCard(p)));
+      cards.forEach(c => box.append(c));
       const all = el("button", {}, "Join all");
       const frozenCount = ps.filter(p => p.frozen.length).length;
       if (frozenCount > 1) { all.disabled = true; all.title = "two frozen prints can't be joined: unfreeze one first"; }
       else all.title = "these prints are one print: join them all";
       all.onclick = async () => {
-        const handles = new Set(ps.map(handle));
-        if (!await post("/decide", {kind: "join", prints: ps.map(p => p.keys.map(k => k.key))}, false)) return;
+        const cs = left(), handles = new Set(cs.map(c => c.handle));
+        if (!await post("/decide", {kind: "join", prints: cs.map(c => c.keys)}, false)) return;
         holes(handles, "joined");
         for (const h of handles) joinTicks.delete(h);
         all.disabled = apart.disabled = true; bar();
