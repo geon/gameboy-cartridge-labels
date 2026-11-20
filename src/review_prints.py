@@ -19,8 +19,8 @@
 # holding no other label photo (find's) is deleted from photos/ (photos.delete: the file and its record in
 # photo-sources.json); else the label photo's area is marked in find's NOT_LABELS as fit-by-hand's "Not a label" does
 # (solve's cut and find's outline, in the photo's pixels; "why": "deleted in review-prints"), and the next make find
-# makes no label photo there. Not a frozen print's. A deleted label photo leaves the page at once (and stays gone on
-# reload), as does a print left with none (the user, 2026-11-17).
+# makes no label photo there. Not a frozen print's. A deleted label photo leaves a hole of its size at once, as does a
+# print left with none, so nothing moves (the user, 2026-11-20); both are gone on reload. Each print on its own row.
 # Each print's serial typed in by hand ("Set serial", the user 2026-11-14): every label photo of the print gets it in
 # serial-corrections.json (read_serials.CORRECTIONS, which make read-serials applies last; the page shows it at once);
 # not a frozen print's. Joining leaves a hole of the same size where each joined print sat, so the page doesn't move
@@ -276,8 +276,9 @@ button{font:inherit;padding:4px 10px;border-radius:4px;border:1px solid #777;bac
 button:disabled{opacity:.4;cursor:default}
 .serial{margin:12px 0 24px;padding:8px;border:1px solid #555;border-radius:6px}
 .serial h2{font-size:16px;margin:0 0 6px}
-.print{display:inline-block;vertical-align:top;margin:4px 8px 8px 0;padding:6px;border:1px solid #666;border-radius:6px;background:#333;max-width:100%}
-.print.hole{box-sizing:border-box;border:1px dashed #555;background:none;color:#777;display:inline-flex;align-items:center;justify-content:center}
+.print{display:block;width:fit-content;margin:4px 0 8px;padding:6px;border:1px solid #666;border-radius:6px;background:#333;max-width:100%}
+.print.hole{box-sizing:border-box;border:1px dashed #555;background:none;color:#777;display:flex;align-items:center;justify-content:center}
+.lp.hole{box-sizing:border-box;border:1px dashed #555;color:#777;display:flex;align-items:center;justify-content:center}
 .print.ticked{border-color:#5a8;box-shadow:0 0 0 2px #5a8}
 .print .head{display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap}
 .print .restored{width:220px;display:block;margin-bottom:4px}
@@ -316,8 +317,7 @@ async function load(show = true) {
   S = await r.json();
   const now = new Set(S.prints.map(handle));
   for (const h of [...joinTicks.keys()]) if (!now.has(h)) joinTicks.delete(h);
-  lpTicks.clear();
-  if (show) render();
+  if (show) { lpTicks.clear(); render(); }
 }
 
 async function post(path, body, show = true) {
@@ -343,8 +343,9 @@ function printCard(p) {
   tick.checked = joinTicks.has(handle(p));
   tick.onchange = () => { if (tick.checked) joinTicks.set(handle(p), keys); else joinTicks.delete(handle(p)); card.classList.toggle("ticked", tick.checked); bar(); };
   const name = p.id ? p.id : "new print, from " + (p.from.join(" + ") || "?");
+  const count = el("span", {}, `${p.keys.length}`);
   const head = el("div", {class: "head"}, el("label", {}, tick, " join"), el("b", {}, name),
-    el("span", {class: "note"}, `${p.serial || p.release || "no serial"} · ${p.keys.length} label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
+    el("span", {class: "note"}, `${p.serial || p.release || "no serial"} · `, count, ` label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
       (p.disagree ? ` · ${p.disagree} read another serial` : "") + (p.tiles ? ` · up to ${p.tiles} tiles differ` : "")));
   if (p.frozen.length) head.append(el("span", {class: "frozen"}, "frozen"));
   const fz = el("button", {onclick: () => {
@@ -363,7 +364,19 @@ function printCard(p) {
     const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "")},
       el("label", {}, el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(k.key)}),
         box, el("span", {class: (k.serial && k.serial !== p.serial) ? "odd" : ""}, " " + (k.serial || k.release || "no serial read"))));
-    if (!p.frozen.length) lp.append(el("div", {}, el("button", {class: "del", onclick: () => post("/delete", {key: k.key})}, "Delete label photo")));
+    if (!p.frozen.length) lp.append(el("div", {}, el("button", {class: "del", onclick: async () => {
+      if (!await post("/delete", {key: k.key}, false)) return;
+      // a hole where it was, so the page doesn't move; the card's other buttons act on the label photos left
+      lpTicks.delete(k.key);
+      keys.splice(keys.indexOf(k.key), 1);
+      if (!keys.length) { joinTicks.delete(card.handle); holes(new Set([card.handle]), "deleted"); bar(); return; }
+      const r = lp.getBoundingClientRect();
+      lp.replaceWith(el("div", {class: "lp hole", style: `width:${r.width}px;height:${r.height}px`}, "deleted"));
+      count.textContent = keys.length;
+      card.handle = keys[0];
+      if (tick.checked) joinTicks.set(keys[0], keys);  // load() dropped it if the deleted one was its handle
+      split.disabled = !canSplit(); bar();
+    }}, "Delete label photo")));
     box.onchange = () => { if (box.checked) lpTicks.add(k.key); else lpTicks.delete(k.key); lp.classList.toggle("ticked", box.checked); split.disabled = !canSplit(); };
     lps.append(lp);
   }
