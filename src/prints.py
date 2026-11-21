@@ -98,8 +98,9 @@ def load_pairs(path, version):
     if str(z["version"]) != version:
         return {}
     out = {}
-    for name, (h, w), a, b in zip(z["names"], z["grids"], z["starts"][:-1], z["starts"][1:]):
-        out[str(name)] = np.unpackbits(z["bits"][a:b])[:h * w].astype(bool).reshape(h, w)
+    bits, starts = z["bits"], z["starts"]  # each z[...] reads the array from the file again
+    for name, (h, w), a, b in zip(z["names"], z["grids"], starts[:-1], starts[1:]):
+        out[str(name)] = np.unpackbits(bits[a:b])[:h * w].astype(bool).reshape(h, w)
     return out
 
 
