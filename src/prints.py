@@ -23,12 +23,13 @@
 # The ids are kept between runs in print-ids.json (the repo root, committed; with --sample in <generated>/prints/).
 # Done again when prints.json is older than this file, solve.json, serials.json or print-corrections.json.
 # Usage: prints.py [--sample]
-import argparse, html, itertools, json, os, sys
+import argparse, html, itertools, json, os, re, sys
 from collections import Counter
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, steps, straighten, shapes, print_ids, frozen, print_corrections
+import serials as serials_module
 
 TILE_MM = 1
 TEXTURE = 6.0
@@ -207,6 +208,37 @@ def keep_ids(all_prints, ids_file, gen):
     return changes
 
 
+def serial_code(serial):
+    """A serial's (or release id's) code: AGB-AC6D-NOE: AC6D."""
+    return re.sub(r"^(DIS-)?(DMG|CGB|AGB)-", "", (serial or "").upper()).split("-")[0]
+
+
+def game_code(serial):
+    """A serial's game: its code without the language letter (AGB-AC6D-NOE: AC6; a short old code as it is: DMG-NR)."""
+    code = serial_code(serial)
+    return code[:3] if len(code) == 4 else code
+
+
+def same_game(a, b):
+    """Whether two serials (or release ids) are of one game by their codes: equal but for a look-alike (A05J, AO5J),
+    or an old code and the same with J (DMG-NR, DMG-NRJ)."""
+    ga, gb = game_code(a), game_code(b)
+    ca, cb = serial_code(a), serial_code(b)
+    return bool(ga and gb) and (serials_module.edit_cost(ga, gb) <= 0.5 or ca + "J" == cb or cb + "J" == ca)
+
+
+def print_release(chosen, reads):
+    """A print's release: the most common among its label photos' (reads: read-serials' records) of its serial's game
+    (chosen: same_game, by the release id or else the serial read); all of them if it has no serial. Not another
+    game's: a print of a serial the database lacks (AGB-BSPE-USA) has no release, not the one a stray label photo's
+    misread gave it (AGB-AW2E, 2026-11-21); one of another language or a misread of the game's keeps it
+    (AGB-AC6D-NOE: AGB-AC6P; DMG-A05J-JPN: DMG-AO5J)."""
+    def mine(r):
+        return not chosen or same_game(chosen, r["release"]) or same_game(chosen, r.get("serial"))
+    rel = Counter(r["release"] for r in reads if r.get("release") and mine(r))
+    return rel.most_common(1)[0][0] if rel else None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sample", action="store_true")
@@ -285,13 +317,12 @@ def main():
                 f = {frozen_of[k] for k in p["keys"] if k in frozen_of}
                 if f:
                     p["frozen"] = f.pop()
-            rel = Counter(serial.get(k, {}).get("release") for k in p["keys"] if serial.get(k, {}).get("release"))
-            p["release"] = rel.most_common(1)[0][0] if rel else None
             ser = Counter(serial.get(k, {}).get("serial") for k in p["keys"] if serial.get(k, {}).get("serial"))
             p["serial"] = ser.most_common(1)[0][0] if ser else None
             p["shape"] = solved[p["keys"][0]]["shape"] if p["keys"] else frozen_entries[p["frozen"]]["shape"]
             if p.get("frozen"):  # as frozen
                 p["serial"] = frozen_entries[p["frozen"]]["serial"]
+            p["release"] = print_release(p["serial"], [serial.get(k, {}) for k in p["keys"]])
         ids_file = print_ids.IDS_FILE if not args.sample else os.path.join(out_dir, print_ids.IDS_FILE)
         changes = keep_ids(all_prints, ids_file, gen)
         for d in os.listdir(out_dir):  # pair images (pooling masks) of earlier versions
