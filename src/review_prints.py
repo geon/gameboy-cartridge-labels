@@ -3,12 +3,14 @@
 # prints as that run will make them: the prints step's own grouping (<generated>/prints/automatic.json; prints.json
 # before the prints step wrote it) with the decisions applied. A print as prints.json has it shows its id and restored
 # image; one the decisions changed shows the ids it's made from (its image comes with make prints restore).
-# Three tabs, and the decisions:
+# Four tabs, and the decisions:
 #   - Same serial: the serials (or releases, where no serial was read) of several prints, the most prints first,
 #     SERIALS_PER_PAGE at a time: join some, "Join all" (its prints joined as "Join ticked" would; the user, 2026-11-15),
 #     or "All different", which hides the serial while its prints are these.
 #   - Every print, worst first, PRINTS_PER_PAGE at a time: the most label photos whose serial read isn't the print's
 #     first, then the most differing tiles between two of its label photos (the prints step's pair cache).
+#   - Several serials: the prints whose label photos read two serials or more (the user, 2026-11-21), the most label
+#     photos reading another serial first, then the most serials, PRINTS_PER_PAGE at a time.
 #   - Search: a serial, a stem or an id (its start), up to SEARCH_MAX prints.
 #   - Decisions: every decision, the latest first, each to undo.
 # Each print: its label photos (straighten's image as is: full resolution and uncropped, for pinch-zooming; the user,
@@ -147,7 +149,9 @@ class Tool:
             same.append({"serial": s, "prints": idx, "looked_at": now in apart.get(s, [])})
         same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
         worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
-        self.state_json = {"prints": out, "same": same, "worst": worst,
+        several = [i for i in range(len(out)) if len({k["serial"] for k in out[i]["keys"] if k["serial"]}) > 1]
+        several.sort(key=lambda i: (-out[i]["disagree"], -len({k["serial"] for k in out[i]["keys"] if k["serial"]}), -len(out[i]["keys"])))
+        self.state_json = {"prints": out, "same": same, "worst": worst, "several": several,
                            "decisions": [{**d, "index": n, "applied": a} for n, (d, a) in enumerate(zip(self.decisions, self.applied))],
                            "per_page": {"serials": SERIALS_PER_PAGE, "prints": PRINTS_PER_PAGE, "search": SEARCH_MAX}}
         self.groups = {frozenset(k["key"] for k in p["keys"]): p for p in out}
@@ -297,6 +301,7 @@ button:disabled{opacity:.4;cursor:default}
 <header>
 <button class="tab" data-tab="same">Same serial</button>
 <button class="tab" data-tab="worst">Every print, worst first</button>
+<button class="tab" data-tab="several">Several serials</button>
 <button class="tab" data-tab="search">Search</button>
 <button class="tab" data-tab="decisions">Decisions</button>
 <span id="searchbox" style="display:none"><input id="q" placeholder="serial, stem or id" size="24"> <button id="go">Search</button></span>
@@ -443,6 +448,11 @@ function render() {
     m.append(el("p", {class: "note"}, `${S.prints.length} prints: the most label photos reading another serial first, then the most differing tiles between two of its label photos.`), pager(S.worst.length, per));
     for (const i of S.worst.slice(page * per, (page + 1) * per)) m.append(printCard(S.prints[i]));
     m.append(pager(S.worst.length, per));
+  } else if (tab === "several") {
+    const per = S.per_page.prints;
+    m.append(el("p", {class: "note"}, `${S.several.length} prints whose label photos read two serials or more: the most label photos reading another serial first, then the most serials.`), pager(S.several.length, per));
+    for (const i of S.several.slice(page * per, (page + 1) * per)) m.append(printCard(S.prints[i]));
+    m.append(pager(S.several.length, per));
   } else if (tab === "search") {
     const q = query.trim().toUpperCase();
     if (!q) { m.append(el("p", {class: "note"}, "A serial (DMG-APSJ-JPN), a stem (DMG-APS) or an id (DMG-APSJ-JPN-lisa).")); return; }
