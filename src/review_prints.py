@@ -13,7 +13,7 @@
 #     photos reading another serial first, then the most serials, PRINTS_PER_PAGE at a time.
 #   - Search: a serial, a stem or an id (its start), up to SEARCH_MAX prints.
 #   - Decisions: every decision, the latest first, each to undo.
-# Each print: its label photos (straighten's image as is: full resolution and uncropped, for pinch-zooming; the user,
+# Each print: its label photos, sorted by serial read (none last), (straighten's image as is: full resolution and uncropped, for pinch-zooming; the user,
 # 2026-11-14), each with its serial read and a tick box: "Split off ticked" makes the ticked a print of their own. A
 # print's own tick box marks it for joining: "Join ticked" in the bar at the bottom joins the ticked prints, from any
 # tab. Frozen prints (src/frozen.py) can't be split, and two can't be joined. "Delete label photo" under each label
@@ -364,7 +364,9 @@ function printCard(p) {
   if (p.image) card.append(el("img", {class: "restored", loading: "lazy", src: "/print/" + encodeURIComponent(p.id)}));
   else if (p.keys.length >= 3) card.append(el("div", {class: "note"}, p.id ? "no restored image" : "restored after make prints restore"));
   const lps = el("div", {class: "lps"});
-  for (const k of p.keys) {
+  // sorted by serial read, none last (the user, 2026-11-21); p.keys keeps its order (its first is the print's handle)
+  const bySerial = [...p.keys].sort((a, b) => !a.serial - !b.serial || (a.serial || "").localeCompare(b.serial || "") || a.key.localeCompare(b.key));
+  for (const k of bySerial) {
     const box = el("input", {type: "checkbox"});
     box.checked = lpTicks.has(k.key);
     const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "")},
