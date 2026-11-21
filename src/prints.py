@@ -209,8 +209,8 @@ def keep_ids(all_prints, ids_file, gen):
 
 
 def serial_code(serial):
-    """A serial's (or release id's) code: AGB-AC6D-NOE: AC6D."""
-    return re.sub(r"^(DIS-)?(DMG|CGB|AGB)-", "", (serial or "").upper()).split("-")[0]
+    """A serial's (or release id's) code: AGB-AC6D-NOE: AC6D; DMG-133 CHN: 133."""
+    return re.split(r"[- ]", re.sub(r"^(DIS-)?(DMG|CGB|AGB)-", "", (serial or "").upper()))[0]
 
 
 def game_code(serial):

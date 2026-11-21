@@ -213,14 +213,14 @@ class Tool:
 
     def set_serial(self, keys, serial):
         """Every label photo of a print (keys, as shown) gets serial in serial-corrections.json: None, or why not."""
-        serial = (serial or "").strip().upper()
+        serial = re.sub(r"\s+", " ", (serial or "").strip().upper())
         g = self.group_of(keys or [])
         if g is None:
             return "The page may be out of date: reload."
         if g["frozen"]:
             return "A frozen print's serial can't be set: unfreeze it first."
-        if not re.fullmatch(r"[A-Z0-9]+(-[A-Z0-9]+)+", serial):
-            return f"Not a serial: {serial!r} (like DMG-APSJ-JPN)."
+        if not re.fullmatch(r"[A-Z0-9]+(-[A-Z0-9]+)+( [A-Z]{3})?", serial):  # DMG-133 CHN: Chinese, as in releases.json
+            return f"Not a serial: {serial!r} (like DMG-APSJ-JPN, or DMG-133 CHN)."
         data = self.corrections()
         data["corrections"] = dict(sorted({**data["corrections"], **{k: serial for k in keys}}.items()))
         tmp = CORRECTIONS + ".tmp"
