@@ -59,6 +59,9 @@ def measure(job):
         if img is None:
             out[key] = None
             continue
+        if img.shape[:2] != (size[1], size[0]):  # straightened as another shape than the print's: restore can't use it
+            out[key] = {"detail": None, "divergence": None, "cover": 0.0}
+            continue
         valid = img.max(2) > 1
         cut = straighten.load_cut(os.path.dirname(os.path.dirname(path)), key)
         if cut is not None:
