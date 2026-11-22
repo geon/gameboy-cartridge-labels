@@ -21,8 +21,8 @@
 #     "n of N prints measured" while that runs). One print a page:
 #     the restored image now and the would-be one side by side, the full width; under them every label photo of the
 #     print in rows of at most 10, the best first, scaled to fit. The would-be one starts from optimize.proposal (the worse half
-#     left out); clicking a label photo toggles it, and the would-be image is restored again (restore.restore_print, in
-#     background processes; cached per set of label photos in <generated>/review-prints/optimize/would-be/; the latest
+#     left out); clicking a label photo toggles it, and the would-be image is restored again (restore.restore_print, a
+#     background process per restore, killed when a newer click supersedes it; cached per set of label photos in <generated>/review-prints/optimize/would-be/; the latest
 #     click wins). Accept, after a confirmation: the label photos left out deleted as "Delete label photo" does (one
 #     change in the log), and the would-be image and its description written to <generated>/restore/ as the print's.
 #     Nothing marks a print optimized: with good label photos left, its total is low and it sinks (the user).
@@ -40,7 +40,7 @@
 # Usage: review_prints.py [port]
 import json, os, re, shutil, sys, threading, urllib.parse
 from collections import Counter
-from concurrent.futures import ProcessPoolExecutor, CancelledError, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -57,7 +57,6 @@ PRINTS_PER_PAGE = 20
 SEARCH_MAX = 50
 LOG_SHOWN = 200
 MEASURE_WORKERS = 4   # background processes measuring label photos for Optimize
-RESTORE_WORKERS = 2   # background processes restoring would-be images
 MEASURES_SAVED_EVERY = 25
 lock = threading.Lock()
 
@@ -324,8 +323,7 @@ class Tool:
         self.measures = json.load(open(self.measures_file)) if os.path.exists(self.measures_file) else {}
         self.unmeasurable = set()
         self.measure_pool = ProcessPoolExecutor(MEASURE_WORKERS, initializer=optimize.nice)
-        self.restore_pool = ProcessPoolExecutor(RESTORE_WORKERS, initializer=optimize.nice)
-        self.pending = {}  # print id -> (key hash, future): its latest would-be restore
+        self.pending = {}  # print id -> (key hash, optimize.Restore): its latest would-be restore, killed when superseded
         self.measuring = [0, 0]
         self.compute_optimize()
         threading.Thread(target=self.measure_all, daemon=True).start()
@@ -483,15 +481,15 @@ class Tool:
                 fut = old[1]
             else:
                 if old:
-                    old[1].cancel()  # not started yet: not wanted any more
+                    old[1].kill()  # not wanted any more: its process killed, queued or running
                 fams = {self.solved[k]["family"] for k in keys if k in self.solved}
                 job = (pid, shape, [(k, self.image_of(k)) for k in keys], {k: self.px_per_mm[k] for k in keys if k in self.px_per_mm},
                        self.approximate & set(keys), desc["crop"], len(fams) > 1, base)
-                fut = self.restore_pool.submit(optimize.would_be, job)
+                fut = optimize.Restore(job)
                 self.pending[pid] = (h, fut)
         try:
-            _, d = fut.result()
-        except CancelledError:
+            _, d = fut.wait()
+        except optimize.Restore.Superseded:
             return None, "Superseded."
         if d is None:
             return {"too_few": True}, None

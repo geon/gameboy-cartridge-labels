@@ -13,7 +13,7 @@
 # The proposal: the label photos restore can't use (a poor fit, another shape than the print's) left out, and of the
 # others the worse half by badness, keeping at least restore.MIN_PHOTOS, restore.MIN_PRECISE of them not approximate
 # cuts. A print's total badness: the sum over the label photos the proposal leaves out (the tab's order, the most first).
-import hashlib, json, os, sys
+import hashlib, json, multiprocessing, os, sys, threading
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -123,3 +123,50 @@ def nice():
     except OSError:
         pass
     cv2.setNumThreads(1)
+
+
+def _would_be_child(job, conn):
+    nice()
+    try:
+        conn.send(("ok", would_be(job)))
+    except Exception as e:
+        conn.send(("error", repr(e)))
+    conn.close()
+
+
+class Restore:
+    """would_be(job) in a process of its own, so it can be killed when superseded (a process pool can't stop a running
+    job: the user, 2026-11-22). Killed before it writes its .json, nothing partial is kept (would_be writes it last,
+    via a temporary file). wait() -> would_be's answer; raises Superseded if killed."""
+    class Superseded(Exception):
+        pass
+
+    def __init__(self, job):
+        ctx = multiprocessing.get_context("spawn")
+        parent, child = ctx.Pipe(duplex=False)
+        self.proc = ctx.Process(target=_would_be_child, args=(job, child), daemon=True)
+        self.proc.start()
+        child.close()  # the parent's copy: a killed child then reads as EOF
+        self.done, self.answer = threading.Event(), None
+        def reader():
+            try:
+                self.answer = parent.recv()
+            except (EOFError, OSError):
+                self.answer = ("superseded", None)
+            parent.close()
+            self.proc.join()
+            self.done.set()
+        threading.Thread(target=reader, daemon=True).start()
+
+    def kill(self):
+        if self.proc.is_alive():
+            self.proc.kill()
+
+    def wait(self):
+        self.done.wait()
+        kind, value = self.answer
+        if kind == "ok":
+            return value
+        if kind == "superseded":
+            raise Restore.Superseded()
+        raise RuntimeError(value)
