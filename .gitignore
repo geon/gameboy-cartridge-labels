@@ -21,3 +21,5 @@ edge-models/training/models/
 edge-models/training/fit-*.json
 # The photos (photos/<sha1>.<ext>, sources in photo-sources.json): kept on disk only, too big for GitHub (the user, 2026-11-13).
 photos/
+# The store's stamp of the frozen prints (src/stored_prints.py), redone from prints.json.
+frozen/.changed
