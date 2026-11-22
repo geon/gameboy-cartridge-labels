@@ -9,7 +9,38 @@ Decided by the user, 2026-11-22, after a make all merged dozens of prints of dif
 3. **A stored print only grows by a new label photo of its own serial.** A new label photo may be added to a stored print automatically only if its serial matches the print's. Otherwise it isn't added. Pixels alone never add a label photo to a print of another serial, and never merge two stored prints.
 4. **The serial is read from the straightened label photo only.** The serial used for adding a label photo to a print comes from the OCR of its straightened image. It never comes from reads in the whole photo (another cartridge's serial can be there), from the family's reads, or from a title guess.
 5. **The serial must be there when joining.** If a label photo's serial isn't available when it would be added to a print, the pipeline steps are in the wrong order, and that's the bug to fix. Never add it without one.
-6. **Frozen prints are never changed automatically.** Freezing means no step changes the print: no label photo is added, removed or moved, by pixels, by serial or by anything else. Only the user changes a frozen print, by hand. Frozen prints need not be part of any pipeline step at all, which saves time. Never changing them automatically is crucial.
+6. **Pixels choose among prints of one serial.** A new label photo whose serial several stored prints share goes into the one it matches best by pixels; if it matches none of them, it starts a new print (the user, 2026-11-22).
+7. **Frozen prints are never changed automatically.** Freezing means no step changes the print: no label photo is added, removed or moved, by pixels, by serial or by anything else. Only the user changes a frozen print, by hand. Frozen prints need not be part of any pipeline step at all, which saves time. Never changing them automatically is crucial.
+
+## Proposed design (for the user's yes, 2026-11-22; not built)
+
+**The store.** print-ids.json becomes the store of open prints: `{"prints": {id: {"created", "serial", "keys": [...]}}, "gone": {...}}`, as now plus each print's own `serial`. Written only by the prints step (adding new label photos, dropping gone ones) and by review-prints (the user's changes). Frozen prints stay in frozen-prints.json and are not in it. Freezing moves a print from the store to frozen-prints.json, and unfreezing moves it back.
+
+**A print's serial.** Stored in the print. It's set when the print is made, from its first label photos' serials. After that, only the user changes it (Set serial), never a run. Reads that later disagree are shown, not acted on.
+
+**A label photo's serial (for joining).** read-serials gives each label photo a `straightened_serial`: the serial its straightened image's own exact OCR reads give. That's one serial, or none where they give none or several. It ignores the photo, the family and titles. The existing `serial` stays for display and the database. On the full set now: 22,757 of 25,260 label photos have one, 13 several, 155 only a near read, 2,335 none.
+
+**The prints step, each run:**
+
+1. Load the store. Match each stored key to a current label photo (print_ids.same_label_photo: the same key, else the one current outline holding its centre; not found where none or several do). Drop keys not found. A print left empty becomes gone ("no label photo left"). Nothing else in a stored print changes.
+2. New label photos: current ones in no stored print and no frozen print.
+3. Each new label photo with a `straightened_serial`: compared by pixels (the comparison as now: differing tiles, MIN_DIFF_TILES) with the label photos of the stored prints of that serial. It goes into the one where most of the print's label photos are "same" and the mean differing tiles are fewest. Where none, it's left over.
+4. The left-over new label photos of one serial are grouped among themselves by pixels (split_family as now), and each group becomes a new print of that serial.
+5. A new label photo without a `straightened_serial` joins nothing. It becomes a print of its own with no serial, for the user (below).
+6. prints.json is written from the store (as now: id, keys, serial, release, shape, family) for restore and publish. The automatic grouping of whole families, automatic.json and the decisions replay all go away.
+
+If a label photo's straightened serial isn't there when step 3 runs (read-serials older than straighten or solve), the step stops with an error naming the order. It doesn't guess.
+
+**review-prints, revised to the store** (the user: the UI may need revising to match):
+
+- Join, Split off, Delete label photo and Set serial change the store at once and save it. The page shows the store itself, not a forecast of the next run.
+- Every change is appended to a change log in the store (`"log": [{kind, datetime, before, after}]`). A Recent changes tab replaces Decisions, with Undo on the latest changes.
+- Tabs: Same serial (several stored prints of one serial: join or "all different"), Several serials (prints whose label photos' straightened serials differ), No serial (prints of label photos without a straightened serial: join into a print or set serial), New (label photos the last run added, where they went), Every print, Search.
+- Frozen prints: shown, not changeable, as now.
+
+**Migration, once:** the store is made from what review-prints shows now (the last run's grouping with the decisions applied, deterministic since 31b0634d). Each print whose label photos' straightened serials name different games is split into one print per serial; the label photos without a straightened serial stay with the most common serial. Then print-corrections.json is deleted. Its decisions are in the store, and the git history keeps the file.
+
+**Later, separately:** frozen prints out of the pipeline steps (find, match, solve, restore, publish), and solve's stage 3 joining (rule 7).
 
 ## Why
 
