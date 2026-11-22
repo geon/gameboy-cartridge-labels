@@ -311,6 +311,12 @@ Not yet in find: the ink's extent from agreeing pixels and cut edges (edges isn'
 
 ## Next
 
+To do (the user, 2026-11-22):
+
+- **Review and normalize every JSON file** (hand input, the store and every step's output): each fact kept in one place, nothing copied or derivable from another file. Propose the whole scheme to the user before changing any (consult on conventions).
+- **serials.json** (read-serials), first found: `family` is solve.json's (identical for all 25,260); `release` is the database lookup of `serial` wherever there's a serial (23,334 of 23,334), its own only in the 528 decided by the family's reads (which may go against stored-prints.md rule 12); hand corrections (1,270) are copied in from serial-corrections.json; `reads[].from` is always "straightened" now; `serial` and `straightened_serial` are two answers from the same reads (they differ on 392). Keep per label photo its reads and one serial decided from them, the rest looked up where it's needed.
+- **prints.json's `several_serials`** (the prints step's output): derived from the keys and serials.json, and the rule is in review-prints too. One function (in prints.py) for both, called by restore and review-prints; no field.
+
 Hand-off, 2026-11-09 (the session ended for a restart):
 
 - **The full set needs a rerun** of everything changed today: `make solve straighten read-serials prints restore publish` (solve can run overnight). Then the user judges restore's sharpness visually (the black point looked great on the sample, 2026-11-09).
