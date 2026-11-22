@@ -333,3 +333,11 @@ document.body.prepend(inp);
 - The extension returns at most about 1000 characters per call: listings come out as a browser download (Chrome asks once to allow several downloads).
 - Left out by hand (NOT_CARTRIDGE doesn't catch them): other systems' games (N64, SNES, NES, Mega Drive), a games guide, two consoles without games. A console bundle with 2 games kept (a lot).
 - Kept: retrospielewelt 23 of 28 (5 too small), chronogamesretro 19 of 20 (1 too small). Listings: downloaded-photos/ebay-store-retrospielewelt.json, downloaded-photos/ebay-store-chrono-games.json.
+
+## 2026-11-22: pass "wanted1", the wanted list (eBay and Jauce)
+
+- The releases of generated/publish/wanted.json (the prints a photo or two short of an image), in its rank order: 1564 releases of 1734 prints, 757 Japanese.
+- eBay: 1553 queries (`queries ALL <releases> wanted1`; 834 Japanese with "Japan", 423 European with "PAL"); one search every 35–50 s, half-hour waits on a block for up to 4 hours. Batches `~/Downloads/ebay-batch-wanted1-<n>.json`.
+- Jauce: 757 short queries (`queries <releases> wanted1 short`), Japanese releases searched before included (Yahoo's auctions last about a week; auctions downloaded before are skipped by ingest). One search every 20–30 s. Batches `~/Downloads/jauce-wanted1-batch-<n>.json`.
+- Lots and other-region listings no longer left out (the user, 2026-11-17); boxed, complete, manual and sealed listings (箱, 説明書, 未開封) put last instead of left out. Still left out: box or manual only, empty, repros, custom, stickers, guides, fan-made, consoles and accessories, other systems.
+- Jauce changed: the form post to /directory_list.php now gets a "Loading..." page (a script sets a cookie and reloads). A search typed in the tab's own search box passes it and lands on `/search/<words joined by +>`; after that, a `fetch()` of `/search/<words>` from the tab gets the results page (404 with "No results found." when there are none, as before).
