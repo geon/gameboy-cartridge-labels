@@ -334,6 +334,12 @@ def write_avif(path, img):
 # the ink at that lightness (or its neutral grey if none is), taken off per channel in linear light so the black is
 # neutral too. A label with too little such ink keeps its blacks as they are. (Tried: a cap at 15 % sRGB: no gain on
 # clean labels, too little on glary ones, which need the higher black.)
+# A dark colour isn't black ink (2026-11-22, the user: AGB-AGSP-EUR-jill's dark green background clipped to black): dark
+# colours have little Oklab chroma, so they pass as near-neutral ink, the histogram's peak is the colour and taking its
+# colour off makes it black. Where the ink at that lightness has a hue (its median a,b at least INK_HUE from neutral;
+# real black ink's noise averages out, median 0.014 on 273 prints, 17 % at INK_HUE or more), the black is neutral
+# instead, at the ink's INK_BLACK quantile of lightness: the darkest go black, the colour gets darker but stays a colour.
+# (Tried: an ink chroma limit of 0.02: much of the green is under it too, no change; no black point at all: washed out.)
 PAPER_CHROMA = 0.04
 PAPER_TOP = 0.1
 PAPER_MIN = 0.03
@@ -345,6 +351,7 @@ INK_MIN = 0.01
 INK_BLACK = 0.1
 INK_ABOVE_DARKEST = 0.1
 INK_BINS = 40
+INK_HUE = 0.025
 
 
 def paper_white(bgr):
@@ -364,20 +371,22 @@ def paper_white(bgr):
     ink = neutral & (L < INK_MAX)
     black_lin = np.zeros(3)
     if ink.mean() >= INK_MIN:
-        black_lin = ink_black(L[ink], lin[ink])
+        black_lin = ink_black(L[ink], lin[ink], lab[..., 1][ink], lab[..., 2][ink])
     out = np.clip((lin - black_lin) / np.maximum(white_lin - black_lin, 1e-3), 0, 1)
     out = np.where(out <= 0.0031308, out * 12.92, 1.055 * np.power(out, 1 / 2.4) - 0.055)
     return np.median(bgr[paper], axis=0), out.astype(np.float32)
 
 
-def ink_black(L, lin):
-    """The black point (linear BGR) of the ink's lightness L and colours lin (see above)."""
+def ink_black(L, lin, a, b):
+    """The black point (linear BGR) of the ink's lightness L, colours lin and Oklab a, b (see above)."""
     edges = np.linspace(0, INK_MAX, INK_BINS + 1)
     h = np.convolve(np.histogram(L, edges)[0], np.ones(3) / 3, "same")
     peak = int(np.argmax(h))
     side = peak + next((i for i, v in enumerate(h[peak:]) if v < h[peak] / 2), len(h) - peak)
     level = min(edges[min(side, INK_BINS)], np.quantile(L, INK_BLACK) + INK_ABOVE_DARKEST)
     near = np.abs(L - level) < INK_MAX / INK_BINS / 2
+    if near.any() and np.hypot(np.median(a[near]), np.median(b[near])) >= INK_HUE:  # a colour, not black ink
+        return np.full(3, np.quantile(L, INK_BLACK) ** 3)
     return np.median(lin[near], axis=0) if near.any() else np.full(3, level ** 3)
 
 
