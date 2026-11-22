@@ -34,3 +34,11 @@ def test_the_title_settles_several_own_reads():
 def test_a_cut_off_read_gives_way_to_the_whole_one():
     db = {"DMG-VF": {"id": "dmg-vf"}, "DMG-VFJ": {"id": "dmg-vfj"}}
     assert read_serials.decide([r("DMG-VF"), r("DMG-VFJ")], Counter({"dmg-vf": 2}), db, 2)[1] == "dmg-vfj"
+
+
+def test_straightened_serial_is_the_straightened_images_own_exact_read_only():
+    s = lambda serial, kind="exact", where="straightened": {"text": serial, "serial": serial, "kind": kind, "from": where}
+    assert read_serials.straightened_serial([s("DMG-APSJ-JPN"), s("DMG-APSJ-JPN")]) == "DMG-APSJ-JPN"
+    assert read_serials.straightened_serial([s("DMG-APSJ-JPN", where="photo")]) is None
+    assert read_serials.straightened_serial([s("DMG-APSJ-JPN", kind="near")]) is None
+    assert read_serials.straightened_serial([s("DMG-APSJ-JPN"), s("DMG-APBJ-JPN")]) is None

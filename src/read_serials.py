@@ -1,6 +1,10 @@
 # read-serials: every solved label photo's serial, into <generated>/read-serials/:
 #   serials.json: {key: {"reads": [{"text", "serial", "kind" (exact, near, unknown), "from" (straightened, photo)}],
-#                        "serial", "release" (the database's id or null), "decided_by", "family"}}
+#                        "serial", "release" (the database's id or null), "decided_by", "family",
+#                        "straightened_serial"}}
+#   straightened_serial (stored-prints.md, rule 4): the serial the straightened label photo's own exact reads give, one
+#   serial or null (none, or several); never the photo's reads, the family's or a title. The serial the prints step
+#   joins a new label photo to a stored print by. A serial set by hand (serial-corrections.json) is it.
 #   missing.json: the database's entries no label photo has (sorted by id)
 #   unknown-serials.json: {serial-looking string the database doesn't know: [keys]} (possible new releases)
 # The reads: OCR (read_text, RapidOCR) of the straightened label photo (straighten: upright, no perspective), and the
@@ -87,6 +91,12 @@ def own_reads(lines, strings, release_of, regions, shape=None):
             if unknown:
                 reads.append({"text": text, "serial": unknown[0], "kind": "unknown", "from": source})
     return reads
+
+
+def straightened_serial(reads):
+    """The serial a label photo's straightened image's own exact reads give: one serial, else None."""
+    found = {r["serial"] for r in reads if r["from"] == "straightened" and r["kind"] == "exact"}
+    return found.pop() if len(found) == 1 else None
 
 
 def decide(reads, family_reads, release_of, family_readers=0, title=None, by_title=None):
@@ -252,13 +262,14 @@ def main():
             by_title, game = (None, None) if has_serial else find_by_title(text, solved[k]["shape"], reads[k], index, release_of)
             serial, release, how = decide(reads[k], fam, release_of, readers, title)
             result[k] = {"reads": reads[k], "serial": serial, "release": release, "decided_by": how, "family": family_of[k],
+                         "straightened_serial": straightened_serial(reads[k]),
                          "title_score": round(title(release), 2) if release else None,
                          "title_guess": (by_title[1] if by_title else game) if not release else None}
         corrections = json.load(open(CORRECTIONS)).get("corrections", {}) if os.path.exists(CORRECTIONS) else {}
         for k, serial in corrections.items():
             if k in result:
                 r_ = serials.release(serial, release_of)
-                result[k].update(serial=serial, release=r_["id"] if r_ else None, decided_by="corrected by hand")
+                result[k].update(serial=serial, release=r_["id"] if r_ else None, decided_by="corrected by hand", straightened_serial=serial)
         steps.write_json(out, result)
         covered = {v["release"] for v in result.values() if v["release"]}
         everything = sorted({r["id"] for r in serials.releases()})
