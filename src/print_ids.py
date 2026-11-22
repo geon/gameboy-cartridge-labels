@@ -65,7 +65,10 @@ def new_name(part, used, seed):
 
 def same_label_photo(old_key, new_keys_of_photo, outlines, sizes):
     """The new key that is the old key's label photo, or None: the same key, else the one whose outline holds the old
-    key's centre (its photo's size from sizes, sha1 -> [w, h])."""
+    key's centre (its photo's size from sizes, sha1 -> [w, h]). None where several outlines hold it (an old label photo
+    over two cartridges, which find now tells apart: either may be it). The first one holding it was taken until
+    2026-11-22, in set order, so it differed from run to run: make prints and review-prints each grouped by another
+    random pick (25 such label photos in the decisions)."""
     if old_key in new_keys_of_photo:
         return old_key
     import cv2, numpy as np
@@ -75,10 +78,8 @@ def same_label_photo(old_key, new_keys_of_photo, outlines, sizes):
     x, y = (int(v) for v in pos.split(","))
     w, h = sizes[sha1]
     pt = ((x + 0.5) / 100 * w, (y + 0.5) / 100 * h)
-    for k in new_keys_of_photo:
-        if k in outlines and cv2.pointPolygonTest(np.float32(outlines[k]), pt, False) >= 0:
-            return k
-    return None
+    holding = [k for k in new_keys_of_photo if k in outlines and cv2.pointPolygonTest(np.float32(outlines[k]), pt, False) >= 0]
+    return holding[0] if len(holding) == 1 else None
 
 
 def assign(prints, registry, key_map, when=None, forced=None):
