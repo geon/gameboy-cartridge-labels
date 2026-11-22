@@ -9,8 +9,8 @@
 #                        frozen image's, frozen/<id>.avif), "photo_label_photos"? (match: src/frozen.py), "frozen_at"?,
 #                        "split_from"?, "renamed_from"?}},
 #        "gone": {id: {"why", "into"?, "datetime"}} (ids are never reused),
-#        "looked_at": {"same_serial": {serial: [[id...]]}, "several_serials": {id: [key...]}} (review-prints: what the
-#                     user looked at and left as it was; shown again once it differs),
+#        "looked_at": {"same_serial": {serial: [[id...]]}} (review-prints' "All different": the prints of a serial the user
+#                     looked at and left apart; shown again once they differ),
 #        "log": [{"datetime", "kind", "manual", "before": {id: summary or null}, "after": {id: summary or null}}]}
 #   a summary: {"serial", "frozen", "keys"}. Written one label photo, gone id and log entry per line, so a run's diff
 #   shows what changed. The log is what Undo works from (the latest change only, while what it made is unchanged);
@@ -34,7 +34,7 @@ def now():
 
 
 def empty():
-    return {"prints": {}, "gone": {}, "looked_at": {"same_serial": {}, "several_serials": {}}, "log": []}
+    return {"prints": {}, "gone": {}, "looked_at": {"same_serial": {}}, "log": []}
 
 
 def load(path=None):

@@ -4,9 +4,10 @@
 # Tabs:
 #   - Same serial: the serials of several stored prints, the most prints first, SERIALS_PER_PAGE at a time: join some,
 #     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these).
-#   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ, and
-#     prints the prints step gave a label photo without a serial ("joined_without_serial"); "Looked at" hides one while
-#     its label photos are these (looked_at.several_serials). The most label photos reading another serial first.
+#   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ (label
+#     photos without one don't count). A print of several serials is nonsense, to be fixed by hand (the user,
+#     2026-11-22: split or set the serial), and isn't restored until it is. The most label photos reading another
+#     serial first.
 #   - No serial: prints without a serial (label photos without a straightened serial that joined no print).
 #   - New: the prints the last make prints made or added label photos to (<generated>/prints/id-changes.json).
 #   - Every print, worst first: the most label photos reading another serial, then the most differing tiles between two
@@ -122,12 +123,9 @@ class Tool:
             image = os.path.exists(frozen.image_path(pid)) if p.get("frozen") else restored
             tiles = max((self.tiles.get((a, b), 0) for i, a in enumerate(keys) for b in keys[i + 1:]), default=0)
             fams = {self.solved[k]["family"] for k in keys if k in self.solved}
-            without = sorted(k for k in keys if p["label_photos"][k].get("joined_without_serial"))
-            out.append({"id": pid, "keys": [{"key": k, "serial": read[k], "release": release(k), "by_hand": k in hand,
-                                             "without_serial": k in without} for k in keys],
+            out.append({"id": pid, "keys": [{"key": k, "serial": read[k], "release": release(k), "by_hand": k in hand} for k in keys],
                         "serial": ser, "frozen": bool(p.get("frozen")), "image": bool(image), "restored": restored,
-                        "families": len(fams), "disagree": disagree, "tiles": tiles,
-                        "unlooked": bool(without) and looked["several_serials"].get(pid) != keys})
+                        "families": len(fams), "disagree": disagree, "tiles": tiles})
         index = {p["id"]: i for i, p in enumerate(out)}
         by_serial = {}
         for i, p in enumerate(out):
@@ -140,7 +138,7 @@ class Tool:
                 same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, [])})
         same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
         nserials = lambda i: len({k["serial"] for k in out[i]["keys"] if k["serial"]})
-        several = [i for i in range(len(out)) if (nserials(i) > 1 and looked["several_serials"].get(out[i]["id"]) != [k["key"] for k in out[i]["keys"]]) or out[i]["unlooked"]]
+        several = [i for i in range(len(out)) if nserials(i) > 1]
         several.sort(key=lambda i: (-out[i]["disagree"], -nserials(i), -len(out[i]["keys"])))
         worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
         none = sorted((i for i in range(len(out)) if not out[i]["serial"]), key=lambda i: -len(out[i]["keys"]))
@@ -192,14 +190,6 @@ class Tool:
     def looked_same(self, serial, ids):
         self.fresh()
         self.store.data["looked_at"]["same_serial"].setdefault(serial, []).append(sorted(ids))
-        self.save()
-
-    def looked_several(self, pid):
-        self.fresh()
-        why = self.known([pid])
-        if why:
-            return why
-        self.store.data["looked_at"]["several_serials"][pid] = sorted(self.store.prints[pid]["label_photos"])
         self.save()
 
     def set_frozen(self, pid, on):
@@ -391,8 +381,7 @@ function printCard(p, extra) {
     box.checked = lpTicks.has(k.key);
     const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "")},
       el("label", {}, el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(k.key)}),
-        box, el("span", {class: (k.serial && k.serial !== p.serial) || k.without_serial ? "odd" : ""},
-          " " + (k.serial || "no serial read") + (k.without_serial ? " (joined without a serial)" : ""))));
+        box, el("span", {class: k.serial && k.serial !== p.serial ? "odd" : ""}, " " + (k.serial || "no serial read"))));
     lp.append(el("div", {}, el("button", {class: "del", onclick: async () => {
       if (!await post("/delete", {key: k.key}, false)) return;
       // a hole where it was, so the page doesn't move; the card's other buttons act on the label photos left
@@ -465,8 +454,7 @@ function render() {
     }
     m.append(pager(shown.length, per));
   } else if (tab === "several") {
-    list(S.several, `${S.several.length} prints whose label photos' straightened serials differ, or given a label photo without a serial by make prints: the most label photos reading another serial first. "Looked at" hides one while its label photos are these.`,
-         p => el("button", {onclick: async () => { if (await post("/looked", {id: p.id}, false)) holes(new Set([p.id]), "looked at"); }}, "Looked at"));
+    list(S.several, `${S.several.length} prints whose label photos read several serials (label photos without one don't count): fix each by splitting or setting the serial. Not restored until fixed. The most label photos reading another serial first.`);
   } else if (tab === "none") {
     list(S.none, `${S.none.length} prints without a serial: label photos whose straightened image gave none and matched no print. Join them into a print, or set the serial.`);
   } else if (tab === "new") {
@@ -555,7 +543,6 @@ class Handler(BaseHTTPRequestHandler):
         actions = {"/join": lambda d: tool.join(d.get("ids") or []),
                    "/split": lambda d: tool.split(d.get("id"), d.get("keys") or []),
                    "/apart": lambda d: tool.looked_same(d.get("serial"), d.get("ids") or []),
-                   "/looked": lambda d: tool.looked_several(d.get("id")),
                    "/delete": lambda d: tool.delete(d.get("key")),
                    "/serial": lambda d: tool.set_serial(d.get("id"), d.get("serial")),
                    "/freeze": lambda d: tool.set_frozen(d.get("id"), bool(d.get("on"))),

@@ -440,6 +440,8 @@ def print_jobs(gen, result, solved):
     for p in result["prints"]:
         if p.get("frozen"):  # its image is the frozen one (src/frozen.py): restored again only by make refreeze
             continue
+        if p.get("several_serials"):  # its label photos read several serials: to be fixed by hand first (stored-prints.md)
+            continue
         job = job_of(p, info, crops[p["family"]])
         if job:
             jobs[p["id"]] = job

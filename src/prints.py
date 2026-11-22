@@ -1,6 +1,8 @@
 # prints: the stored prints (stored-prints.md; src/stored_prints.py, prints.json in the repo root: the truth) kept up
 # with this run's label photos, and written out for restore and publish, into <generated>/prints/:
-#   prints.json: {"prints": [{"id", "keys", "release", "serial", "shape", "family", "families"?, "frozen"? (its id)}],
+#   prints.json: {"prints": [{"id", "keys", "release", "serial", "shape", "family", "families"?, "frozen"? (its id),
+#                 "several_serials"? (its label photos' straightened serials where they're two or more: restore skips it;
+#                 the user fixes it in review-prints)}],
 #                 "tile_mm": TILE_MM, "differences": {}}
 #   few-photos.json: [print ids] of open prints with fewer than FEW label photos
 #   id-changes.json: this run's changes to the store ([{"kind": new, added, removed, gone, "id", "keys"?}]), on the page
@@ -14,8 +16,7 @@
 #      - with one: into the open stored print of that serial it matches best by pixels (below), else left over; the
 #        left-over ones of a serial and shape grouped by pixels among themselves (split_family), each group a new print;
 #      - with none: into the open stored print holding label photos of its family (solve's) it matches best by pixels,
-#        whatever its serial, marked "joined_without_serial" (review-prints lists it in Several serials until looked
-#        at); else a print of its own with no serial.
+#        whatever its serial (assumed rightly grouped: restored with it); else a print of its own with no serial.
 #   Matching a print: compared with each of its label photos of the same shape; it matches where most are "same"
 #   (differing on fewer than MIN_DIFF_TILES tiles), best by the fewest differing tiles on average.
 # Comparing, in each family's ink coordinates (straighten's images): the label, 1 mm in from its edges, in TILE_MM
@@ -326,7 +327,7 @@ def main():
             else:
                 pid = comparer.best(k, sorted(by_family.get(solved[k]["family"], set())), mem)
                 if pid:
-                    store.add(pid, {k: {**record(k), "joined_without_serial": True}}, manual=False)
+                    store.add(pid, {k: record(k)}, manual=False)
                     mem[pid].append(k)
                 else:
                     store.make({k: record(k)}, None, manual=False, release=serial[k].get("release"))
@@ -373,6 +374,9 @@ def main():
             if p.get("frozen"):
                 e["frozen"] = pid
             e["release"] = print_release(e["serial"], [serial.get(k, {}) for k in keys])
+            read = sorted({serial.get(k, {}).get("straightened_serial") for k in keys} - {None})
+            if len(read) > 1:  # not restored until fixed by hand (stored-prints.md); none-serial ones don't count
+                e["several_serials"] = read
             all_prints.append(e)
         for d in os.listdir(out_dir):  # pair images (pooling masks) of earlier versions
             if os.path.isdir(os.path.join(out_dir, d)):
