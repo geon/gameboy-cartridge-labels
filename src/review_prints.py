@@ -559,7 +559,7 @@ button:disabled{opacity:.4;cursor:default}
 .opt{min-width:0;cursor:pointer;font-size:10px;line-height:1.25;overflow:hidden}
 .opt .crop{overflow:hidden;width:100%;outline:2px solid #5a8;outline-offset:-2px}
 .opt .crop img{display:block;max-width:none}
-.opt.off .crop{opacity:.3;outline-color:#e55}
+.opt.off .crop{outline-color:#e55}
 .opt.off{color:#e88}
 .opt.fixed{cursor:not-allowed}
 .opt .why{color:#f96}
