@@ -554,10 +554,10 @@ button:disabled{opacity:.4;cursor:default}
 .pair figcaption{font-size:12px;color:#aaa;margin:4px 0}
 .pair .waiting{opacity:.45}
 .optrow{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:4px;width:100%;margin-top:8px}
-.opt{min-width:0;cursor:pointer;font-size:10px;line-height:1.25;overflow:hidden}
-.opt .crop{overflow:hidden;width:100%;outline:2px solid #5a8;outline-offset:-2px}
+.opt{min-width:0;cursor:pointer;font-size:10px;line-height:1.25;overflow:hidden;padding:3px}
+.opt .crop{overflow:hidden;width:100%;box-shadow:0 0 0 2px #5a8}
 .opt .crop img{display:block;max-width:none}
-.opt.off .crop{outline-color:#e55}
+.opt.off .crop{box-shadow:0 0 0 2px #e55}
 .opt.off{color:#e88}
 .opt.fixed{cursor:not-allowed}
 .opt .why{color:#f96}
@@ -776,7 +776,9 @@ function optimizeCard(P) {
     el("figure", {}, el("img", {src: "/print/" + encodeURIComponent(P.id) + "?t=" + Date.now()}), el("figcaption", {}, `Restored now, from ${P.used_now} label photos`)),
     el("figure", {}, wb, wbCap)));
   const row = el("div", {class: "optrow", style: `--cols:${Math.min(10, P.label_photos.length)}`});  // at most 10 per row (the user)
-  const c = P.crop, [cw] = P.canvas;
+  // the restore's crop plus a margin all round, so the whole label shows (the user); the frame is drawn outside it
+  const m = 0.06 * Math.max(P.crop.w, P.crop.h), [cw] = P.canvas;
+  const c = {x: P.crop.x - m, y: P.crop.y - m, w: P.crop.w + 2 * m, h: P.crop.h + 2 * m};
   for (const lp of P.label_photos) {
     const img = el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(lp.key),
       style: `width:${cw / c.w * 100}%;margin:${-c.y / c.w * 100}% 0 0 ${-c.x / c.w * 100}%`});
