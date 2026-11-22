@@ -873,6 +873,7 @@ def merge_fitted(lps, fits):
             continue
         quads = [fit_quad(fits[lp["key"]], lp["shape"]) for lp in group]
         parent = list(range(len(group)))
+        fixed_in = [lp["found_by"] in ("frozen", "stored") for lp in group]  # per root: its set holds a stored one
         def root(i):
             while parent[i] != i:
                 i = parent[i]
@@ -884,9 +885,13 @@ def merge_fitted(lps, fits):
                 except cv2.error:
                     shared = 0.0
                 smaller = min(abs(cv2.contourArea(quads[i])), abs(cv2.contourArea(quads[j])))
-                fixed = group[i]["found_by"] in ("frozen", "stored") and group[j]["found_by"] in ("frozen", "stored")
-                if smaller > 0 and shared / smaller > FIT_OVERLAP and not fixed:  # two stored label photos: never one
-                    parent[root(j)] = root(i)
+                # two stored label photos: never one, not through a third either (union-find joins transitively:
+                # 2026-11-22, 19 stored label photos merged into another stored one through unstored ones between)
+                ri, rj = root(i), root(j)
+                fixed = ri != rj and fixed_in[ri] and fixed_in[rj]
+                if smaller > 0 and shared / smaller > FIT_OVERLAP and not fixed:
+                    parent[rj] = ri
+                    fixed_in[ri] = fixed_in[ri] or fixed_in[rj]
         sets = {}
         for i, lp in enumerate(group):
             sets.setdefault(root(i), []).append(lp)
