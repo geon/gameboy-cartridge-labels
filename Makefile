@@ -82,10 +82,10 @@
 #   replaced; its label photos, poses and crop stay as accepted (src/refreeze.py). Then make all, to match the new images.
 #
 #   make review-prints
-#   A tool, not a step: a local page for splitting and joining prints (across families too), the decisions kept in
-#   print-corrections.json and applied by the next make prints (then make restore publish): the serials of several prints,
-#   every print worst first (label photos reading another serial, differing tiles), a search, and the decisions to undo;
-#   the page shows the prints as the next make prints makes them (src/review_prints.py, src/print_corrections.py).
+#   A tool, not a step: a local page for the stored prints (prints.json, stored-prints.md): joining, splitting, deleting
+#   label photos, setting serials, freezing, changed in the store at once (then make restore publish): the serials of
+#   several prints, prints of several serials, prints without a serial, the last run's new ones, every print worst
+#   first, a search, and the recent changes to undo (src/review_prints.py).
 #
 #   make remove-photos
 #   A tool, not a step: a local page for deleting photos from photos/ (the file and its record in photo-sources.json),

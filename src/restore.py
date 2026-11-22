@@ -113,7 +113,7 @@ def even_to(img, ref, valid):
 # REGISTER_ROUNDS times; then by a smooth local correction: dense optical flow (DIS) against the median, smoothed over
 # FLOW_SMOOTH_MM and limited to FLOW_MAX_PX, so a gentle bend or lens distortion is followed, not a detail (dirt isn't
 # pulled into place).
-# A print joined across families (the user's decisions, src/print_corrections.py) has label photos posed by separate
+# A print joined across families (by the user in review-prints, or by the prints step) has label photos posed by separate
 # fits, up to about 1 mm (20 px) apart: each is first shifted onto the one with the most of the label on it by phase
 # correlation (accepted when its peak is at least COARSE_RESPONSE and the shift at most COARSE_MAX_MM).
 REGISTER_ROUNDS = 2

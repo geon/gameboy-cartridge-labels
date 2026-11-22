@@ -7,7 +7,7 @@
 #   index.json: {"prints": {id: {serial, release, game (the release's game id in the database), family (solve's: label
 #     photos that look alike), title (the database's), shape, image, size (its w, h px), paper,
 #     label_photos, frozen, restored_from (the label photos its image was restored from)}}, "label_photos": {key: {print,
-#     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (print-ids.json); keys hold within a run only.
+#     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (the store, prints.json); keys hold within a run only.
 #   missing.json, unknown-serials.json (read-serials), few-photos.json (prints): the lists, copied as they are.
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
