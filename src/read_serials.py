@@ -7,9 +7,9 @@
 #   joins a new label photo to a stored print by. A serial set by hand (serial-corrections.json) is it.
 #   missing.json: the database's entries no label photo has (sorted by id)
 #   unknown-serials.json: {serial-looking string the database doesn't know: [keys]} (possible new releases)
-# The reads: OCR (read_text, RapidOCR) of the straightened label photo (straighten: upright, no perspective), and the
-# serials find read in the photo (its own and those of the label photos solve merged into it: the same sticker), only
-# those whose centre lies on its fitted label (find's are those near it: another cartridge's serial too). Decided, in order:
+# The reads: OCR (read_text, RapidOCR) of the straightened label photo (straighten: upright, no perspective) only; the
+# photo's own reads (find's) only help find the first fit (the user, 2026-11-22: they hold other cartridges' text too).
+# The label's text for titles is the straightened label photo's too. Decided, in order:
 #   own: its own exact reads give one release;
 #   own, with its title or family: they give several, the one whose title the label's text holds, else the one most
 #     of its family's own exact reads support;
@@ -38,7 +38,6 @@ import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials, steps, read_text, straighten
-import solve as solve_step
 
 
 CORRECTIONS = "serial-corrections.json"
@@ -199,7 +198,6 @@ def main():
         if not os.path.exists(p):
             sys.exit(f"{p} missing: run make find, solve and straighten first")
     solved = json.load(open(solve_file))["label_photos"]
-    found = {lp["key"]: lp for lp in json.load(open(find_file))["label_photos"]}
     out_dir = os.path.join(gen, "read-serials")
     ocr_dir = os.path.join(out_dir, "ocr")
     os.makedirs(ocr_dir, exist_ok=True)
@@ -227,25 +225,10 @@ def main():
         for r_ in release_of.values():
             by_id.setdefault(r_["id"], r_)
         ocr = {k: json.load(open(ocr_out[k])) for k in solved}
-        # find's strings of it and of the label photos solve merged into it (the same sticker), only those whose centre
-        # lies on its fitted label (solve.strings_on_label: find's strings are those near it, another cartridge's too)
-        strings = lambda k: solve_step.strings_on_label(
-            [t for m in [k] + solved[k].get("merged", []) for t in found.get(m, {}).get("strings", [])],
-            np.float64(solved[k]["photo_to_ink"]), solved[k]["shape"])
-        reads = {k: own_reads(ocr[k], strings(k), release_of, regions, solved[k]["shape"]) for k in solved}
-        photo_lines = {}
-        def label_text(k):
-            lp = found.get(k)
-            lines = [l["text"] for l in ocr[k]]
-            if lp is not None:
-                if lp["photo"] not in photo_lines:
-                    photo_lines[lp["photo"]] = json.load(open(os.path.join(gen, "read-text", lp["photo"] + ".json")))["lines"]
-                c, rad = lp["centre"], lp["radius"]
-                for l in photo_lines[lp["photo"]]:
-                    m = [sum(p[0] for p in l["corners"]) / 4, sum(p[1] for p in l["corners"]) / 4]
-                    if (m[0] - c[0]) ** 2 + (m[1] - c[1]) ** 2 < rad ** 2:
-                        lines.append(l["text"])
-            return serials.plain(" ".join(lines))
+        # only the straightened label photo's own OCR (the user, 2026-11-22: the photo's reads, find's, only help find the
+        # first fit; they hold other cartridges' text too)
+        reads = {k: own_reads(ocr[k], [], release_of, regions, solved[k]["shape"]) for k in solved}
+        label_text = lambda k: serials.plain(" ".join(l["text"] for l in ocr[k]))
         family_of = {k: v["family"] for k, v in solved.items()}
         own_release = {k: Counter(serials.release(r["serial"], release_of)["id"] for r in rs if r["kind"] == "exact") for k, rs in reads.items()}
         result = {}
