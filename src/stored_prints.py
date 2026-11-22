@@ -10,7 +10,9 @@
 #                        "split_from"?, "renamed_from"?}},
 #        "gone": {id: {"why", "into"?, "datetime"}} (ids are never reused),
 #        "looked_at": {"same_serial": {serial: [[id...]]}} (review-prints' "All different": the prints of a serial the user
-#                     looked at and left apart; shown again once they differ),
+#                     looked at and left apart; shown again once they differ;
+#                     "optimized": {id: [key...]}: review-prints' Optimize accepted, hidden there while these are its
+#                     label photos),
 #        "log": [{"datetime", "kind", "manual", "before": {id: summary or null}, "after": {id: summary or null}}]}
 #   a summary: {"serial", "frozen", "keys"}. Written one label photo, gone id and log entry per line, so a run's diff
 #   shows what changed. The log is what Undo works from (the latest change only, while what it made is unchanged);
