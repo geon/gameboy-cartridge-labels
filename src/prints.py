@@ -8,9 +8,11 @@
 #   id-changes.json: this run's changes to the store ([{"kind": new, added, removed, gone, "id", "keys"?}]), on the page
 # Each run, through the store's interface, automatic (stored-prints.md rules 3-7, 10):
 #   1. Frozen prints are left as they are: never touched (the interface raises if anything tries).
-#   2. An open print's label photos are matched to this run's (print_ids.same_label_photo: the same key, else the one
-#      current outline holding the old centre; none where several do). Those not found leave the print; a print left
-#      with none is gone. The found ones get this run's outline (find's) and pose (solve's) written back.
+#   2. An open print's label photos are all in this run (find takes stored label photos as they are, keys included):
+#      they get this run's outline (find's) and pose (solve's) written back. One missing was removed outside the
+#      store's interface (rule 10): the step stops, naming them and why (photo not in photos/, marked not a label, not
+#      in solve.json). Only the interface removes label photos (review-prints, fit-by-hand, remove-photos,
+#      remove-low-resolution).
 #   3. New label photos (this run's in no stored print, frozen or not), each by its straightened serial (read-serials'
 #      straightened_serial; a label photo read-serials hasn't read stops the step: the steps ran in the wrong order):
 #      - with one: into the open stored print of that serial it matches best by pixels (below), else left over; the
@@ -37,7 +39,7 @@ from collections import Counter
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, steps, straighten, shapes, print_ids, stored_prints
+import photos, steps, straighten, shapes, stored_prints
 import serials as serials_module
 
 TILE_MM = 1
@@ -275,27 +277,26 @@ def main():
         store = stored_prints.Store(store_file)
         record = lambda k: {"outline": outlines.get(k), "pose": solved[k]}
         log_start = len(store.data["log"])
-        frozen_keys = {k for p in store.prints.values() if p.get("frozen") for k in p["label_photos"]}
-        # 2. open prints: their label photos matched to this run's
-        of_photo = {}
-        for k in solved:
-            of_photo.setdefault(k.split("@")[0], []).append(k)
-        taken = set(frozen_keys)
+        # 2. open prints: every stored label photo must be in this run (find keeps their keys: stored-prints.md rule 9);
+        # one isn't only if something removed it outside the store's interface (rule 10): a bug, so the step stops
+        whole = json.load(open(solve_file))["label_photos"]
+        missing = {}
         for pid in sorted(store.prints):
             if store.prints[pid].get("frozen"):
                 continue
-            old = sorted(store.prints[pid]["label_photos"])
-            sizes = photo_sizes({k.split("@")[0] for k in old if k not in solved}, gen)
-            now = {k: print_ids.same_label_photo(k, of_photo.get(k.split("@")[0], []), outlines, sizes) for k in old}
-            lost = [k for k in old if now[k] is None or now[k] in taken]
-            moved = {k: n for k, n in now.items() if n is not None and n != k and n not in taken}
-            taken.update(n for k, n in now.items() if n is not None and k not in lost)
-            if moved:
-                store.add(pid, {n: record(n) for n in moved.values()}, manual=False)
-            if lost or moved:
-                store.remove(pid, lost + list(moved), manual=False)
-            if pid in store.prints:
-                store.write_back(pid, {k: record(k) for k in store.prints[pid]["label_photos"] if k in solved})
+            for k in sorted(store.prints[pid]["label_photos"]):
+                if k not in solved:
+                    sha1 = k.split("@")[0]
+                    why = ("its photo isn't in photos/" if sha1 not in present else "marked not a label" if k in not_labels
+                           else "not in solve.json" if k not in whole else "?")
+                    missing.setdefault(why, []).append(f"{k} ({pid})")
+        if missing:
+            sys.exit("stored label photos missing from this run, removed outside the store's interface (stored-prints.md, "
+                     "rule 10): " + "; ".join(f"{len(v)} {why}: {', '.join(v[:5])}" + (" …" if len(v) > 5 else "")
+                                             for why, v in sorted(missing.items())))
+        for pid in sorted(store.prints):
+            if not store.prints[pid].get("frozen"):
+                store.write_back(pid, {k: record(k) for k in store.prints[pid]["label_photos"]})
         # 3. new label photos
         stored = store.print_of()
         new = sorted(k for k in solved if k not in stored)
