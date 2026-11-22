@@ -1,35 +1,29 @@
-# review-prints: a tool, not a step: a local page for splitting and joining prints (the user, 2026-11-14), the decisions
-# kept in print-corrections.json (src/print_corrections.py) and applied by the next make prints. The page shows the
-# prints as that run will make them: the prints step's own grouping (<generated>/prints/automatic.json; prints.json
-# before the prints step wrote it) with the decisions applied. A print as prints.json has it shows its id and restored
-# image; one the decisions changed shows the ids it's made from (its image comes with make prints restore).
-# Four tabs, and the decisions:
-#   - Same serial: the serials (or releases, where no serial was read) of several prints, the most prints first,
-#     SERIALS_PER_PAGE at a time: join some, "Join all" (its prints joined as "Join ticked" would; the user, 2026-11-15),
-#     or "All different", which hides the serial while its prints are these.
-#   - Every print, worst first, PRINTS_PER_PAGE at a time: the most label photos whose serial read isn't the print's
-#     first, then the most differing tiles between two of its label photos (the prints step's pair cache).
-#   - Several serials: the prints whose label photos read two serials or more (the user, 2026-11-21), the most label
-#     photos reading another serial first, then the most serials, PRINTS_PER_PAGE at a time.
+# review-prints: a tool, not a step: a local page for the stored prints (stored-prints.md; src/stored_prints.py,
+# prints.json in the repo root), the user's changes made in the store at once, through its interface as manual changes
+# (rule 10): a change to a frozen print unfreezes it, without asking (rule 8). The page shows the store itself.
+# Tabs:
+#   - Same serial: the serials of several stored prints, the most prints first, SERIALS_PER_PAGE at a time: join some,
+#     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these).
+#   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ, and
+#     prints the prints step gave a label photo without a serial ("joined_without_serial"); "Looked at" hides one while
+#     its label photos are these (looked_at.several_serials). The most label photos reading another serial first.
+#   - No serial: prints without a serial (label photos without a straightened serial that joined no print).
+#   - New: the prints the last make prints made or added label photos to (<generated>/prints/id-changes.json).
+#   - Every print, worst first: the most label photos reading another serial, then the most differing tiles between two
+#     of its label photos (the prints step's pair cache).
 #   - Search: a serial, a stem or an id (its start), up to SEARCH_MAX prints.
-#   - Decisions: every decision, the latest first, each to undo.
-# Each print: its label photos, sorted by serial read (none last), (straighten's image as is: full resolution and uncropped, for pinch-zooming; the user,
-# 2026-11-14), each with its serial read and a tick box: "Split off ticked" makes the ticked a print of their own. A
-# print's own tick box marks it for joining: "Join ticked" in the bar at the bottom joins the ticked prints, from any
-# tab. Frozen prints (src/frozen.py) can't be split, and two can't be joined. "Delete label photo" under each label
-# photo (the user, 2026-11-14: a bootleg with the wrong serial; 2026-11-15: the label photo, not the photo): a photo
-# holding no other label photo (find's) is deleted from photos/ (photos.delete: the file and its record in
-# photo-sources.json); else the label photo's area is marked in find's NOT_LABELS as fit-by-hand's "Not a label" does
-# (solve's cut and find's outline, in the photo's pixels; "why": "deleted in review-prints"), and the next make find
-# makes no label photo there. Not a frozen print's. A deleted label photo leaves a hole of its size at once, as does a
-# print left with none, so nothing moves (the user, 2026-11-20); both are gone on reload. Each print on its own row.
-# Each print's serial typed in by hand ("Set serial", the user 2026-11-14): every label photo of the print gets it in
-# serial-corrections.json (read_serials.CORRECTIONS, which make read-serials applies last; the page shows it at once);
-# not a frozen print's. Joining leaves a hole of the same size where each joined print sat, so the page doesn't move
-# (the user, 2026-11-14); the joined print shows on the next page turn, tab or search.
-# Freeze and Unfreeze on each print (the user, 2026-11-15; as in remove-photos: frozen.freeze, frozen.unfreeze): a print
-# as prints.json has it, with its image from make restore, can be frozen; unfreezing asks first (its frozen image is
-# deleted). A frozen print shows its frozen image; what's frozen is read from frozen-prints.json, so it shows at once. The next make read-serials and make prints give the print its id with that serial. Buttons only, no keys (the user: keys next to S are too easy to hit).
+#   - Recent changes: the store's change log, the latest first; Undo on the latest manual change (Store.undo).
+# Each print: its label photos sorted by straightened serial (none last), straighten's image as is (full resolution
+# and uncropped, for pinch-zooming), each with a tick box: "Split off ticked" makes the ticked a print of their own (the
+# serial their straightened reads give most, else the print's). A print's tick box marks it for joining: "Join ticked"
+# in the bar at the bottom joins the ticked prints (into the one with the most label photos). "Delete label photo": out
+# of its print; a photo holding no other label photo (find's) is deleted from photos/ (photos.delete), else its area is
+# marked in find's NOT_LABELS ("why": "deleted in review-prints") and the next make find makes no label photo there.
+# "Set serial": the print's serial (it's renamed: Store.set_serial) and every label photo's in serial-corrections.json
+# (read_serials.CORRECTIONS); setting the serial it has only does the latter (a frozen print stays frozen). Freeze:
+# a print with its image from make restore under its id (frozen.freeze); Unfreeze doesn't ask. A deleted label photo or
+# a joined print leaves a hole of its size, so nothing moves. Buttons only, no keys (the user: keys next to S are too
+# easy to hit).
 # Usage: review_prints.py [port]
 import json, os, re, sys, threading, urllib.parse
 from collections import Counter
@@ -37,18 +31,19 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cv2, numpy as np
-import photos, steps, shapes, straighten, frozen, find as find_step, print_corrections, prints as prints_step, serials as serials_db
+import photos, steps, shapes, straighten, frozen, find as find_step, stored_prints, prints as prints_step, serials as serials_db
 from read_serials import CORRECTIONS
 
 GEN = photos.generated(False)
 SERIALS_PER_PAGE = 10
 PRINTS_PER_PAGE = 20
 SEARCH_MAX = 50
+LOG_SHOWN = 200
 lock = threading.Lock()
 
 
 def pair_tiles(gen):
-    """{(key, key): differing tiles} from the prints step's pair cache (pairs within a family)."""
+    """{(key, key): differing tiles} from the prints step's pair cache."""
     path = os.path.join(gen, "prints", "pairs.npz")
     if not os.path.exists(path):
         return {}
@@ -66,208 +61,235 @@ def pair_tiles(gen):
 
 class Tool:
     def __init__(self):
-        P = os.path.join(GEN, "prints")
-        self.result = json.load(open(os.path.join(P, "prints.json")))
-        auto_file = os.path.join(P, "automatic.json")
-        self.auto = json.load(open(auto_file))["prints"] if os.path.exists(auto_file) else [p for p in self.result["prints"] if p["keys"]]
         self.serials = json.load(open(os.path.join(GEN, "read-serials", "serials.json")))
         self.solved = json.load(open(os.path.join(GEN, "solve", "solve.json")))["label_photos"]
         found = json.load(open(os.path.join(GEN, "find", "label-photos.json")))["label_photos"]
         self.outlines = {lp["key"]: lp["outline"] for lp in found}
-        self.by_keys = {frozenset(p["keys"]): p for p in self.result["prints"] if p["keys"]}
-        self.id_of_key = {k: p["id"] for p in self.result["prints"] for k in p["keys"]}
-        self.tiles = pair_tiles(GEN)
-        self.present = set(photos.all_photos())
         self.photo_keys = {}
         for k in self.outlines:
             self.photo_keys.setdefault(k.split("@")[0], set()).add(k)
+        changes_file = os.path.join(GEN, "prints", "id-changes.json")
+        self.last_run = json.load(open(changes_file)) if os.path.exists(changes_file) else []
+        self.tiles = pair_tiles(GEN)
+        self.present = set(photos.all_photos())
         self.release_of = serials_db.load_database()
+        self.load_store()
+
+    def load_store(self):
+        self.store = stored_prints.Store()
+        self.store_mtime = os.path.getmtime(stored_prints.FILE) if os.path.exists(stored_prints.FILE) else 0
         self.compute()
 
-    def mapper(self, decisions):
-        keys = {k for p in self.auto for k in p["keys"]}
-        old = {k for d in decisions for k in d.get("keys", []) + [k for g in d.get("prints", []) for k in g]} - keys
-        return print_corrections.key_mapper(keys, self.outlines, prints_step.photo_sizes({k.split("@")[0] for k in old}, GEN))
+    def fresh(self):
+        """The store as on disk (make prints may have written it since)."""
+        if os.path.exists(stored_prints.FILE) and os.path.getmtime(stored_prints.FILE) != self.store_mtime:
+            self.load_store()
+
+    def save(self):
+        self.store.save()
+        self.store_mtime = os.path.getmtime(stored_prints.FILE)
+        self.compute()
 
     def corrections(self):
         return json.load(open(CORRECTIONS)) if os.path.exists(CORRECTIONS) else {"corrections": {}}
 
-    def not_labels(self):
-        return json.load(open(find_step.NOT_LABELS)) if os.path.exists(find_step.NOT_LABELS) else {}
-
-    def compute(self):
-        entries = frozen.load()
-        marked = self.not_labels()
-        self.frozen_of = {k: pid for pid, e in entries.items() for k in e["label_photos"]}
-        hand = self.corrections()["corrections"]
-        for k, serial in hand.items():  # as make read-serials will have them
-            r_ = serials_db.release(serial, self.release_of)
-            self.serials[k] = {**self.serials.get(k, {}), "serial": serial, "release": r_["id"] if r_ else None,
-                               "decided_by": "corrected by hand"}
-        self.decisions = print_corrections.load()["decisions"]
-        mapped = self.mapper(self.decisions)
-        groups, self.applied = print_corrections.apply([p["keys"] for p in self.auto], self.decisions, mapped, self.frozen_of)
-        out, self.whole = [], {}
-        for whole in groups:
-            p = self.by_keys.get(frozenset(whole))
-            g = sorted(k for k in whole if k.split("@")[0] in self.present and k not in marked)  # deleted ones gone
-            if not g:
-                continue
-            self.whole[frozenset(g)] = sorted(whole)  # decisions are recorded with the deleted ones too
-            read = lambda k, f: (self.serials.get(k) or {}).get(f)
-            ser = Counter(read(k, "serial") for k in g if read(k, "serial"))
-            rel = Counter(read(k, "release") for k in g if read(k, "release"))
-            serial = ser.most_common(1)[0][0] if ser else None
-            frozen_ids = {self.frozen_of[k] for k in g if k in self.frozen_of}
-            restored = p and os.path.exists(os.path.join(GEN, "restore", straighten.file_name(p["id"])))
-            image = p and (os.path.exists(frozen.image_path(p["id"])) if p["id"] in entries else restored)
-            disagree = sum(1 for k in g if read(k, "serial") and read(k, "serial") != serial)
-            tiles = max((self.tiles.get((a, b), 0) for i, a in enumerate(g) for b in g[i + 1:]), default=0)
-            out.append({"keys": [{"key": k, "serial": read(k, "serial"), "release": read(k, "release"),
-                                  "by_hand": k in hand} for k in g],
-                        "id": p["id"] if p else None,
-                        "from": sorted({self.id_of_key[k] for k in whole if k in self.id_of_key}) if not p else [],
-                        "serial": serial, "release": rel.most_common(1)[0][0] if rel else None,
-                        "shape": self.solved[g[0]]["shape"] if g[0] in self.solved else None,
-                        "families": len({self.solved[k]["family"] for k in g if k in self.solved}),
-                        "frozen": sorted(frozen_ids), "image": bool(image), "restored": bool(restored), "disagree": disagree, "tiles": tiles})
-        # the same serial (or release): several prints; hidden where an "apart" decision has these prints
-        by_serial = {}
-        for i, p in enumerate(out):
-            s = p["serial"] or p["release"]
-            if s:
-                by_serial.setdefault(s, []).append(i)
-        apart = {}
-        for d in self.decisions:
-            if d["kind"] == "apart":
-                apart.setdefault(d["serial"], []).append({frozenset(mapped(k) for k in g) - {None} for g in d["prints"]})
-        same = []
-        for s, idx in by_serial.items():
-            if len(idx) < 2:
-                continue
-            now = {frozenset(self.whole[frozenset(k["key"] for k in out[i]["keys"])]) for i in idx}
-            same.append({"serial": s, "prints": idx, "looked_at": now in apart.get(s, [])})
-        same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
-        worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
-        several = [i for i in range(len(out)) if len({k["serial"] for k in out[i]["keys"] if k["serial"]}) > 1]
-        several.sort(key=lambda i: (-out[i]["disagree"], -len({k["serial"] for k in out[i]["keys"] if k["serial"]}), -len(out[i]["keys"])))
-        self.state_json = {"prints": out, "same": same, "worst": worst, "several": several,
-                           "decisions": [{**d, "index": n, "applied": a} for n, (d, a) in enumerate(zip(self.decisions, self.applied))],
-                           "per_page": {"serials": SERIALS_PER_PAGE, "prints": PRINTS_PER_PAGE, "search": SEARCH_MAX}}
-        self.groups = {frozenset(k["key"] for k in p["keys"]): p for p in out}
-
-    def group_of(self, keys):
-        return self.groups.get(frozenset(keys))
-
-    def decide(self, decision):
-        """A decision added (checked against the prints as shown): None, or why not."""
-        kind = decision.get("kind")
-        if kind == "join":
-            gs = [self.group_of(g) for g in decision.get("prints", [])]
-            if len(gs) < 2 or any(g is None for g in gs):
-                return "Tick two or more prints (the page may be out of date: reload)."
-            if sum(1 for g in gs if g["frozen"]) > 1:
-                return "Two frozen prints can't be joined: unfreeze one first."
-            d = {"kind": "join", "prints": [self.whole[frozenset(g)] for g in decision["prints"]]}
-        elif kind == "split":
-            keys, rest = decision.get("keys", []), decision.get("rest", [])
-            g = self.group_of(keys + rest)
-            if g is None or not keys or not rest:
-                return "Tick some of a print's label photos, not all (the page may be out of date: reload)."
-            if g["frozen"]:
-                return "A frozen print can't be split: unfreeze it first."
-            d = {"kind": "split", "keys": keys, "rest": sorted(set(self.whole[frozenset(keys + rest)]) - set(keys))}
-        elif kind == "apart":
-            if not decision.get("serial") or any(self.group_of(g) is None for g in decision.get("prints", [])):
-                return "The page may be out of date: reload."
-            d = {"kind": "apart", "serial": decision["serial"], "prints": [self.whole[frozenset(g)] for g in decision["prints"]]}
-        else:
-            return "Unknown decision."
-        data = print_corrections.load()
-        data["decisions"].append({**d, "datetime": print_corrections.now()})
-        print_corrections.save(data)
-        self.compute()
-        return None
-
-    def set_frozen(self, keys, on):
-        """Freezes the print shown with keys (its id and image from make restore) or unfreezes it: None, or why not."""
-        g = self.group_of(keys or [])
-        if g is None:
-            return "The page may be out of date: reload."
-        if not on:
-            for pid in g["frozen"]:
-                frozen.unfreeze(pid)
-                print(f"unfrozen {pid}", flush=True)
-        else:
-            if g["frozen"]:
-                return "Already frozen."
-            if not g["id"] or not g["restored"]:
-                return "Only a print with its image from make restore can be frozen (after make prints restore)."
-            p = self.by_keys.get(frozenset(keys))
-            if p is None:
-                return "A label photo of this print was deleted: freeze it after the next make all."
-            frozen.freeze(p["id"], p, self.solved, self.outlines, os.path.join(GEN, "restore", straighten.file_name(p["id"])[:-5]))
-            print(f"frozen {p['id']}", flush=True)
-        self.compute()
-        return None
-
-    def set_serial(self, keys, serial):
-        """Every label photo of a print (keys, as shown) gets serial in serial-corrections.json: None, or why not."""
-        serial = re.sub(r"\s+", " ", (serial or "").strip().upper())
-        g = self.group_of(keys or [])
-        if g is None:
-            return "The page may be out of date: reload."
-        if g["frozen"]:
-            return "A frozen print's serial can't be set: unfreeze it first."
-        if not re.fullmatch(r"[A-Z0-9]+(-[A-Z0-9]+)+( [A-Z]{3})?", serial):  # DMG-133 CHN: Chinese, as in releases.json
-            return f"Not a serial: {serial!r} (like DMG-APSJ-JPN, or DMG-133 CHN)."
+    def write_corrections(self, corrections):
         data = self.corrections()
-        data["corrections"] = dict(sorted({**data["corrections"], **{k: serial for k in keys}}.items()))
+        data["corrections"] = dict(sorted((k, v) for k, v in corrections.items() if v))
         tmp = CORRECTIONS + ".tmp"
         with open(tmp, "w") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         os.replace(tmp, CORRECTIONS)
-        print(f"serial {serial}: {len(keys)} label photos", flush=True)
-        self.compute()
-        return None
+
+    def not_labels(self):
+        return json.load(open(find_step.NOT_LABELS)) if os.path.exists(find_step.NOT_LABELS) else {}
+
+    def label_serial(self, k, hand):
+        """A label photo's straightened serial (a serial set by hand wins: as make read-serials will have it)."""
+        return hand.get(k) or (self.serials.get(k) or {}).get("straightened_serial")
+
+    def compute(self):
+        hand = self.corrections()["corrections"]
+        looked = self.store.data["looked_at"]
+        out = []
+        for pid, p in sorted(self.store.prints.items()):
+            keys = sorted(p["label_photos"])
+            ser = p.get("serial")
+            read = {k: self.label_serial(k, hand) for k in keys}
+            release = lambda k: (self.serials.get(k) or {}).get("release")
+            disagree = sum(1 for k in keys if read[k] and read[k] != ser)
+            restored = os.path.exists(os.path.join(GEN, "restore", straighten.file_name(pid)))
+            image = os.path.exists(frozen.image_path(pid)) if p.get("frozen") else restored
+            tiles = max((self.tiles.get((a, b), 0) for i, a in enumerate(keys) for b in keys[i + 1:]), default=0)
+            fams = {self.solved[k]["family"] for k in keys if k in self.solved}
+            without = sorted(k for k in keys if p["label_photos"][k].get("joined_without_serial"))
+            out.append({"id": pid, "keys": [{"key": k, "serial": read[k], "release": release(k), "by_hand": k in hand,
+                                             "without_serial": k in without} for k in keys],
+                        "serial": ser, "frozen": bool(p.get("frozen")), "image": bool(image), "restored": restored,
+                        "families": len(fams), "disagree": disagree, "tiles": tiles,
+                        "unlooked": bool(without) and looked["several_serials"].get(pid) != keys})
+        index = {p["id"]: i for i, p in enumerate(out)}
+        by_serial = {}
+        for i, p in enumerate(out):
+            if p["serial"]:
+                by_serial.setdefault(p["serial"], []).append(i)
+        same = []
+        for s, idx in by_serial.items():
+            if len(idx) > 1:
+                ids = sorted(out[i]["id"] for i in idx)
+                same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, [])})
+        same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
+        nserials = lambda i: len({k["serial"] for k in out[i]["keys"] if k["serial"]})
+        several = [i for i in range(len(out)) if (nserials(i) > 1 and looked["several_serials"].get(out[i]["id"]) != [k["key"] for k in out[i]["keys"]]) or out[i]["unlooked"]]
+        several.sort(key=lambda i: (-out[i]["disagree"], -nserials(i), -len(out[i]["keys"])))
+        worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
+        none = sorted((i for i in range(len(out)) if not out[i]["serial"]), key=lambda i: -len(out[i]["keys"]))
+        new = []
+        for c in self.last_run:
+            if c["kind"] in ("new", "added") and c["id"] in index and index[c["id"]] not in new:
+                new.append(index[c["id"]])
+        log = self.store.data["log"]
+        latest_manual = next((n for n in range(len(log) - 1, -1, -1) if log[n]["manual"]), None)
+        shown_log = [{"index": n, "datetime": e["datetime"], "kind": e["kind"], "manual": e["manual"],
+                      "before": {pid: (s and len(s["keys"])) for pid, s in e["before"].items()},
+                      "after": {pid: (s and len(s["keys"])) for pid, s in e["after"].items()}}
+                     for n, e in list(enumerate(log))[-LOG_SHOWN:]][::-1]
+        self.state_json = {"prints": out, "same": same, "worst": worst, "several": several, "none": none, "new": new,
+                           "log": shown_log, "log_total": len(log), "undoable": latest_manual,
+                           "per_page": {"serials": SERIALS_PER_PAGE, "prints": PRINTS_PER_PAGE, "search": SEARCH_MAX}}
+
+    # --- changes, all manual (stored-prints.md rule 10)
+    def known(self, ids):
+        missing = [pid for pid in ids if pid not in self.store.prints]
+        return f"Not a stored print any more: {missing[0]} (reload)." if missing else None
+
+    def join(self, ids):
+        self.fresh()
+        if len(set(ids)) < 2:
+            return "Tick two or more prints."
+        why = self.known(ids)
+        if why:
+            return why
+        into = self.store.join(sorted(set(ids)), manual=True)
+        print(f"joined {len(ids)} prints into {into}", flush=True)
+        self.save()
+
+    def split(self, pid, keys):
+        self.fresh()
+        why = self.known([pid])
+        if why:
+            return why
+        lps = self.store.prints[pid]["label_photos"]
+        keys = [k for k in keys if k in lps]
+        if not keys or len(keys) == len(lps):
+            return "Tick some of a print's label photos, not all (reload)."
+        hand = self.corrections()["corrections"]
+        reads = Counter(self.label_serial(k, hand) for k in keys if self.label_serial(k, hand))
+        new = self.store.split(pid, keys, manual=True, serial=reads.most_common(1)[0][0] if reads else None)
+        print(f"split {len(keys)} label photos off {pid}: {new}", flush=True)
+        self.save()
+
+    def looked_same(self, serial, ids):
+        self.fresh()
+        self.store.data["looked_at"]["same_serial"].setdefault(serial, []).append(sorted(ids))
+        self.save()
+
+    def looked_several(self, pid):
+        self.fresh()
+        why = self.known([pid])
+        if why:
+            return why
+        self.store.data["looked_at"]["several_serials"][pid] = sorted(self.store.prints[pid]["label_photos"])
+        self.save()
+
+    def set_frozen(self, pid, on):
+        self.fresh()
+        why = self.known([pid])
+        if why:
+            return why
+        p = self.store.prints[pid]
+        if not on:
+            frozen.unfreeze(pid)
+            print(f"unfrozen {pid}", flush=True)
+        else:
+            if p.get("frozen"):
+                return "Already frozen."
+            base = os.path.join(GEN, "restore", straighten.file_name(pid)[:-5])
+            if not os.path.exists(base + ".avif"):
+                return "Only a print with its image from make restore can be frozen (after make prints restore)."
+            keys = sorted(p["label_photos"])
+            shape = next((self.solved[k]["shape"] for k in keys if k in self.solved), None)
+            frozen.freeze(pid, {"keys": keys, "shape": shape}, self.solved, self.outlines, base)
+            print(f"frozen {pid}", flush=True)
+        self.load_store()
+
+    def set_serial(self, pid, serial):
+        """The print's serial (renamed) and every label photo's in serial-corrections.json: None, or why not."""
+        self.fresh()
+        serial = re.sub(r"\s+", " ", (serial or "").strip().upper())
+        why = self.known([pid])
+        if why:
+            return why
+        if not re.fullmatch(r"[A-Z0-9]+(-[A-Z0-9]+)+( [A-Z]{3})?", serial):  # DMG-133 CHN: Chinese, as in releases.json
+            return f"Not a serial: {serial!r} (like DMG-APSJ-JPN, or DMG-133 CHN)."
+        keys = sorted(self.store.prints[pid]["label_photos"])
+        data = self.corrections()
+        before = {k: data["corrections"].get(k) for k in keys}
+        self.write_corrections({**data["corrections"], **{k: serial for k in keys}})
+        logged = len(self.store.data["log"])
+        new = self.store.set_serial(pid, serial, manual=True)
+        if len(self.store.data["log"]) > logged:  # for Undo
+            self.store.data["log"][-1]["corrections_before"] = before
+        print(f"serial {serial}: {pid}" + (f" renamed {new}" if new != pid else "") + f", {len(keys)} label photos", flush=True)
+        self.save()
 
     def delete(self, key):
-        """Deletes a label photo: its photo if it holds no other, else its area marked not a label. None, or why not."""
+        """A label photo out of its print: its photo deleted if it holds no other, else its area marked not a label."""
+        self.fresh()
         sha1 = (key or "").split("@")[0]
-        if key in self.frozen_of:
-            return "A frozen print's label photo can't be deleted: unfreeze it first."
-        if sha1 not in self.present:
-            return None
-        if self.photo_keys.get(sha1, set()) - {key}:
-            r = self.solved.get(key)
-            area = None
-            if r:
-                w, h = shapes.LABEL_MM[r["shape"]]
-                area = cv2.perspectiveTransform(np.float64([[[0, 0]], [[w, 0]], [[w, h]], [[0, h]]]),
-                                                np.float64(r["cut_to_photo"])).reshape(-1, 2)
-                area = np.round(area, 1).tolist()
-            marked = self.not_labels()
-            marked[key] = {"photo": sha1, "area": area, "found": self.outlines.get(key), "why": "deleted in review-prints",
-                           "datetime": print_corrections.now()}
-            steps.write_json(find_step.NOT_LABELS, marked)
-            print(f"label photo {key} marked not a label", flush=True)
-        else:
-            if sha1 not in photos.all_photos():
-                return "Not in photos/ any more: reload."
-            photos.delete(sha1)
-            print(f"deleted {sha1}", flush=True)
-            self.present.discard(sha1)
-        self.compute()
-        return None
+        pid = self.store.print_of().get(key)
+        if pid is None:
+            return "Not in a stored print any more: reload."
+        if sha1 in self.present:
+            if self.photo_keys.get(sha1, set()) - {key}:
+                r = self.solved.get(key)
+                area = None
+                if r:
+                    w, h = shapes.LABEL_MM[r["shape"]]
+                    area = cv2.perspectiveTransform(np.float64([[[0, 0]], [[w, 0]], [[w, h]], [[0, h]]]),
+                                                    np.float64(r["cut_to_photo"])).reshape(-1, 2)
+                    area = np.round(area, 1).tolist()
+                marked = self.not_labels()
+                marked[key] = {"photo": sha1, "area": area, "found": self.outlines.get(key), "why": "deleted in review-prints",
+                               "datetime": stored_prints.now()}
+                steps.write_json(find_step.NOT_LABELS, marked)
+                print(f"label photo {key} marked not a label", flush=True)
+            else:
+                photos.delete(sha1)
+                print(f"deleted {sha1}", flush=True)
+                self.present.discard(sha1)
+        self.store.remove(pid, [key], manual=True, why="deleted in review-prints")
+        self.save()
 
-    def undo(self, index, when):
-        data = print_corrections.load()
-        if not (0 <= index < len(data["decisions"])) or data["decisions"][index]["datetime"] != when:
-            return "The decisions changed: reload."
-        del data["decisions"][index]
-        print_corrections.save(data)
-        self.compute()
-        return None
+    def undo(self, index):
+        self.fresh()
+        if index != self.state_json["undoable"]:
+            return "The changes changed: reload."
+        e = self.store.data["log"][index]
+        dropped = list(e.get("dropped", {}))
+        if e["kind"] == "remove" and any(k.split("@")[0] not in self.present for k in dropped):
+            return "Its photo was deleted from photos/: that can't be undone here."
+        why = self.store.undo()
+        if why:
+            return why
+        if "corrections_before" in e:  # Set serial: the label photos' serials as they were
+            self.write_corrections({**self.corrections()["corrections"], **e["corrections_before"]})
+        if e["kind"] == "remove":  # a deleted label photo: not marked "not a label" any more
+            marked = self.not_labels()
+            if any(marked.get(k, {}).get("why") == "deleted in review-prints" for k in dropped):
+                steps.write_json(find_step.NOT_LABELS, {k: v for k, v in marked.items() if not (k in dropped and v.get("why") == "deleted in review-prints")})
+        print("undone", flush=True)
+        self.save()
 
 
 PAGE = r"""<!doctype html><html><head><meta charset="utf-8"><title>review prints</title>
@@ -300,10 +322,12 @@ button:disabled{opacity:.4;cursor:default}
 </style></head><body>
 <header>
 <button class="tab" data-tab="same">Same serial</button>
-<button class="tab" data-tab="worst">Every print, worst first</button>
 <button class="tab" data-tab="several">Several serials</button>
+<button class="tab" data-tab="none">No serial</button>
+<button class="tab" data-tab="new">New</button>
+<button class="tab" data-tab="worst">Every print, worst first</button>
 <button class="tab" data-tab="search">Search</button>
-<button class="tab" data-tab="decisions">Decisions</button>
+<button class="tab" data-tab="log">Recent changes</button>
 <span id="searchbox" style="display:none"><input id="q" placeholder="serial, stem or id" size="24"> <button id="go">Search</button></span>
 <label id="lookedbox" style="display:none"><input type="checkbox" id="looked"> show serials looked at</label>
 </header>
@@ -311,18 +335,18 @@ button:disabled{opacity:.4;cursor:default}
 <div id="bar"><span id="count">No prints ticked for joining.</span><button id="join" disabled>Join ticked</button><button id="clear" disabled>Clear</button><span id="msg"></span></div>
 <script>
 let S = null, tab = "same", page = 0, query = "";
-const joinTicks = new Map();  // print handle (its first key) -> its keys
+const joinTicks = new Set();  // print ids ticked for joining
 const lpTicks = new Set();    // label photo keys ticked for splitting
 const $ = id => document.getElementById(id);
-const handle = p => p.keys[0].key;
 
 async function load(show = true) {
   const r = await fetch("/state");
   if (r.status === 503) { setTimeout(() => load(show), 1000); return; }
   S = await r.json();
-  const now = new Set(S.prints.map(handle));
-  for (const h of [...joinTicks.keys()]) if (!now.has(h)) joinTicks.delete(h);
+  const now = new Set(S.prints.map(p => p.id));
+  for (const id of [...joinTicks]) if (!now.has(id)) joinTicks.delete(id);
   if (show) { lpTicks.clear(); render(); }
+  bar();
 }
 
 async function post(path, body, show = true) {
@@ -340,64 +364,54 @@ function el(tag, attrs, ...kids) {
   return e;
 }
 
-function printCard(p) {
+function printCard(p, extra) {
   const keys = p.keys.map(k => k.key);
-  const card = el("div", {class: "print" + (joinTicks.has(handle(p)) ? " ticked" : "")});
-  card.handle = handle(p);
-  card.keys = keys;  // the label photos left: deleting one takes it out
+  const card = el("div", {class: "print" + (joinTicks.has(p.id) ? " ticked" : "")});
+  card.pid = p.id;
   const tick = el("input", {type: "checkbox"});
-  tick.checked = joinTicks.has(handle(p));
-  tick.onchange = () => { if (tick.checked) joinTicks.set(card.handle, keys); else joinTicks.delete(card.handle); card.classList.toggle("ticked", tick.checked); bar(); };
-  const name = p.id ? p.id : "new print, from " + (p.from.join(" + ") || "?");
+  tick.checked = joinTicks.has(p.id);
+  tick.onchange = () => { if (tick.checked) joinTicks.add(p.id); else joinTicks.delete(p.id); card.classList.toggle("ticked", tick.checked); bar(); };
   const count = el("span", {}, `${p.keys.length}`);
-  const head = el("div", {class: "head"}, el("label", {}, tick, " join"), el("b", {}, name),
-    el("span", {class: "note"}, `${p.serial || p.release || "no serial"} · `, count, ` label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
+  const head = el("div", {class: "head"}, el("label", {}, tick, " join"), el("b", {}, p.id),
+    el("span", {class: "note"}, `${p.serial || "no serial"} · `, count, ` label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
       (p.disagree ? ` · ${p.disagree} read another serial` : "") + (p.tiles ? ` · up to ${p.tiles} tiles differ` : "")));
-  if (p.frozen.length) head.append(el("span", {class: "frozen"}, "frozen"));
-  const fz = el("button", {onclick: () => {
-    if (p.frozen.length && !confirm(`Unfreeze ${p.frozen.join(", ")}? Its frozen image is deleted; the next make restore restores it again.`)) return;
-    post("/freeze", {keys, on: !p.frozen.length});
-  }}, p.frozen.length ? "Unfreeze" : "Freeze");
-  if (!p.frozen.length && !(p.id && p.restored)) { fz.disabled = true; fz.title = "only a print with its image from make restore"; }
+  if (p.frozen) head.append(el("span", {class: "frozen"}, "frozen"));
+  const fz = el("button", {onclick: () => post("/freeze", {id: p.id, on: !p.frozen})}, p.frozen ? "Unfreeze" : "Freeze");
+  if (!p.frozen && !p.restored) { fz.disabled = true; fz.title = "only a print with its image from make restore"; }
   head.append(fz);
+  if (extra) head.append(extra);
   card.append(head);
   if (p.image) card.append(el("img", {class: "restored", loading: "lazy", src: "/print/" + encodeURIComponent(p.id)}));
-  else if (p.keys.length >= 3) card.append(el("div", {class: "note"}, p.id ? "no restored image" : "restored after make prints restore"));
+  else if (p.keys.length >= 3) card.append(el("div", {class: "note"}, "no restored image yet (make restore)"));
   const lps = el("div", {class: "lps"});
-  // sorted by serial read, none last (the user, 2026-11-21); p.keys keeps its order (its first is the print's handle)
+  // sorted by straightened serial, none last (the user, 2026-11-21)
   const bySerial = [...p.keys].sort((a, b) => !a.serial - !b.serial || (a.serial || "").localeCompare(b.serial || "") || a.key.localeCompare(b.key));
   for (const k of bySerial) {
     const box = el("input", {type: "checkbox"});
     box.checked = lpTicks.has(k.key);
     const lp = el("div", {class: "lp" + (box.checked ? " ticked" : "")},
       el("label", {}, el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(k.key)}),
-        box, el("span", {class: (k.serial && k.serial !== p.serial) ? "odd" : ""}, " " + (k.serial || k.release || "no serial read"))));
-    if (!p.frozen.length) lp.append(el("div", {}, el("button", {class: "del", onclick: async () => {
+        box, el("span", {class: (k.serial && k.serial !== p.serial) || k.without_serial ? "odd" : ""},
+          " " + (k.serial || "no serial read") + (k.without_serial ? " (joined without a serial)" : ""))));
+    lp.append(el("div", {}, el("button", {class: "del", onclick: async () => {
       if (!await post("/delete", {key: k.key}, false)) return;
       // a hole where it was, so the page doesn't move; the card's other buttons act on the label photos left
       lpTicks.delete(k.key);
       keys.splice(keys.indexOf(k.key), 1);
-      if (!keys.length) { joinTicks.delete(card.handle); holes(new Set([card.handle]), "deleted"); bar(); return; }
+      if (!keys.length) { joinTicks.delete(p.id); holes(new Set([p.id]), "deleted"); bar(); return; }
       const r = lp.getBoundingClientRect();
       lp.replaceWith(el("div", {class: "lp hole", style: `width:${r.width}px;height:${r.height}px`}, "deleted"));
       count.textContent = keys.length;
-      card.handle = keys[0];
-      if (tick.checked) joinTicks.set(keys[0], keys);  // load() dropped it if the deleted one was its handle
       split.disabled = !canSplit(); bar();
     }}, "Delete label photo")));
     box.onchange = () => { if (box.checked) lpTicks.add(k.key); else lpTicks.delete(k.key); lp.classList.toggle("ticked", box.checked); split.disabled = !canSplit(); };
     lps.append(lp);
   }
-  const canSplit = () => { const n = keys.filter(k => lpTicks.has(k)).length; return n > 0 && n < keys.length && !p.frozen.length; };
-  const split = el("button", {onclick: () => {
-    const ticked = keys.filter(k => lpTicks.has(k));
-    post("/decide", {kind: "split", keys: ticked, rest: keys.filter(k => !lpTicks.has(k))});
-  }}, "Split off ticked");
+  const canSplit = () => { const n = keys.filter(k => lpTicks.has(k)).length; return n > 0 && n < keys.length; };
+  const split = el("button", {onclick: () => post("/split", {id: p.id, keys: keys.filter(k => lpTicks.has(k))})}, "Split off ticked");
   split.disabled = !canSplit();
-  if (p.frozen.length) split.title = "frozen: can't be split";
   const input = el("input", {size: "16", placeholder: "serial", value: p.serial || ""});
-  const set = el("button", {onclick: () => post("/serial", {keys, serial: input.value})}, "Set serial");
-  if (p.frozen.length) { set.disabled = true; set.title = "frozen: can't be changed"; }
+  const set = el("button", {onclick: () => post("/serial", {id: p.id, serial: input.value})}, "Set serial");
   const hand = p.keys.every(k => k.by_hand) ? el("span", {class: "note"}, " entered by hand") : "";
   card.append(lps, el("div", {style: "margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"}, split, input, set, hand));
   return card;
@@ -412,6 +426,13 @@ function pager(n, per) {
   return el("div", {class: "pager"}, prev, ` page ${page + 1} of ${pages} `, next);
 }
 
+function list(indexes, note, extra) {
+  const m = $("main"), per = S.per_page.prints;
+  m.append(el("p", {class: "note"}, note), pager(indexes.length, per));
+  for (const i of indexes.slice(page * per, (page + 1) * per)) m.append(printCard(S.prints[i], extra && extra(S.prints[i])));
+  m.append(pager(indexes.length, per));
+}
+
 function render() {
   document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
   $("searchbox").style.display = tab === "search" ? "" : "none";
@@ -419,57 +440,53 @@ function render() {
   const m = $("main"); m.innerHTML = "";
   if (!S) { m.textContent = "loading…"; return; }
   if (tab === "same") {
-    const list = S.same.filter(e => $("looked").checked || !e.looked_at);
+    const shown = S.same.filter(e => $("looked").checked || !e.looked_at);
     const per = S.per_page.serials;
-    m.append(el("p", {class: "note"}, `${list.length} serials (or releases) of several prints` + ($("looked").checked ? "" : `; ${S.same.length - list.length} looked at, hidden`) + ". The most prints first."), pager(list.length, per));
-    for (const e of list.slice(page * per, (page + 1) * per)) {
+    m.append(el("p", {class: "note"}, `${shown.length} serials of several prints` + ($("looked").checked ? "" : `; ${S.same.length - shown.length} looked at, hidden`) + ". The most prints first."), pager(shown.length, per));
+    for (const e of shown.slice(page * per, (page + 1) * per)) {
       const ps = e.prints.map(i => S.prints[i]);
-      const cards = ps.map(printCard);
-      const left = () => cards.filter(c => c.isConnected);  // a print whose label photos were all deleted is a hole
-      const apart = el("button", {onclick: () => post("/decide", {kind: "apart", serial: e.serial, prints: left().map(c => c.keys)})}, "All different");
+      const cards = ps.map(p => printCard(p));
+      const left = () => cards.filter(c => c.isConnected).map(c => c.pid);  // a print whose label photos were all deleted is a hole
+      const apart = el("button", {onclick: () => post("/apart", {serial: e.serial, ids: left()})}, "All different");
       apart.title = "these prints are different prints: hide this serial while its prints are these";
       const box = el("div", {class: "serial"}, el("h2", {}, `${e.serial}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "")));
       cards.forEach(c => box.append(c));
       const all = el("button", {}, "Join all");
-      const frozenCount = ps.filter(p => p.frozen.length).length;
-      if (frozenCount > 1) { all.disabled = true; all.title = "two frozen prints can't be joined: unfreeze one first"; }
-      else all.title = "these prints are one print: join them all";
+      all.title = "these prints are one print: join them all";
       all.onclick = async () => {
-        const cs = left(), handles = new Set(cs.map(c => c.handle));
-        if (!await post("/decide", {kind: "join", prints: cs.map(c => c.keys)}, false)) return;
-        holes(handles, "joined");
-        for (const h of handles) joinTicks.delete(h);
+        const ids = left();
+        if (!await post("/join", {ids}, false)) return;
+        holes(new Set(ids), "joined");
+        for (const id of ids) joinTicks.delete(id);
         all.disabled = apart.disabled = true; bar();
       };
       box.append(el("div", {}, all, " ", apart));
       m.append(box);
     }
-    m.append(pager(list.length, per));
-  } else if (tab === "worst") {
-    const per = S.per_page.prints;
-    m.append(el("p", {class: "note"}, `${S.prints.length} prints: the most label photos reading another serial first, then the most differing tiles between two of its label photos.`), pager(S.worst.length, per));
-    for (const i of S.worst.slice(page * per, (page + 1) * per)) m.append(printCard(S.prints[i]));
-    m.append(pager(S.worst.length, per));
+    m.append(pager(shown.length, per));
   } else if (tab === "several") {
-    const per = S.per_page.prints;
-    m.append(el("p", {class: "note"}, `${S.several.length} prints whose label photos read two serials or more: the most label photos reading another serial first, then the most serials.`), pager(S.several.length, per));
-    for (const i of S.several.slice(page * per, (page + 1) * per)) m.append(printCard(S.prints[i]));
-    m.append(pager(S.several.length, per));
+    list(S.several, `${S.several.length} prints whose label photos' straightened serials differ, or given a label photo without a serial by make prints: the most label photos reading another serial first. "Looked at" hides one while its label photos are these.`,
+         p => el("button", {onclick: async () => { if (await post("/looked", {id: p.id}, false)) holes(new Set([p.id]), "looked at"); }}, "Looked at"));
+  } else if (tab === "none") {
+    list(S.none, `${S.none.length} prints without a serial: label photos whose straightened image gave none and matched no print. Join them into a print, or set the serial.`);
+  } else if (tab === "new") {
+    list(S.new, `${S.new.length} prints the last make prints made or added label photos to.`);
+  } else if (tab === "worst") {
+    list(S.worst, `${S.prints.length} prints: the most label photos reading another serial first, then the most differing tiles between two of its label photos.`);
   } else if (tab === "search") {
     const q = query.trim().toUpperCase();
     if (!q) { m.append(el("p", {class: "note"}, "A serial (DMG-APSJ-JPN), a stem (DMG-APS) or an id (DMG-APSJ-JPN-lisa).")); return; }
-    const hits = S.prints.filter(p => [p.serial, p.release, p.id, ...p.from].some(s => s && s.toUpperCase().startsWith(q)));
+    const hits = S.prints.filter(p => [p.serial, p.id].some(s => s && s.toUpperCase().startsWith(q)));
     m.append(el("p", {class: "note"}, `${hits.length} prints` + (hits.length > S.per_page.search ? `, the first ${S.per_page.search} shown` : "")));
-    hits.sort((a, b) => (a.serial || a.release || "").localeCompare(b.serial || b.release || "") || b.keys.length - a.keys.length);
+    hits.sort((a, b) => (a.serial || "").localeCompare(b.serial || "") || b.keys.length - a.keys.length);
     hits.slice(0, S.per_page.search).forEach(p => m.append(printCard(p)));
   } else {
-    m.append(el("p", {class: "note"}, `${S.decisions.length} decisions in print-corrections.json, the latest first; applied by the next make prints.`));
-    for (const d of [...S.decisions].reverse()) {
-      const what = d.kind === "join" ? `join ${d.prints.length} prints (${d.prints.map(g => g.length).join(" + ")} label photos)` :
-                   d.kind === "split" ? `split off ${d.keys.length} label photos (from ${d.keys.length + d.rest.length})` :
-                   `${d.serial}: ${d.prints.length} prints all different`;
-      const undo = el("button", {onclick: () => post("/undo", {index: d.index, datetime: d.datetime})}, "Undo");
-      m.append(el("div", {style: "margin:6px 0"}, `${d.datetime} · ${what}` + (d.applied ? "" : " · (nothing to do now)") + " ", undo));
+    m.append(el("p", {class: "note"}, `${S.log_total} changes to the stored prints; the latest ${S.log.length} shown, the latest first. Undo: the latest change by hand, while what it made is unchanged.`));
+    for (const e of S.log) {
+      const ids = Object.keys(e.after).map(id => `${id} (${e.before[id] ?? "–"} → ${e.after[id] ?? "–"})`).join(", ");
+      const row = el("div", {style: "margin:6px 0"}, `${e.datetime} · ${e.manual ? "by hand" : "make prints"} · ${e.kind} · ${ids} `);
+      if (e.index === S.undoable) row.append(el("button", {onclick: () => post("/undo", {index: e.index})}, "Undo"));
+      m.append(row);
     }
   }
 }
@@ -480,17 +497,17 @@ function bar() {
   $("join").disabled = n < 2; $("clear").disabled = n === 0;
 }
 // each card of these prints replaced by a hole of its size, so the page doesn't move
-function holes(handles, text) {
+function holes(ids, text) {
   for (const card of document.querySelectorAll(".print")) {
-    if (!handles.has(card.handle)) continue;
+    if (!ids.has(card.pid)) continue;
     const r = card.getBoundingClientRect();
     card.replaceWith(el("div", {class: "print hole", style: `width:${r.width}px;height:${r.height}px`}, text));
   }
 }
 $("join").onclick = async () => {
-  const handles = new Set(joinTicks.keys());
-  if (!await post("/decide", {kind: "join", prints: [...joinTicks.values()]}, false)) return;
-  holes(handles, "joined");
+  const ids = new Set(joinTicks);
+  if (!await post("/join", {ids: [...ids]}, false)) return;
+  holes(ids, "joined");
   joinTicks.clear(); bar();
 };
 $("clear").onclick = () => { joinTicks.clear(); bar(); render(); };
@@ -529,20 +546,25 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(open(file, "rb").read(), "image/avif", cache=True) if os.path.exists(file) else self.send_error(404)
         if part == "print":
             file = frozen.image_path(name)
-            if not (name in frozen.load() and os.path.exists(file)):
+            if not (tool.store.prints.get(name, {}).get("frozen") and os.path.exists(file)):
                 file = os.path.join(GEN, "restore", straighten.file_name(name))
             return self.send(open(file, "rb").read(), "image/avif") if os.path.exists(file) else self.send_error(404)
         self.send_error(404)
 
     def do_POST(self):
-        if self.path not in ("/decide", "/undo", "/delete", "/serial", "/freeze") or tool is None:
+        actions = {"/join": lambda d: tool.join(d.get("ids") or []),
+                   "/split": lambda d: tool.split(d.get("id"), d.get("keys") or []),
+                   "/apart": lambda d: tool.looked_same(d.get("serial"), d.get("ids") or []),
+                   "/looked": lambda d: tool.looked_several(d.get("id")),
+                   "/delete": lambda d: tool.delete(d.get("key")),
+                   "/serial": lambda d: tool.set_serial(d.get("id"), d.get("serial")),
+                   "/freeze": lambda d: tool.set_frozen(d.get("id"), bool(d.get("on"))),
+                   "/undo": lambda d: tool.undo(d.get("index"))}
+        if self.path not in actions or tool is None:
             return self.send_error(404)
         data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         with lock:
-            why = (tool.decide(data) if self.path == "/decide" else tool.delete(data.get("key")) if self.path == "/delete"
-                   else tool.set_serial(data.get("keys"), data.get("serial")) if self.path == "/serial"
-                   else tool.set_frozen(data.get("keys"), bool(data.get("on"))) if self.path == "/freeze"
-                   else tool.undo(data.get("index", -1), data.get("datetime")))
+            why = actions[self.path](data)
         if why:
             return self.send(why.encode(), "text/plain", 409)
         self.send({"ok": True})
@@ -558,7 +580,7 @@ if __name__ == "__main__":
     threading.Thread(target=server.serve_forever, daemon=True).start()
     print(f"review prints at http://localhost:{PORT}/ (ctrl-C to stop); the page waits until the prints are loaded", flush=True)
     tool = Tool()
-    print(f"loaded: {len(tool.state_json['prints'])} prints, {len(tool.decisions)} decisions", flush=True)
+    print(f"loaded: {len(tool.state_json['prints'])} stored prints", flush=True)
     try:
         threading.Event().wait()
     except KeyboardInterrupt:
