@@ -40,6 +40,9 @@
 #      full resolution (refine_fine).
 #   Between them, 1b (an experiment): each chosen fit refined by the learned edge models where they're sure
 #      (stage1_edges, src/edge_fit.py).
+#   Stored label photos of open prints (src/stored_prints.py; stored-prints.md rule 9): not fitted again in stage 1 nor
+#      stage 1b: their stored pose is their fit (the stored poses are what stage 1's work is kept in); stages 2 and 3
+#      refine them as any, and the prints step writes the result back. Never merged with another stored one.
 #   Frozen label photos (src/frozen.py, persistent-prints.md stage 2): not fitted; their records as frozen ("frozen": the
 #      print's id), never poor fits, never carried; they take part in stage 2's links (a new photo of a frozen print joins
 #      its family), and their family's ink frame is moved onto the frame they were frozen in (anchor_to_frozen), so the
@@ -58,7 +61,7 @@ import cv2, numpy as np
 from scipy.optimize import least_squares
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, steps, match, shapes, find, outlines, edge_fit, frozen
+import photos, steps, match, shapes, find, outlines, edge_fit, frozen, stored_prints
 from multiprocessing import Pool
 
 ANGLE = 8.0           # degrees: a segment counts for a sample point if this parallel to its edge
@@ -881,7 +884,8 @@ def merge_fitted(lps, fits):
                 except cv2.error:
                     shared = 0.0
                 smaller = min(abs(cv2.contourArea(quads[i])), abs(cv2.contourArea(quads[j])))
-                if smaller > 0 and shared / smaller > FIT_OVERLAP:
+                fixed = group[i]["found_by"] in ("frozen", "stored") and group[j]["found_by"] in ("frozen", "stored")
+                if smaller > 0 and shared / smaller > FIT_OVERLAP and not fixed:  # two stored label photos: never one
                     parent[root(j)] = root(i)
         sets = {}
         for i, lp in enumerate(group):
@@ -889,7 +893,7 @@ def merge_fitted(lps, fits):
         for members in sets.values():
             if len(members) < 2:
                 continue
-            rank = lambda lp: (lp["found_by"] != "frozen", approximate_cut(fits[lp["key"]]), find.FOUND_BY.index(lp["found_by"]), lp["key"])
+            rank = lambda lp: (lp["found_by"] not in ("frozen", "stored"), approximate_cut(fits[lp["key"]]), find.FOUND_BY.index(lp["found_by"]), lp["key"])
             members.sort(key=rank)
             keep = members[0]
             for lp in members[1:]:
@@ -1422,7 +1426,7 @@ def offset_matrix(o):
 
 
 def frozen_fit(r):
-    """A frozen label photo's record in solve.json as stage 1's fit."""
+    """A frozen or stored label photo's record in solve.json as stage 1's fit."""
     return {"cut_to_photo": np.float64(r["cut_to_photo"]), "plastic_to_photo": np.float64(r["plastic_to_photo"]),
             "width_mm": r.get("width_mm"), "height_mm": r.get("height_mm"), "placement": r["placement"],
             "start": r["start"], "support": r["support"], "error_mm": r["error_mm"], "candidates": r["candidates"],
@@ -1508,18 +1512,23 @@ def from_frozen_match(out, lps, failed, photo_paths, frozen_entries):
     return done
 
 
-def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None):
+def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None, stored_records=None):
     lps = found["label_photos"]
     for lp in lps:
         lp["centre"] = np.float64(lp["centre"])
     global _GEN_DIR
     _GEN_DIR = os.path.dirname(edges_dir)
-    frozen_records = {k: r for k, r in (frozen_records or {}).items() if k in {lp["key"] for lp in lps}}
-    fitting = [lp for lp in lps if lp["key"] not in frozen_records]
+    present = {lp["key"] for lp in lps}
+    frozen_records = {k: r for k, r in (frozen_records or {}).items() if k in present}
+    stored_records = {k: r for k, r in (stored_records or {}).items() if k in present and k not in frozen_records}
+    fitting = [lp for lp in lps if lp["key"] not in frozen_records and lp["key"] not in stored_records]
+    print(f"stage 1: {len(stored_records)} label photos start from their stored poses, {len(frozen_records)} frozen", flush=True)
     fits, failed, choice = stage1(shape_variants(fitting), edges_dir, None)
     shapes_chosen = choose_shapes(fitting, fits, failed)
     strings_off = drop_strings_off_label(fitting, fits)
     fits = stage1_edges(fitting, fits, photo_paths or {})
+    fits.update({k: frozen_fit(r) for k, r in stored_records.items()})
+    strings_off += drop_strings_off_label([lp for lp in lps if lp["key"] in stored_records], fits)
     fits.update({k: frozen_fit(r) for k, r in frozen_records.items()})
     merged = merge_fitted(lps, fits)
     candidates = link_candidates(lps, matches, merged)
@@ -1780,7 +1789,10 @@ def main():
         found["label_photos"] = [lp for lp in found["label_photos"] if lp["photo"] in chosen]  # deleted since find ran: left out
         entries = frozen.load()
         fz = {k: {**r, "frozen": pid} for k, (pid, r) in frozen.label_photos(entries, set(chosen)).items()}
-        result = solve(found, match.read_matches(os.path.join(gen, "match"), list(chosen)), os.path.join(gen, "edges"), chosen, fz, entries)
+        store = stored_prints.load(None if not args.sample else os.path.join(gen, "prints", stored_prints.FILE))
+        stored = {k: r["pose"] for p in store["prints"].values() if not p.get("frozen") for k, r in p["label_photos"].items()
+                  if (r.get("pose") or {}).get("plastic_to_photo") is not None}
+        result = solve(found, match.read_matches(os.path.join(gen, "match"), list(chosen)), os.path.join(gen, "edges"), chosen, fz, entries, stored)
         steps.write_json(out, result)
     result = json.load(open(out))
     sizes = {s: json.load(open(os.path.join(gen, "read-text", s + ".json")))["size"] or [1, 1] for s in chosen}

@@ -38,10 +38,12 @@
 # Not labels: an area a person marked as not a label (NOT_LABELS, from make fit-by-hand: the fitted cut and find's
 # outline of the label photo, in the photo's pixels) holds no label photo: a candidate whose centre lies in either is
 # left out, from the seeds (rejected, with why) and from spreading (none is made there, so none spreads from it).
-# Frozen label photos (src/frozen.py, persistent-prints.md stage 2): taken as they are (their keys, their cut as the
-# outline, found_by "frozen"), never merged into another; their areas (the cut and find's outline when frozen) are
-# taken: no other label photo is made there. Spreading reaches them as any label photo, so a new photo of a frozen
-# print links to it.
+# Stored label photos (every stored print's, src/stored_prints.py; stored-prints.md rule 9; frozen ones since
+# persistent-prints.md stage 2): taken as they are (their keys, their stored cut as the outline, found_by "frozen" or
+# "stored"), never merged into another, so their keys never change; their areas (the cut and the stored outline) are
+# taken: no other label photo is made there. Spreading reaches them as any label photo, so a new photo of a print links
+# to it. They're read when find runs for its other inputs: the prints step adding label photos find made changes nothing
+# here (only the frozen prints' stamp, frozen.FILE, and NOT_LABELS make find run again).
 # A match between a photo and a frozen print's image (match indexes them as photos) makes a label photo where the image
 # lands in the photo, or tags the one already there (found_by "frozen print"; "frozen_print": the print's id,
 # "frozen_match": the photo's pixels -> the image's): solve takes its pose from it.
@@ -58,7 +60,7 @@ import argparse, html, json, os, re, sys
 import numpy as np, cv2
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, serials, steps, match, details, shapes, frozen
+import photos, serials, steps, match, details, shapes, frozen, stored_prints
 
 MERGE = 12          # line heights: strings closer than this are one label's
 RADIUS = 28         # line heights: a label's diagonal around its serial
@@ -186,7 +188,7 @@ def overlap(a, b):
     return float(area / smaller) if smaller > 0 else 0.0
 
 
-FOUND_BY = ["frozen", "frozen print", "serial", "near serial", "detail", "string and match", "match"]
+FOUND_BY = ["frozen", "stored", "frozen print", "serial", "near serial", "detail", "string and match", "match"]
 
 
 def merge_overlapping(lps):
@@ -202,12 +204,12 @@ def merge_overlapping(lps):
             out.append(lp)
             continue
         same = out[i]
-        if same.get("frozen_key") and lp.get("frozen_key"):  # two frozen label photos: never one
+        if same.get("stored_key") and lp.get("stored_key"):  # two stored label photos: never one
             here.append(len(out))
             out.append(lp)
             continue
-        if same.get("frozen_key") or lp.get("frozen_key"):  # a frozen label photo stays as it is
-            keep, other = (same, lp) if same.get("frozen_key") else (lp, same)
+        if same.get("stored_key") or lp.get("stored_key"):  # a stored label photo stays as it is
+            keep, other = (same, lp) if same.get("stored_key") else (lp, same)
         else:
             keep, other = (same, lp) if same["strings"] or not lp["strings"] else (lp, same)
         keep["strings"] = keep["strings"] + other["strings"]
@@ -245,20 +247,21 @@ def place(lp, places, photo_seeds=()):
 
 
 def find(chosen, texts, matches, release_of, detections=None, use_strings=True, places=None, not_labels=None,
-         frozen_lps=None, frozen_images=None):
+         stored_lps=None, frozen_images=None):
     """The label photos, their sets and the rejected candidates, from the photos' texts (unless not use_strings), the
     details found in them (sha1 -> detections) and the matches; none in the areas not_labels marks (load_not_labels)."""
     not_labels = not_labels or {}
-    # frozen label photos (src/frozen.py), as they are: key -> {"photo", "cut", "found", "shape"}; their areas taken
+    # stored label photos (src/stored_prints.py), as they are: key -> {"photo", "cut", "found", "shape", "frozen"}; their
+    # areas taken
     taken = {}
-    lps_frozen = []
-    for fk, f in sorted((frozen_lps or {}).items()):
+    lps_stored = []
+    for fk, f in sorted((stored_lps or {}).items()):
         if f["photo"] not in chosen:
             continue
         cut = np.float64(f["cut"])
         centre = cut.mean(0)
-        lps_frozen.append({"photo": f["photo"], "centre": centre, "radius": float(np.max(np.hypot(*(cut - centre).T))),
-                           "strings": [], "details": [], "points": [], "found_by": "frozen", "frozen_key": fk,
+        lps_stored.append({"photo": f["photo"], "centre": centre, "radius": float(np.max(np.hypot(*(cut - centre).T))),
+                           "strings": [], "details": [], "points": [], "found_by": "frozen" if f.get("frozen") else "stored", "stored_key": fk,
                            "placed": cut, "placed_by": None, "detail_shape": f["shape"]})
         for poly in (f["cut"], f.get("found")):
             if poly is not None and len(poly) >= 3:
@@ -284,13 +287,13 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
                 rejected.append({"photo": s, "centre": cand["centre"].tolist(), "strings": strings, "why": "in an area marked not a label"})
                 continue
             if not_a_label(taken, s, cand["centre"]):
-                rejected.append({"photo": s, "centre": cand["centre"].tolist(), "strings": strings, "why": "in a frozen label photo's area"})
+                rejected.append({"photo": s, "centre": cand["centre"].tolist(), "strings": strings, "why": "in a stored label photo's area"})
                 continue
             if cand["found_by"]:
                 lps.append(cand)
             else:
                 unknown.setdefault(s, []).append(cand)
-    lps += lps_frozen
+    lps += lps_stored
     # matches with frozen prints' images (frozen_images: image SHA-1 -> {"print", "crop", "shape"}): each makes a label
     # photo where it lands in the photo (or tags the one there) with the print and the match (photo -> image pixels)
     frozen_images = frozen_images or {}
@@ -311,7 +314,7 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
         here = [lp for lp in lps if lp["photo"] == a and inside([pa.mean(0)], lp)[0]]
         if here:
             lp = here[0]
-            if lp.get("frozen_key") or lp.get("frozen_match") is not None:
+            if lp.get("stored_key") or lp.get("frozen_match") is not None:
                 continue
         else:
             if not_a_label(not_labels, a, centre) or not_a_label(taken, a, centre):
@@ -395,11 +398,11 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
     lps = merge_overlapping(lps)
     for lp in lps:
         lp["outline"] = outline(lp)
-        lp["key"] = lp.get("frozen_key") or key(lp["photo"], lp["centre"], sizes[lp["photo"]])
+        lp["key"] = lp.get("stored_key") or key(lp["photo"], lp["centre"], sizes[lp["photo"]])
     for lp in lps:
         own = [shape_of(t["serial"]) for t in lp["strings"] if t["kind"] != "unknown"]
         lp["shape"] = most(own, lp.get("detail_shape")) if own else lp.get("detail_shape")
-        if lp.get("frozen_key"):
+        if lp.get("stored_key"):
             lp["shape"] = lp["detail_shape"]
     for _ in range(len(lps)):  # shapes spread along links
         moved = False
@@ -446,7 +449,7 @@ def page(out_dir, chosen, result, texts):
     for lp in lps:
         shapes[lp["shape"]] = shapes.get(lp["shape"], 0) + 1
     rel = os.path.relpath(".", out_dir)
-    colours = {"frozen": "#05f", "frozen print": "#5af", "serial": "#2a2", "near serial": "#6c2", "detail": "#a3c", "string and match": "#c80", "match": "#28c"}
+    colours = {"frozen": "#05f", "stored": "#38f", "frozen print": "#5af", "serial": "#2a2", "near serial": "#6c2", "detail": "#a3c", "string and match": "#c80", "match": "#28c"}
 
     def figure(s):
         w, h = texts[s]["size"] or [1, 1]
@@ -477,6 +480,20 @@ figcaption{{font-size:12px}}</style>
 """)
 
 
+def stored_label_photos(sample, gen):
+    """Every stored print's label photos (src/stored_prints.py; stored-prints.md rule 9), for find(): key -> {"photo",
+    "cut" (its stored pose's cut), "found" (its stored outline), "shape", "frozen"}."""
+    store = stored_prints.load(None if not sample else os.path.join(gen, "prints", stored_prints.FILE))
+    out = {}
+    for p in store["prints"].values():
+        for k, r in p["label_photos"].items():
+            pose = r.get("pose") or {}
+            if pose.get("cut_to_photo") is not None:
+                out[k] = {"photo": pose["photo"], "cut": frozen.cut_corners(pose), "found": r.get("outline"), "shape": pose["shape"],
+                          "frozen": bool(p.get("frozen"))}
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sample", action="store_true")
@@ -502,8 +519,7 @@ def main():
         result = find(chosen, texts, match.read_matches(os.path.join(gen, "match"), list(chosen), frozen.images()), serials.load_database(),
                       found, use_strings=not args.no_strings, places=details.load_places(), not_labels=load_not_labels(),
                       frozen_images={e["image"]: {"print": pid, "crop": e["crop"], "shape": e["shape"]} for pid, e in frozen.load().items()},
-                      frozen_lps={k: {"photo": r["photo"], "cut": frozen.cut_corners(r), "found": r.get("found"), "shape": r["shape"]}
-                                  for k, (pid, r) in frozen.label_photos(frozen.load()).items()})
+                      stored_lps=stored_label_photos(args.sample, gen))
         steps.write_json(out, result)
     result = json.load(open(out))
     page(out_dir, chosen, result, texts)

@@ -88,18 +88,19 @@ def test_an_area_marked_not_a_label_holds_no_label_photo_and_spreads_none():
     assert [lp["photo"] for lp in result["label_photos"]] == ["a"]
 
 
-def test_a_frozen_label_photo_is_taken_as_it_is_and_new_photos_link_to_it():
+def test_a_stored_label_photo_is_taken_as_it_is_and_new_photos_link_to_it():
     texts = {"a": {"size": [1000, 1000], "lines": [line("DMG-APSJ-JPN", 300, 300)]},
              "b": {"size": [1000, 1000], "lines": []}}
     label = points(200, 200, 600, 600)
     chosen = {s: f"photos/{s}.jpg" for s in texts}
     cut = [[180.0, 180.0], [620.0, 180.0], [620.0, 620.0], [180.0, 620.0]]
-    fz = {"a@12,34": {"photo": "a", "cut": cut, "found": None, "shape": "dmg"}}
-    result = find.find(chosen, texts, [("a", "b", H_SHIFT, inliers(label, H_SHIFT))], DATABASE, frozen_lps=fz)
-    by_key = {lp["key"]: lp for lp in result["label_photos"]}
-    assert by_key["a@12,34"]["found_by"] == "frozen" and by_key["a@12,34"]["outline"] == cut
-    assert [lp["photo"] for lp in result["label_photos"]].count("a") == 1      # the serial's candidate is taken
-    assert any(r["why"] == "in a frozen label photo's area" for r in result["rejected"])
+    for frozen, found_by in ((True, "frozen"), (False, "stored")):
+        fz = {"a@12,34": {"photo": "a", "cut": cut, "found": None, "shape": "dmg", "frozen": frozen}}
+        result = find.find(chosen, texts, [("a", "b", H_SHIFT, inliers(label, H_SHIFT))], DATABASE, stored_lps=fz)
+        by_key = {lp["key"]: lp for lp in result["label_photos"]}
+        assert by_key["a@12,34"]["found_by"] == found_by and by_key["a@12,34"]["outline"] == cut
+        assert [lp["photo"] for lp in result["label_photos"]].count("a") == 1  # the serial's candidate is taken
+        assert any(r["why"] == "in a stored label photo's area" for r in result["rejected"])
     b = [lp for lp in result["label_photos"] if lp["photo"] == "b"]
     assert len(b) == 1 and b[0]["matches"][0]["to"] == "a@12,34"               # spread into b, linked to it
 
