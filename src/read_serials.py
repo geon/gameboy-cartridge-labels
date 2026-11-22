@@ -4,7 +4,8 @@
 #   missing.json: the database's entries no label photo has (sorted by id)
 #   unknown-serials.json: {serial-looking string the database doesn't know: [keys]} (possible new releases)
 # The reads: OCR (read_text, RapidOCR) of the straightened label photo (straighten: upright, no perspective), and the
-# serials find read in the photo (its own and those of the label photos solve merged into it: the same sticker). Decided, in order:
+# serials find read in the photo (its own and those of the label photos solve merged into it: the same sticker), only
+# those whose centre lies on its fitted label (find's are those near it: another cartridge's serial too). Decided, in order:
 #   own: its own exact reads give one release;
 #   own, with its title or family: they give several, the one whose title the label's text holds, else the one most
 #     of its family's own exact reads support;
@@ -29,10 +30,11 @@
 # Usage: read_serials.py [--sample] [--workers N]
 import argparse, html, json, os, re, sys
 from collections import Counter
-import cv2
+import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import photos, serials, steps, read_text, straighten
+import solve as solve_step
 
 
 CORRECTIONS = "serial-corrections.json"
@@ -215,7 +217,11 @@ def main():
         for r_ in release_of.values():
             by_id.setdefault(r_["id"], r_)
         ocr = {k: json.load(open(ocr_out[k])) for k in solved}
-        strings = lambda k: [t for m in [k] + solved[k].get("merged", []) for t in found.get(m, {}).get("strings", [])]  # merged: the same sticker
+        # find's strings of it and of the label photos solve merged into it (the same sticker), only those whose centre
+        # lies on its fitted label (solve.strings_on_label: find's strings are those near it, another cartridge's too)
+        strings = lambda k: solve_step.strings_on_label(
+            [t for m in [k] + solved[k].get("merged", []) for t in found.get(m, {}).get("strings", [])],
+            np.float64(solved[k]["photo_to_ink"]), solved[k]["shape"])
         reads = {k: own_reads(ocr[k], strings(k), release_of, regions, solved[k]["shape"]) for k in solved}
         photo_lines = {}
         def label_text(k):

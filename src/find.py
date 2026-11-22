@@ -42,6 +42,9 @@
 # lands in the photo, or tags the one already there (found_by "frozen print"; "frozen_print": the print's id,
 # "frozen_match": the photo's pixels -> the image's): solve takes its pose from it.
 # The shape is the serial's platform (DMG-, CGB-, AGB-); a label photo found by matching takes its linked ones' (most).
+# With serials of two platforms (a second cartridge's serial pulled in: find doesn't know the label's edges yet), the
+# most named, a tie to the detail's shape, else alphabetical (most); solve then fits every named shape and keeps the
+# one whose fitted label holds a serial of it (solve's choose_shapes).
 # Keys: <sha1>@<x>,<y>, the centre in whole percent of the photo's width and height.
 # Done again when label-photos.json is older than this file or than any of its inputs (NOT_LABELS among them).
 # With --no-strings, the text isn't used at all (details and matches only), into <generated>/find-no-strings/: to
@@ -132,6 +135,14 @@ def inside(points, lp):
 def shape_of(serial):
     m = re.match(r"(?:DIS-)?(DMG|CGB|AGB)", serial or "")
     return m.group(1).lower() if m else None
+
+
+def most(shapes_seen, prefer=None):
+    """The shape named most often; a tie goes to prefer if it's among the tied, else to the first in alphabetical
+    order (not max over a set: its order changes with each process's string hashing, so a tie came out at random)."""
+    top = max(map(shapes_seen.count, set(shapes_seen)))
+    tied = sorted((s for s in set(shapes_seen) if shapes_seen.count(s) == top), key=str)
+    return prefer if prefer in tied else tied[0]
 
 
 def outline(lp):
@@ -365,7 +376,7 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
         lp["key"] = lp.get("frozen_key") or key(lp["photo"], lp["centre"], sizes[lp["photo"]])
     for lp in lps:
         own = [shape_of(t["serial"]) for t in lp["strings"] if t["kind"] != "unknown"]
-        lp["shape"] = max(set(own), key=own.count) if own else lp.get("detail_shape")
+        lp["shape"] = most(own, lp.get("detail_shape")) if own else lp.get("detail_shape")
         if lp.get("frozen_key"):
             lp["shape"] = lp["detail_shape"]
     for _ in range(len(lps)):  # shapes spread along links
@@ -374,7 +385,7 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
             if lp["shape"] is None:
                 linked = [o["shape"] for o, _ in lp.get("links", []) if o["shape"]]
                 if linked:
-                    lp["shape"] = max(set(linked), key=linked.count)
+                    lp["shape"] = most(linked)
                     moved = True
         if not moved:
             break

@@ -545,10 +545,12 @@ def own_candidates(all_cands, lps):
         by_photo.setdefault(lp["photo"], []).append(lp)
     out, emptied = dict(all_cands), []
     for group in by_photo.values():
-        if len(group) < 2:
+        bases = list(dict.fromkeys(lp.get("base", lp["key"]) for lp in group))  # a label photo fitted with several shapes: one
+        if len(bases) < 2:
             continue
-        centres = np.array([lp["centre"] for lp in group], np.float64)
-        for i, lp in enumerate(group):
+        centres = np.array([next(lp["centre"] for lp in group if lp.get("base", lp["key"]) == b) for b in bases], np.float64)
+        for lp in group:
+            i = bases.index(lp.get("base", lp["key"]))
             cands = all_cands.get(lp["key"])
             if not cands:
                 continue
@@ -623,6 +625,89 @@ def stage1(lps, edges_dir, pairs, workers=8):
         "confident label photos": sure, "examples": len(labels), "right": int(sum(labels)),
         "weights": {f: round(float(w), 3) for f, w in zip(FEATURES, model[2])}}
     return fits, failed, description
+
+
+# Shapes (the user, 2026-11-22): find gives a label photo the shape its serials name, but its strings are those near
+# it, before anyone knows the label's edges: a second cartridge's serial in the photo can land in it (9817412e@48,54:
+# CGB-BYTP-EUR on its label, AGB-AXVP-EUR of another cartridge 450 px off), and with a 1-1 tie find's vote once came out
+# at random. So a label photo whose exact or near serials name two shapes or more is fitted once with each
+# (shape_variants: key "<key>#<shape>"), and the fit kept (choose_shapes) is one whose fitted label holds a serial of
+# its own shape (the string's centre on the label), the best mean support among those, else among all. Then every
+# label photo keeps only its strings whose centre is on its fitted label (drop_strings_off_label; read-serials does
+# the same with the final fit).
+def platforms_named(lp):
+    """The shapes a label photo's exact and near serials name, sorted."""
+    return sorted({find.shape_of(t["serial"]) for t in lp.get("strings") or [] if t["kind"] != "unknown"} - {None})
+
+
+def strings_on_label(strings, photo_to_label, shape):
+    """The strings whose centre lies on the label: photo_to_label maps the photo's pixels to label mm (its top left at
+    0, 0: the inverse of a cut_to_photo, or a photo_to_ink), the label its shape's canonical size."""
+    w, h = shapes.LABEL_MM[shape]
+    on = []
+    for t in strings:
+        if not t.get("corners"):
+            continue
+        c = project(photo_to_label, [np.mean(np.float64(t["corners"]), 0)])[0]
+        if np.all(np.isfinite(c)) and 0 <= c[0] <= w and 0 <= c[1] <= h:
+            on.append(t)
+    return on
+
+
+def shape_variants(lps):
+    """The label photos to fit: each once, those whose serials name several shapes once per shape (key
+    "<key>#<shape>", "base": its key)."""
+    out = []
+    for lp in lps:
+        named = platforms_named(lp)
+        if len(named) < 2:
+            out.append(lp)
+        else:
+            out += [dict(lp, key=f"{lp['key']}#{s}", shape=s, base=lp["key"]) for s in named]
+    return out
+
+
+def choose_shapes(lps, fits, failed):
+    """For each label photo fitted with several shapes (shape_variants), in place: its shape and fit the chosen one's
+    (above), its variants' fits and failures removed; one with no fit at all fails (shape None). -> {shape chosen,
+    shapes named: count}."""
+    chosen = {}
+    for lp in lps:
+        named = platforms_named(lp)
+        if len(named) < 2:
+            continue
+        tried, why = [], []
+        for s in named:
+            v = f"{lp['key']}#{s}"
+            f = fits.pop(v, None)
+            if v in failed:
+                why.append(f"{s}: {failed.pop(v)}")
+            if f is None:
+                continue
+            on = strings_on_label(lp["strings"], np.linalg.inv(f["cut_to_photo"]), s)
+            own = any(t["kind"] != "unknown" and find.shape_of(t["serial"]) == s for t in on)
+            tried.append((own, float(np.mean(list(f["support"].values()))), s, f))
+        if not tried:
+            lp["shape"] = None
+            failed[lp["key"]] = "no fit with any shape its serials name: " + "; ".join(why)
+            continue
+        own, _, s, f = max(tried, key=lambda t: (t[0], t[1]))
+        lp["shape"] = s
+        fits[lp["key"]] = f
+        label = f"{s} of {', '.join(named)}" + ("" if own else ", none holding its serial")
+        chosen[label] = chosen.get(label, 0) + 1
+    return dict(sorted(chosen.items()))
+
+
+def drop_strings_off_label(lps, fits):
+    """Each fitted label photo's strings: only those on its fitted label (in place). -> how many dropped."""
+    dropped = 0
+    for lp in lps:
+        if lp["key"] in fits and lp.get("strings"):
+            on = strings_on_label(lp["strings"], np.linalg.inv(fits[lp["key"]]["cut_to_photo"]), lp["shape"])
+            dropped += len(lp["strings"]) - len(on)
+            lp["strings"] = on
+    return dropped
 
 
 # Stage 1b, an experiment (label-detection.md: edge models): each chosen fit refined by the learned edge models
@@ -1431,7 +1516,9 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
     _GEN_DIR = os.path.dirname(edges_dir)
     frozen_records = {k: r for k, r in (frozen_records or {}).items() if k in {lp["key"] for lp in lps}}
     fitting = [lp for lp in lps if lp["key"] not in frozen_records]
-    fits, failed, choice = stage1(fitting, edges_dir, None)
+    fits, failed, choice = stage1(shape_variants(fitting), edges_dir, None)
+    shapes_chosen = choose_shapes(fitting, fits, failed)
+    strings_off = drop_strings_off_label(fitting, fits)
     fits = stage1_edges(fitting, fits, photo_paths or {})
     fits.update({k: frozen_fit(r) for k, r in frozen_records.items()})
     merged = merge_fitted(lps, fits)
@@ -1443,6 +1530,8 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
         merged_into.setdefault(k, []).append(d)
     offsets, family_of, poor, links_info, corrections, groups = stage2(lps, fits, candidates, photo_paths or {})
     poor -= set(frozen_records)  # a frozen label photo is never a poor fit
+    links_info["shapes chosen by the fit"] = shapes_chosen
+    links_info["strings off the label, dropped"] = strings_off
     coarse = {}
     for k, f in fits.items():
         C, _ = corrections.get(k, (np.eye(3), None))
