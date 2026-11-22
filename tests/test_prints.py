@@ -47,16 +47,6 @@ def test_pair_cache_round_trip(tmp_path):
     assert prints.load_pairs(path, "v2") == {}
 
 
-def test_a_frozen_group_stays_one_print_others_may_join_two_frozen_never_merge():
-    D = differ_matrix(5, 50)                                       # all alike
-    groups, _ = prints.split_family(D, [[0, 1], [2, 3]])
-    assert sorted(sorted(g) for g in groups) in ([[0, 1, 4], [2, 3]], [[0, 1], [2, 3, 4]])
-    D = differ_matrix(3, 50, [({1}, slice(10, 13))])               # 1 differs from 0 and 2
-    groups, _ = prints.split_family(D, [[0, 1]])                   # frozen together anyway
-    assert sorted(sorted(g) for g in groups) == [[0, 1, 2]] or sorted(sorted(g) for g in groups) == [[0, 1], [2]]
-    assert any(sorted(g)[:2] == [0, 1] for g in groups)
-
-
 def test_a_prints_release_only_of_its_serials_game():
     stray = {"serial": "AGB-AW2E-USA", "release": "AGB-AW2E"}
     assert prints.print_release("AGB-BSPE-USA", [{"serial": "AGB-BSPE-USA", "release": None}] * 7 + [stray]) is None

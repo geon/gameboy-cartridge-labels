@@ -1,34 +1,42 @@
-# prints: the label photos of each family (solve) split into prints, into <generated>/prints/:
-#   prints.json: {"prints": [{"id" (its persistent id: src/print_ids.py, print-ids.json), "keys", "release", "serial", "shape", "family"}], "tile_mm": TILE_MM,
-#                 "differences": {family: {"grid": [rows, columns], "tiles": [index...]}} (the tiles telling its prints apart)}
-#   few-photos.json: [print ids] of prints with fewer than FEW label photos
+# prints: the stored prints (stored-prints.md; src/stored_prints.py, prints.json in the repo root: the truth) kept up
+# with this run's label photos, and written out for restore and publish, into <generated>/prints/:
+#   prints.json: {"prints": [{"id", "keys", "release", "serial", "shape", "family", "families"?, "frozen"? (its id)}],
+#                 "tile_mm": TILE_MM, "differences": {}}
+#   few-photos.json: [print ids] of open prints with fewer than FEW label photos
+#   id-changes.json: this run's changes to the store ([{"kind": new, added, removed, gone, "id", "keys"?}]), on the page
+# Each run, through the store's interface, automatic (stored-prints.md rules 3-7, 10):
+#   1. Frozen prints are left as they are: never touched (the interface raises if anything tries).
+#   2. An open print's label photos are matched to this run's (print_ids.same_label_photo: the same key, else the one
+#      current outline holding the old centre; none where several do). Those not found leave the print; a print left
+#      with none is gone. The found ones get this run's outline (find's) and pose (solve's) written back.
+#   3. New label photos (this run's in no stored print, frozen or not), each by its straightened serial (read-serials'
+#      straightened_serial; a label photo read-serials hasn't read stops the step: the steps ran in the wrong order):
+#      - with one: into the open stored print of that serial it matches best by pixels (below), else left over; the
+#        left-over ones of a serial and shape grouped by pixels among themselves (split_family), each group a new print;
+#      - with none: into the open stored print holding label photos of its family (solve's) it matches best by pixels,
+#        whatever its serial, marked "joined_without_serial" (review-prints lists it in Several serials until looked
+#        at); else a print of its own with no serial.
+#   Matching a print: compared with each of its label photos of the same shape; it matches where most are "same"
+#   (differing on fewer than MIN_DIFF_TILES tiles), best by the fewest differing tiles on average.
 # Comparing, in each family's ink coordinates (straighten's images): the label, 1 mm in from its edges, in TILE_MM
 # tiles (the outermost millimetre left out: the cut wanders about 1 mm). Two label photos differ at a tile where both
 # are textured (gray spread over TEXTURE) and their lighting-evened gray (minus the local mean, over the local spread,
 # 0.25 mm blur) doesn't correlate over CORRELATION. Only that counts as evidence of a print difference: a tile textured
 # in one photo only is blur, glare or dirt as often as other text. Different prints: different on MIN_DIFF_TILES tiles
-# or more. Only the pixels decide: serials and releases are only the prints' labels. (Where another print's label
+# or more. Which prints a new label photo may join is its serial's (above); the pixels choose among them. (Where another print's label
 # photos may be used in a restored print is restore's own comparison, not this one.) Measured on the full set at 1 mm
 # tiles (pairs within a family, by their serials read): 3 or more different tiles on 10 % of same-serial pairs (dirt,
 # misfits: split, then pooled back), 86 % of one release's region variants (many of the rest misread serials of one
 # print: IPN for JPN, a cut-off serial) and 95 % of different releases. At 2 mm tiles a region code hardly showed (one tile, often still correlating).
 #   pairs.npz: the pair cache (below)
-#   A frozen print (src/frozen.py, persistent-prints.md stage 2): its label photos still here are one print from the start,
-#   never split, never merged with another frozen print; others of its family may join it (a new photo of it); it keeps
-#   its id ("frozen": its id) and its serial as frozen. One with none of its label photos left is still listed (keys []).
-#   id-changes.json: this run's id changes ([{"kind": new, kept, split, merged, renamed or gone, "id", ...}]), on the page
-#   automatic.json: {"prints": [{"keys", "family"}]}: the prints as the comparison found them, before the user's decisions
-#   The user's decisions (print-corrections.json, made in review-prints: src/print_corrections.py) applied on those: a
-#   print joined across families has the family most of its label photos are of, and "families", all of them.
-# The ids are kept between runs in print-ids.json (the repo root, committed; with --sample in <generated>/prints/).
-# Done again when prints.json is older than this file, solve.json, serials.json or print-corrections.json.
+# Done again when prints.json is older than this file, solve.json, serials.json or the store.
 # Usage: prints.py [--sample]
 import argparse, html, itertools, json, os, re, sys
 from collections import Counter
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, steps, straighten, shapes, print_ids, frozen, print_corrections
+import photos, steps, straighten, shapes, print_ids, stored_prints
 import serials as serials_module
 
 TILE_MM = 1
@@ -36,6 +44,7 @@ TEXTURE = 6.0
 CORRELATION = 0.0
 FEW = 3
 MIN_DIFF_TILES = 3
+NOT_LABELS = "not-labels.json"  # find's (find.NOT_LABELS)
 
 
 def tile_views(image_path, shape):
@@ -125,29 +134,22 @@ def components(n, edges):
     return [root(i) for i in range(n)]
 
 
-def split_family(D, fixed=()):
-    """A family's prints: [[member index...]], and the tiles that tell its prints apart. D: n x n x tiles booleans
-    (tiles_textured_in_both_and_not_correlating). Two label photos are different prints where they differ on
-    MIN_DIFF_TILES tiles or more (dirt or glare rarely does; other text does). Prints are merged, the pairs with the
-    fewest differing tiles first, where most cross pairs aren't different. fixed: groups of member indices that are one
-    print from the start and are never split nor merged with each other (frozen prints); others may join them."""
+def split_family(D):
+    """New label photos of one serial and shape grouped into prints: [[member index...]], and the tiles that tell the
+    prints apart. D: n x n x tiles booleans (tiles_textured_in_both_and_not_correlating). Two label photos are different
+    prints where they differ on MIN_DIFF_TILES tiles or more (dirt or glare rarely does; other text does). Prints are
+    merged, the pairs with the fewest differing tiles first, where most cross pairs aren't different."""
     n = D.shape[0]
     count = D.sum(2)
     same = count < MIN_DIFF_TILES
-    in_fixed = {i for g in fixed for i in g}
-    prints = [list(g) for g in fixed] + [[i] for i in range(n) if i not in in_fixed]
-    where = [0] * n
-    for gi, g in enumerate(prints):
-        for i in g:
-            where[i] = gi
-    is_fixed = [gi < len(fixed) for gi in range(len(prints))]
+    prints = [[i] for i in range(n)]
+    where = list(range(n))
     for a, b in sorted(itertools.combinations(range(n), 2), key=lambda p: count[p]):
         pa, pb = where[a], where[b]
-        if pa == pb or not same[a, b] or (is_fixed[pa] and is_fixed[pb]):
+        if pa == pb or not same[a, b]:
             continue
         if np.mean([same[x, y] for x in prints[pa] for y in prints[pb]]) > 0.5:
             prints[pa] += prints[pb]
-            is_fixed[pa] = is_fixed[pa] or is_fixed[pb]
             for i in prints[pb]:
                 where[i] = pa
             prints[pb] = []
@@ -166,47 +168,6 @@ def photo_sizes(shas, gen):
         if os.path.exists(f):
             sizes[s] = json.load(open(f))["size"]
     return sizes
-
-
-def corrected(auto, solved, frozen_of, gen):
-    """The automatic prints ([{keys, family}]) with the user's decisions applied (print_corrections)."""
-    decisions = print_corrections.load()["decisions"]
-    if not decisions:
-        return auto
-    found = json.load(open(os.path.join(gen, "find", "label-photos.json")))["label_photos"]
-    keys = {k for p in auto for k in p["keys"]}
-    old = {k for d in decisions for k in d.get("keys", []) + [k for g in d.get("prints", []) for k in g]} - keys
-    mapped = print_corrections.key_mapper(keys, {lp["key"]: lp["outline"] for lp in found}, photo_sizes({k.split("@")[0] for k in old}, gen))
-    groups, applied = print_corrections.apply([p["keys"] for p in auto], decisions, mapped, frozen_of)
-    print(f"print corrections: {sum(applied)} of {len(decisions)} decisions applied", flush=True)
-    out = []
-    for g in groups:
-        fams = Counter(solved[k]["family"] for k in g)
-        p = {"keys": sorted(g), "family": fams.most_common(1)[0][0]}
-        if len(fams) > 1:
-            p["families"] = sorted(fams)
-        out.append(p)
-    return out
-
-
-def keep_ids(all_prints, ids_file, gen):
-    """Each print's persistent id (print_ids), the registry in ids_file updated; this run's changes."""
-    registry = print_ids.load(ids_file)
-    found = json.load(open(os.path.join(gen, "find", "label-photos.json")))["label_photos"]
-    outlines = {lp["key"]: lp["outline"] for lp in found}
-    new_keys = {k for p in all_prints for k in p["keys"]}
-    of_photo = {}
-    for k in new_keys:
-        of_photo.setdefault(k.split("@")[0], []).append(k)
-    old_keys = {k for e in registry["prints"].values() for k in e["keys"]}
-    sizes = photo_sizes({k.split("@")[0] for k in old_keys - new_keys}, gen)
-    key_map = {k: print_ids.same_label_photo(k, of_photo.get(k.split("@")[0], []), outlines, sizes) for k in old_keys}
-    forced = {i: p["frozen"] for i, p in enumerate(all_prints) if p.get("frozen")}
-    registry, changes = print_ids.assign(all_prints, registry, key_map, forced=forced)
-    print_ids.save(registry, ids_file)
-    counts = Counter(c["kind"] for c in changes)
-    print("print ids: " + ", ".join(f"{n} {kind}" for kind, n in sorted(counts.items())), flush=True)
-    return changes
 
 
 def serial_code(serial):
@@ -240,6 +201,48 @@ def print_release(chosen, reads):
     return rel.most_common(1)[0][0] if rel else None
 
 
+class Comparer:
+    """Pairs of label photos compared (tiles_textured_in_both_and_not_correlating), through the pair cache."""
+    def __init__(self, gen, solved, cached):
+        self.gen, self.solved, self.cached, self.views, self.compared = gen, solved, cached, {}, 0
+
+    def path(self, k):
+        return os.path.join(self.gen, "straighten", straighten.file_name(k))
+
+    def view(self, k):
+        if k not in self.views:
+            self.views[k] = tile_views(self.path(k), self.solved[k]["shape"])
+        return self.views[k]
+
+    def tiles(self, a, b):
+        """The differing tiles (bool array) between two label photos of one shape, or None (an image missing)."""
+        a, b = sorted((a, b))
+        if not (os.path.exists(self.path(a)) and os.path.exists(self.path(b))):
+            return None
+        name = f"{a}|{b}|{image_fingerprint(self.path(a))}|{image_fingerprint(self.path(b))}"
+        if name not in self.cached:
+            self.cached[name] = tiles_textured_in_both_and_not_correlating(self.view(a), self.view(b))
+            self.compared += 1
+        return self.cached[name]
+
+    def differing(self, a, b):
+        m = self.tiles(a, b)
+        return None if m is None else int(m.sum())
+
+    def best(self, k, candidates, members):
+        """The candidate print k matches best (members: id -> its label photos), or None."""
+        shape, best = self.solved[k]["shape"], None
+        for pid in candidates:
+            counts = [self.differing(k, m) for m in members[pid] if m in self.solved and self.solved[m]["shape"] == shape]
+            counts = [c for c in counts if c is not None]
+            if not counts or sum(c < MIN_DIFF_TILES for c in counts) * 2 <= len(counts):
+                continue
+            mean = sum(counts) / len(counts)
+            if best is None or mean < best[0]:
+                best = (mean, pid)
+        return best and best[1]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sample", action="store_true")
@@ -247,94 +250,140 @@ def main():
     gen = photos.generated(args.sample)
     solve_file = os.path.join(gen, "solve", "solve.json")
     serials_file = os.path.join(gen, "read-serials", "serials.json")
-    for p in (solve_file, serials_file):
+    found_file = os.path.join(gen, "find", "label-photos.json")
+    for p in (solve_file, serials_file, found_file):
         if not os.path.exists(p):
-            sys.exit(f"{p} missing: run make solve, straighten and read-serials first")
+            sys.exit(f"{p} missing: run make find, solve, straighten and read-serials first")
     out_dir = os.path.join(gen, "prints")
     out = os.path.join(out_dir, "prints.json")
     os.makedirs(out_dir, exist_ok=True)
-    solved = json.load(open(solve_file))["label_photos"]
-    serial = json.load(open(serials_file))
-    frozen_entries = frozen.load()
-    inputs = [solve_file, serials_file, __file__, print_ids.__file__] + [f for f in (frozen.FILE, print_corrections.FILE) if os.path.exists(f)]
+    store_file = stored_prints.FILE if not args.sample else os.path.join(out_dir, stored_prints.FILE)
+    inputs = [solve_file, serials_file, __file__, stored_prints.__file__] + [f for f in (store_file, NOT_LABELS) if os.path.exists(f)]
     if not os.path.exists(out) or os.path.getmtime(out) < max(os.path.getmtime(p) for p in inputs):
-        frozen_of = {k: pid for pid, e in frozen_entries.items() for k in e["label_photos"] if k in solved}
-        families = {}
-        for k, r in solved.items():
-            families.setdefault(r["family"], []).append(k)
-        all_prints, differences = [], {}
-        several = sum(1 for keys in families.values() if len(keys) > 1)
-        pairs_file, version = os.path.join(out_dir, "pairs.npz"), comparison_version()
-        cached = load_pairs(pairs_file, version)
-        print(f"{len(families)} families, {several} of several label photos to compare; {len(cached)} pairs cached", flush=True)
-        pairs, compared, unsaved, done = {}, 0, 0, 0
-        for fam, keys in sorted(families.items()):
-            keys = sorted(keys)
-            shape = solved[keys[0]]["shape"]
-            if len(keys) == 1:
-                all_prints.append({"keys": keys, "family": fam})
+        solved = json.load(open(solve_file))["label_photos"]
+        # deleted since solve ran (review-prints' Delete label photo: marked not a label, or its photo deleted): left out
+        not_labels = json.load(open(NOT_LABELS)) if os.path.exists(NOT_LABELS) else {}
+        present = set(photos.chosen(args.sample))
+        solved = {k: r for k, r in solved.items() if k not in not_labels and r["photo"] in present}
+        serial = json.load(open(serials_file))
+        unread = [k for k in solved if "straightened_serial" not in serial.get(k, {})]
+        if unread:
+            sys.exit(f"{len(unread)} label photos read-serials hasn't read (like {unread[0]}): the steps ran in the wrong "
+                     "order; run make straighten and make read-serials first (stored-prints.md, rule 5)")
+        outlines = {lp["key"]: lp["outline"] for lp in json.load(open(found_file))["label_photos"]}
+        store = stored_prints.Store(store_file)
+        record = lambda k: {"outline": outlines.get(k), "pose": solved[k]}
+        log_start = len(store.data["log"])
+        frozen_keys = {k for p in store.prints.values() if p.get("frozen") for k in p["label_photos"]}
+        # 2. open prints: their label photos matched to this run's
+        of_photo = {}
+        for k in solved:
+            of_photo.setdefault(k.split("@")[0], []).append(k)
+        taken = set(frozen_keys)
+        for pid in sorted(store.prints):
+            if store.prints[pid].get("frozen"):
                 continue
-            fixed = {}
-            for i, k in enumerate(keys):
-                if k in frozen_of:
-                    fixed.setdefault(frozen_of[k], []).append(i)
-            done += 1
-            if done % 50 == 0 or done == several:
-                print(f"compared {done} of {several} families ({len(keys)} label photos in this one)", flush=True)
-            paths = [os.path.join(gen, "straighten", straighten.file_name(k)) for k in keys]
-            fps = [image_fingerprint(f) for f in paths]
-            views = {}
-            view = lambda i: views[i] if i in views else views.setdefault(i, tile_views(paths[i], shape))
-            n, found = len(keys), {}
+            old = sorted(store.prints[pid]["label_photos"])
+            sizes = photo_sizes({k.split("@")[0] for k in old if k not in solved}, gen)
+            now = {k: print_ids.same_label_photo(k, of_photo.get(k.split("@")[0], []), outlines, sizes) for k in old}
+            lost = [k for k in old if now[k] is None or now[k] in taken]
+            moved = {k: n for k, n in now.items() if n is not None and n != k and n not in taken}
+            taken.update(n for k, n in now.items() if n is not None and k not in lost)
+            if moved:
+                store.add(pid, {n: record(n) for n in moved.values()}, manual=False)
+            if lost or moved:
+                store.remove(pid, lost + list(moved), manual=False)
+            if pid in store.prints:
+                store.write_back(pid, {k: record(k) for k in store.prints[pid]["label_photos"] if k in solved})
+        # 3. new label photos
+        stored = store.print_of()
+        new = sorted(k for k in solved if k not in stored)
+        pairs_file, version = os.path.join(out_dir, "pairs.npz"), comparison_version()
+        comparer = Comparer(gen, solved, load_pairs(pairs_file, version))
+        members = lambda: {pid: sorted(p["label_photos"]) for pid, p in store.prints.items() if not p.get("frozen")}
+        by_serial, by_family = {}, {}
+        for pid, p in store.prints.items():
+            if not p.get("frozen"):
+                if p.get("serial"):
+                    by_serial.setdefault(p["serial"], []).append(pid)
+                for k in p["label_photos"]:
+                    if k in solved:
+                        by_family.setdefault(solved[k]["family"], set()).add(pid)
+        mem = members()
+        print(f"{len(store.prints)} stored prints; {len(new)} new label photos", flush=True)
+        left = {}
+        for n, k in enumerate(new):
+            if n % 200 == 0 and n:
+                print(f"placed {n} of {len(new)} new label photos ({comparer.compared} pairs compared)", flush=True)
+            s = serial[k]["straightened_serial"]
+            if s:
+                pid = comparer.best(k, sorted(by_serial.get(s, [])), mem)
+                if pid:
+                    store.add(pid, {k: record(k)}, manual=False)
+                    mem[pid].append(k)
+                else:
+                    left.setdefault((s, solved[k]["shape"]), []).append(k)
+            else:
+                pid = comparer.best(k, sorted(by_family.get(solved[k]["family"], set())), mem)
+                if pid:
+                    store.add(pid, {k: {**record(k), "joined_without_serial": True}}, manual=False)
+                    mem[pid].append(k)
+                else:
+                    store.make({k: record(k)}, None, manual=False, release=serial[k].get("release"))
+        for (s, shape), keys in sorted(left.items()):
+            n = len(keys)
+            D = np.zeros((n, n) + comparer.view(keys[0])[1].shape, bool) if n > 1 else None
             for i, j in itertools.combinations(range(n), 2):
-                name = f"{keys[i]}|{keys[j]}|{fps[i]}|{fps[j]}"
-                if name not in cached:
-                    cached[name] = tiles_textured_in_both_and_not_correlating(view(i), view(j))
-                    compared += 1
-                    unsaved += 1
-                found[i, j] = pairs[name] = cached[name]
-            grid = next(iter(found.values())).shape
-            D = np.zeros((n, n) + grid, bool)
-            for (i, j), m in found.items():
-                D[i, j] = D[j, i] = m
-            groups, differs = split_family(D.reshape(n, n, -1), list(fixed.values()))
-            if differs.any():
-                differences[fam] = {"grid": list(grid), "tiles": np.flatnonzero(differs).tolist()}
-            if unsaved and done % SAVE_EVERY == 0:
-                save_pairs(pairs_file, version, cached)
-                unsaved = 0
-            all_prints += [{"keys": [keys[i] for i in g], "family": fam} for g in groups]
-        save_pairs(pairs_file, version, pairs)  # this run's pairs only: those no longer in a family dropped
-        print(f"{compared} pairs compared, {len(pairs) - compared} from the cache", flush=True)
-        steps.write_json(os.path.join(out_dir, "automatic.json"), {"prints": all_prints})
-        all_prints = corrected(all_prints, solved, frozen_of, gen)
-        present = {pid for pid in frozen_of.values()}
-        all_prints += [{"keys": [], "family": None} for pid in frozen_entries if pid not in present]
-        missing = [pid for pid in frozen_entries if pid not in present]
-        for p, pid in zip(all_prints[len(all_prints) - len(missing):], missing):
-            p["frozen"] = pid
-        for p in all_prints:
-            if "frozen" not in p:
-                f = {frozen_of[k] for k in p["keys"] if k in frozen_of}
-                if f:
-                    p["frozen"] = f.pop()
-            ser = Counter(serial.get(k, {}).get("serial") for k in p["keys"] if serial.get(k, {}).get("serial"))
-            p["serial"] = ser.most_common(1)[0][0] if ser else None
-            p["shape"] = solved[p["keys"][0]]["shape"] if p["keys"] else frozen_entries[p["frozen"]]["shape"]
-            if p.get("frozen"):  # as frozen
-                p["serial"] = frozen_entries[p["frozen"]]["serial"]
-            p["release"] = print_release(p["serial"], [serial.get(k, {}) for k in p["keys"]])
-        ids_file = print_ids.IDS_FILE if not args.sample else os.path.join(out_dir, print_ids.IDS_FILE)
-        changes = keep_ids(all_prints, ids_file, gen)
+                m = comparer.tiles(keys[i], keys[j])
+                if m is not None:
+                    D[i, j] = D[j, i] = m
+            groups = split_family(D.reshape(n, n, -1))[0] if n > 1 else [[0]]
+            for g in groups:
+                store.make({keys[i]: record(keys[i]) for i in g}, s, manual=False)
+        save_pairs(pairs_file, version, {**comparer.cached})
+        print(f"{comparer.compared} pairs compared", flush=True)
+        store.save()
+        # what this run changed
+        changes = []
+        for e in store.data["log"][log_start:]:
+            for pid, after in e["after"].items():
+                before = e["before"].get(pid)
+                if before is None and after is not None:
+                    changes.append({"kind": "new", "id": pid, "keys": after["keys"]})
+                elif after is None:
+                    changes.append({"kind": "gone", "id": pid})
+                else:
+                    gained = sorted(set(after["keys"]) - set(before["keys"]))
+                    lost = sorted(set(before["keys"]) - set(after["keys"]))
+                    if gained:
+                        changes.append({"kind": "added", "id": pid, "keys": gained})
+                    if lost:
+                        changes.append({"kind": "removed", "id": pid, "keys": lost})
+        # written out
+        all_prints = []
+        for pid, p in sorted(store.prints.items()):
+            keys = sorted(p["label_photos"])
+            pose = lambda k: solved.get(k) or p["label_photos"][k].get("pose") or {}
+            fams = Counter(pose(k).get("family") for k in keys if pose(k).get("family"))
+            e = {"id": pid, "keys": keys, "serial": p.get("serial"),
+                 "shape": p.get("shape") or (pose(keys[0]).get("shape") if keys else None),
+                 "family": fams.most_common(1)[0][0] if fams else None}
+            if len(fams) > 1:
+                e["families"] = sorted(fams)
+            if p.get("frozen"):
+                e["frozen"] = pid
+            e["release"] = print_release(e["serial"], [serial.get(k, {}) for k in keys])
+            all_prints.append(e)
         for d in os.listdir(out_dir):  # pair images (pooling masks) of earlier versions
             if os.path.isdir(os.path.join(out_dir, d)):
                 for f in os.listdir(os.path.join(out_dir, d)):
                     os.remove(os.path.join(out_dir, d, f))
                 os.rmdir(os.path.join(out_dir, d))
-        steps.write_json(out, {"prints": sorted(all_prints, key=lambda p: p["id"]), "tile_mm": TILE_MM,
-                               "differences": differences})
+        steps.write_json(out, {"prints": all_prints, "tile_mm": TILE_MM, "differences": {}})
         steps.write_json(os.path.join(out_dir, "few-photos.json"), sorted(p["id"] for p in all_prints if len(p["keys"]) < FEW and not p.get("frozen")))
         steps.write_json(os.path.join(out_dir, "id-changes.json"), changes)
+        counts = Counter(c["kind"] for c in changes)
+        print("store changes: " + (", ".join(f"{n} {k}" for k, n in sorted(counts.items())) or "none"), flush=True)
     result = json.load(open(out))
     page(out_dir, result, gen)
     print(f"{len(result['prints'])} prints of {sum(len(p['keys']) for p in result['prints'])} label photos; page: {os.path.join(out_dir, 'index.html')}")
@@ -382,10 +431,10 @@ def page(out_dir, result, gen):
     changes_file = os.path.join(out_dir, "id-changes.json")
     changes = json.load(open(changes_file)) if os.path.exists(changes_file) else []
     counts = Counter(c["kind"] for c in changes)
-    words = {"split": lambda c: f'{c["id"]} split from {c["from"]}', "merged": lambda c: f'{c["id"]} merged into {c["into"]}',
-             "renamed": lambda c: f'{c["from"]} renamed {c["id"]}', "gone": lambda c: f'{c["id"]}: no label photo left'}
+    words = {"new": lambda c: f'{c["id"]}: new, {len(c["keys"])} label photos', "added": lambda c: f'{c["id"]}: {len(c["keys"])} label photos added',
+             "removed": lambda c: f'{c["id"]}: {len(c["keys"])} label photos gone', "gone": lambda c: f'{c["id"]}: no label photo left'}
     listed = "".join(f"<li>{html.escape(words[c['kind']](c))}</li>" for c in changes if c["kind"] in words)
-    ids = (f'<p>Print ids this run: {", ".join(f"{v} {k}" for k, v in sorted(counts.items()))}.</p>'
+    ids = (f'<p>Changes to the stored prints this run: {", ".join(f"{v} {k}" for k, v in sorted(counts.items()))}.</p>'
            + (f"<ul>{listed}</ul>" if listed else "")) if changes else ""
     with open(os.path.join(out_dir, "index.html"), "w") as f:
         f.write(f"""<!doctype html><meta charset="utf-8"><title>prints</title>
