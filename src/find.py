@@ -31,6 +31,10 @@
 #      background, embossing) starts nothing.
 #   4. Label photos of one photo whose outlines (the hull of their evidence) share MERGE_OVERLAP of the smaller are
 #      one: spreading's circles are rough and may land a second label photo on one already there.
+#   Never one label photo, in 1 or 4: two whose exact serials name different releases (other_games; the user,
+#   2026-11-22: two cartridges side by side, AGB-AXVP-EUR and CGB-BYTP-EUR, had been merged into one, and one label was
+#   lost). One sticker read as two releases (a misread) is two label photos here; solve merges label photos whose fits
+#   overlap (merge_fitted).
 # Not labels: an area a person marked as not a label (NOT_LABELS, from make fit-by-hand: the fitted cut and find's
 # outline of the label photo, in the photo's pixels) holds no label photo: a candidate whose centre lies in either is
 # left out, from the seeds (rejected, with why) and from spreading (none is made there, so none spreads from it).
@@ -96,14 +100,31 @@ def detail_seeds(found):
             for d in found]
 
 
+def releases(strings):
+    """The releases a label photo's (or seed group's) exact serials name."""
+    return {t["release"] for t in strings if t.get("kind") == "exact" and t.get("release")}
+
+
+def other_games(a, b):
+    """Whether two label photos' (or seed groups') exact serials name different releases: then they're two labels,
+    never one (the user, 2026-11-22: two cartridges side by side were merged into one label photo)."""
+    ra, rb = releases(a), releases(b)
+    return bool(ra and rb and not ra & rb)
+
+
 def group(seeds):
-    """Seeds of one label (within the larger one's reach of each other) as candidates: [[seed...]]."""
+    """Seeds of one label (within the larger one's reach of each other) as candidates: [[seed...]]; never two exact
+    serials of different releases in one (other_games)."""
     reach = lambda s: s.get("reach", MERGE * s.get("height", 0))
     groups = []
     for s in seeds:
         near = [g for g in groups if any(np.hypot(*np.subtract(s["centre"], t["centre"])) < max(reach(s), reach(t)) for t in g)]
-        merged = [s] + [t for g in near for t in g]
-        groups = [g for g in groups if g not in near] + [merged]
+        merged, joined = [s], []
+        for g in near:
+            if not other_games(merged, g):
+                merged += g
+                joined.append(g)
+        groups = [g for g in groups if not any(g is j for j in joined)] + [merged]
     return groups
 
 
@@ -169,12 +190,13 @@ FOUND_BY = ["frozen", "frozen print", "serial", "near serial", "detail", "string
 
 
 def merge_overlapping(lps):
-    """Label photos of one photo whose outlines share MERGE_OVERLAP of the smaller are merged: strings, points and
-    links combined; the centre and circle of the one with strings (else the first); found by the strongest."""
+    """Label photos of one photo whose outlines share MERGE_OVERLAP of the smaller are merged, unless their exact
+    serials name different releases (other_games: two labels): strings, points and links combined; the centre and circle of the one with strings (else the first); found by the strongest."""
     out, of_photo = [], {}  # of_photo: photo -> indices in out (by identity: == on these dicts compares numpy arrays)
     for lp in lps:
         here = of_photo.setdefault(lp["photo"], [])
-        i = next((i for i in here if overlap(out[i]["outline"], lp["outline"]) >= MERGE_OVERLAP), None)
+        i = next((i for i in here if overlap(out[i]["outline"], lp["outline"]) >= MERGE_OVERLAP
+                  and not other_games(out[i]["strings"], lp["strings"])), None)
         if i is None:
             here.append(len(out))
             out.append(lp)
