@@ -1519,6 +1519,11 @@ def from_frozen_match(out, lps, failed, photo_paths, frozen_entries):
 
 def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None, stored_records=None):
     lps = found["label_photos"]
+    keys = [lp["key"] for lp in lps]
+    if len(set(keys)) < len(keys):  # find makes keys unique (find.unique_keys); two alike would both be merged away
+        seen = set()
+        twice = sorted({k for k in keys if k in seen or seen.add(k)})
+        sys.exit(f"{len(twice)} keys found twice in find's output (like {twice[0]}): run make find again")
     for lp in lps:
         lp["centre"] = np.float64(lp["centre"])
     global _GEN_DIR

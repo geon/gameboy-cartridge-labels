@@ -151,6 +151,32 @@ def key(sha1, centre, size):
     return f"{sha1}@{int(centre[0] / size[0] * 100)},{int(centre[1] / size[1] * 100)}"
 
 
+# Keys are unique: a new label photo whose key (its centre in whole percents of the photo) is already taken in its photo,
+# by a stored label photo or another new one, takes the nearest free x,y (the user, 2026-11-22: 65 keys found twice in lot
+# photos, a new label photo beside a stored one; solve then dropped both). Stored keys never change.
+def unique_keys(lps, sizes):
+    taken = {}
+    for lp in lps:
+        if lp.get("stored_key"):
+            lp["key"] = lp["stored_key"]
+            taken.setdefault(lp["photo"], set()).add(lp["key"])
+    for lp in sorted((lp for lp in lps if not lp.get("stored_key")), key=lambda lp: (lp["photo"], tuple(lp["centre"]))):
+        w, h = sizes[lp["photo"]]
+        x, y = lp["centre"][0] / w * 100, lp["centre"][1] / h * 100
+        here = taken.setdefault(lp["photo"], set())
+        free = lambda i, j: f"{lp['photo']}@{i},{j}" not in here
+        i, j = int(x), int(y)
+        r = 0
+        while not free(i, j):  # rings outward; the nearest free one is in the first ring holding one or the next
+            r += 1
+            ring = lambda r: [(int(x) + di, int(y) + dj) for di in range(-r, r + 1) for dj in range(-r, r + 1) if max(abs(di), abs(dj)) == r]
+            near = [c for c in ring(r) + ring(r + 1) if free(*c)]
+            if near:
+                i, j = min(near, key=lambda c: ((c[0] + 0.5 - x) ** 2 + (c[1] + 0.5 - y) ** 2, c))
+        lp["key"] = f"{lp['photo']}@{i},{j}"
+        here.add(lp["key"])
+
+
 def inside(points, lp):
     return np.hypot(*(np.asarray(points) - lp["centre"]).T) < lp["radius"]
 
@@ -398,7 +424,7 @@ def find(chosen, texts, matches, release_of, detections=None, use_strings=True, 
     lps = merge_overlapping(lps)
     for lp in lps:
         lp["outline"] = outline(lp)
-        lp["key"] = lp.get("stored_key") or key(lp["photo"], lp["centre"], sizes[lp["photo"]])
+    unique_keys(lps, sizes)
     for lp in lps:
         own = [shape_of(t["serial"]) for t in lp["strings"] if t["kind"] != "unknown"]
         lp["shape"] = most(own, lp.get("detail_shape")) if own else lp.get("detail_shape")
