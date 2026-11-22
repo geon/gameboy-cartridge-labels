@@ -73,9 +73,9 @@ The wrong merges were reverted by hand on 2026-11-22: split decisions in print-c
 - **read-serials** (rule 12): the serial and the title text from the straightened label photo's OCR only. On the full set 84 label photos lost their serial, 29 changed, 1 gained.
 - **find and solve from the stored label photos** (rule 9): find takes every stored label photo as it is (key, stored cut as outline, area taken, never merged; found_by "stored" or "frozen"); solve takes an open print's stored pose as its stage 1 fit (no refitting, stages 2 and 3 refine; the stored poses are where stage 1's work is kept) and never merges two stored ones. Tried on 40 photos: all 41 stored label photos kept their keys and cuts. Stored label photos don't make find or solve run again: they're read when those run for their other inputs.
 - **The prints step stops on a missing stored label photo** (rule 10), and remove-low-resolution (automatic) and fit-by-hand's Not a label (manual) go through the interface.
+- **Every print unfrozen** (the user, 2026-11-22); 28 label photos whose photos had gone from photos/ before 2026-11-22 (in 15 prints) taken out by hand.
 
 ## Not yet built (as of 2026-11-22)
 
-- **Frozen prints in the pipeline.** They still pass through find, match, solve, restore and publish (find and solve take their stored outlines and poses as they are). Frozen prints whose photos are gone (15 of 289, from before 2026-11-22) aren't checked.
-- **The store's size.** prints.json is about 45 MB, committed.
+- **Frozen prints in the pipeline.** They still pass through find, match, solve, restore and publish (find and solve take their stored outlines and poses as they are).
 - **Steps run on their own.** make all runs the steps in order and stops on the first failure, so read-serials always runs before prints there; make prints alone after a new solve stops with rule 5's error until make straighten read-serials have run.
