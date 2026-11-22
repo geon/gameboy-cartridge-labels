@@ -20,7 +20,7 @@
 #     drift a little as it changes, which doesn't matter for finding the worst; a print's total is summed when shown;
 #     "n of N prints measured" while that runs). One print a page:
 #     the restored image now and the would-be one side by side, the full width; under them every label photo of the
-#     print in one row, the best first, scaled to fit. The would-be one starts from optimize.proposal (the worse half
+#     print in rows of at most 10, the best first, scaled to fit. The would-be one starts from optimize.proposal (the worse half
 #     left out); clicking a label photo toggles it, and the would-be image is restored again (restore.restore_print, in
 #     background processes; cached per set of label photos in <generated>/review-prints/optimize/would-be/; the latest
 #     click wins). Accept, after a confirmation: the label photos left out deleted as "Delete label photo" does (one
@@ -555,8 +555,8 @@ button:disabled{opacity:.4;cursor:default}
 .pair img{width:100%;display:block}
 .pair figcaption{font-size:12px;color:#aaa;margin:4px 0}
 .pair .waiting{opacity:.45}
-.optrow{display:flex;gap:4px;width:100%;margin-top:8px}
-.opt{flex:1 1 0;min-width:0;cursor:pointer;font-size:10px;line-height:1.25;overflow:hidden}
+.optrow{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:4px;width:100%;margin-top:8px}
+.opt{min-width:0;cursor:pointer;font-size:10px;line-height:1.25;overflow:hidden}
 .opt .crop{overflow:hidden;width:100%;outline:2px solid #5a8;outline-offset:-2px}
 .opt .crop img{display:block;max-width:none}
 .opt.off .crop{opacity:.3;outline-color:#e55}
@@ -777,7 +777,7 @@ function optimizeCard(P) {
   card.append(el("div", {class: "pair"},
     el("figure", {}, el("img", {src: "/print/" + encodeURIComponent(P.id) + "?t=" + Date.now()}), el("figcaption", {}, `Restored now, from ${P.used_now} label photos`)),
     el("figure", {}, wb, wbCap)));
-  const row = el("div", {class: "optrow"});
+  const row = el("div", {class: "optrow", style: `--cols:${Math.min(10, P.label_photos.length)}`});  // at most 10 per row (the user)
   const c = P.crop, [cw] = P.canvas;
   for (const lp of P.label_photos) {
     const img = el("img", {loading: "lazy", src: "/label/" + encodeURIComponent(lp.key),
