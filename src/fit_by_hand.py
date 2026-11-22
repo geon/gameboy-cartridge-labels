@@ -18,7 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cv2, numpy as np
-import solve as solve_step, straighten, cuts, shapes, steps, find as find_step
+import solve as solve_step, straighten, cuts, shapes, steps, find as find_step, stored_prints
 
 GEN = "generated"
 HAND_FILE = "hand-fit-labels.json"  # {label photo key: {"corners": [[x, y] x 4: the cut's top left, top right, bottom right, bottom left, in the photo's pixels], "datetime"}}
@@ -95,6 +95,12 @@ class Hand:
             steps.write_json(find_step.NOT_LABELS, marked)
             if self.hand.pop(key, None):
                 steps.write_json(HAND_FILE, self.hand)
+            # out of its stored print, by hand (stored-prints.md rule 10: a frozen one unfreezes)
+            store = stored_prints.Store()
+            pid = store.print_of().get(key)
+            if pid:
+                store.remove(pid, [key], manual=True, why="not a label (fit-by-hand)")
+                store.save()
             self.order = [k for k in self.order if k != key]
             self.conf.pop(key, None)
 

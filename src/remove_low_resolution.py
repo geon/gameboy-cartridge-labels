@@ -7,13 +7,14 @@
 # beside it is more likely a misfit than a blurry photo); one with no solved label photo is left to remove-photos'
 # Unused tab. Each deletion is recorded in <generated>/remove-low-resolution/deleted.json ({sha1: {"px_per_mm" (its
 # label photos'), "source" (its photo-sources.json record), "date"}}), kept across runs.
-# A photo holding a label photo of a frozen print is never deleted (stored-prints.md rule 7).
+# A photo holding a label photo of a frozen print is never deleted (stored-prints.md rule 7); a deleted photo's label
+# photos leave their stored prints through the store's interface (automatic).
 # Usage: remove_low_resolution.py [--sample]
 import argparse, datetime, json, os, sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, shapes, steps, frozen
+import photos, shapes, steps, frozen, stored_prints
 
 MIN_PX_PER_MM = 10.0
 SOURCES = "photo-sources.json"
@@ -52,9 +53,21 @@ def main():
     log = json.load(open(log_file)) if os.path.exists(log_file) else {}
     sources = json.load(open(SOURCES)) if os.path.exists(SOURCES) else {}
     today = datetime.date.today().isoformat()
+    store = stored_prints.Store(None if not args.sample else os.path.join(gen, "prints", stored_prints.FILE))
+    of = store.print_of()
     for s, ppm in sorted(low.items()):
         log[s] = {"px_per_mm": ppm, "source": sources.get(s), "date": today}
         photos.delete(s)
+        # its label photos out of their stored prints (automatic: open prints only, frozen ones were kept above)
+        by_print = {}
+        for k, pid in of.items():
+            if k.split("@")[0] == s:
+                by_print.setdefault(pid, []).append(k)
+        for pid, keys in sorted(by_print.items()):
+            if pid in store.prints:
+                store.remove(pid, keys, manual=False, why="photo deleted: low resolution")
+    if low:
+        store.save()
     steps.write_json(log_file, log)
     print(f"{len(low)} photos deleted (every label photo under {MIN_PX_PER_MM:g} px/mm); {len(log)} in all: {log_file}")
 
