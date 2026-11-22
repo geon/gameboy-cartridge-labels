@@ -7,12 +7,13 @@
 # beside it is more likely a misfit than a blurry photo); one with no solved label photo is left to remove-photos'
 # Unused tab. Each deletion is recorded in <generated>/remove-low-resolution/deleted.json ({sha1: {"px_per_mm" (its
 # label photos'), "source" (its photo-sources.json record), "date"}}), kept across runs.
+# A photo holding a label photo of a frozen print is never deleted (stored-prints.md rule 7).
 # Usage: remove_low_resolution.py [--sample]
 import argparse, datetime, json, os, sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import photos, shapes, steps
+import photos, shapes, steps, frozen
 
 MIN_PX_PER_MM = 10.0
 SOURCES = "photo-sources.json"
@@ -40,6 +41,12 @@ def main():
         return
     present = photos.chosen(args.sample)
     low = low_resolution(json.load(open(solve_file))["label_photos"], present)
+    # never a photo of a frozen print (stored-prints.md rule 7: no step changes a frozen print)
+    of_frozen = {k.split("@")[0] for k in frozen.label_photos(frozen.load())}
+    kept = sorted(s for s in low if s in of_frozen)
+    low = {s: v for s, v in low.items() if s not in of_frozen}
+    if kept:
+        print(f"{len(kept)} low-resolution photos kept: they hold label photos of frozen prints", flush=True)
     log_file = os.path.join(gen, "remove-low-resolution", "deleted.json")
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     log = json.load(open(log_file)) if os.path.exists(log_file) else {}

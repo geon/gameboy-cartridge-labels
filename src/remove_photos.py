@@ -9,9 +9,10 @@
 #   - Restored prints: every print's restored image (restore), 18 at a time in 2 columns, the unmarked first, each to mark Good or
 #     Bad (MARKS_FILE). A mark is of that image file (its SHA-1): a print restored differently is unmarked again. An
 #     image the pipeline has changed since the page loaded is not shown, nor can it be marked (restart the tool).
-#     Freeze (and Unfreeze) beside Good and Bad: a print the user accepts is frozen (src/frozen.py: frozen-prints.json and
-#     frozen/<id>.avif, persistent-prints.md stage 2): its label photos, poses and image are kept as they are and no
-#     step recomputes them. A button only, no key (the user: keys next to S are too easy to hit).
+#     Freeze (and Unfreeze, without asking) beside Good and Bad: a print the user accepts is frozen (the store,
+#     prints.json, stored-prints.md; src/frozen.py; its image at frozen/<id>.avif): no step changes it. A deleted photo's
+#     label photos leave their stored prints, by hand (a frozen one is unfrozen). A button only, no key (the user: keys
+#     next to S are too easy to hit).
 # The tabs keep their pages as loaded (the user, 2026-11-12: a photo deleted or OK-ed leaves its place, nothing moves).
 #   - Bad photos: every print (prints.json) with its label photos (in prints.json's order), by print id (a game's prints
 #     together); a search box keeps the prints whose id holds every word typed. Each label photo: "Delete"; deleting a
@@ -26,7 +27,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cv2, numpy as np
-import photos, steps, straighten, shapes, publish, frozen
+import photos, steps, straighten, shapes, publish, frozen, stored_prints
 
 GEN = "generated"
 THUMB_PX = 600
@@ -191,11 +192,22 @@ class Tool:
         done = []
         with lock:
             have = photos.all_photos()
+            store = stored_prints.Store()
+            of = store.print_of()
             for s in sha1s:
                 if s in have:
                     photos.delete(s)
                     print(f"deleted {s}", flush=True)
+                    # its label photos out of their stored prints, by hand (a frozen print unfreezes: stored-prints.md)
+                    by_print = {}
+                    for k, pid in of.items():
+                        if k.split("@")[0] == s:
+                            by_print.setdefault(pid, []).append(k)
+                    for pid, keys in by_print.items():
+                        if pid in store.prints:
+                            store.remove(pid, keys, manual=True, why="photo deleted in remove-photos")
                 done.append(s)
+            store.save()
         return done
 
 
@@ -318,7 +330,6 @@ async function setMark(p, mark) {
 }
 
 async function setFrozen(p, on) {
-  if (!on && !confirm(`Unfreeze ${p.id}? Its frozen image is deleted; the next run restores it again.`)) return;
   const r = await fetch("/freeze", {method: "POST", body: JSON.stringify({print: p.id, on})});
   if (!r.ok) { alert(await r.text()); return; }
   S.frozen = on ? [...S.frozen, p.id] : S.frozen.filter(x => x !== p.id);
