@@ -77,5 +77,5 @@ The wrong merges were reverted by hand on 2026-11-22: split decisions in print-c
 
 ## Not yet built (as of 2026-11-22)
 
-- **Frozen prints in the pipeline.** They still pass through find, match, solve, restore and publish (find and solve take their stored outlines and poses as they are).
+- Nothing of the rules. Frozen prints still take part in the steps on purpose: new photos are matched against their images and their label photos anchor their family in solve's stage 2, so new label photos line up with them; the rest of their work is cached (edges, straighten, read-serials) or skipped (match, solve's stage 1, prints, restore).
 - **Steps run on their own.** make all runs the steps in order and stops on the first failure, so read-serials always runs before prints there; make prints alone after a new solve stops with rule 5's error until make straighten read-serials have run.
