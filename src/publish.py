@@ -12,9 +12,6 @@
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
 #     with its label photos' sources.
-#   browse.html: the same, but only the prints select-visually-distinct selected (its selected.json): prints for
-#     browsing, without the ones that differ only by serial, region or a moved logo (the user, 2026-11-20). Linked from
-#     index.html and back.
 # Prints of a single label photo (poor fits counted) are left out, with their label photo (the user, 2026-11-15).
 # The source and URLs come from photo-sources.json (by SHA-1): for output only, never read by a detection step.
 # The folder starts empty (make build removes it first), so every file is written anew.
@@ -65,8 +62,7 @@ def main():
     args = ap.parse_args()
     gen = photos.generated(args.sample)
     need = [os.path.join(gen, "prints", "prints.json"), os.path.join(gen, "solve", "solve.json"),
-            os.path.join(gen, "read-serials", "serials.json"), os.path.join(gen, "restore", "index.html"),
-            os.path.join(gen, "select-visually-distinct", "selected.json")]
+            os.path.join(gen, "read-serials", "serials.json"), os.path.join(gen, "restore", "index.html")]
     for f in need:
         if not os.path.exists(f):
             sys.exit(f"no {f}: run the steps before publish")
@@ -132,13 +128,10 @@ def main():
     wanted.page(out_dir, wanted_list)
     wanted_count = len(wanted.games(wanted_list))  # the rows of wanted.html: one per game and region group
     shown = [p for p in index["prints"].values() if p["image"]]
-    chosen = browse(index, json.load(open(need[4])))
-    page(out_dir, index, wanted_count, shown, "index.html", f'<a href="browse.html">Browse</a>: {len(chosen)} of these prints, the visually distinct ones (no other serials, regions or moved logos)')
-    page(out_dir, index, wanted_count, chosen, "browse.html", f'The visually distinct prints: {len(chosen)} of the {len(shown)} (<a href="index.html">all of them</a>). Prints of one game that look alike, differing only by serial, region or a moved logo, are shown once.')
+    page(out_dir, index, wanted_count, shown, "index.html")
     print(f"{single} prints of a single label photo left out")
     print(f"{len(copies)} prints, {len(index['label_photos'])} label photos listed ({len(poor & set(index['label_photos']))} poor fits)")
     print(f"{len(wanted_list)} prints wanted (wanted.html)")
-    print(f"{len(chosen)} prints for browsing (browse.html)")
     print(f"page: {os.path.join(out_dir, 'index.html')}")
 
 
@@ -151,22 +144,11 @@ def used_photos(index, p):
     return sum(1 for k in p["label_photos"] if not index["label_photos"][k]["poor_fit"])
 
 
-def browse(index, selection):
-    """The prints with an image that select-visually-distinct selected (selection: its selected.json). Fails if it
-    hasn't seen one of them (it reads the same prints and images: run it again)."""
-    seen = set(selection["selected"]) | set(selection["left_out"])
-    missing = [pid for pid, p in index["prints"].items() if p["image"] and pid not in seen]
-    if missing:
-        sys.exit(f"{len(missing)} prints with an image not in select-visually-distinct's selected.json ({missing[0]}, ...): run make select-visually-distinct")
-    selected = set(selection["selected"])
-    return [p for pid, p in sorted(index["prints"].items()) if p["image"] and pid in selected]
-
-
-def page(out_dir, index, wanted_count, shown, file, note):
-    """A page of prints (index.html: all with an image; browse.html: browse()'s): per platform (linked from the top,
+def page(out_dir, index, wanted_count, shown, file):
+    """A page of prints (index.html: all with an image): per platform (linked from the top,
     with its image count, and the total) by game title (prints without one last, by serial), in a grid of as many
     columns as fit (MIN_COLUMN); each image at most half its pixel width wide, so it shows at 2x pixel density or
-    more. note: a line at the top."""
+    more."""
     lp = index["label_photos"]
     used = lambda p: used_photos(index, p)
     order = lambda p: (p["title"] is None, (p["title"] or "").casefold(), str(p["serial"] or p["release"] or ""))
@@ -193,7 +175,6 @@ def page(out_dir, index, wanted_count, shown, file, note):
 figure{{margin:0;min-width:0}} figure img{{display:block;width:100%;height:auto;margin:0 auto}} figcaption{{font-size:12px;margin:4px 0}}
 .src{{font-size:11px;color:#bbb;margin-top:2px}} .poor{{color:#fa0}} a{{color:#9cf}} h2{{margin-top:32px}}</style>
 <p><a href="wanted.html">Wanted photos</a>: help find photos of {wanted_count} cartridges</p>
-<p>{note}</p>
 <ul>{"".join(links)}<li>Total: {sum(1 for p in shown if p["shape"] in dict(PLATFORMS))} images</li></ul>
 {"".join(sections)}""")
 
