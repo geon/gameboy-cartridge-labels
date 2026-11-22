@@ -15,15 +15,17 @@
 #   - Search: a serial, a stem or an id (its start), up to SEARCH_MAX prints.
 #   - Recent changes: the store's change log, the latest first; Undo on the latest manual change (Store.undo).
 #   - Optimize (the user, 2026-11-22): the restored prints, the most total badness first (src/optimize.py: each label
-#     photo's detail and divergence against the restored image, measured in background processes and cached in
-#     <generated>/review-prints/optimize/measures.json; "n of N prints measured" while that runs). One print a page:
+#     photo's detail and divergence against its print's restored image, measured once per label photo in background
+#     processes and kept in <generated>/review-prints/optimize/measures.json, {key: measures}: a print's divergences
+#     drift a little as it changes, which doesn't matter for finding the worst; a print's total is summed when shown;
+#     "n of N prints measured" while that runs). One print a page:
 #     the restored image now and the would-be one side by side, the full width; under them every label photo of the
 #     print in one row, the best first, scaled to fit. The would-be one starts from optimize.proposal (the worse half
 #     left out); clicking a label photo toggles it, and the would-be image is restored again (restore.restore_print, in
 #     background processes; cached per set of label photos in <generated>/review-prints/optimize/would-be/; the latest
 #     click wins). Accept, after a confirmation: the label photos left out deleted as "Delete label photo" does (one
-#     change in the log), the would-be image and its description written to <generated>/restore/ as the print's, and
-#     the print marked looked_at.optimized with its label photos (not shown again while they're these).
+#     change in the log), and the would-be image and its description written to <generated>/restore/ as the print's.
+#     Nothing marks a print optimized: with good label photos left, its total is low and it sinks (the user).
 # Each print: its label photos sorted by straightened serial (none last), straighten's image as is (full resolution
 # and uncropped, for pinch-zooming), each with a tick box: "Split off ticked" makes the ticked a print of their own (the
 # serial their straightened reads give most, else the print's). A print's tick box marks it for joining: "Join ticked"
@@ -320,6 +322,7 @@ class Tool:
         self.px_per_mm, self.poor, self.approximate, self.image_of, self.shape_of = restore.fit_info(GEN, self.solved)
         self.measures_file = os.path.join(self.opt_dir, "measures.json")
         self.measures = json.load(open(self.measures_file)) if os.path.exists(self.measures_file) else {}
+        self.unmeasurable = set()
         self.measure_pool = ProcessPoolExecutor(MEASURE_WORKERS, initializer=optimize.nice)
         self.restore_pool = ProcessPoolExecutor(RESTORE_WORKERS, initializer=optimize.nice)
         self.pending = {}  # print id -> (key hash, future): its latest would-be restore
@@ -356,47 +359,55 @@ class Tool:
         return "poor fit" if k in self.poor else "ok"
 
     def measure_job(self, pid):
+        """optimize.measure's job for the print's label photos not measured yet, or None."""
         p = self.store.prints.get(pid)
         if not p or p.get("frozen"):
             return None
-        desc = self.restored_desc(pid)
+        keys = [k for k in sorted(p["label_photos"]) if k not in self.measures and k not in self.unmeasurable]
+        desc = self.restored_desc(pid) if keys else None
         if desc is None:
             return None
-        keys = sorted(p["label_photos"])
-        return (pid, self.restore_base(pid) + ".avif", desc["crop"], self.print_shape(pid, keys),
+        return (pid, self.restore_base(pid) + ".avif", desc["crop"], self.print_shape(pid, sorted(p["label_photos"])),
                 [(k, self.image_of(k), k in self.approximate) for k in keys])
 
     def measured(self, pid):
-        """The print's measures if they're of its restored image now and its label photos now, else None."""
-        e = self.measures.get(pid)
+        """{"keys", "measures": {key: measures or None}} if the print is restored and every label photo of it measured
+        (or found unmeasurable: no straightened image), else None."""
         p = self.store.prints.get(pid)
-        if not e or not p or e["keys"] != sorted(p["label_photos"]):
+        if not p or p.get("frozen"):
             return None
-        avif = self.restore_base(pid) + ".avif"
-        return e if os.path.exists(avif) and os.path.getmtime(avif) == e["mtime"] else None
+        keys = sorted(p["label_photos"])
+        if any(k not in self.measures and k not in self.unmeasurable for k in keys):
+            return None
+        if not os.path.exists(self.restore_base(pid) + ".avif"):
+            return None
+        return {"keys": keys, "measures": {k: self.measures.get(k) for k in keys}}
 
-    def measure_all(self, pids=None):
-        """Measures the prints not measured (or only pids), in the background, the most label photos first."""
+    def measure_all(self):
+        """Measures the label photos not measured yet, in the background, the prints with the most of them first."""
         with lock:
-            todo = [pid for pid in (pids or self.store.prints) if pids or self.measured(pid) is None]
-            jobs = [j for j in (self.measure_job(pid) for pid in todo) if j]
+            jobs = [j for j in (self.measure_job(pid) for pid in list(self.store.prints)) if j]
             jobs.sort(key=lambda j: -len(j[4]))
             self.measuring[1] += len(jobs)
         if not jobs:
             return
         by_id = {j[0]: j for j in jobs}
-        print(f"optimize: measuring {len(jobs)} restored prints in the background", flush=True)
+        print(f"optimize: measuring the label photos of {len(jobs)} restored prints in the background", flush=True)
         futures = [self.measure_pool.submit(optimize.measure, j) for j in jobs]
         for n, f in enumerate(as_completed(futures), 1):
             try:
-                pid, m, mtime = f.result()
+                pid, m, _ = f.result()
             except Exception as e:  # an image being rewritten by a running make: measured again next start
                 print(f"optimize: measuring failed: {e}", flush=True)
                 m = None
             with lock:
                 self.measuring[0] += 1
                 if m is not None:
-                    self.measures[pid] = {"mtime": mtime, "keys": [k for k, _, _ in by_id[pid][4]], "measures": m}
+                    for k, v in m.items():
+                        if v is None:  # no straightened image (yet): tried again next start
+                            self.unmeasurable.add(k)
+                        else:
+                            self.measures[k] = v
                 if n % MEASURES_SAVED_EVERY == 0 or n == len(futures):
                     steps.write_json(self.measures_file, self.measures)
                     self.compute_optimize()
@@ -421,12 +432,8 @@ class Tool:
         return lps, keep, shape
 
     def compute_optimize(self):
-        optimized = self.store.data["looked_at"].get("optimized", {})
         out = []
-        for pid in self.measures:
-            p = self.store.prints.get(pid)
-            if not p or p.get("frozen") or optimized.get(pid) == sorted(p["label_photos"]):
-                continue
+        for pid in self.store.prints:
             r = self.proposal_of(pid)
             if r is None:
                 continue
@@ -508,14 +515,12 @@ class Tool:
             return "No label photo left out."
         self.discard(removed)
         self.store.remove(pid, removed, manual=True, why="deleted in review-prints")
-        self.store.data["looked_at"].setdefault("optimized", {})[pid] = keys
         out = self.restore_base(pid)
         shutil.copyfile(base + ".avif", out + ".tmp.avif")
         os.replace(out + ".tmp.avif", out + ".avif")
         steps.write_json(out + ".json", json.load(open(base + ".json")))
         print(f"optimized {pid}: {len(removed)} label photos deleted, {len(keys)} kept", flush=True)
         self.save()
-        threading.Thread(target=self.measure_all, args=([pid],), daemon=True).start()
 
 
 PAGE = r"""<!doctype html><html><head><meta charset="utf-8"><title>review prints</title>
