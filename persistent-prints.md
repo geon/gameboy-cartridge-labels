@@ -1,5 +1,7 @@
 # Persistent prints and freezing (design, for review)
 
+**Superseded where they differ by stored-prints.md (the user, 2026-11-22): every print is stored and is the truth; a print grows only by a new label photo of its own serial, read from the straightened label photo; frozen prints are never changed automatically (no stage 3 joining).**
+
 Status: stage 1 built 2026-11-13 (src/print_ids.py, print-ids.json; the prints step's pair cache with it); stage 2 built 2026-11-13 (src/frozen.py; Freeze in remove-photos; features, match, find, solve, prints, restore, publish), tried on the sample only: a frozen print kept its id, label photos, poses and image; two of its photos held out of the freezing were matched against its image (pose from the match within 0.15 and 0.20 mm of their own fit) and joined it. Match's fingerprint is unchanged: nothing is matched again. The user's idea: a print the user is happy with needn't be fitted or restored again, its label photos needn't be matched again, and prints should keep their ids between runs.
 
 ## Why

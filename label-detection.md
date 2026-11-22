@@ -174,7 +174,7 @@ match and find are separate so that the rule for a label photo can be tried in v
 - Ink coordinates: mm, origin at the nominal label's top left (main's label model moved to 0, 0); plastic coordinates: main's cartridge mm.
 - Homographies: 3 x 3 lists named `<from>_to_<to>` (photo_to_ink).
 - JSON for what a person might read; .npz for large arrays; generated images AVIF at a high quality (they can be regenerated; checked once on the sample: tile differences and file sizes with and without compression); details/ stays PNG (used for matching).
-- Label photo key: `<sha1>@<x>,<y>`. Print id: persistent (the user, 2026-11-13; persistent-prints.md, stage 1): the serial printed on the label, a hyphen and a short English name (`DMG-APSJ-JPN-lisa`), kept between runs in print-ids.json (the repo root, committed, written by the prints step only: the one step that reads its own earlier output); usable in hand files.
+- Label photo key: `<sha1>@<x>,<y>`. Print id: persistent (the user, 2026-11-13; persistent-prints.md, stage 1): the serial printed on the label, a hyphen and a short English name (`DMG-APSJ-JPN-lisa`), kept between runs in print-ids.json (the repo root, committed, written by the prints step only: the one step that reads its own earlier output); usable in hand files. Prints themselves are stored and are the truth (stored-prints.md, the user 2026-11-22, settled).
 
 | Step | File | Contents |
 |---|---|---|
