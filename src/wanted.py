@@ -74,9 +74,7 @@ def entries(prints, has_image, solved, serials, releases, sources, pair_differen
         n = needed(p["keys"], solved)
         if not 0 < n <= MAX_NEEDED or (game(r), group) in covered:
             continue
-        reads = {(serials.get(k) or {}).get("serial") for k in p["keys"]}
-        tiles = [pair_differences.get((a, b)) for i, a in enumerate(p["keys"]) for b in p["keys"][i + 1:]]
-        agree = None if len(p["keys"]) < 2 else (len(reads) == 1 and None not in reads and all(t == 0 for t in tiles))
+        agree = agreeing(p["keys"], {k: (serials.get(k) or {}).get("serial") for k in p["keys"]}, pair_differences)
         if p["serial"]:
             serial_list = [p["serial"]]
         else:
@@ -88,6 +86,22 @@ def entries(prints, has_image, solved, serials, releases, sources, pair_differen
                     "search": search_links(r, serial_list, group)})
     out.sort(key=lambda e: (e["needed"], e["agree"] is not True, -e["px_per_mm"], e["title"].casefold()))
     return out
+
+
+def agreeing(keys, reads, pair_differences):
+    """Whether label photos agree: all read the same serial (reads: key -> serial or None), and no tile differs between
+    any two. None for fewer than two."""
+    if len(keys) < 2:
+        return None
+    tiles = [pair_differences.get((a, b)) for i, a in enumerate(keys) for b in keys[i + 1:]]
+    return len(set(reads[k] for k in keys)) == 1 and None not in reads.values() and all(t == 0 for t in tiles)
+
+
+def rank(keys, solved, reads, pair_differences):
+    """The wanted list's ranking of label photos as one print (lower is better): photos needed, whether they agree,
+    then the lowest resolution among them. Also used by review-prints for its same-serial groups."""
+    return (needed(keys, solved), agreeing(keys, reads, pair_differences) is not True,
+            -min(px_per_mm(solved[k]) for k in keys))
 
 
 def search_links(release, serial_list, group):

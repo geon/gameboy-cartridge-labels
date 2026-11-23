@@ -2,7 +2,8 @@
 # prints.json in the repo root), the user's changes made in the store at once, through its interface as manual changes
 # (rule 10): a change to a frozen print unfreezes it, without asking (rule 8). The page shows the store itself.
 # Tabs:
-#   - Same serial: the serials of several stored prints, the most prints first, SERIALS_PER_PAGE at a time: join some,
+#   - Same serial: the serials of several stored prints, ranked as wanted.rank ranks a print (the wanted list's ranking:
+#     photos needed, agreement, lowest resolution), of each serial's prints joined, SERIALS_PER_PAGE at a time: join some,
 #     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these).
 #   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ (label
 #     photos without one don't count). A print of several serials is nonsense, to be fixed by hand (the user,
@@ -46,7 +47,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cv2, numpy as np
 import photos, steps, shapes, straighten, frozen, find as find_step, stored_prints, prints as prints_step, serials as serials_db
-import restore, optimize
+import restore, optimize, wanted
 from read_serials import CORRECTIONS
 
 GEN = photos.generated(False)
@@ -155,7 +156,13 @@ class Tool:
             if len(idx) > 1:
                 ids = sorted(out[i]["id"] for i in idx)
                 same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, [])})
-        same.sort(key=lambda e: (-len(e["prints"]), -sum(len(out[i]["keys"]) for i in e["prints"]), e["serial"]))
+        def same_rank(e):  # as the wanted list ranks a print, of the group's prints joined (the user, 2026-11-23)
+            keys = [k for i in e["prints"] for k in out[i]["keys"] if k["key"] in self.solved]
+            if not keys:
+                return (1, e["serial"])
+            reads = {k["key"]: k["serial"] for k in keys}
+            return (0, *wanted.rank(list(reads), self.solved, reads, self.tiles), e["serial"])
+        same.sort(key=same_rank)
         nserials = lambda i: len({k["serial"] for k in out[i]["keys"] if k["serial"]})
         several = [i for i in range(len(out)) if nserials(i) > 1]
         several.sort(key=lambda i: (-out[i]["disagree"], -nserials(i), -len(out[i]["keys"])))
