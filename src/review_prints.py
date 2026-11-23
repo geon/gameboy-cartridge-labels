@@ -6,7 +6,9 @@
 #     photos needed, agreement, lowest resolution), of each serial's prints joined, SERIALS_PER_PAGE at a time: join some,
 #     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these). A serial with a frozen
 #     print is hidden too (the user, 2026-11-23: a frozen print is done; make prints never joins new label photos into
-#     it, stored-prints.md rule 7), unless "show serials with a frozen print" is ticked.
+#     it, stored-prints.md rule 7), unless "show serials with a frozen print" is ticked. Grouped by serial and tag:
+#     prints of one serial with different tags aren't listed together; an untagged group is hidden by a frozen print of
+#     its serial whatever its tag (as restore holds it back).
 #   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ (label
 #     photos without one don't count). A print of several serials is nonsense, to be fixed by hand (the user,
 #     2026-11-22: split or set the serial), and isn't restored until it is. The most label photos reading another
@@ -15,7 +17,7 @@
 #   - New: the prints the last make prints made or added label photos to (<generated>/prints/id-changes.json).
 #   - Every print, worst first: the most label photos reading another serial, then the most differing tiles between two
 #     of its label photos (the prints step's pair cache).
-#   - Search: a serial, a stem or an id (its start), up to SEARCH_MAX prints.
+#   - Search: a serial, a stem or an id (its start), or a tag (anywhere in it), up to SEARCH_MAX prints.
 #   - Recent changes: the store's change log, the latest first; Undo on the latest manual change (Store.undo).
 #   - Optimize (the user, 2026-11-22): the restored prints, the most total badness first (src/optimize.py: each label
 #     photo's detail and divergence against its print's restored image, measured once per label photo in background
@@ -38,7 +40,9 @@
 # "Set serial": the print's serial (it's renamed: Store.set_serial) and every label photo's in serial-corrections.json
 # (read_serials.CORRECTIONS); setting the serial it has only does the latter (a frozen print stays frozen). Freeze:
 # a print with its image from make restore under its id (frozen.freeze); Unfreeze doesn't ask. A deleted label photo or
-# a joined print leaves a hole of its size, so nothing moves. Buttons only, no keys (the user: keys next to S are too
+# a joined print leaves a hole of its size, so nothing moves. "Set tag": the print's tag, free text telling prints of
+# one serial apart ("PINK", "Player's Choice"; the user, 2026-11-23), shown as DMG-ATAJ-JPN [PINK]; empty clears it;
+# it doesn't unfreeze (Store.set_tag). Search finds tags too (anywhere in them). Buttons only, no keys (the user: keys next to S are too
 # easy to hit).
 # Usage: review_prints.py [port]
 import json, os, re, shutil, sys, threading, urllib.parse
@@ -62,6 +66,11 @@ LOG_SHOWN = 200
 MEASURE_WORKERS = 4   # background processes measuring label photos for Optimize
 MEASURES_SAVED_EVERY = 25
 lock = threading.Lock()
+
+
+def tagged(serial, tag):
+    """A serial and tag as shown: DMG-ATAJ-JPN [PINK] (as photo names' brackets)."""
+    return f"{serial} [{tag}]" if tag else serial
 
 
 def pair_tiles(gen):
@@ -146,19 +155,24 @@ class Tool:
             tiles = max((self.tiles.get((a, b), 0) for i, a in enumerate(keys) for b in keys[i + 1:]), default=0)
             fams = {self.solved[k]["family"] for k in keys if k in self.solved}
             out.append({"id": pid, "keys": [{"key": k, "serial": read[k], "release": release(k), "by_hand": k in hand} for k in keys],
-                        "serial": ser, "frozen": bool(p.get("frozen")), "image": bool(image), "restored": restored,
+                        "serial": ser, "tag": p.get("tag"), "frozen": bool(p.get("frozen")), "image": bool(image), "restored": restored,
                         "families": len(fams), "disagree": disagree, "tiles": tiles})
         index = {p["id"]: i for i, p in enumerate(out)}
-        by_serial = {}
+        by_serial, frozen_serials = {}, set()
         for i, p in enumerate(out):
             if p["serial"]:
-                by_serial.setdefault(p["serial"], []).append(i)
+                by_serial.setdefault((p["serial"], p["tag"] or ""), []).append(i)
+                if p["frozen"]:
+                    frozen_serials.add(p["serial"])
         same = []
-        for s, idx in by_serial.items():
+        for (s, tag), idx in by_serial.items():
             if len(idx) > 1:
                 ids = sorted(out[i]["id"] for i in idx)
-                same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, []),
-                             "frozen": any(out[i]["frozen"] for i in idx)})
+                name = tagged(s, tag)  # looked_at is keyed by it
+                same.append({"serial": s, "tag": tag, "name": name, "prints": idx,
+                             "looked_at": ids in looked["same_serial"].get(name, []),
+                             # a frozen print of the serial and tag; untagged: of the serial (as restore holds them back)
+                             "frozen": any(out[i]["frozen"] for i in idx) or (not tag and s in frozen_serials)})
         def same_rank(e):  # as the wanted list ranks a print, of the group's prints joined (the user, 2026-11-23)
             keys = [k for i in e["prints"] for k in out[i]["keys"] if k["key"] in self.solved]
             if not keys:
@@ -262,6 +276,16 @@ class Tool:
         if len(self.store.data["log"]) > logged:  # for Undo
             self.store.data["log"][-1]["corrections_before"] = before
         print(f"serial {serial}: {pid}" + (f" renamed {new}" if new != pid else "") + f", {len(keys)} label photos", flush=True)
+        self.save()
+
+    def set_tag(self, pid, tag):
+        """The print's tag (free text; empty: none): None, or why not."""
+        self.fresh()
+        why = self.known([pid])
+        if why:
+            return why
+        self.store.set_tag(pid, tag, manual=True)
+        print(f"tag {pid}: {self.store.prints[pid].get('tag')!r}", flush=True)
         self.save()
 
     def discard(self, keys):
@@ -627,7 +651,7 @@ function printCard(p, extra) {
   tick.onchange = () => { if (tick.checked) joinTicks.add(p.id); else joinTicks.delete(p.id); card.classList.toggle("ticked", tick.checked); bar(); };
   const count = el("span", {}, `${p.keys.length}`);
   const head = el("div", {class: "head"}, el("label", {}, tick, " join"), el("b", {}, p.id),
-    el("span", {class: "note"}, `${p.serial || "no serial"} · `, count, ` label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
+    el("span", {class: "note"}, `${p.serial || "no serial"}` + (p.tag ? ` [${p.tag}]` : "") + " · ", count, ` label photos` + (p.families > 1 ? ` · ${p.families} families` : "") +
       (p.disagree ? ` · ${p.disagree} read another serial` : "") + (p.tiles ? ` · up to ${p.tiles} tiles differ` : "")));
   if (p.frozen) head.append(el("span", {class: "frozen"}, "frozen"));
   const fz = el("button", {onclick: () => post("/freeze", {id: p.id, on: !p.frozen})}, p.frozen ? "Unfreeze" : "Freeze");
@@ -666,7 +690,10 @@ function printCard(p, extra) {
   const input = el("input", {size: "16", placeholder: "serial", value: p.serial || ""});
   const set = el("button", {onclick: () => post("/serial", {id: p.id, serial: input.value})}, "Set serial");
   const hand = p.keys.every(k => k.by_hand) ? el("span", {class: "note"}, " entered by hand") : "";
-  card.append(lps, el("div", {style: "margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"}, split, input, set, hand));
+  const tagInput = el("input", {size: "16", placeholder: "tag", value: p.tag || ""});
+  tagInput.title = "free text telling prints of one serial apart (PINK, Player's Choice…); empty: none";
+  const setTag = el("button", {onclick: () => post("/tag", {id: p.id, tag: tagInput.value})}, "Set tag");
+  card.append(lps, el("div", {style: "margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"}, split, input, set, hand, tagInput, setTag));
   return card;
 }
 
@@ -704,9 +731,9 @@ function render() {
       const ps = e.prints.map(i => S.prints[i]);
       const cards = ps.map(p => printCard(p));
       const left = () => cards.filter(c => c.isConnected).map(c => c.pid);  // a print whose label photos were all deleted is a hole
-      const apart = el("button", {onclick: () => post("/apart", {serial: e.serial, ids: left()})}, "All different");
+      const apart = el("button", {onclick: () => post("/apart", {serial: e.name, ids: left()})}, "All different");
       apart.title = "these prints are different prints: hide this serial while its prints are these";
-      const box = el("div", {class: "serial"}, el("h2", {}, `${e.serial}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "") + (e.frozen ? " (one frozen)" : "")));
+      const box = el("div", {class: "serial"}, el("h2", {}, `${e.name}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "") + (e.frozen ? " (one frozen)" : "")));
       cards.forEach(c => box.append(c));
       const all = el("button", {}, "Join all");
       all.title = "these prints are one print: join them all";
@@ -734,7 +761,7 @@ function render() {
   } else if (tab === "search") {
     const q = query.trim().toUpperCase();
     if (!q) { m.append(el("p", {class: "note"}, "A serial (DMG-APSJ-JPN), a stem (DMG-APS) or an id (DMG-APSJ-JPN-lisa).")); return; }
-    const hits = S.prints.filter(p => [p.serial, p.id].some(s => s && s.toUpperCase().startsWith(q)));
+    const hits = S.prints.filter(p => [p.serial, p.id].some(s => s && s.toUpperCase().startsWith(q)) || (p.tag && p.tag.toUpperCase().includes(q)));
     m.append(el("p", {class: "note"}, `${hits.length} prints` + (hits.length > S.per_page.search ? `, the first ${S.per_page.search} shown` : "")));
     hits.sort((a, b) => (a.serial || "").localeCompare(b.serial || "") || b.keys.length - a.keys.length);
     hits.slice(0, S.per_page.search).forEach(p => m.append(printCard(p)));
@@ -926,6 +953,7 @@ class Handler(BaseHTTPRequestHandler):
                    "/apart": lambda d: tool.looked_same(d.get("serial"), d.get("ids") or []),
                    "/delete": lambda d: tool.delete(d.get("key")),
                    "/serial": lambda d: tool.set_serial(d.get("id"), d.get("serial")),
+                   "/tag": lambda d: tool.set_tag(d.get("id"), d.get("tag")),
                    "/freeze": lambda d: tool.set_frozen(d.get("id"), bool(d.get("on"))),
                    "/undo": lambda d: tool.undo(d.get("index"))}
         actions["/optimize/accept"] = lambda d: tool.accept(d.get("id"), d.get("keys") or [])

@@ -33,8 +33,9 @@
 # the screen's peaks, then a 1.5 px weighted median; the user, 2026-11-14: on the restored print, not on each label
 # photo before).
 # A frozen print (src/frozen.py) isn't restored: its image is the one frozen (publish copies it); make refreeze
-# (src/refreeze.py) restores it again. Nor is an open print of a serial some frozen print has (the user, 2026-11-23:
-# the frozen one is done; review-prints' Same serial tab hides them too).
+# (src/refreeze.py) restores it again. Nor is an open print of a serial and tag some frozen print has (the user,
+# 2026-11-23: the frozen one is done; review-prints' Same serial tab hides them too); an untagged open print is held
+# back by any frozen print of its serial.
 # Done again when an image is older than this file, cuts.py, descreen.py, prints.json, solve.json or its family's straightened
 # images and cuts.
 # Usage: restore.py [--sample] [--workers N]
@@ -446,15 +447,19 @@ def print_jobs(gen, result, solved):
         found = [c for c in (straighten.load_cut(gen, k) for k in keys) if c is not None]
         crops[fam] = (cuts.crop(found, ps[0]["shape"], straighten.PX_PER_MM, straighten.MARGIN) if found
                       else canonical_crop(ps[0]["shape"]))
-    frozen_serials = {p["serial"] for p in result["prints"] if p.get("frozen") and p.get("serial")}
+    frozen_tags = {}  # serial -> the tags of its frozen prints ("" for none)
+    for p in result["prints"]:
+        if p.get("frozen") and p.get("serial"):
+            frozen_tags.setdefault(p["serial"], set()).add(p.get("tag") or "")
     jobs = {}
     for p in result["prints"]:
         if p.get("frozen"):  # its image is the frozen one (src/frozen.py): restored again only by make refreeze
             continue
         if p.get("several_serials"):  # its label photos read several serials: to be fixed by hand first (stored-prints.md)
             continue
-        if p.get("serial") in frozen_serials:  # a frozen print of its serial is done (the user, 2026-11-23)
-            continue
+        tags = frozen_tags.get(p.get("serial"))
+        if tags and (not p.get("tag") or p["tag"] in tags):  # a frozen print of its serial and tag is done (the user,
+            continue                                          # 2026-11-23); an untagged print is any print of its serial
         job = job_of(p, info, crops[p["family"]])
         if job:
             jobs[p["id"]] = job

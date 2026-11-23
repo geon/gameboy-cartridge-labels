@@ -8,7 +8,7 @@
 # Ranked by photos needed, then whether the label photos agree (all read the same serial, and no tile differs between
 #   any two: prints.py's pair comparison), then the lowest resolution among them (photo px per mm at the label): the
 #   more likely one more photo makes a good image, the higher.
-# wanted.json per print: title, system, serials (its own as read; else the release's in its region group), the photos
+# wanted.json per print: title, system, tag (the user's, or null), serials (its own as read; else the release's in its region group), the photos
 # it has (their sources), the numbers ranked by, and search links (eBay by title, Google Images by serial).
 # wanted.html: plain, for the people helping: a section per system (Game Boy, Color, Advance), linked from the top
 # with its count, and the total, listed as on index.html (the user, 2026-11-17, 2026-11-18); in each, one row per game and region group (the user, 2026-11-17: a game's prints of
@@ -79,7 +79,7 @@ def entries(prints, has_image, solved, serials, releases, sources, pair_differen
             serial_list = [p["serial"]]
         else:
             serial_list = [s for s in serials_module.cartridge_serials(r) if region_group(s, None) in (group, None)] or [r["id"]]
-        out.append({"print": p["id"], "release": r["id"], "title": r["title"], "system": r["system"],
+        out.append({"print": p["id"], "release": r["id"], "title": r["title"], "system": r["system"], "tag": p.get("tag"),
                     "region": group, "serials": serial_list, "needed": n, "photos": len(p["keys"]), "agree": agree,
                     "px_per_mm": round(min(px_per_mm(solved[k]) for k in p["keys"]), 1),
                     "sources": [sources.get(k.split("@")[0], {}) for k in p["keys"]],

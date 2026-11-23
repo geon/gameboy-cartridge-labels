@@ -1,6 +1,6 @@
 # prints: the stored prints (stored-prints.md; src/stored_prints.py, prints.json in the repo root: the truth) kept up
 # with this run's label photos, and written out for restore and publish, into <generated>/prints/:
-#   prints.json: {"prints": [{"id", "keys", "release", "serial", "shape", "family", "families"?, "frozen"? (its id),
+#   prints.json: {"prints": [{"id", "keys", "release", "serial", "tag"? (the user's), "shape", "family", "families"?, "frozen"? (its id),
 #                 "several_serials"? (its label photos' straightened serials where they're two or more: restore skips it;
 #                 the user fixes it in review-prints)}],
 #                 "tile_mm": TILE_MM, "differences": {}}
@@ -374,6 +374,8 @@ def main():
                 e["families"] = sorted(fams)
             if p.get("frozen"):
                 e["frozen"] = pid
+            if p.get("tag"):
+                e["tag"] = p["tag"]
             e["release"] = print_release(e["serial"], [serial.get(k, {}) for k in keys])
             read = sorted({serial.get(k, {}).get("straightened_serial") for k in keys} - {None})
             if len(read) > 1:  # not restored until fixed by hand (stored-prints.md); none-serial ones don't count

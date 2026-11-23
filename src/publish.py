@@ -4,7 +4,7 @@
 #   No label photo images (the user, 2026-11-10: the straightened photos aren't worth distributing, over 1 GB): each
 #     label photo is in index.json, with where it came from. Poor fits (solve.poor_fit) are listed with
 #     poor_fit true; restore leaves them out.
-#   index.json: {"prints": {id: {serial, release, game (the release's game id in the database), family (solve's: label
+#   index.json: {"prints": {id: {serial, tag (the user's, or null), release, game (the release's game id in the database), family (solve's: label
 #     photos that look alike), title (the database's), shape, image, size (its w, h px), paper,
 #     label_photos, frozen, restored_from (the label photos its image was restored from)}}, "label_photos": {key: {print,
 #     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (the store, prints.json); keys hold within a run only.
@@ -99,7 +99,7 @@ def main():
             image = "prints/" + name  # the id starts with the serial
             copies.append((restored, os.path.join(out_dir, image)))
         crop = desc.get("crop") or {}
-        index["prints"][p["id"]] = {"serial": p["serial"], "release": p["release"],
+        index["prints"][p["id"]] = {"serial": p["serial"], "tag": p.get("tag"), "release": p["release"],
                                     "game": (releases.get(p["release"]) or {}).get("gameId"), "family": p["family"],
                                     "title": titles.get(p["release"]),
                                     "shape": p["shape"], "image": image,
@@ -163,7 +163,7 @@ def page(out_dir, index, wanted_count, shown, file):
                 + (' <span class="poor">(poor fit)</span>' if lp[k]["poor_fit"] else "") for k in p["label_photos"])
             w = (p.get("size") or [680])[0] / 2
             figs.append(f'<figure><img loading="lazy" src="{p["image"]}" style="max-width:{w:.0f}px">'
-                        f'<figcaption><b>{html.escape(p["title"] or "(no title)")}</b><br>{html.escape(str(p["serial"] or p["release"] or "?"))}, '
+                        f'<figcaption><b>{html.escape(p["title"] or "(no title)")}</b><br>{html.escape(str(p["serial"] or p["release"] or "?"))}{html.escape(" [" + p["tag"] + "]" if p.get("tag") else "")}, '
                         f'Recreated from {used(p)} photo{"" if used(p) == 1 else "s"}'
                         f'<div class="src">{sources}</div></figcaption></figure>')
         links.append(f'<li><a href="#{shape}">{platform}</a>: {len(ps)} images</li>')

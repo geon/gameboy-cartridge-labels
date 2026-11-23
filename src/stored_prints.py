@@ -7,12 +7,13 @@
 # FILE: {"prints": {id: {"created", "serial", "frozen": bool, "label_photos": {key: {"outline" (find's), "pose" (solve's
 #                        record)}}, "shape"?, "image"? ({"sha1", "crop", "paper", "restored_from", "refrozen"?}: the
 #                        frozen image's, frozen/<id>.avif), "photo_label_photos"? (match: src/frozen.py), "frozen_at"?,
-#                        "split_from"?, "renamed_from"?}},
+#                        "split_from"?, "renamed_from"?, "tag"? (the user's free text telling prints of one serial
+#                        apart: "PINK", "Player's Choice"; the user, 2026-11-23)}},
 #        "gone": {id: {"why", "into"?, "datetime"}} (ids are never reused),
 #        "looked_at": {"same_serial": {serial: [[id...]]}} (review-prints' "All different": the prints of a serial the user
 #                     looked at and left apart; shown again once they differ),
 #        "log": [{"datetime", "kind", "manual", "before": {id: summary or null}, "after": {id: summary or null}}]}
-#   a summary: {"serial", "frozen", "keys"}. Written one label photo, gone id and log entry per line, so a run's diff
+#   a summary: {"serial", "frozen", "keys", "tag"? (only when set)}. Written one label photo, gone id and log entry per line, so a run's diff
 #   shows what changed. The log is what Undo works from (the latest change only, while what it made is unchanged);
 #   outlines and poses written back by a run aren't logged.
 # A frozen print's image stays at frozen/<id>.avif when it's unfrozen (so Undo can refreeze it); freezing again
@@ -111,7 +112,12 @@ class Store:
     # --- reading
     def summary(self, pid):
         p = self.prints.get(pid)
-        return None if p is None else {"serial": p.get("serial"), "frozen": bool(p.get("frozen")), "keys": sorted(p["label_photos"])}
+        if p is None:
+            return None
+        s = {"serial": p.get("serial"), "frozen": bool(p.get("frozen")), "keys": sorted(p["label_photos"])}
+        if p.get("tag"):
+            s["tag"] = p["tag"]
+        return s
 
     def print_of(self):
         """key -> id of every stored label photo."""
@@ -189,6 +195,10 @@ class Store:
         into = into or max(pids, key=lambda p: (len(self.prints[p]["label_photos"]), p))
 
         def change():
+            if not self.prints[into].get("tag"):  # an untagged print takes a joined print's tag
+                tag = next((self.prints[pid]["tag"] for pid in pids if self.prints[pid].get("tag")), None)
+                if tag:
+                    self.prints[into]["tag"] = tag
             for pid in pids:
                 if pid != into:
                     self.prints[into]["label_photos"].update(self.prints[pid]["label_photos"])
@@ -229,6 +239,19 @@ class Store:
             return [new]
         self._logged("set serial", manual, [pid], change)
         return new
+
+    def set_tag(self, pid, tag, manual):
+        """The print's tag (free text, spaces collapsed; empty: none). Doesn't unfreeze: it changes no label photo."""
+        tag = " ".join((tag or "").split())
+        if (self.prints[pid].get("tag") or "") == tag:
+            return
+
+        def change():
+            if tag:
+                self.prints[pid]["tag"] = tag
+            else:
+                self.prints[pid].pop("tag", None)
+        self._logged("set tag", manual, [pid], change, unfreezes=False)
 
     def write_back(self, pid, label_photos, manual=False):
         """A run's outlines and poses for label photos already in the print (not logged)."""
@@ -283,6 +306,9 @@ class Store:
                 continue
             p = {**e.get("heads", {}).get(pid, {"created": now()}), "serial": s["serial"],
                  "label_photos": {k: pool[k] for k in s["keys"] if k in pool}}
+            p.pop("tag", None)
+            if s.get("tag"):
+                p["tag"] = s["tag"]
             p["frozen"] = bool(s["frozen"] and os.path.exists(os.path.join(self.folder, pid + ".avif")))
             if p["frozen"]:
                 p.pop("unfrozen", None)
