@@ -70,8 +70,9 @@
 #
 #   make build
 #   The site, made anew in generated/publish/: prints/ (the restored prints), index.json (source and URLs from
-#   photo-sources.json), the lists, the page generated/publish/index.html and wanted.html (the prints a photo or two
-#   short of an image, best chances first: src/wanted.py) (src/publish.py). Needs make restore.
+#   photo-sources.json), the lists, visually-distinct.json (select-visually-distinct's selected.json), TypeScript types
+#   beside each JSON file (<file>.json.ts, from src/publish-types/), the page generated/publish/index.html and wanted.html
+#   (the prints a photo or two short of an image, best chances first: src/wanted.py) (src/publish.py). Needs make restore.
 #
 #   make publish
 #   Not in make all: generated/publish/ as it is (make build) committed to the gh-pages branch, replacing all it held,

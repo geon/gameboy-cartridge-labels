@@ -9,6 +9,9 @@
 #     label_photos, frozen, restored_from (the label photos its image was restored from)}}, "label_photos": {key: {print,
 #     serial, source, page_url, image_url, poor_fit}}}. Print ids persist between runs (the store, prints.json); keys hold within a run only.
 #   missing.json, unknown-serials.json (read-serials), few-photos.json (prints): the lists, copied as they are.
+#   visually-distinct.json: select-visually-distinct's selected.json, as it is (left out when that step hasn't run).
+#   <file>.json.ts beside each JSON file: TypeScript types for its content, from src/publish-types/ (the user,
+#     2026-11-23: easy to use in TypeScript projects). Every JSON file written must have one.
 #   wanted.html, wanted.json: the prints that need photos (src/wanted.py), linked from index.html.
 #   index.html: per platform (linked from the top, with its image count) every print with an image, by game title,
 #     with its label photos' sources.
@@ -26,7 +29,9 @@ import serials as serials_module
 
 SOURCES = "photo-sources.json"
 QUALITY = straighten.QUALITY
-LISTS = [("read-serials", "missing.json"), ("read-serials", "unknown-serials.json"), ("prints", "few-photos.json")]
+LISTS = [("read-serials", "missing.json", "missing.json"), ("read-serials", "unknown-serials.json", "unknown-serials.json"),
+         ("prints", "few-photos.json", "few-photos.json"), ("select-visually-distinct", "selected.json", "visually-distinct.json")]
+TYPES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "publish-types")  # <file>.json.ts per JSON file
 
 
 def crop_box(shape, crop=None):
@@ -115,9 +120,9 @@ def main():
 
     for a, b in copies:
         shutil.copyfile(a, b)
-    for step, f in LISTS:
+    for step, f, name in LISTS:
         if os.path.exists(os.path.join(gen, step, f)):
-            shutil.copyfile(os.path.join(gen, step, f), os.path.join(out_dir, f))
+            shutil.copyfile(os.path.join(gen, step, f), os.path.join(out_dir, name))
     steps.write_json(os.path.join(out_dir, "index.json"), index)
     differences = {}
     for name, tiles in prints_step.load_pairs(os.path.join(gen, "prints", "pairs.npz"), prints_step.comparison_version()).items():
@@ -126,6 +131,7 @@ def main():
     wanted_list = wanted.entries(prints["prints"], has_image, solved, serials, releases, src, differences)
     steps.write_json(os.path.join(out_dir, "wanted.json"), wanted_list)
     wanted.page(out_dir, wanted_list)
+    copy_types(out_dir)
     wanted_count = len(wanted.games(wanted_list))  # the rows of wanted.html: one per game and region group
     shown = [p for p in index["prints"].values() if p["image"]]
     page(out_dir, index, wanted_count, shown, "index.html")
@@ -133,6 +139,16 @@ def main():
     print(f"{len(copies)} prints, {len(index['label_photos'])} label photos listed ({len(poor & set(index['label_photos']))} poor fits)")
     print(f"{len(wanted_list)} prints wanted (wanted.html)")
     print(f"page: {os.path.join(out_dir, 'index.html')}")
+
+
+def copy_types(out_dir):
+    """<file>.json.ts beside each JSON file in out_dir, from TYPES; stops when one has none."""
+    for f in sorted(os.listdir(out_dir)):
+        if f.endswith(".json"):
+            ts = os.path.join(TYPES, f + ".ts")
+            if not os.path.exists(ts):
+                sys.exit(f"no {ts}: every published JSON file needs its TypeScript types")
+            shutil.copyfile(ts, os.path.join(out_dir, f + ".ts"))
 
 
 PLATFORMS = [("dmg", "Game Boy"), ("cgb", "Game Boy Color"), ("agb", "Game Boy Advance")]
