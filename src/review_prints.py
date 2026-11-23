@@ -4,7 +4,9 @@
 # Tabs:
 #   - Same serial: the serials of several stored prints, ranked as wanted.rank ranks a print (the wanted list's ranking:
 #     photos needed, agreement, lowest resolution), of each serial's prints joined, SERIALS_PER_PAGE at a time: join some,
-#     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these).
+#     "Join all", or "All different" (looked_at.same_serial: hidden while its prints are these). A serial with a frozen
+#     print is hidden too (the user, 2026-11-23: a frozen print is done; make prints never joins new label photos into
+#     it, stored-prints.md rule 7), unless "show serials with a frozen print" is ticked.
 #   - Several serials: prints whose label photos' straightened serials (read-serials' straightened_serial) differ (label
 #     photos without one don't count). A print of several serials is nonsense, to be fixed by hand (the user,
 #     2026-11-22: split or set the serial), and isn't restored until it is. The most label photos reading another
@@ -25,8 +27,8 @@
 #     left out); clicking a label photo toggles it, and the would-be image is restored again (restore.restore_print, a
 #     background process per restore, killed when a newer click supersedes it; cached per set of label photos in <generated>/review-prints/optimize/would-be/; the latest
 #     click wins). Accept, after a confirmation: the label photos left out deleted as "Delete label photo" does (one
-#     change in the log), and the would-be image and its description written to <generated>/restore/ as the print's.
-#     Nothing marks a print optimized: with good label photos left, its total is low and it sinks (the user).
+#     change in the log), the would-be image and its description written to <generated>/restore/ as the print's, and
+#     the print frozen with that image (the user, 2026-11-23), which takes it off this tab.
 # Each print: its label photos sorted by straightened serial (none last), straighten's image as is (full resolution
 # and uncropped, for pinch-zooming), each with a tick box: "Split off ticked" makes the ticked a print of their own (the
 # serial their straightened reads give most, else the print's). A print's tick box marks it for joining: "Join ticked"
@@ -155,7 +157,8 @@ class Tool:
         for s, idx in by_serial.items():
             if len(idx) > 1:
                 ids = sorted(out[i]["id"] for i in idx)
-                same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, [])})
+                same.append({"serial": s, "prints": idx, "looked_at": ids in looked["same_serial"].get(s, []),
+                             "frozen": any(out[i]["frozen"] for i in idx)})
         def same_rank(e):  # as the wanted list ranks a print, of the group's prints joined (the user, 2026-11-23)
             keys = [k for i in e["prints"] for k in out[i]["keys"] if k["key"] in self.solved]
             if not keys:
@@ -526,6 +529,7 @@ class Tool:
         steps.write_json(out + ".json", json.load(open(base + ".json")))
         print(f"optimized {pid}: {len(removed)} label photos deleted, {len(keys)} kept", flush=True)
         self.save()
+        return self.set_frozen(pid, True)  # an accepted print is done (the user, 2026-11-23)
 
 
 PAGE = r"""<!doctype html><html><head><meta charset="utf-8"><title>review prints</title>
@@ -578,7 +582,8 @@ button:disabled{opacity:.4;cursor:default}
 <button class="tab" data-tab="log">Recent changes</button>
 <button class="tab" data-tab="optimize">Optimize</button>
 <span id="searchbox" style="display:none"><input id="q" placeholder="serial, stem or id" size="24"> <button id="go">Search</button></span>
-<label id="lookedbox" style="display:none"><input type="checkbox" id="looked"> show serials looked at</label>
+<span id="lookedbox" style="display:none"><label><input type="checkbox" id="looked"> show serials looked at</label>
+<label><input type="checkbox" id="showfrozen"> show serials with a frozen print</label></span>
 </header>
 <main id="main">loading…</main>
 <div id="bar"><span id="count">No prints ticked for joining.</span><button id="join" disabled>Join ticked</button><button id="clear" disabled>Clear</button><span id="msg"></span></div>
@@ -688,16 +693,20 @@ function render() {
   const m = $("main"); m.innerHTML = ""; renderSeq++;
   if (!S) { m.textContent = "loading…"; return; }
   if (tab === "same") {
-    const shown = S.same.filter(e => $("looked").checked || !e.looked_at);
+    const showFrozen = $("showfrozen").checked, showLooked = $("looked").checked;
+    const shown = S.same.filter(e => (showLooked || !e.looked_at) && (showFrozen || !e.frozen));
+    const nLooked = S.same.filter(e => !showLooked && e.looked_at).length;
+    const nFrozen = S.same.filter(e => !showFrozen && e.frozen && (showLooked || !e.looked_at)).length;
     const per = S.per_page.serials;
-    m.append(el("p", {class: "note"}, `${shown.length} serials of several prints` + ($("looked").checked ? "" : `; ${S.same.length - shown.length} looked at, hidden`) + ". The most prints first."), pager(shown.length, per));
+    m.append(el("p", {class: "note"}, `${shown.length} serials of several prints` + (nLooked ? `; ${nLooked} looked at, hidden` : "") +
+                                      (nFrozen ? `; ${nFrozen} with a frozen print, hidden` : "") + ". Best chances first, as on the wanted list."), pager(shown.length, per));
     for (const e of shown.slice(page * per, (page + 1) * per)) {
       const ps = e.prints.map(i => S.prints[i]);
       const cards = ps.map(p => printCard(p));
       const left = () => cards.filter(c => c.isConnected).map(c => c.pid);  // a print whose label photos were all deleted is a hole
       const apart = el("button", {onclick: () => post("/apart", {serial: e.serial, ids: left()})}, "All different");
       apart.title = "these prints are different prints: hide this serial while its prints are these";
-      const box = el("div", {class: "serial"}, el("h2", {}, `${e.serial}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "")));
+      const box = el("div", {class: "serial"}, el("h2", {}, `${e.serial}: ${ps.length} prints` + (e.looked_at ? " (looked at)" : "") + (e.frozen ? " (one frozen)" : "")));
       cards.forEach(c => box.append(c));
       const all = el("button", {}, "Join all");
       all.title = "these prints are one print: join them all";
@@ -809,7 +818,7 @@ function optimizeCard(P) {
   const left = () => P.label_photos.filter(lp => !sel.has(lp.key)).length;
   const buttons = () => {
     accept.disabled = ready !== current() || left() === 0;
-    accept.textContent = `Accept: delete ${left()} label photos`;
+    accept.textContent = `Accept: delete ${left()} label photos, freeze`;
   };
   async function update() {
     const my = ++optSeq, want = current();
@@ -828,7 +837,7 @@ function optimizeCard(P) {
   }
   accept.onclick = async () => {
     const n = left();
-    if (!confirm(`Delete ${n} label photos of ${P.id}? A photo holding no other label photo is deleted from photos/, otherwise its area is marked not a label. The would-be image becomes the print's restored image.`)) return;
+    if (!confirm(`Delete ${n} label photos of ${P.id}? A photo holding no other label photo is deleted from photos/, otherwise its area is marked not a label. The would-be image becomes the print's restored image, and the print is frozen.`)) return;
     accept.disabled = true;
     status.textContent = "accepting…";
     const r = await fetch("/optimize/accept", {method: "POST", body: JSON.stringify({id: P.id, keys: [...sel]})});
@@ -862,7 +871,7 @@ $("join").onclick = async () => {
 $("clear").onclick = () => { joinTicks.clear(); bar(); render(); };
 $("go").onclick = () => { query = $("q").value; render(); };
 $("q").onkeydown = e => { if (e.key === "Enter") { query = $("q").value; render(); } };
-$("looked").onchange = () => { page = 0; render(); };
+$("looked").onchange = $("showfrozen").onchange = () => { page = 0; render(); };
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => { tab = b.dataset.tab; page = 0; render(); });
 bar(); load();
 </script></body></html>"""
