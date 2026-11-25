@@ -18,10 +18,14 @@
 # the image is under 8 px across). Per band and pixel, a label photo counts unless the band is finer than its own
 # photo's resolution (the fit's photo pixels per mm), its straightened image is empty there (off the photo), it lies
 # outside its own sticker's cut moved cuts.INSET mm inward (plastic, and the highlight or shadow on the cut's edge); in
-# coarser bands, only where the whole pixel
-# counts. Outside where it counts, each is filled from its nearest pixel that counts before it's split into bands (so
-# neither black nor plastic leaks into the coarse bands). Before combining, the label photos are registered finely at
-# full resolution (register). Combined per band by the median.
+# coarser bands, a pixel partly where it counts counts by the part (its weight). Outside where it counts, each is filled
+# from its nearest pixel that counts before it's split into bands (so neither black nor plastic leaks into the coarse
+# bands). Before combining, the label photos are registered finely at full resolution (register). Combined per band by
+# the weighted median (weighted_median).
+# (Was, until 2026-11-25: in coarser bands only where the whole pixel counts. At a label's edge, where few label photos
+# reach it (approximate cuts stop 1 mm further in), no band pixel 0.8-1.6 mm tall was whole there, so those bands had no
+# detail; the coarsest band's blur of the design 1-3 mm in was no longer cancelled by them and showed as a coloured
+# smear along the edge (the user: AGB-AEVE-USA-ivan, its photos black at the edge).)
 # (Tried: weighting by each band's local energy, as in focus stacking, with Tukey's biweight: the user found the plain
 # median removes noise better; noise and dirt have high local energy too. To experiment with later: energy only to
 # leave out clearly blurred regions. Tried 2026-11-15: before the median, each label photo's band fitted per Oklab
@@ -39,7 +43,7 @@
 # Done again when an image is older than this file, cuts.py, descreen.py, prints.json, solve.json or its family's straightened
 # images and cuts.
 # Usage: restore.py [--sample] [--workers N]
-import argparse, html, json, os, sys, warnings
+import argparse, html, json, os, sys
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -231,6 +235,23 @@ def sharp_enough(L, counts, lv):
     return detail >= SHARP_SHARE * second
 
 
+def weighted_median(vals, W):
+    """Per pixel and channel, the median of vals (n x H x W x C) weighted by W (n x H x W); where two halves weigh
+    the same, the mean of the values on either side (so equal weights give np.median's). 0 where nothing weighs."""
+    order = np.argsort(vals, axis=0)
+    v = np.take_along_axis(vals, order, 0)
+    w = np.take_along_axis(np.broadcast_to(W[..., None], vals.shape), order, 0)
+    cum = np.cumsum(w, 0)
+    half = cum[-1:] / 2
+    eps = 1e-6 * np.maximum(cum[-1:], 1e-12)
+    lo = np.minimum((cum < half - eps).sum(0, keepdims=True), len(vals) - 1)
+    hi = np.minimum((cum <= half + eps).sum(0, keepdims=True), len(vals) - 1)
+    # hi past lo only on a tie; skip zero-weight values there
+    hi = np.maximum(hi, lo)
+    out = (np.take_along_axis(v, lo, 0) + np.take_along_axis(v, hi, 0))[0] / 2
+    return np.where(cum[-1] > 0, out, 0)
+
+
 def filled(img, where):
     """img with the pixels outside where set to their nearest pixel inside (img as it is if where is empty)."""
     if where.all() or not where.any():
@@ -276,9 +297,9 @@ def restore_print(job):
         hh, ww = vals.shape[1:3]
         weights = []
         for e, p in zip(entries, pyrs):
-            # where it counts (on the photo, inside its cut): the whole pixel
-            counts_here = cv2.resize(e[1].astype(np.float32), (ww, hh), interpolation=cv2.INTER_AREA) > 0.99
-            wgt = counts_here.astype(np.float32)
+            # where it counts (on the photo, inside its cut): by the part of the pixel that does
+            wgt = cv2.resize(e[1].astype(np.float32), (ww, hh), interpolation=cv2.INTER_AREA)
+            wgt[wgt < 1e-3] = 0
             if lv < levels - 1 and lv < finest_band(e[2]):
                 wgt[:] = 0
             weights.append(wgt)
@@ -290,9 +311,7 @@ def restore_print(job):
             W = np.where(((sharp > 0).sum(0) >= 3)[None], sharp, W)
         total = W.sum(0)
         counts.append(int(np.median((W > 0).sum(0))))
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)  # pixels no label photo covers
-            est = np.nan_to_num(np.nanmedian(np.where((W > 0)[..., None], vals, np.nan), axis=0))
+        est = weighted_median(vals, W)
         # where nothing counts in this band (finer than every photo): no detail
         est = np.where((total > 1e-12)[..., None], est, 0 if lv < levels - 1 else vals.mean(0))
         out_levels.append(est.astype(np.float32))
