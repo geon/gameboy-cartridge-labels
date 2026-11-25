@@ -37,7 +37,8 @@
 #      LINK_FIT_MM and the pixels agree (see stage2's comment); poor fits flagged; offsets per family by a robust fit,
 #      each family's median cut its anchor; then each family's label photos aligned to its median view by the pixels
 #      (refine_family: a homography per label photo, correcting the outline fit's perspective errors), then again at
-#      full resolution (refine_fine).
+#      full resolution (refine_fine); then each stored open print's label photos aligned to each other, whatever their
+#      families, a coarse shift first (refine_prints; "print_correction_mm" in their records).
 #   Between them, 1b (an experiment): each chosen fit refined by the learned edge models where they're sure
 #      (stage1_edges, src/edge_fit.py).
 #   Stored label photos of open prints (src/stored_prints.py; stored-prints.md rule 9): not fitted again in stage 1 nor
@@ -1351,6 +1352,15 @@ FINE_PX_PER_MM = 20
 FINE_MARGIN = 2.0
 FINE_ROUNDS = 2
 MAX_FINE_MM = 1.0
+# Then each stored open print's label photos aligned to each other the same way, starting from where the family
+# refinement left them (the user, 2026-11-24: a print's label photos are aligned as one, whatever their families; a
+# print joined across families had its families up to about 1 mm apart, and some label photos were left out of place by
+# more than ECC finds from where it starts): first a coarse shift each (phase correlation: the label photos placed one
+# by one, the most of the label first, each onto the median of those placed; a shift accepted when its peak is at least
+# COARSE_RESPONSE and it's at most PRINT_MAX_MM; the shifts then moved so their median is none, so the print stays
+# where most of its label photos are), then ECC as above. A correction over PRINT_MAX_MM isn't applied.
+COARSE_RESPONSE = 0.05
+PRINT_MAX_MM = 3.0
 
 
 def fine_view(photo, photo_to_ink, shape):
@@ -1372,7 +1382,7 @@ def fine_group(job):
     """{key: (correction: ink mm -> corrected ink mm, how far it moves the label's corners)} for one group, aligned at
     full resolution (keys whose correction is too large left out)."""
     import warnings
-    keys, paths, to_inks, shape = job
+    keys, paths, to_inks, shape, coarse, max_mm = job
     views = {}
     for k, path, H in zip(keys, paths, to_inks):
         img = photos.load(path) if path else None
@@ -1384,6 +1394,8 @@ def fine_group(job):
     S = np.array([[P, 0, m * P], [0, P, m * P], [0, 0, 1.0]])  # ink mm -> view px
     corners = corners_mm(shape)
     W = {k: np.eye(3, dtype=np.float32) for k in views}  # ref px -> member px
+    if coarse:
+        W = coarse_shifts(views)
     crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 100, 1e-5)
     for _ in range(FINE_ROUNDS):
         warped = [cv2.warpPerspective(v, W[k], (v.shape[1], v.shape[0]), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP, borderValue=np.nan)
@@ -1402,21 +1414,50 @@ def fine_group(job):
     for k in views:
         C = np.linalg.inv(np.linalg.inv(S) @ W[k].astype(np.float64) @ S)  # member ink mm -> the reference's
         moved = float(np.max(np.linalg.norm(project(C, corners) - corners, axis=1)))
-        if moved <= MAX_FINE_MM:
+        if moved <= max_mm:
             out[k] = (C / C[2, 2], moved)
     return out
 
 
-def refine_fine(groups, photo_to_ink, paths, shape_of, workers=8):
+def coarse_shifts(views):
+    """{key: a translation (ref px -> member px)} putting each fine view on the others (see PRINT_MAX_MM)."""
+    import warnings
+    order = sorted(views, key=lambda k: -int(np.isfinite(views[k]).sum()))
+    some = views[order[0]]
+    window = cv2.createHanningWindow((some.shape[1], some.shape[0]), cv2.CV_32F)
+    limit = PRINT_MAX_MM * FINE_PX_PER_MM
+    shift = {order[0]: (0.0, 0.0)}
+    moved = lambda k: cv2.warpAffine(views[k], np.float32([[1, 0, -shift[k][0]], [0, 1, -shift[k][1]]]),
+                                     (some.shape[1], some.shape[0]), flags=cv2.INTER_LINEAR, borderValue=np.nan)
+    placed = [moved(order[0])]
+    for k in order[1:]:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            ref = np.nan_to_num(np.nanmedian(np.stack(placed), 0)).astype(np.float32)
+        (dx, dy), response = cv2.phaseCorrelate(ref * window, np.nan_to_num(views[k]).astype(np.float32) * window)
+        shift[k] = (dx, dy) if response >= COARSE_RESPONSE and np.hypot(dx, dy) <= limit else (0.0, 0.0)
+        placed.append(moved(k))
+    mx, my = np.median([v[0] for v in shift.values()]), np.median([v[1] for v in shift.values()])
+    return {k: np.float32([[1, 0, dx - mx], [0, 1, dy - my], [0, 0, 1]]) for k, (dx, dy) in shift.items()}
+
+
+def refine_fine(groups, photo_to_ink, paths, shape_of, workers=8, coarse=False, max_mm=MAX_FINE_MM, what="fine refinement"):
     """Fine corrections for every refinement group of two or more label photos (fine_group), in parallel."""
-    jobs = [(g, [paths.get(k) for k in g], [photo_to_ink[k] for k in g], shape_of[g[0]]) for g in groups if len(g) >= 2]
+    jobs = [(g, [paths.get(k) for k in g], [photo_to_ink[k] for k in g], shape_of[g[0]], coarse, max_mm)
+            for g in groups if len(g) >= 2]
     out = {}
     with Pool(workers) as pool:
         for n, c in enumerate(pool.imap_unordered(fine_group, jobs), 1):
             out.update(c)
             if n % 100 == 0 or n == len(jobs):
-                print(f"fine refinement: {n} of {len(jobs)} groups", flush=True)
+                print(f"{what}: {n} of {len(jobs)} groups", flush=True)
     return out
+
+
+def refine_prints(print_groups, photo_to_ink, paths, shape_of, workers=8):
+    """Corrections aligning each stored open print's label photos to each other (see PRINT_MAX_MM)."""
+    return refine_fine(print_groups, photo_to_ink, paths, shape_of, workers, coarse=True, max_mm=PRINT_MAX_MM,
+                       what="print alignment")
 
 
 def apply_offset(o, pts):
@@ -1428,6 +1469,157 @@ def apply_offset(o, pts):
 def offset_matrix(o):
     th, dx, dy = o
     return np.array([[np.cos(th), -np.sin(th), dx], [np.sin(th), np.cos(th), dy], [0, 0, 1]])
+
+
+# A stored print's label photo whose pose is off (the user, 2026-11-25: DMG-LO-GPS-john, a cartridge photographed lying
+# sideways, its label fitted turned 90 degrees, the DMG recess being nearly square; others with a corner some mm off in
+# perspective): its pose carried from the print's other label photos through their matches (as stage 3: the match's
+# inliers in both label photos' circles, MIN_LINK_POINTS or more, a homography refitted to them by RANSAC,
+# CARRY_RANSAC_PX), from up to CARRY_MAX of them, the most points first, in ink coordinates (their stored photo_to_ink).
+# Used where two or more of the carried poses agree within PRINT_CARRY_AGREE_MM (their label's corners; a carrier fitted
+# wrongly itself disagrees: DMG-NM-USA-ted's 201b75e0, 40-60 mm off) and the label photo's own stored pose is off from
+# them: the label's corners over PRINT_CARRY_MM apart once the best turn and shift between the two is taken out (the
+# shape of the label in the photo wrong: a quarter turn, perspective), or that turn over PRINT_CARRY_DEG or shift over
+# PRINT_MAX_MM (what the print alignment can't reach). A turn and shift alone isn't counted: the families' ink frames
+# differ by that (each anchored by its own median cut), and a print joined across families has its label photos in
+# several (comparing the poses as they were, 80 of 128 carried were from another family). The carried cut must lie on
+# the label photo (on_label, as stage 3: in lot photos a match also reaches the same print on another cartridge). And the
+# pixels decide (the shape off by 1-3 mm can be the carry's own error as well as the fit's): the label photo drawn by its
+# own pose (the turn and shift taken out) and by the carried one, its label 1 mm in, blurred over CARRY_BLUR_MM, each
+# correlated with the median of the agreeing carriers drawn by their own poses; carried only where the carried
+# correlates PRINT_CARRY_GAIN more, and at least PRINT_CARRY_MIN (2026-11-25, all open prints: 75 of 81 candidates
+# correlated better carried, turned ones from about 0.05 to 0.95-0.99, shapes 1-2 mm off from 0.5-0.7 to about 0.9; the
+# three carried far onto something else stayed under 0.2, the others 0.5 or more). Then its fit is the agreeing carrier's with the most points, carried (its cut, plastic,
+# placement and width, as stage 3), an approximate cut (the print sits about 1 mm differently on each sticker:
+# straighten finds its own cut, restore insets it), before stage 2, so it links and is refined with its print.
+# ("carried_in_print": {from, points, moved_mm, shape_off_mm, turn_deg, shift_mm, correlation: [own, carried]} in its record.) Measured before building (2026-11-25, standalone on 10
+# turned label photos and 179 random ones of stored prints, against the median of the print's others at 20 px/mm):
+# carried, the turned ones correlated a median 0.78 (0.00 as fitted), ECC then moving their corners a median 0.20 mm,
+# 90 % 0.33 (the refinements finish it); on the random ones the stored pose and the carried agreed within a median
+# 0.15 mm, 99 % 3.1 mm. Refitting the edges from the carried pose was worse than the carried pose on 170 of 181 (as on
+# 2026-11-15). (Tried first, the same day: turning the fit a quarter turn by the serial's reading direction, wrong on
+# all 11 half turns; then by the pixels, right on all, but a turned fit keeps its perspective errors.)
+PRINT_CARRY_AGREE_MM = 0.5
+PRINT_CARRY_MM = 1.0
+PRINT_CARRY_DEG = 5.0
+PRINT_CARRY_GAIN = 0.05
+PRINT_CARRY_MIN = 0.4
+CARRY_BLUR_MM = 0.4
+
+
+def pose_off(own, carried, shape):
+    """How a pose is off from another (both photo -> ink): (the label's corners apart once the best turn and shift is
+    taken out, mm; that turn, degrees; that shift, mm, at the label's centre; the turn and shift, ink -> ink, taking
+    own onto carried)."""
+    c = corners_mm(shape)
+    a, b = project(own @ np.linalg.inv(carried), c), c  # where own puts the carried pose's corners
+    am, bm = a.mean(0), b.mean(0)
+    U, _, Vt = np.linalg.svd((a - am).T @ (b - bm))
+    R = Vt.T @ U.T
+    if np.linalg.det(R) < 0:
+        Vt[-1] *= -1
+        R = Vt.T @ U.T
+    rest = float(np.max(np.linalg.norm((a - am) @ R.T + bm - b, axis=1)))
+    t = bm - R @ am
+    T = np.array([[R[0, 0], R[0, 1], t[0]], [R[1, 0], R[1, 1], t[1]], [0, 0, 1.0]])
+    return rest, abs(float(np.degrees(np.arctan2(R[1, 0], R[0, 0])))), float(np.linalg.norm(am - bm)), T
+
+
+def ink_label(photo, photo_to_ink, shape):
+    """A label photo's label in ink coordinates (compare_view's drawing), 1 mm in, blurred over CARRY_BLUR_MM."""
+    v = cv2.GaussianBlur(np.float32(compare_view(photo, np.linalg.inv(np.float64(photo_to_ink)), shape)), (0, 0),
+                         CARRY_BLUR_MM * COMPARE_PX_PER_MM)
+    b = int((COMPARE_MARGIN + 1) * COMPARE_PX_PER_MM)
+    return v[b:-b, b:-b]
+
+
+def correlation(a, b):
+    a, b = a - a.mean(), b - b.mean()
+    return float((a * b).sum() / np.sqrt((a * a).sum() * (b * b).sum() + 1e-9))
+
+
+def carry_check(job):
+    """(key, the correlation by its own pose, by the carried) with the agreeing carriers' median (see PRINT_CARRY_GAIN)."""
+    k, path, shape, own, carried, refs = job
+    img = photos.load(path) if path else None
+    views = [ink_label(i, H, shape) for i, H in ((photos.load(p) if p else None, H) for p, H in refs) if i is not None]
+    if img is None or not views:
+        return k, None, None
+    ref = np.median(np.stack(views), 0)
+    return k, correlation(ink_label(img, own, shape), ref), correlation(ink_label(img, carried, shape), ref)
+
+
+def carry_in_prints(lps, fits, stored_records, matches, print_groups, photo_paths, workers=8):
+    """In place on fits: the stored prints' label photos whose poses are off carried from the others (above);
+    {key: {"from", "points", "moved_mm"}}."""
+    lp_of = {lp["key"]: lp for lp in lps}
+    pid_of = {k: i for i, g in enumerate(print_groups or []) for k in g
+              if k in fits and k in lp_of and (stored_records.get(k) or {}).get("photo_to_ink") is not None}
+    by_photo = {}
+    for k in pid_of:
+        by_photo.setdefault(lp_of[k]["photo"], []).append(k)
+    inside = lambda pts, lp: np.hypot(*(pts - np.float64(lp["centre"])).T) < lp["radius"]
+    tries = {}
+    for a, b, _, inl in matches:
+        for pa_all, pb_all, x, y in ((inl[:, :2], inl[:, 2:], a, b), (inl[:, 2:], inl[:, :2], b, a)):
+            for ka in by_photo.get(x, []):
+                ia = inside(pa_all, lp_of[ka])
+                for kb in by_photo.get(y, []):
+                    if kb != ka and pid_of[kb] == pid_of[ka] and lp_of[kb]["shape"] == lp_of[ka]["shape"]:
+                        m = ia & inside(pb_all, lp_of[kb])
+                        if m.sum() >= MIN_LINK_POINTS:
+                            tries.setdefault(ka, []).append((int(m.sum()), kb, pa_all[m], pb_all[m]))
+    candidates = {}
+    for ka, t in tries.items():
+        shape = lp_of[ka]["shape"]
+        c = corners_mm(shape)
+        apart = lambda A, B: float(np.max(np.linalg.norm(project(A @ np.linalg.inv(B), c) - c, axis=1)))
+        poses = []
+        for _, kb, pa, pb in sorted(t, key=lambda x: -x[0])[:CARRY_MAX]:
+            H, mask = cv2.findHomography(np.float32(pa), np.float32(pb), cv2.RANSAC, CARRY_RANSAC_PX)
+            if H is None or mask.sum() < MIN_LINK_POINTS:
+                continue
+            ink = np.float64(stored_records[kb]["photo_to_ink"]) @ H
+            poses.append((int(mask.sum()), kb, ink / ink[2, 2], H))
+        # the carried poses agreeing with the most others (two or more agreeing), the most points first
+        groups = [[q for q in poses if apart(q[2], p[2]) <= PRINT_CARRY_AGREE_MM] for p in poses]
+        groups = [g for g in groups if len(g) >= 2]
+        if not groups:
+            continue
+        g = max(groups, key=lambda g: (len(g), sum(q[0] for q in g)))
+        points, kb, ink, H = max(g, key=lambda q: q[0])
+        own = np.float64(stored_records[ka]["photo_to_ink"])
+        rest, turn, shift, T = pose_off(own, ink, shape)
+        if rest <= PRINT_CARRY_MM and turn <= PRINT_CARRY_DEG and shift <= PRINT_MAX_MM:
+            continue
+        Hinv, fb = np.linalg.inv(H), fits[kb]
+        cut = Hinv @ np.float64(fb["cut_to_photo"])
+        if not on_label(cut / cut[2, 2], shape, lp_of[ka]["centre"], fits[ka]["cut_to_photo"]):
+            continue
+        refs = [(photo_paths.get(lp_of[q[1]]["photo"]), np.float64(stored_records[q[1]]["photo_to_ink"])) for q in g]
+        candidates[ka] = (points, kb, H, rest, turn, shift,
+                          (ka, photo_paths.get(lp_of[ka]["photo"]), shape, T @ own, ink, refs), apart(own, ink))
+    checked = {}
+    if candidates:
+        print(f"carried from their print: {len(candidates)} candidates, comparing their pixels", flush=True)
+        with Pool(workers) as pool:
+            for k, now, by_carry in pool.imap_unordered(carry_check, [c[6] for c in candidates.values()]):
+                checked[k] = (now, by_carry)
+    carried = {}
+    for ka, (points, kb, H, rest, turn, shift, _, moved) in candidates.items():
+        now, by_carry = checked.get(ka, (None, None))
+        if now is None or by_carry < max(now + PRINT_CARRY_GAIN, PRINT_CARRY_MIN):
+            continue
+        Hinv, fb = np.linalg.inv(H), fits[kb]
+        cut, plastic = Hinv @ np.float64(fb["cut_to_photo"]), Hinv @ np.float64(fb["plastic_to_photo"])
+        f = fits[ka]
+        f.update({"cut_to_photo": cut / cut[2, 2], "plastic_to_photo": plastic / plastic[2, 2], "placement": fb["placement"],
+                  "width_mm": fb.get("width_mm"), "height_mm": fb.get("height_mm"),
+                  "edge": dict(f.get("edge") or {}, label_used=False)})
+        carried[ka] = f["carried_in_print"] = {"from": kb, "points": points, "moved_mm": round(moved, 3),
+                                               "shape_off_mm": round(rest, 3), "turn_deg": round(turn, 1), "shift_mm": round(shift, 3),
+                                               "correlation": [round(now, 3), round(by_carry, 3)]}
+    return carried
 
 
 def frozen_fit(r):
@@ -1517,7 +1709,8 @@ def from_frozen_match(out, lps, failed, photo_paths, frozen_entries):
     return done
 
 
-def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None, stored_records=None):
+def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None, stored_records=None,
+          print_groups=None):
     lps = found["label_photos"]
     keys = [lp["key"] for lp in lps]
     if len(set(keys)) < len(keys):  # find makes keys unique (find.unique_keys); two alike would both be merged away
@@ -1540,6 +1733,8 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
     fits.update({k: frozen_fit(r) for k, r in stored_records.items()})
     strings_off += drop_strings_off_label([lp for lp in lps if lp["key"] in stored_records], fits)
     fits.update({k: frozen_fit(r) for k, r in frozen_records.items()})
+    carried_in = carry_in_prints(lps, fits, stored_records, matches, print_groups, photo_paths or {})
+    print(f"carried from their print: {len(carried_in)} label photos", flush=True)
     merged = merge_fitted(lps, fits)
     candidates = link_candidates(lps, matches, merged)
     lps = [lp for lp in lps if lp["key"] not in merged]
@@ -1550,6 +1745,7 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
     offsets, family_of, poor, links_info, corrections, groups = stage2(lps, fits, candidates, photo_paths or {})
     poor -= set(frozen_records)  # a frozen label photo is never a poor fit
     links_info["shapes chosen by the fit"] = shapes_chosen
+    links_info["carried from their print"] = carried_in
     links_info["strings off the label, dropped"] = strings_off
     coarse = {}
     for k, f in fits.items():
@@ -1563,6 +1759,19 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
         links_info["fine refined"] = len(fine)
         links_info["fine correction_mm"] = {"median": round(float(np.median([v[1] for v in fine.values()])), 3),
                                             "90 %": round(float(np.percentile([v[1] for v in fine.values()], 90)), 3)}
+    after_fine = {k: fine.get(k, (np.eye(3), None))[0] @ coarse[k] for k in fits}
+    groups_p = []
+    for g in print_groups or []:
+        g = [k for k in g if k in fits and k not in poor and k not in frozen_records]
+        if g:
+            sh = max(set(shape_of[k] for k in g), key=lambda x: sum(shape_of[k] == x for k in g))
+            groups_p.append([k for k in g if shape_of[k] == sh])
+    by_print = refine_prints(groups_p, after_fine, paths, shape_of)
+    if by_print:
+        links_info["print aligned"] = len(by_print)
+        links_info["print correction_mm"] = {"median": round(float(np.median([v[1] for v in by_print.values()])), 3),
+                                             "90 %": round(float(np.percentile([v[1] for v in by_print.values()], 90)), 3),
+                                             "over 0.5": int(sum(v[1] > 0.5 for v in by_print.values()))}
     out = {}
     for lp in lps:
         k = lp["key"]
@@ -1572,7 +1781,8 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
         o = offsets.get(k, np.zeros(3))
         C, moved = corrections.get(k, (np.eye(3), None))
         Cf, fine_moved = fine.get(k, (np.eye(3), None))
-        photo_to_ink = Cf @ C @ offset_matrix(o) @ np.linalg.inv(f["cut_to_photo"])
+        Cp, print_moved = by_print.get(k, (np.eye(3), None))
+        photo_to_ink = Cp @ Cf @ C @ offset_matrix(o) @ np.linalg.inv(f["cut_to_photo"])
         out[k] = {"photo": lp["photo"], "shape": lp["shape"], "photo_to_ink": (photo_to_ink / photo_to_ink[2, 2]).tolist(),
                   "cut_to_photo": (f["cut_to_photo"] / f["cut_to_photo"][2, 2]).tolist(),
                   "width_mm": round(float(f.get("width_mm", shapes.LABEL_MM[lp["shape"]][0])), 3),
@@ -1584,12 +1794,14 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
                   "candidates": f["candidates"], "probability": f["probability"] and round(f["probability"], 3),
                   "changed_by_choice": not f["round1_same"],
                   "fallback": "a poor fit: its links disagree" if k in poor else
+                              f"approximate cut: pose carried from {f['carried_in_print']['from']} of its print through a match" if f.get("carried_in_print") else
                               "approximate cut: the label edges could not be precisely located" if f.get("edge") and not f["edge"]["label_used"] else
                               ("found by the pose search" if f["start"].startswith("search") else None),
                   "family": family_of[k][0], "family_size": family_of[k][1],
                   "correction_mm": None if moved is None else round(moved, 3),
                   "fine_correction_mm": None if fine_moved is None else round(fine_moved, 3),
-                  "edge": f.get("edge"), "merged": sorted(merged_into.get(k, []))}
+                  "print_correction_mm": None if print_moved is None else round(print_moved, 3),
+                  "edge": f.get("edge"), "merged": sorted(merged_into.get(k, [])), "carried_in_print": f.get("carried_in_print")}
     anchor_to_frozen(out, frozen_records)
     links_info["from frozen print matches"] = from_frozen_match(out, lps, failed, photo_paths or {}, frozen_entries or {})
     carry_alone(out, lps, matches, photo_paths or {}, links_info)
@@ -1802,7 +2014,9 @@ def main():
         store = stored_prints.load(None if not args.sample else os.path.join(gen, "prints", stored_prints.FILE))
         stored = {k: r["pose"] for p in store["prints"].values() if not p.get("frozen") for k, r in p["label_photos"].items()
                   if (r.get("pose") or {}).get("plastic_to_photo") is not None}
-        result = solve(found, match.read_matches(os.path.join(gen, "match"), list(chosen)), os.path.join(gen, "edges"), chosen, fz, entries, stored)
+        print_groups = [sorted(p["label_photos"]) for p in store["prints"].values() if not p.get("frozen")]
+        result = solve(found, match.read_matches(os.path.join(gen, "match"), list(chosen)), os.path.join(gen, "edges"), chosen, fz, entries, stored,
+                       print_groups)
         steps.write_json(out, result)
     result = json.load(open(out))
     sizes = {s: json.load(open(os.path.join(gen, "read-text", s + ".json")))["size"] or [1, 1] for s in chosen}
