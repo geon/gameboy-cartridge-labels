@@ -9,6 +9,7 @@ original up is not known. First crawled 2026-11-22: "gameboy" in Spel (product_c
 
     python3 src/blocket_photos.py list '<search URL>' > listings.json
     python3 src/blocket_photos.py download listings.json
+    python3 src/blocket_photos.py search queries.json   (title searches, one per release: tradera_photos.py queries)
 
 Listings whose title says complete in box come last (tradera_photos.CIB); lots are kept (the user, 2026-11-17).
 Only each listing's first photo, one a second. A photo under MIN_SIDE on its long side is not kept.
@@ -68,6 +69,76 @@ def list_search(url):
     return out
 
 
+SEARCHES = os.path.join(OUT, "blocket-searches.json")
+SEARCH = "https://www.blocket.se/recommerce/forsale/search?q={q}"
+
+
+def fetch(v, sources, today, extra=None):
+    """Downloads one listing's first photo: "kept", "small" or "failed"; records it in sources (not saved)."""
+    name = f"blocket-{v['id']}.jpg"
+    image_url = v["image"].replace("/dynamic/default/", f"/dynamic/{WIDTH}/")
+    os.makedirs(DROP, exist_ok=True)
+    path = os.path.join(DROP, name)
+    if subprocess.run(["curl", "-sSf", "-o", path, image_url], stderr=subprocess.DEVNULL).returncode != 0:
+        if os.path.exists(path):
+            os.remove(path)
+        return "failed"
+    time.sleep(1)
+    wh = size(path)
+    record = {"listing": v["url"], "listing_title": v["title"], "image": image_url, "size": wh,
+              "search": v["search"], **(extra or {}), "fetched": today}
+    if max(wh) < MIN_SIDE:
+        os.remove(path)
+        sources[name] = {**record, "too_small": True}
+        return "small"
+    sources[name] = record
+    with locked(DROP):
+        listing = load(LISTING)
+        listing[name] = {"page_url": v["url"], "image_url": image_url, "title_on_page": v["title"],
+                         **({"searched_release": extra["release"], "searched_serial": extra["serial"], "query": extra["query"]}
+                            if extra else {}), "fetched": today}
+        save(LISTING, listing)
+    return "kept"
+
+
+def search(queries_file):
+    """Title searches (2026-11-25, the user: search for specific titles), one per release (tradera_photos.search_queries):
+    the search's first page (plain curl, one search every 3 s), the listings tradera_photos.wanted_listing keeps,
+    complete-in-box last, until tradera_photos.PER_RELEASE photos are kept. Every search recorded in SEARCHES under its pass."""
+    import urllib.parse
+    sources, searches = load(SOURCES), load(SEARCHES)
+    today = datetime.date.today().isoformat()
+    for q in json.load(open(queries_file)):
+        if q["pass"] in searches.get(q["release"], {}):
+            continue
+        url = SEARCH.format(q=urllib.parse.quote_plus(q["query"]))
+        page = subprocess.run(["curl", "-sS", url], capture_output=True, text=True)
+        if page.returncode != 0:
+            print("failed", q["release"], page.stderr.strip(), flush=True)
+            time.sleep(60)
+            continue
+        items = [{"id": i["url"].rstrip("/").rsplit("/", 1)[1], "title": html_module.unescape(i.get("name", "")),
+                  "url": i["url"], "image": i.get("image"), "search": url} for i in page_items(page.stdout)]
+        cands = [v for v in items if v["image"] and tradera_photos.wanted_listing(q["title"], v["title"])]
+        cands.sort(key=lambda v: tradera_photos.boxed_last(v["title"]))
+        kept = small = 0
+        for v in cands:
+            if kept >= tradera_photos.PER_RELEASE:
+                break
+            if f"blocket-{v['id']}.jpg" in sources:
+                continue
+            r = fetch(v, sources, today, {"release": q["release"], "serial": q["serial"], "query": q["query"]})
+            kept += r == "kept"
+            small += r == "small"
+        searches.setdefault(q["release"], {})[q["pass"]] = {"query": q["query"], "results": len(items),
+                                                             "candidates": len(cands), "kept": kept, "too_small": small,
+                                                             "date": today}
+        save(SOURCES, sources)
+        save(SEARCHES, searches)
+        print(q["release"], len(items), "results,", len(cands), "candidates,", kept, "kept,", small, "too small", flush=True)
+        time.sleep(3)
+
+
 def download(listings_file):
     listings = json.load(open(listings_file))
     listings.sort(key=lambda v: tradera_photos.is_cib(v["title"]))  # stable: page order otherwise
@@ -108,3 +179,5 @@ if __name__ == "__main__":
         json.dump(list_search(sys.argv[2]), sys.stdout, ensure_ascii=False, indent=1)
     elif sys.argv[1] == "download":  # download <listings.json>
         download(sys.argv[1 + 1])
+    elif sys.argv[1] == "search":  # search <queries.json> (tradera_photos.py queries)
+        search(sys.argv[2])
