@@ -116,17 +116,17 @@ def even_to(img, ref, valid):
 # Fine registration at full resolution: solve aligns a print's label photos by their pixels at 5 px/mm, which leaves
 # 0.4-1.8 px (at 20 px/mm) between them, most at the label's top and bottom, enough to blur small text in a median.
 # Each label photo (lighting-evened gray) is aligned to the print's median by a homography (ECC), the median rebuilt,
-# REGISTER_ROUNDS times; then by a smooth local correction: dense optical flow (DIS) against the median, smoothed over
-# FLOW_SMOOTH_MM and limited to FLOW_MAX_PX, so a gentle bend or lens distortion is followed, not a detail (dirt isn't
-# pulled into place).
+# REGISTER_ROUNDS times; then by a smooth local correction: dense optical flow (DIS) against the median, in FLOW_ROUNDS
+# rounds, each against the median rebuilt, smoothed over that round's mm and limited to its px, so a gentle bend or
+# lens distortion is followed, not a detail (dirt isn't pulled into place). (Was, until 2026-11-26: one round at 2 mm;
+# 0.5-2 px were left between the label photos, varying over about 5 mm, most along the label's top: AGB-AFXP-EUR-tess.)
 # A print joined across families (by the user in review-prints, or by the prints step) has label photos posed by separate
 # fits, up to about 1 mm (20 px) apart: each is first shifted onto the one with the most of the label on it by phase
 # correlation (accepted when its peak is at least COARSE_RESPONSE and the shift at most COARSE_MAX_MM).
 REGISTER_ROUNDS = 2
 COARSE_RESPONSE = 0.05
 COARSE_MAX_MM = 3.0
-FLOW_SMOOTH_MM = 2.0
-FLOW_MAX_PX = 3.0
+FLOW_ROUNDS = [(2.0, 3.0), (1.0, 3.0), (0.5, 2.0)]  # (smoothed over mm, limited to px)
 
 
 def evened_gray(img, valid):
@@ -165,16 +165,21 @@ def homography_to(ref, gray, valid, M):
         return M
 
 
-def warped_onto(ref, entry, gray, M):
-    """entry (image, valid, px/mm) resampled onto ref: its homography M, then a smooth local correction (optical flow
-    against ref, smoothed over FLOW_SMOOTH_MM, limited to FLOW_MAX_PX)."""
+def flow_to(ref, gray, smooth_mm, max_px):
+    """A smooth local correction of gray onto ref (ref px -> where it is in gray): optical flow, smoothed over
+    smooth_mm, limited to max_px."""
     dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
     to8 = lambda x: np.clip(x * 40 + 128, 0, 255).astype(np.uint8)
-    flow = dis.calc(to8(ref), to8(warp(gray, M)), None)        # ref px -> where it is in the aligned photo
-    flow = cv2.GaussianBlur(flow, (0, 0), FLOW_SMOOTH_MM * straighten.PX_PER_MM)
+    flow = cv2.GaussianBlur(dis.calc(to8(ref), to8(gray), None), (0, 0), smooth_mm * straighten.PX_PER_MM)
     mag = np.linalg.norm(flow, axis=2, keepdims=True)
-    flow = (flow * np.minimum(1, FLOW_MAX_PX / np.maximum(mag, 1e-6))).astype(np.float32)
-    return (warp(entry[0], M, flow), warp(entry[1].astype(np.uint8), M, flow, nearest=True) > 0, entry[2])
+    return (flow * np.minimum(1, max_px / np.maximum(mag, 1e-6))).astype(np.float32)
+
+
+def composed(flow, more):
+    """The flow of more and then flow, as one: out(x) = flow's (x + more(x))."""
+    h, w = flow.shape[:2]
+    gx, gy = np.meshgrid(np.arange(w, dtype=np.float32), np.arange(h, dtype=np.float32))
+    return more + cv2.remap(flow, gx + more[..., 0], gy + more[..., 1], cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
 
 def coarse_shifts(grays, valids):
@@ -202,15 +207,26 @@ def register(entries, joined=False):
     for _ in range(REGISTER_ROUNDS):
         ref = np.median(np.stack([warp(g, M) for g, M in zip(grays, Ms)]), 0)
         Ms = [homography_to(ref, g, v, M) for g, v, M in zip(grays, valids, Ms)]
-    ref = np.median(np.stack([warp(g, M) for g, M in zip(grays, Ms)]), 0)
-    return [warped_onto(ref, e, g, M) for e, g, M in zip(entries, grays, Ms)]
+    flows = [np.zeros(g.shape + (2,), np.float32) for g in grays]
+    for smooth_mm, max_px in FLOW_ROUNDS:
+        cur = [warp(g, M, f) for g, M, f in zip(grays, Ms, flows)]
+        ref = np.median(np.stack(cur), 0)
+        flows = [composed(f, flow_to(ref, c, smooth_mm, max_px)) for f, c in zip(flows, cur)]
+    return [(warp(e[0], M, f), warp(e[1].astype(np.uint8), M, f, nearest=True) > 0, e[2])
+            for e, M, f in zip(entries, Ms, flows)]
+
+
+# A photo counts in band k only from FINEST_SHARE of the pixels per mm the band holds (straighten's / 2^k). (Was, until
+# 2026-11-26: down to half of it, rounded down; AGB-AFXP-EUR-tess: 7 of 10 label photos of 10.7-17.5 px/mm counted
+# in the finest band, little detail there, and outvoted the 3 sharp ones in the median.)
+FINEST_SHARE = 0.8
 
 
 def finest_band(photo_px_per_mm):
     """The finest band (0 = straighten's full resolution) a photo with this many pixels per mm carries: band k holds
-    detail about 2^k pixels of straighten's across, which needs about as many of the photo's per mm."""
-    ratio = straighten.PX_PER_MM / max(photo_px_per_mm, 1e-6)
-    return max(0, int(np.floor(np.log2(max(ratio, 1.0)))))
+    detail about 2^k pixels of straighten's across, which needs at least FINEST_SHARE as many of the photo's per mm."""
+    ratio = FINEST_SHARE * straighten.PX_PER_MM / max(photo_px_per_mm, 1e-6)
+    return max(0, int(np.ceil(np.log2(max(ratio, 1.0)) - 1e-9)))
 
 
 # Local sharpness: a label photo blurred in places (out of focus, motion, a soft lens corner) has little detail there in
@@ -223,7 +239,8 @@ def finest_band(photo_px_per_mm):
 # per pixel, a label photo is left out only where three or more still count (a
 # watermark on one of three came through where the softest was left out: 1b32d2a69c…_68_34, 2026-11-10).
 SHARP_MM = 1.0
-SHARP_SHARE = 0.5
+SHARP_SHARE = 0.8  # was 0.5 until 2026-11-26 (with FLOW_ROUNDS and FINEST_SHARE: sharper on 20 popular prints, the
+                   # user; 0.9, and 0.9 ramped to 0.5 in the coarsest band, were tried: 0.8 looked best)
 
 
 def sharp_enough(L, counts, lv):

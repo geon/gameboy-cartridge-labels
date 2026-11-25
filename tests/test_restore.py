@@ -17,6 +17,8 @@ def test_pyramid_collapses_back():
 def test_finest_band_by_resolution():
     assert restore.finest_band(20) == 0 and restore.finest_band(40) == 0
     assert restore.finest_band(10) == 1 and restore.finest_band(5) == 2
+    # from 0.8 of the band's pixels per mm: 16 px/mm counts in the finest band at 20, 15 doesn't
+    assert restore.finest_band(16) == 0 and restore.finest_band(15) == 1
 
 
 def test_evening_a_photo_to_itself_keeps_it():
@@ -66,7 +68,8 @@ def test_a_blurred_label_photo_is_left_out_of_the_fine_band_where_its_blurred():
     L = np.stack([sharp, sharp * 1.1, blurred, half])
     ok = restore.sharp_enough(L, np.ones(L.shape, bool), 0)
     assert ok[0].all() and ok[1].all() and not ok[2, 10:50, 10:70].any()
-    assert ok[3, 10:50, 5:30].all() and not ok[3, 10:50, 55:75].any()
+    # sharp where its detail, averaged over SHARP_MM (20 px), is mostly from its sharp half
+    assert ok[3, 10:50, 5:20].all() and not ok[3, 10:50, 55:75].any()
 
 
 def test_dirt_on_one_label_photo_doesnt_push_the_others_out():
