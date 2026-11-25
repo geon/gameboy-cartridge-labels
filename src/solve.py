@@ -1164,17 +1164,20 @@ def stage2(lps, fits, candidates, photo_paths, workers=8):
         if fam_links:
             weights = np.ones(len(fam_links))
             for _ in range(6):  # least squares, Tukey reweighting: o_b - o_a = the link's (turn, shift)
-                rows, rhs, ws = [], [], []
-                for (ia, ib, j), w in zip(fam_links, weights):
-                    theta, t = np.radians(j[1]), j[2]
-                    for c, v in ((0, theta), (1, t[0]), (2, t[1])):
-                        r = np.zeros(3 * len(members)); r[3 * ib + c] = 1; r[3 * ia + c] = -1
-                        rows.append(r * np.sqrt(w)); rhs.append(v * np.sqrt(w))
-                for n in range(len(members)):  # the gauge, weakly
-                    for c in range(3):
-                        r = np.zeros(3 * len(members)); r[3 * n + c] = 1e-3
-                        rows.append(r); rhs.append(0.0)
-                x = np.linalg.lstsq(np.array(rows), np.array(rhs), rcond=None)[0].reshape(-1, 3)
+                # the normal equations of that least squares (each of turn, shift x, shift y on its own): the links'
+                # weighted Laplacian plus the gauge, weakly (1e-3 per label photo, squared); same solution as a dense
+                # lstsq over 3 x members columns, which LAPACK's SVD failed to converge on (2026-11-25)
+                ia_, ib_ = np.array([l[0] for l in fam_links]), np.array([l[1] for l in fam_links])
+                v_ = np.array([(np.radians(l[2][1]), l[2][2][0], l[2][2][1]) for l in fam_links])
+                if not np.all(np.isfinite(v_)) or not np.all(np.isfinite(weights)):
+                    raise ValueError(f"stage 2: a link of family {min(members)} is not finite")
+                L = np.zeros((len(members), len(members)))
+                np.add.at(L, (ia_, ia_), weights); np.add.at(L, (ib_, ib_), weights)
+                np.add.at(L, (ia_, ib_), -weights); np.add.at(L, (ib_, ia_), -weights)
+                L[np.diag_indices_from(L)] += 1e-6
+                b = np.zeros((len(members), 3))
+                np.add.at(b, ib_, weights[:, None] * v_); np.add.at(b, ia_, -weights[:, None] * v_)
+                x = np.linalg.solve(L, b)
                 res = np.array([np.hypot(*(x[ib, 1:] - x[ia, 1:] - j[2])) + 20 * abs(x[ib, 0] - x[ia, 0] - np.radians(j[1]))
                                 for ia, ib, j in fam_links])  # mm; a turn's effect across about 20 mm
                 u = res / TUKEY_MM
