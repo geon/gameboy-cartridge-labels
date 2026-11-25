@@ -1,6 +1,10 @@
-// eBay country-site crawl for pass wanted1-<site>; window.EB_SITE set before loading (uk, fr, ...).
+// eBay crawl in one eBay site's tab (any country, ebay.com too). Set before loading: window.EB_SITE (com, uk, fr, ...),
+// window.EB_PASS (the pass name, as ingest's: wanted2-uk), window.EB_SLOT = [i, n, ms]: this tab is tab i of n sharing
+// eBay's rate limit (shared across its country sites), searching at the start of slot i of each n × ms cycle (the
+// user, 2026-11-23: one eBay search every ms in all). window.EB_QUEUE: the queries, when loaded with the script.
 (function () {
-const site = window.EB_SITE, pass = 'wanted1-' + site, key = 'EB.results.' + pass;
+const site = window.EB_SITE, pass = window.EB_PASS || 'wanted1-' + site, key = 'EB.results.' + pass;
+const [slotI, slotN, slotMs] = window.EB_SLOT || [0, 1, 75000];
 const EB = window.EB = {site, pass, results: {}, queue: [], running: false, blocks: [], done: 0};
 try { EB.results = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
 // left out: not a cartridge photo (box/manual only, guides, repros); lots and other regions kept (the user, 2026-11-17)
@@ -41,9 +45,17 @@ EB.flush = function () {
   EB.batch++;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(part)], {type: 'application/json'}));
-  a.download = 'ebay-' + site + '-batch-wanted1-' + String(EB.batch).padStart(3, '0') + '.json'; document.body.appendChild(a); a.click(); a.remove();
+  a.download = 'ebay-' + site + '-batch-' + pass + '-' + String(EB.batch).padStart(3, '0') + '.json'; document.body.appendChild(a); a.click(); a.remove();
   return Object.keys(part).length;
 };
+EB.slot = function () {  // waits for this tab's next slot
+  const cycle = slotN * slotMs, now = Date.now();
+  let t = Math.floor(now / cycle) * cycle + slotI * slotMs;
+  if (t < now) t += cycle;
+  return EB.sleep(t - now);
+};
+// removes releases from the unsearched part of the queue (those with enough photos already)
+EB.prune = list => { const s = new Set(list), before = EB.queue.length; EB.queue.splice(0, EB.queue.length, ...EB.queue.filter(q => q.release in EB.results || !s.has(q.release))); return site + ' removed ' + (before - EB.queue.length) + ', left to search ' + EB.queue.filter(q => !(q.release in EB.results)).length; };
 EB.run = async function () {
   if (EB.running) return; EB.running = true; EB.error = null; EB.stop = false;
   try {
@@ -53,6 +65,7 @@ EB.run = async function () {
       EB.current = q.release;
       let ok = false, netTries = 0, blockStart = null;
       while (!ok && !EB.stop) {
+        await EB.slot();
         try { EB.results[q.release] = await EB.search(q); ok = true; }
         catch (e) {
           if (e.http === undefined && netTries < 3) { netTries++; await EB.sleep(60000); continue; }
@@ -68,7 +81,6 @@ EB.run = async function () {
       if (!ok) break;
       EB.done++;
       try { localStorage.setItem(key, JSON.stringify(EB.results)); } catch (e) {}
-      await EB.sleep(60000 + Math.random() * 30000);
     }
   } finally { EB.running = false; EB.flush(); }
 };
@@ -77,4 +89,5 @@ const inp = document.createElement('input'); inp.type = 'file'; inp.setAttribute
 inp.style.cssText = 'position:fixed;top:30px;left:0;z-index:99999';
 inp.onchange = async () => { EB.queue = JSON.parse(await inp.files[0].text()); EB.loaded = EB.queue.length; EB.run(); };
 document.body.prepend(inp);
+if (window.EB_QUEUE) { EB.queue = window.EB_QUEUE; EB.loaded = EB.queue.length; EB.run(); }
 })();
