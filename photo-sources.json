@@ -8589,15 +8589,6 @@
   "serial_on_label": "DMG-UHJ",
   "source": "ebay-hitjapan"
  },
- "08bd804b91fd9beb90370e51d8301e70807508ed": {
-  "category": 300201,
-  "fetched": "2026-11-17",
-  "file": "tradera-741956916.jpg",
-  "image_url": "https://img.tradera.net/images/755/653422755_8f41861c-7f51-428f-8d61-7e85de3940ee.jpg",
-  "page_url": "https://www.tradera.com/item/300201/741956916/the-sword-of-hope-game-boy-scn",
-  "source": "tradera-category",
-  "title_on_page": "The Sword of Hope - Game Boy - SCN"
- },
  "08c180b9b8c189ed67a160646cee5e413a651208": {
   "category": 300201,
   "fetched": "2026-11-17",
@@ -11730,17 +11721,6 @@
   "system": "GBC",
   "title_on_page": "Pitfall: Beyond the Jungle"
  },
- "0bf8415e69c6a6905d3d728d9d33a7724afece35": {
-  "fetched": "2026-11-23",
-  "file": "ebay-117502352048.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/8i4AAeSwcdJqv~jG/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/117502352048",
-  "query": "Turok: Evolution GBA cartridge",
-  "searched_release": "AGB-AT4E",
-  "searched_serial": "AGB-AT4E-USA",
-  "source": "ebay-search",
-  "title_on_page": "Turok Evolution Nintendo Game Boy Advance GBA, 2002 Tested Game only Working"
- },
  "0c06b9c6b2d17020514cb8a7ec2f80ce22ae86da": {
   "fetched": "2026-11-10",
   "file": "ebay-278096297247.jpg",
@@ -12618,17 +12598,6 @@
   "platform": "gba",
   "source": "golisto-category",
   "title_on_page": "Harry Potter and the Prisoner of Azkaban(GB Advance)"
- },
- "0d0127c150770321265a22c1ef2dd803a6854214": {
-  "fetched": "2026-11-25",
-  "file": "yahoo-k1234596180-last.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0206/user/4de85e37f2cc010ee64b5d765ea5758a79581da8e31f1e79dbb068181bd11d56/i-img1200x900-17821970901007nhnny531797.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/k1234596180",
-  "photo": "last",
-  "searched_release": "DMG-AALJ",
-  "searched_serial": "DMG-AALJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "ゲームボーイ／アクアライフ"
  },
  "0d01d83ec99096d255d0576c501a3d5432c4f593": {
   "category": "gameboy-classic/games",
@@ -14461,16 +14430,6 @@
   "source": "ebay-search",
   "title_on_page": "Booby Boys Nintendo Game Boy Nihon Bussan 1993 Japanese Version DMG-B8J Rare"
  },
- "0f14d2b8cfc8dc440e8fc55454ef8e09e8ac722c": {
-  "fetched": "2026-11-18",
-  "file": "retro-gameland-876716b7b3.jpg",
-  "image_url": "https://cdn.myonlinestore.eu/f5d376c7-2585-4d4a-ba5c-4e5ab991c5d4/image/cache/full/95bd0c0332f0bde5acd946a5bb6825a609e1750e.jpg",
-  "page_url": "https://www.retrogameland.be/a-97873887/game-boy-games/gb-bubble-bobble-cib-noe/",
-  "shop": "Retro Gameland",
-  "source": "shop-retro-gameland",
-  "system": "GB",
-  "title_on_page": "GB Bubble Bobble (CIB) NOE"
- },
  "0f1670eedb68aeb724b0cc24b282180083abbc84": {
   "category": "https://superretro.com.au/collections/gameboy/Games",
   "fetched": "2026-11-14",
@@ -14508,17 +14467,6 @@
   "page_url": "https://www.tradera.com/item/300306/749484687/dragonball-z-the-legacy-of-goku-game-boy-advance-spel-gba-game-nintendo-original",
   "source": "tradera-category",
   "title_on_page": "Dragonball Z The Legacy Of Goku Game Boy Advance Spel GBA Game Nintendo Original"
- },
- "0f1f2d48cd1bc4232b2e45cfe6c63bdba1df75f7": {
-  "fetched": "2026-11-11",
-  "file": "ebay-198698816447.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/toQAAeSwzvFqx5zB/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/198698816447",
-  "query": "LEGO Star Wars II The Original Trilogy GBA cartridge",
-  "searched_release": "AGB-BL7E",
-  "searched_serial": "AGB-BL7E-USA",
-  "source": "ebay-search",
-  "title_on_page": "LEGO Star Wars II: The Original Trilogy (Nintendo Game Boy Advance, 2006)"
  },
  "0f261087852cf462aa46c163cb5026d1f5dbe206": {
   "fetched": "2026-11-23",
@@ -18933,17 +18881,6 @@
   "source": "shop-retro-gaming-fun",
   "system": "GB",
   "title_on_page": "GB Double Dragn II Complete (fah)"
- },
- "141bb034f733b6548fb85906a4010dacf8f07f8b": {
-  "fetched": "2026-11-09",
-  "file": "ebay-188750291032.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/ip8AAeSwNwVqc~mn/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/188750291032",
-  "query": "Jazz Jackrabbit GBA cartridge",
-  "searched_release": "AGB-AJJE",
-  "searched_serial": "AGB-AJJE-USA",
-  "source": "unrecorded",
-  "title_on_page": "Jazz Jackrabbit Nintendo Gameboy Advance GBA Tested Working Authentic"
  },
  "141be43a8490f5bbeabdfa6dbb496d17f1ea21ae": {
   "file": "jauce/cgb/CGB-AQIJ-JPN.jpg",
@@ -27740,14 +27677,6 @@
   "source": "mercari-search",
   "title_on_page": "Battleship Risk Clue for Nintendo Gameboy Advance"
  },
- "1df056f0ab366523c87ddb0e5236635d74945c79": {
-  "fetched": "2026-11-22",
-  "file": "blocket-27042900.jpg",
-  "image_url": "https://images.blocketcdn.se/dynamic/1600w/item/27042900/5997f899-01aa-46d2-95b3-4e01bec21f77",
-  "page_url": "https://www.blocket.se/recommerce/forsale/item/27042900",
-  "source": "blocket-search",
-  "title_on_page": "Monster warrior monsters - Gameboy"
- },
  "1df16395242c24422894de4488e21277b5ce9050": {
   "collection": "game-boy-games",
   "file": "retroraven/dmg/DMG-AOAE-USA.jpg",
@@ -27775,16 +27704,6 @@
   "searched_serial": "AGB-BPAE-USA",
   "source": "unrecorded",
   "title_on_page": "Pac-Man World (Nintendo Game Boy Advance, GBA 2004) AUTHENTIC CARTRIDGE TESTED"
- },
- "1dfa20485bd305cb12c7944eccf844d0f837fe21": {
-  "fetched": "2026-11-18",
-  "file": "la-tienda-de-videojuegos-bd84d9f3b3.webp",
-  "image_url": "https://latiendadevideojuegos.com/wp-content/uploads/2025/10/Looney-Tunes-Game-Boy-Color.webp",
-  "page_url": "https://latiendadevideojuegos.com/producto/looney-tunes-game-boy-color/",
-  "shop": "La Tienda de Videojuegos",
-  "source": "shop-la-tienda-de-videojuegos",
-  "system": "GB+GBC+GBA",
-  "title_on_page": "Looney Tunes Game Boy Color"
  },
  "1dfb8562dd9f5085804072fb24276d38e8e3c131": {
   "fetched": "2026-11-10",
@@ -27838,16 +27757,6 @@
   "source": "jauce-search",
   "title_on_page": "【※箱説なし※】みんなの飼育シリーズ1 ぼくのカブト虫",
   "via": "https://www.jauce.com/auction/1236818572"
- },
- "1e05d3a79269f24bad9dc51edbb2d8e6ba673cbd": {
-  "fetched": "2026-11-18",
-  "file": "retro-game-collector-heaven-cbced7aefc.jpg",
-  "image_url": "https://retrogamecollectorheaven.de/images/large/newstuffAugust2_2023_312_LRG.jpg",
-  "page_url": "https://retrogamecollectorheaven.de/index.php?main_page=product_info&cPath=210_4_18&products_id=76749",
-  "shop": "Retro Game Collector Heaven",
-  "source": "shop-retro-game-collector-heaven",
-  "system": "GB",
-  "title_on_page": "GB Iron Man X-O - Manowar in Heavy Metal EUR"
  },
  "1e08ed4bee22e3756414cf68a4d4baa423d2a349": {
   "file": "launchbox-abeezy1388/dmg/DMG-AMCE-USA_3.png",
@@ -36816,17 +36725,6 @@
   "system": "GameBoy",
   "title_on_page": "Chibi Maruko-Chan 4: Korega Nippon Dayo! Oujisama (JAP Version)"
  },
- "2712597eb8a810d127878eaa2b2cfabc13a9e987": {
-  "fetched": "2026-11-22",
-  "file": "ebay-318732651547.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/SzAAAeSwZy5qf~kk/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/318732651547",
-  "query": "Kim Possible 3 Team Possible GBA cartridge",
-  "searched_release": "AGB-BQPE",
-  "searched_serial": "AGB-BQPE",
-  "source": "ebay-search",
-  "title_on_page": "Kim Possible 3 Team Possible for Game Boy Advance GBA Cartridge Only Tested"
- },
  "271603b40801001074f7068911e40a991fba5d08": {
   "category": "gameboy-color/games",
   "file": "retronintendostore/dmg/DMG-AVUP-EUR.jpg",
@@ -39466,17 +39364,6 @@
   "page_url": "https://www.tradera.com/item/300306/758977447/super-mario-advance-2-3-for-game-boy-advance",
   "source": "tradera-category",
   "title_on_page": "Super Mario Advance 2 & 3 för Game Boy Advance"
- },
- "2a16fea8f2feb123e140732a5dc94776e6a87812": {
-  "fetched": "2026-11-23",
-  "file": "ebay-376916532246.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/MHMAAeSwpAppfQxX/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/376916532246",
-  "query": "Gran Duel: Shinki Dungeon no Hihou Game Boy Color Japan cartridge",
-  "searched_release": "CGB-ADVJ",
-  "searched_serial": "CGB-ADVJ-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Gran Duel: Shinki Dungeon no Hihou Version Game Boy Color GBC CIB"
  },
  "2a18893f5994176c4c22c7bf630760d5e60e85c2": {
   "category": 300306,
@@ -46016,17 +45903,6 @@
   "source": "ebay-search",
   "title_on_page": "Groove Adventure Rave 2: Hikari to Yami no Daikessen GBA Japan import US Seller"
  },
- "310ccc00a680a888ed64fe29adb65b4399bb2a3c": {
-  "fetched": "2026-11-22",
-  "file": "ebay-800816700232.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/fi4AAeSwf3Fq10Ok/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/800816700232",
-  "query": "Wings of Fury Game Boy",
-  "searched_release": "DMG-AFXE",
-  "searched_serial": "DMG-AFXE-USA",
-  "source": "ebay-search",
-  "title_on_page": "Nintendo Gameboy Color: Wings of Fury"
- },
  "3112dba1a5b1c57d595a910a29e47197b435b363": {
   "collection": "game-boy",
   "file": "zockbar/dmg/DMG-KA.jpg",
@@ -49837,17 +49713,6 @@
   "site": "zockbar.ch",
   "source": "zockbar",
   "title_on_page": "The Lord of the Rings: The Return of the King"
- },
- "353bae1a934fbcb00303b4f6305c259087d60fde": {
-  "fetched": "2026-11-23",
-  "file": "mercari-m96294337380.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m96294337380_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m96294337380/",
-  "query": "Woody Woodpecker: Crazy Castle 5 GBA PAL",
-  "searched_release": "AGB-AWWP",
-  "searched_serial": "AGB-AWWP-EUR",
-  "source": "mercari-search",
-  "title_on_page": "Woody woodpecker Crazy Castle 5 Gameboy Advance Game GAME ONLY"
  },
  "353baf4c50169522fd621def846db722723565c1": {
   "file": "launchbox-abeezy1388/dmg/DMG-Q2-USA_2.png",
@@ -57326,18 +57191,6 @@
   "serial_on_label": "DMG-S4J",
   "source": "emumovies"
  },
- "3d093d0aa5a12489ca508dfa31bcab2f26183c0c": {
-  "category": 1001332,
-  "fetched": "2026-11-25",
-  "file": "tradera-754885413.jpg",
-  "image_url": "https://img.tradera.net/images/967/663443967_2f03ab85-23c3-4a67-be9e-56a8e8c40aaf.jpg",
-  "page_url": "https://www.tradera.com/item/1001332/754885413/legend-of-the-river-king-gb-game-boy-color",
-  "query": "Legend of the River King 2",
-  "searched_release": "DMG-BRKP",
-  "searched_serial": "DMG-BRKP-EUR",
-  "source": "tradera-category",
-  "title_on_page": "Legend of the River King GB - Game Boy Color"
- },
  "3d0a8ebdb8166d23c51f2e545c943404be455e0b": {
   "file": "launchbox-abeezy1388/dmg/DMG-IY-USA_2.png",
   "note": "named by the serial read on it (exact)",
@@ -58537,17 +58390,6 @@
   "source": "ebay-search",
   "title_on_page": "World Championship Poker (Nintendo GBA) Authentic CLEANED & TESTED"
  },
- "3e2e9552bd535d063b37fa812b64035648389df5": {
-  "fetched": "2026-11-23",
-  "file": "mercari-m18055854952.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m18055854952_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m18055854952/",
-  "query": "SimCity 2000 GBA",
-  "searched_release": "AGB-A5CE",
-  "searched_serial": "AGB-A5CE-USA",
-  "source": "mercari-search",
-  "title_on_page": "SimCity 2000 for Nintendo Gameboy Advance"
- },
  "3e310f7e7a1575ec13a9565c1adea27089326980": {
   "fetched": "2026-11-18",
   "file": "golisto-165350.jpg",
@@ -59324,17 +59166,6 @@
   "platform": "game-boy",
   "source": "golisto-category",
   "title_on_page": "The Rugrats Movie (Nintendo Gameboy/Gameboy Color)"
- },
- "3edcfae0f76c47a201a0ee233ebf105b820d9961": {
-  "fetched": "2026-11-23",
-  "file": "ebay-147519303021.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/qeIAAOSw1vdj56Ok/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/147519303021",
-  "query": "Wings of Fury Game Boy",
-  "searched_release": "DMG-AFXE",
-  "searched_serial": "DMG-AFXE-USA",
-  "source": "ebay-search",
-  "title_on_page": "Wings of fury game boy en looseOpens in a new window or tab"
  },
  "3eded04aed78b4f07a000ccc9a7553ec567300df": {
   "category": 300201,
@@ -67472,18 +67303,6 @@
   "source": "unrecorded",
   "title_on_page": "Vintage Big Mutha Truckers Nintendo Game Boy Advance NTSC-U/C E10+Tested Minty"
  },
- "47366ee493a6c232e25f9ca7c4b652d7599e22c8": {
-  "fetched": "2026-11-22",
-  "file": "yahoo-n1249657610.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0210/user/2c981a767c9303da43e359911e0ea1829a3f25fe6ae1ec41bd71435a0b300e12/i-img900x1200-1792888053459447g40ia38.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/n1249657610",
-  "query": "グランデュエル GBC",
-  "searched_release": "CGB-ADVJ",
-  "searched_serial": "CGB-ADVJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "GBC 熱血冒険ダンジョンカードバトル　グランデュエル　〜深きダンジョンの秘宝〜　中古　箱、説明書有り　ゲームボーイカラー",
-  "via": "https://www.jauce.com/auction/n1249657610"
- },
  "4738690b4a3192f52d2f79efd51bb283768da915": {
   "fetched": "2026-11-23",
   "file": "mercari-m69610653960.jpg",
@@ -69894,16 +69713,6 @@
   "original_sha1": "f823f1dd4899824adad68e584988264b9fe775f5",
   "serial_on_label": "DMG-B6J",
   "source": "google"
- },
- "49f149aae76b9f0ebfce5616abcade0e2599dffc": {
-  "fetched": "2026-11-18",
-  "file": "retro-game-collector-heaven-87f96efdaf.jpg",
-  "image_url": "https://retrogamecollectorheaven.de/images/large/newstuffJanuary29_2025_058_LRG.jpg",
-  "page_url": "https://retrogamecollectorheaven.de/index.php?main_page=product_info&cPath=210_4_18&products_id=90300",
-  "shop": "Retro Game Collector Heaven",
-  "source": "shop-retro-game-collector-heaven",
-  "system": "GB",
-  "title_on_page": "GB Fifa 97 EUR"
  },
  "49f22ec68b2f809c574f06b6b109fdc664e3352b": {
   "fetched": "2026-11-11",
@@ -73447,17 +73256,6 @@
   "source": "zockbar",
   "title_on_page": "WWF Raw"
  },
- "4e173b4f4200606526dc60d207af65914234ef03": {
-  "fetched": "2026-11-25",
-  "file": "ebay-286621328483.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/wF4AAeSwl4NoQAOW/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/286621328483",
-  "query": "Billy Bob's Huntin'-n-Fishin' Game Boy Color cartridge",
-  "searched_release": "CGB-AHZE",
-  "searched_serial": "CGB-AHZE-USA",
-  "source": "ebay-search",
-  "title_on_page": "Billy Bob's Huntin'-n-Fishin' (Nintendo Game Boy Color, 1999)Opens in a new window or tab"
- },
  "4e255c6d2b6944e6dc2b207a8f039d30ebf26570": {
   "category": 300306,
   "fetched": "2026-11-17",
@@ -75670,18 +75468,6 @@
   "page_url": "https://www.tradera.com/item/300201/442416872/power-racer-scn-nintendo-game-boy-",
   "source": "tradera-category",
   "title_on_page": "Power racer | SCN | Nintendo Game boy | "
- },
- "507f834db297d7c10c6ff8c3dc8d2425db348f1c": {
-  "fetched": "2026-11-23",
-  "file": "yahoo-q1243660630.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0209/user/4de85e37f2cc010ee64b5d765ea5758a79581da8e31f1e79dbb068181bd11d56/i-img1200x900-17887714889932f1deak1930.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/q1243660630",
-  "query": "信長の野望 2 GB",
-  "searched_release": "DMG-AGYJ",
-  "searched_serial": "DMG-AGYJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "GB 信長の野望2",
-  "via": "https://www.jauce.com/auction/q1243660630"
  },
  "5080e4fdfe18d4ce674e80c320993adbe205bb8d": {
   "fetched": "2026-11-12",
@@ -82878,17 +82664,6 @@
   "system": "GBA",
   "title_on_page": "Garfield and His Nine Lives (EUR)"
  },
- "58afb82e2bea4c8ee8524e79a6d04963320854d8": {
-  "fetched": "2026-11-23",
-  "file": "mercari-m76415017357.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m76415017357_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m76415017357/",
-  "query": "Ninja Gaiden Shadow Game Boy",
-  "searched_release": "DMG-NG",
-  "searched_serial": "DMG-NG-AUS",
-  "source": "mercari-search",
-  "title_on_page": "Ninja Gaiden Shadow"
- },
  "58b9fcda26e9eeb21d0520049f9e5f2b0b0e5e5f": {
   "fetched": "2026-11-18",
   "file": "blazebit-e2334ec15e.jpg",
@@ -84757,16 +84532,6 @@
   "original_sha1": "fcef7c67a04a357795898e642dbe37810d351f16",
   "serial_on_label": "DMG-D7-USA-1",
   "source": "jnlgame"
- },
- "5a9b34b732ea9216e0c9fdebe125c8dabf22435b": {
-  "fetched": "2026-11-18",
-  "file": "games-co-ee3c2808a0.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/DSCI9955.jpg",
-  "page_url": "https://www.gamesenco.com/products/f1-world-grand-prix-3",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "F1 WORLD GRAND PRIX"
  },
  "5a9dc060f6b2198729328458b20c89dde89094e6": {
   "file": "ebay-hitjapan/dmg/DMG-AOKJ-JPN_2.webp",
@@ -88187,18 +87952,6 @@
   "system": "GameBoy",
   "title_on_page": "Operation C (US Version)"
  },
- "5e430404593497b363f0a3285d1394abcdbd0896": {
-  "fetched": "2026-11-22",
-  "file": "yahoo-1089413916.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0404/users/a9732f854017700ca4f8c22e0229e2e5dd1a4010/i-img900x1200-1682128334t6squx36.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/1089413916",
-  "query": "アクアライフ GB",
-  "searched_release": "DMG-AALJ",
-  "searched_serial": "DMG-AALJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "【限定即決・未使用品】AQUA LIFE アクアライフ 未開封 TAM 株式会社タム DMG-P-A4LJ Z.187 ゲームボーイ アドバンス レア レトロ",
-  "via": "https://www.jauce.com/auction/1089413916"
- },
  "5e45b1ba5c7f6a5c84989ac88ba80361eb75d83b": {
   "fetched": "2026-11-13",
   "file": "mercari-m49401231054.jpg",
@@ -88998,17 +88751,6 @@
   "original_name": "IMG_7427.HEIC",
   "serial_on_label": "DMG-AGCJ-JPN",
   "source": "my-collection"
- },
- "5f128aae97b608a4f584261df2519b1704e93891": {
-  "fetched": "2026-11-25",
-  "file": "ebay-306456040393.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/7LUAAeSwlgdoo4Fn/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/306456040393",
-  "query": "Taxi 3 Game Boy Color PAL",
-  "searched_release": "CGB-BXIF",
-  "searched_serial": "CGB-BXIF-FRA",
-  "source": "ebay-search",
-  "title_on_page": "Taxi 3 - Spiel / Modul - Nintendo Game Boy Color GBCWird in neuem Fenster oder Tab geöffnet"
  },
  "5f1362bf84dc601886a5950af05a1e0cfffcece3": {
   "fetched": "2026-11-11",
@@ -93037,15 +92779,6 @@
   "source": "retronintendostore",
   "title_on_page": "Hot Potato!"
  },
- "6340f5fdbfd95ae6fc5150fcbf947ae667d79451": {
-  "category": 300306,
-  "fetched": "2026-11-17",
-  "file": "tradera-743375822.jpg",
-  "image_url": "https://img.tradera.net/images/173/654506173_2209345d-21e4-48f5-b048-38197cf19a55.jpg",
-  "page_url": "https://www.tradera.com/item/300306/743375822/pokémon-firered-version-game-boy-advance",
-  "source": "tradera-category",
-  "title_on_page": "Pokémon FireRed Version - Game Boy Advance"
- },
  "6345ad1f3903d38edeccda0d7646b6ed2cb7cb14": {
   "fetched": "2026-11-18",
   "file": "retro-gamingshop-1e3b8b3d9e.jpg",
@@ -93595,17 +93328,6 @@
   "searched_serial": "CGB-BMGE-USA",
   "source": "unrecorded",
   "title_on_page": "Metal Gear Solid Gameboy Color Cartridge, Tested and Working"
- },
- "63bd95ac4f7f206ba5775f0d032ed9eccbe63da5": {
-  "fetched": "2026-11-25",
-  "file": "ebay-377598729309.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/40kAAeSwFppq31PC/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/377598729309",
-  "query": "Pokémon Red Version Game Boy PAL",
-  "searched_release": "DMG-APAS",
-  "searched_serial": "DMG-APAS-ESP",
-  "source": "ebay-search",
-  "title_on_page": "Pokémon FireRed Version Nintendo Game Boy Advance EUR Exzellenter ZustandWird in neuem Fenster oder Tab geöffnet"
  },
  "63be88d2fe7febe66734ffd0661790e8966a9c0b": {
   "collection": "game-boy",
@@ -95364,18 +95086,6 @@
   "source": "shop-pelimies",
   "system": "GB+GBC+GBA",
   "title_on_page": "Mega Man: Dr. Wily’s Revenge käytetty (GB) UKV CIB"
- },
- "65a73724f52f28526beb3fa1527e2b77ce1932ac": {
-  "category": 300201,
-  "fetched": "2026-11-25",
-  "file": "tradera-762082413.jpg",
-  "image_url": "https://img.tradera.net/images/728/669086728_e9f4f22a-564d-4fdf-836c-59db2b410a60.jpg",
-  "page_url": "https://www.tradera.com/item/300201/762082413/alleyway-till-nintendo-game-boy",
-  "query": "Alleyway",
-  "searched_release": "DMG-AWA",
-  "searched_serial": "DMG-AWA-JPN",
-  "source": "tradera-category",
-  "title_on_page": "Alleyway till Nintendo Game Boy"
  },
  "65accf2dbf386ed7893d3172d2ef2e72c8f0402b": {
   "file": "m11869566839_1.webp",
@@ -99721,16 +99431,6 @@
   "searched_serial": "DMG-H5-AUS",
   "source": "mercari-search",
   "title_on_page": "Road Rash (Nintendo Game Boy Color, GBC, 2000) Cartridge Only"
- },
- "6a57f2ab301ddee00501ad31d47ca8a3deed3408": {
-  "fetched": "2026-11-18",
-  "file": "games-co-79f34c0a0b.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/114_0284.jpg",
-  "page_url": "https://www.gamesenco.com/products/batman-return-of-the-joker-gameboy",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "BATMAN RETURN OF THE JOKER - GAMEBOY"
  },
  "6a5a2fb7293362524166a0df8a45ab062c9b6a4b": {
   "category": 300201,
@@ -107634,17 +107334,6 @@
   "source": "tradera-category",
   "title_on_page": "Super Mario Land 2 6 Golden Coins Kassett USA till GB *Nytt Batteri*"
  },
- "7296162ad9ff1079601220b27b6e5b732d16f88d": {
-  "fetched": "2026-11-09",
-  "file": "ebay-168698528524.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/h~cAAeSw0l5qrG89/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/168698528524",
-  "query": "The Powerpuff Girls Battle Him Game Boy Color cartridge",
-  "searched_release": "CGB-BBHE",
-  "searched_serial": "CGB-BBHE-USA",
-  "source": "unrecorded",
-  "title_on_page": "Powerpuff Girls Battle Him Game Boy Color Cartridge CGB Authentic TESTED"
- },
  "72978d4a7f753395ecd25bdc7bcd91d6abff3bb2": {
   "fetched": "2026-11-23",
   "file": "mercari-m79926437292.jpg",
@@ -111215,17 +110904,6 @@
   "page_url": "https://www.tradera.com/item/300201/758579835/mega-man-dr-wily-s-rache-nintendo-game-boy",
   "source": "tradera-category",
   "title_on_page": "Mega Man: Dr. Wily's Rache - Nintendo Game Boy"
- },
- "76a058ff0f67f209dadbd2bc42453c22be0e4313": {
-  "fetched": "2026-11-10",
-  "file": "ebay-147612192903.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/KPUAAeSwCjpqifBO/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/147612192903",
-  "query": "Keitai Denjuu Telefang 2 Power GBA Japan cartridge",
-  "searched_release": "AGB-ATPJ",
-  "searched_serial": "AGB-ATPJ-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Keitai Denjuu Telefang Power Version (English) - Nintendo Game Boy Color GBC"
  },
  "76a4ff89f9c1274d8b9a4f51c338f47b2b01664e": {
   "category": 1001332,
@@ -124564,17 +124242,6 @@
   "source": "unrecorded",
   "title_on_page": "Harvest Moon: Friends Of Mineral Town GBA Authentic Tested Working"
  },
- "83db4bee1f8397447bbcbe528dd3168649ef49b0": {
-  "fetched": "2026-11-23",
-  "file": "ebay-377666755782.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/~EAAAeSwl3drAotf/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/377666755782",
-  "query": "Adventures of Lolo Game Boy PAL cartridge",
-  "searched_release": "DMG-LO",
-  "searched_serial": "DMG-LO-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Lolo no Daibouken Adventures of Lolo Game Boy GB Japan HAL Cartridge Tested"
- },
  "83ddb9ef0aeeff624c2d89bd6e0fabde25633294": {
   "category": 300201,
   "fetched": "2026-11-17",
@@ -129180,16 +128847,6 @@
   "page_url": "https://www.tradera.com/item/300201/751541297/mickey-mouse-game-boy-spel-nintendo",
   "source": "tradera-category",
   "title_on_page": "Mickey Mouse Game Boy Spel Nintendo"
- },
- "8930dab307993ecab50c4c4d5318ebd4a7c2ab18": {
-  "fetched": "2026-11-18",
-  "file": "2-hg-51f794f61c.jpg",
-  "image_url": "https://2hg.nl/13098/tweety-sylvester-het-ontsnapte-ontbijt-slechte-sticker-losse-cassette.jpg",
-  "page_url": "https://2hg.nl/en/3580-tweety-sylvester-het-ontsnapte-ontbijt-slechte-sticker-losse-cassette.html",
-  "shop": "2 HG",
-  "source": "shop-2-hg",
-  "system": "GBC",
-  "title_on_page": "Tweety &amp; Sylvester Het Ontsnapte Ontbijt (slechte sticker, losse cassette)"
  },
  "893323e8b8e1581145aca4154fedb365cc7f6007": {
   "fetched": "2026-11-09",
@@ -134235,17 +133892,6 @@
   "page_url": "https://www.tradera.com/item/300306/741864282/advance-wars-game-boy-advance-gba-",
   "source": "tradera-category",
   "title_on_page": "Advance Wars - Game Boy Advance (GBA)"
- },
- "8f11982d12a521ca1385ef9c380c4449ded7a088": {
-  "fetched": "2026-11-13",
-  "file": "mercari-m71809150321.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m71809150321_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m71809150321/",
-  "query": "The Lion King Simba's Mighty Adventure Game Boy Color",
-  "searched_release": "CGB-BLKE",
-  "searched_serial": "CGB-BLKE-USA",
-  "source": "mercari-search",
-  "title_on_page": "Disney's The Lion King Simba's Mighty Adventure Game Boy Color Cartridge"
  },
  "8f11a45c4fe0f9e4e360989f79ce4fd30ce474b5": {
   "fetched": "2026-11-18",
@@ -139904,17 +139550,6 @@
   "store": "sumomo-syoukai",
   "title_on_page": "Mar Heaven: Knockin' on Heaven's Door Nintendo Game Boy Advance Japanese Version"
  },
- "94ffd6bca1f80333098836b65cbc734d6585a821": {
-  "fetched": "2026-11-11",
-  "file": "ebay-135749451908.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/LLoAAOSwdk9oEhnV/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/135749451908",
-  "query": "The Land Before Time Game Boy Color PAL cartridge",
-  "searched_release": "CGB-BLBP",
-  "searched_serial": "CGB-BLBP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "THE LAND BEFORE TIME NINTENDO GAMEBOY COLOR PAL/EUR MODULE CARTRIDGE"
- },
  "9502195a9bc20aa782f8f10881f24f7713c828eb": {
   "category": 1001332,
   "fetched": "2026-11-25",
@@ -143545,16 +143180,6 @@
   "source": "golisto-category",
   "title_on_page": "Top Gear GT Championship (Game Boy Advance - Løs spil) - Cartridge (Kosmetiske fejl)"
  },
- "98c3344caf24e6d553461028c8f780c90a1a797d": {
-  "fetched": "2026-11-18",
-  "file": "games-co-b89ac02683.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/DSCI9976_9fe502e7-77c9-4b18-bd9a-d1915daef3c7.jpg",
-  "page_url": "https://www.gamesenco.com/products/power-rangers-the-movie-2",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "POWER RANGERS THE MOVIE"
- },
  "98c42bfd346240a6ac04c009862f7995c0e4b3f7": {
   "category": 300306,
   "fetched": "2026-11-17",
@@ -143603,17 +143228,6 @@
   "searched_serial": "CGB-BETE-USA",
   "source": "unrecorded",
   "title_on_page": "E.T. The Extra-Terrestrial: Digital Companion for Game Boy Color Cart Only.nobox"
- },
- "98ceeef5b2adcaa08b70a9c78de54ee01bb77727": {
-  "fetched": "2026-11-23",
-  "file": "mercari-m74859336070.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m74859336070_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m74859336070/",
-  "query": "Freestyle Scooter Game Boy Color",
-  "searched_release": "CGB-BRZP",
-  "searched_serial": "CGB-BRZP-EUR",
-  "source": "mercari-search",
-  "title_on_page": "Razor Freestyle Scooter for Nintendo Gameboy Advance"
  },
  "98cfa2f9ba9299f7c34186754f0fb21b25ede921": {
   "fetched": "2026-11-18",
@@ -147405,16 +147019,6 @@
   "source": "golisto-category",
   "title_on_page": "Harry Potter und der Feuerkelch"
  },
- "9d12080ee174697d664d7ceafd9a8787d72738cb": {
-  "fetched": "2026-11-18",
-  "file": "gameshop-enter-76d7bbf280.webp",
-  "image_url": "https://gameshopenter.com/productfoto/who-framed-roger-rabbit-game-boy-color--GB-178950257682.webp",
-  "page_url": "https://gameshopenter.com/sv/shop/who-framed-roger-rabbit-game-boy-color--GB-178950257682",
-  "shop": "Gameshop Enter",
-  "source": "shop-gameshop-enter",
-  "system": "GB+GBC",
-  "title_on_page": "Who Framed Roger Rabbit (NTSC-U) (Spel i originalask med manual)"
- },
  "9d12d8a6a971e0b07e32d0179a934137a4e24db4": {
   "category": "gameboy-advance/games",
   "file": "retronintendostore/agb/AGB-AT3P-EUR_2.jpg",
@@ -148126,17 +147730,6 @@
   "platform": "game-boy",
   "source": "golisto-category",
   "title_on_page": "Donkey Kong Land (Game Boy - Japansk - Løs spil)"
- },
- "9dc37fe9dbc1ba817a5f57059f53ebb9f50a1340": {
-  "fetched": "2026-11-09",
-  "file": "ebay-287025352691.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/9ewAAeSwgf9pSHQd/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/287025352691",
-  "query": "Toonsylvania Game Boy Color cartridge",
-  "searched_release": "CGB-BSYE",
-  "searched_serial": "CGB-BSYE-USA",
-  "source": "unrecorded",
-  "title_on_page": "Toonsylvania (Nintendo Game Boy Color Game, GBC) Authentic Tested Game"
  },
  "9dc7d35f9e15e48978a3079ea66ffc231da97bf8": {
   "fetched": "2026-11-18",
@@ -155493,18 +155086,6 @@
   "system": "GBA",
   "title_on_page": "Sheep (Game Only) - GBA"
  },
- "a589ec7ca608371ed6974312a3382fce72dbbcd1": {
-  "fetched": "2026-11-23",
-  "file": "yahoo-s1248056798.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0210/user/dbb11e398592ad89e4977ecf1d84d77235718398c5dba506b59ea559ce8ae464/i-img1200x1200-17917871606155z0mgbd202457.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/s1248056798",
-  "query": "信長の野望 2 GB",
-  "searched_release": "DMG-AGYJ",
-  "searched_serial": "DMG-AGYJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "●【管Y538-0.5kg】≦ GBソフト 信長の野望 ゲームボーイ版2 （箱説あり） - コーエー ゲームボーイ",
-  "via": "https://www.jauce.com/auction/s1248056798"
- },
  "a58a6ea17a7834a55845611e23e74ba1938b4a79": {
   "fetched": "2026-11-18",
   "file": "2-hg-bd3292283c.jpg",
@@ -157065,16 +156646,6 @@
   "source": "jauce-search",
   "title_on_page": "GBA ゲームボーイアドバンス 黄金の太陽 失われし時代 ソフトのみ 起動確認済",
   "via": "https://www.jauce.com/auction/h1251030501"
- },
- "a721c8d2706220dad74c82eeb00574a694e3ddd2": {
-  "fetched": "2026-11-18",
-  "file": "retro-game-collector-heaven-ea2eea666a.jpg",
-  "image_url": "https://retrogamecollectorheaven.de/images/large/newstuffAugust2_2023_244_LRG.jpg",
-  "page_url": "https://retrogamecollectorheaven.de/index.php?main_page=product_info&cPath=210_4_18&products_id=76716",
-  "shop": "Retro Game Collector Heaven",
-  "source": "shop-retro-game-collector-heaven",
-  "system": "GB",
-  "title_on_page": "GB Castlevania Legends EUR"
  },
  "a723fa76a395d988791f8e69d3b7c8f4e4767de7": {
   "file": "jnlgame/dmg/DMG-IKJ.jpg",
@@ -168167,16 +167738,6 @@
   "source": "tradera-category",
   "title_on_page": "Hyper Lode Runner (SCN) - Nintendo Game Boy"
  },
- "b30f21399e3ecaa9a7d1ca76b77d4ac8eb24cb6d": {
-  "fetched": "2026-11-18",
-  "file": "games-co-a428bb6ed6.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/DSCI4426_0875f9a9-08ba-42f7-9143-bb804e4cbc31.jpg",
-  "page_url": "https://www.gamesenco.com/products/mortal-kombat-9",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "MORTAL KOMBAT 3"
- },
  "b31291af3f93af628abdca922fb593c23341c7f8": {
   "fetched": "2026-11-22",
   "file": "ebay-277997964667.jpg",
@@ -175665,18 +175226,6 @@
   "source": "tradera-category",
   "title_on_page": "Nintendo GameBoy Advance GBA SSX 3 Snowboard - spelet saknas"
  },
- "ba6f851820be57b44c851c72665c0744605731b7": {
-  "fetched": "2026-11-23",
-  "file": "yahoo-c1193245205.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0107/user/60be8994dac5d5173f68cc5ae99bff302e26ba4a2ee2f416f24fe46e556cea63/i-img1200x1200-17528989574829nb26tv35.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/c1193245205",
-  "query": "サモンナイト 2 GBA",
-  "searched_release": "AGB-BSKJ",
-  "searched_serial": "AGB-BSKJ",
-  "source": "jauce-search",
-  "title_on_page": "サモンナイト クラフトソード物語2 ゲームボーイアドバンス　美品",
-  "via": "https://www.jauce.com/auction/c1193245205"
- },
  "ba707bf2157f76bb480b7b460e7915969f74981c": {
   "fetched": "2026-11-18",
   "file": "retro-game-collector-heaven-a4a18d72d7.jpg",
@@ -179020,17 +178569,6 @@
   "title_on_page": "即決！　同梱可能　GBA 絶体絶命でんぢゃらすじーさん痛 怒りのおしおきブルース",
   "via": "https://www.jauce.com/auction/q257481764"
  },
- "bdd6600bac54a382fac13b9266f9408cb415d8d0": {
-  "fetched": "2026-11-09",
-  "file": "ebay-127595837559.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/HhUAAeSwhF9pVbag/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/127595837559",
-  "query": "Bust-A-Move 4 Game Boy cartridge",
-  "searched_release": "DMG-AA4E",
-  "searched_serial": "DMG-AA4E-USA",
-  "source": "unrecorded",
-  "title_on_page": "Bust-A-Move 4 for Nintendo Game Boy Color Authentic Cartridge"
- },
  "bdd8b0111e6d55e9a9210c0e0c671fa3ebb67985": {
   "category": "https://www.konsolenkost.de/gameboy-advance/spiele/?f_umfang=lose",
   "file": "konsolenkost-9901792-kk-modul-yu-gi-oh-duel-monsters-5-expert-9901792-133516.jpg",
@@ -179783,18 +179321,6 @@
   "source": "ebay-search",
   "title_on_page": "Gameboy Nintendo POWER PRO GB Cartridge Only gbc"
  },
- "bedcb4a4030911474ec0d9ec2062b0379336a4a5": {
-  "fetched": "2026-11-23",
-  "file": "yahoo-x1222869781.jpg",
-  "image_url": "https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0203/user/6ee80e603de58c4594c48c839cc4e2734ae0c0871491ac076099a7565377eeb8/i-img1200x1200-1773446104848258nrlsgf8.jpg",
-  "page_url": "https://page.auctions.yahoo.co.jp/jp/auction/x1222869781",
-  "query": "Pachinko GB",
-  "searched_release": "DMG-AXXJ",
-  "searched_serial": "DMG-AXXJ-JPN",
-  "source": "jauce-search",
-  "title_on_page": "【限定即決】Pachinko Data Card ちょ～あたる君 箱‐取説ありBOSSコミュニケーションズ DMG-P-AXXJ N.3324 ゲームボーイ アドバンス レア",
-  "via": "https://www.jauce.com/auction/x1222869781"
- },
  "bee186772568b33d561102fad179301ad81be544": {
   "file": "jnlgame/dmg/DMG-PC-USA.jpg",
   "original_name": "F429E0D0-A9D8-49AA-A1D0-E21B916541DE.webp",
@@ -180014,17 +179540,6 @@
   "source": "shop-retro-nintendo-kopen",
   "system": "GBC",
   "title_on_page": "The Smurfs Nightmare"
- },
- "bf2d1eb522bbe2be55a7c0ff2e5bdfef51b50d0f": {
-  "fetched": "2026-11-22",
-  "file": "ebay-257866355230.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/6n4AAeSweSJocHGg/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/257866355230",
-  "query": "Justice League: Chronicles GBA cartridge",
-  "searched_release": "AGB-BJLE",
-  "searched_serial": "AGB-BJLE",
-  "source": "ebay-search",
-  "title_on_page": "Justice League Chronicles (Nintendo Game Boy Advance, 2003) DC Tested/Works"
  },
  "bf31230dbd45637e00539585cca802360ab49177": {
   "fetched": "2026-11-11",
@@ -182658,16 +182173,6 @@
   "system": "GBA",
   "title_on_page": "Cat in the Hat (EUR)"
  },
- "c1a8e1b5a8a143d466d00fb6ddb4118ec484b6f0": {
-  "fetched": "2026-11-18",
-  "file": "la-tienda-de-videojuegos-5356cda8aa.webp",
-  "image_url": "https://latiendadevideojuegos.com/wp-content/uploads/2025/10/Tom-and-Jerry-Mouse-Hunt-Game-Boy-Color.webp",
-  "page_url": "https://latiendadevideojuegos.com/producto/tom-and-jerry-mouse-hunt-game-boy-color/",
-  "shop": "La Tienda de Videojuegos",
-  "source": "shop-la-tienda-de-videojuegos",
-  "system": "GB+GBC+GBA",
-  "title_on_page": "Tom and Jerry Mouse Hunt Game Boy Color"
- },
  "c1a8f628db1094f9e1920f29adf4d6e798538bfb": {
   "file": "konsolenkost-1008424-modul-1008424-9062.jpg",
   "image_url": "https://image.konsolenkost.de/item/images/1008424/full/modul-1008424-9062.jpg",
@@ -183621,26 +183126,6 @@
   "page_url": "https://www.tradera.com/item/300201/759212588/skate-or-die-bad-n-rad-nintendo-game-boy",
   "source": "tradera-category",
   "title_on_page": "Skate or Die: Bad 'N Rad - Nintendo Game Boy"
- },
- "c293d84dc71254029b5a07c05ba6e3e1e4d5ff11": {
-  "fetched": "2026-11-18",
-  "file": "retro-gaming-fun-af991ab634.jpg",
-  "image_url": "https://www.retrogamingfun.be/wp-content/uploads/2023/01/IMG_1112-scaled.jpg",
-  "page_url": "https://www.retrogamingfun.be/product/gbc-klustar-complete-eur/",
-  "shop": "Retro Gaming Fun",
-  "source": "shop-retro-gaming-fun",
-  "system": "GBC",
-  "title_on_page": "GBC Klustar Complete  (eur)"
- },
- "c29b1a57f3267981bddd04c9e561be99fd67a79d": {
-  "fetched": "2026-11-18",
-  "file": "games-co-117cfaf84b.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/DSCI8986.jpg",
-  "page_url": "https://www.gamesenco.com/products/the-road-to-el-dorado-3",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "THE ROAD TO EL DORADO"
  },
  "c29f5a1588bec2911ddcbb16b479383da098c390": {
   "fetched": "2026-11-18",
@@ -186307,18 +185792,6 @@
   "source": "tradera-category",
   "title_on_page": "Spider-Man Battle for New York - Game Boy Advance"
  },
- "c55d043d6449bf667aa8cc57245faecf95c6ff44": {
-  "category": 340700,
-  "fetched": "2026-11-25",
-  "file": "tradera-745836713.jpg",
-  "image_url": "https://img.tradera.net/images/978/656411978_cfcabc11-3ebe-4bfb-b228-221b857d1941.jpg",
-  "page_url": "https://www.tradera.com/item/340700/745836713/alfred-chicken-ntsc-usa-",
-  "query": "Alfred Chicken",
-  "searched_release": "DMG-C3J",
-  "searched_serial": "DMG-C3J-JPN",
-  "source": "tradera-category",
-  "title_on_page": "Alfred Chicken - NTSC (USA)"
- },
  "c562e98867a1103eca8305c611872d79d624b652": {
   "fetched": "2026-11-22",
   "file": "mercari-m83423658197.jpg",
@@ -188029,17 +187502,6 @@
   "source": "ebay-search",
   "title_on_page": "Looney Tunes Racing 1988 Nintendo Game Boy Color Game Cartridge Original"
  },
- "c70e51d170d62db9eaa87aa9759c3ea9b4126b8d": {
-  "fetched": "2026-11-23",
-  "file": "ebay-287739454263.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/NyMAAOSwqllnslG~/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/287739454263",
-  "query": "Lemmings Game Boy Japan",
-  "searched_release": "DMG-L8A",
-  "searched_serial": "DMG-L8A-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Lemmings (Nintendo Game Boy Gameboy) CGC 8.5 A NOWY zapieczętowanyOtwiera się w nowym oknie lub nowej karcie"
- },
  "c70eb71faec074bd41a8ac6e4b74cfa974e1ea1e": {
   "collection": "game-boy",
   "file": "zockbar/dmg/DMG-119-CHN.jpg",
@@ -188375,17 +187837,6 @@
   "page_url": "https://www.tradera.com/item/300306/756816393/ice-age-game-boy-advance",
   "source": "tradera-category",
   "title_on_page": "Ice Age - Game Boy Advance"
- },
- "c7676f984aea1187dd78eca143db81c6aee2c741": {
-  "fetched": "2026-11-23",
-  "file": "ebay-820069428364.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/sEkAAeSwj8NqlYPb/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/820069428364",
-  "query": "Loopz Game Boy PAL",
-  "searched_release": "DMG-LP",
-  "searched_serial": "DMG-LP-FRG",
-  "source": "ebay-search",
-  "title_on_page": "Loopz - Jeu Nintendo Gameboy Classic - Housse de protection - NOE/USA #1La page s'ouvre dans une nouvelle fenêtre ou un nouvel onglet"
  },
  "c769559243c97727e933648f7dadd81dc29fc5bb": {
   "file": "my-collection/dmg/DMG-OT-UKV.heic",
@@ -189742,16 +189193,6 @@
   "source": "jauce-search",
   "title_on_page": "GB ゲームボーイ 将棋 ソフトのみ 起動確認済",
   "via": "https://www.jauce.com/auction/w1245140592"
- },
- "c8ef665b101434456d28be8dc1fc9f6c6700a30a": {
-  "fetched": "2026-11-25",
-  "file": "retro-game-collector-dca3328d4e.jpeg",
-  "image_url": "https://retrogamecollector.be/wp-content/uploads/IMG_1336-compressed-2-scaled.jpeg",
-  "page_url": "https://retrogamecollector.be/product/gb-nintendo-gameboy-mega-man-dr-willys-revenge-no-manual-pal/",
-  "shop": "Retro Game Collector",
-  "source": "shop-retro-game-collector",
-  "system": "GB",
-  "title_on_page": "GB Nintendo Gameboy Mega Man DR Willy’s Revenge no manual PAL"
  },
  "c8f764735ce21d381b02cc8328b83090f040f667": {
   "fetched": "2026-11-25",
@@ -195411,17 +194852,6 @@
   "source": "unrecorded",
   "title_on_page": "Bomberman Max 2 Blue Advance Nintendo Gameboy Advance / GBA Cartridge *Genuine*"
  },
- "ced240dd074f23217c6b04f31dfe3949e76fd23b": {
-  "fetched": "2026-11-23",
-  "file": "mercari-m76173218440.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m76173218440_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m76173218440/",
-  "query": "Alleyway Game Boy Japan",
-  "searched_release": "DMG-AWA",
-  "searched_serial": "DMG-AWA-JPN",
-  "source": "mercari-search",
-  "title_on_page": "Alleyway Nintendo Gameboy - Tested Authentic"
- },
  "ced378b026e8f09bc995db7f14d89a25c878c00a": {
   "fetched": "2026-11-09",
   "file": "ebay-206669153543.jpg",
@@ -200954,15 +200384,6 @@
   "source": "tradera-category",
   "title_on_page": "F-1 RACE"
  },
- "d4afe2c0742627d7c1fb60f5613536a559739353": {
-  "category": 300201,
-  "fetched": "2026-11-17",
-  "file": "tradera-757193125.jpg",
-  "image_url": "https://img.tradera.net/images/275/665271275_36c76871-2f46-4701-8533-81d2ba7039c9.jpg",
-  "page_url": "https://www.tradera.com/item/300201/757193125/defekt-wwf-superstars-till-nintendo-game-boy",
-  "source": "tradera-category",
-  "title_on_page": "DEFEKT! WWF Superstars till Nintendo Game Boy"
- },
  "d4b2e40a1cca4ebcc54284fa3474c7fb823d5cb5": {
   "file": "otakaraou/agb/AGB-A5BJ-JPN.jpg",
   "image_url": "https://www.otakaraou.com/data/otakaraou/product/IMG_7273.jpg",
@@ -202864,17 +202285,6 @@
  "d6a9a1d0778fefb813752a29c526f332cf88a005": {
   "file": "DSCF4883 Ken Lawrence.JPEG",
   "source": "reddit-u-thisco_be"
- },
- "d6ac31ad304caa0ffd3ac3d980e58e1540b9440c": {
-  "fetched": "2026-11-13",
-  "file": "ebay-407227477747.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/9vEAAeSwD91qrYQA/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/407227477747",
-  "query": "Black Bass Lure Fishing Game Boy cartridge",
-  "searched_release": "DMG-HP",
-  "searched_serial": "DMG-HP-USA",
-  "source": "ebay-search",
-  "title_on_page": "Big Black Bass: Lure Fishing Nintendo Game Boy Cartridge Only - Tested"
  },
  "d6ae86902a8511f9e8dd1031e239504d8343c069": {
   "fetched": "2026-11-12",
@@ -205715,17 +205125,6 @@
   "source": "ebay-search",
   "title_on_page": "Street Fighter Alpha Warriors Dream für Nintendo Game Boy Color - Nur Kart"
  },
- "d97fccf33c7f64c139e4bd5fd391ee0505e61464": {
-  "fetched": "2026-11-13",
-  "file": "mercari-m64950719140.jpg",
-  "image_url": "https://u-mercari-images.mercdn.net/photos/m64950719140_1.jpg",
-  "page_url": "https://www.mercari.com/us/item/m64950719140/",
-  "query": "Final Fantasy IV Advance GBA",
-  "searched_release": "AGB-BZ4E",
-  "searched_serial": "AGB-BZ4E-USA",
-  "source": "mercari-search",
-  "title_on_page": "Final Fantasy IV Advance Game Boy Advance Game, Tested Working!"
- },
  "d980fbc8ae7bd0d2072a8c02e4c11e208f66d888": {
   "category": 300306,
   "fetched": "2026-11-17",
@@ -206515,17 +205914,6 @@
   "page_url": "https://www.tradera.com/item/300306/745701477/avatar-the-legend-of-aang-game-boy-advance",
   "source": "tradera-category",
   "title_on_page": "Avatar: The Legend of Aang - Game Boy Advance"
- },
- "da6cef3f3fb35e80b318ecfe921fc04c8010452c": {
-  "fetched": "2026-11-22",
-  "file": "ebay-257842352349.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/QMMAAeSw8kxp28vK/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/257842352349",
-  "query": "Lemmings Game Boy Japan",
-  "searched_release": "DMG-L8A",
-  "searched_serial": "DMG-L8A-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Lemmings Gameboy Spiel Cartridge mit Booklet Original"
  },
  "da6d4b7ba26237deab6d5abf97820ec02fd3f88f": {
   "fetched": "2026-11-18",
@@ -211824,17 +211212,6 @@
   "system": "GB+GBC+GBA",
   "title_on_page": "Battletoads - Gameboy spill"
  },
- "dfb40f4bad3ee8c4f847653983e0678d818e6e65": {
-  "fetched": "2026-11-11",
-  "file": "ebay-396634267192.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/0RMAAeSwuQpoLSpm/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/396634267192",
-  "query": "Looney Tunes Racing Game Boy Color cartridge",
-  "searched_release": "CGB-BLQE",
-  "searched_serial": "CGB-BLQE-USA",
-  "source": "ebay-search",
-  "title_on_page": "Looney Tunes Racing 1988 Nintendo Game Boy Color Game Cartridge Original"
- },
  "dfb4cbe82fe0eb20cdb5f828235053ab462135df": {
   "fetched": "2026-11-23",
   "file": "ebay-305786528398.jpg",
@@ -213297,15 +212674,6 @@
   "searched_serial": "AGB-AE2E-USA",
   "source": "unrecorded",
   "title_on_page": "Nintendo Mega Man Battle Network 2 Game Boy Advance GBA Capcom (CARTRIDGE ONLY)"
- },
- "e16cc423d6e5067d1ece28537a60039f7877b04d": {
-  "category": 300201,
-  "fetched": "2026-11-17",
-  "file": "tradera-727203987.jpg",
-  "image_url": "https://img.tradera.net/images/469/642051469_396f7dde-f4cb-4450-b73c-ef1f97ed8230.jpg",
-  "page_url": "https://www.tradera.com/item/300201/727203987/gargoyles-quest-inkl-skyddsbox-bergsala-",
-  "source": "tradera-category",
-  "title_on_page": "Gargoyles Quest (inkl. Skyddsbox & Bergsala)"
  },
  "e174464e9d38f07d45ffa7565fa008d19c04f464": {
   "fetched": "2026-11-11",
@@ -214939,17 +214307,6 @@
   "source": "shop-retrospillkongen",
   "system": "GB+GBC+GBA",
   "title_on_page": "Creatures - GBA Spill"
- },
- "e31d1af81f58edd3a6e0013f69a528200e9ed33e": {
-  "fetched": "2026-11-09",
-  "file": "ebay-256881157594.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/XH8AAOSwUDdn7uQ6/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/256881157594",
-  "query": "Caesars Palace II Game Boy Color cartridge",
-  "searched_release": "CGB-AI2E",
-  "searched_serial": "CGB-AI2E-USA",
-  "source": "unrecorded",
-  "title_on_page": "Caesars Palace II 2 (Nintendo Game Boy Color GBC) Original Game Cartridge"
  },
  "e31e3c46f50bfadbed3da1d8d5395b7ed4f578b1": {
   "category": 300306,
@@ -218716,17 +218073,6 @@
   "system": "GB",
   "title_on_page": "Dennis (German)"
  },
- "e68e1adf76410518797f985c4c0c9235dd4736fb": {
-  "fetched": "2026-11-25",
-  "file": "ebay-358358134898.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/P~YAAeSwV8xpvpTh/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/358358134898",
-  "query": "Spirou Game Boy PAL",
-  "searched_release": "DMG-AUOP",
-  "searched_serial": "DMG-AUOP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Spirou: The Robot Invasion - Nintendo Gameboy Color Spiel + Schutzhülle - PAL #1Wird in neuem Fenster oder Tab geöffnet"
- },
  "e68eb2abef998047556542d0479ddf1591d3be07": {
   "fetched": "2026-11-17",
   "file": "ebay-314623284732.jpg",
@@ -222064,17 +221410,6 @@
   "system": "GBA",
   "title_on_page": "Zapper"
  },
- "ea32c6dd7a7b0b7472af7c70a91aebdad32a0980": {
-  "fetched": "2026-11-23",
-  "file": "ebay-237196532562.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/5DoAAeSw0sNq2Z8O/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/237196532562",
-  "query": "Mickey's Chase Game Boy Japan",
-  "searched_release": "DMG-MCJ",
-  "searched_serial": "DMG-MCJ-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Mickey‘s Dangerous Chase – Original Nintendo Game Boy ModulWird in neuem Fenster oder Tab geöffnet"
- },
  "ea3c1af74d0f08378f6a70181ec31b0c90f54d1d": {
   "fetched": "2026-11-09",
   "file": "ebay-168836296039.jpg",
@@ -222737,17 +222072,6 @@
   "source": "jauce-search",
   "title_on_page": "GB ゲームボーイ F1ボーイ ソフトのみ 起動確認済",
   "via": "https://www.jauce.com/auction/k1249169731"
- },
- "eadee21f1894bfa9f782e0efb92f5780e3aeb7b2": {
-  "fetched": "2026-11-11",
-  "file": "ebay-366618313343.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/~-cAAOSwNPxkWlnt/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/366618313343",
-  "query": "Carl Lewis Athletics 2000 Game Boy Color PAL cartridge",
-  "searched_release": "CGB-BCLP",
-  "searched_serial": "CGB-BCLP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Carl Lewis - Athletics 2000 | Game Boy Color  GBC🕹 Tested ✅️ EUR"
  },
  "eae00a6ddf81df2885cfc7a5237f0d7efd993727": {
   "file": "emumovies/dmg/DMG-PHJ_2.png",
@@ -226156,17 +225480,6 @@
   "searched_serial": "AGB-AH2E-USA",
   "source": "ebay-search",
   "title_on_page": "Activision Mat Hoffman's Pro BMX Nintendo Game Boy Advance GBA NTSC-U/C E"
- },
- "eebe3342f5fb07c83fcd4abe91c49dafe95a1006": {
-  "fetched": "2026-11-25",
-  "file": "ebay-297748332202.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/61EAAeSwwdBpEMJO/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/297748332202",
-  "query": "Batman of the Future: Return of the Joker Game Boy Color PAL",
-  "searched_release": "CGB-BTKP",
-  "searched_serial": "CGB-BTKP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Batman of the Future: Return of the Joker - Game Boy Color - Voll FunktionsfähigWird in neuem Fenster oder Tab geöffnet"
  },
  "eec300778ebefc75652252ccc40ec353d012bb05": {
   "fetched": "2026-11-18",
@@ -230224,16 +229537,6 @@
   "title_on_page": "【※箱説なし※】モンスターガーディアンズ",
   "via": "https://www.jauce.com/auction/k1191715082"
  },
- "f28ba70ccb2639e287a77bbca2c9bfa84c5b5215": {
-  "fetched": "2026-11-18",
-  "file": "games-co-6aebd00a1a.jpg",
-  "image_url": "https://cdn.shopify.com/s/files/1/0591/8500/4740/files/DSCI5420.jpg",
-  "page_url": "https://www.gamesenco.com/products/best-of-the-best-championship-1",
-  "shop": "Games & Co",
-  "source": "shop-games-co",
-  "system": "GB+GBC",
-  "title_on_page": "BEST OF THE BEST CHAMPIONSHIP"
- },
  "f28bf60a5788270b5c790f798616a4ded3dda32b": {
   "fetched": "2026-11-09",
   "file": "ebay-177032113350.jpg",
@@ -231494,30 +230797,6 @@
   "source": "shop-retro-nintendo-kopen",
   "system": "GBA",
   "title_on_page": "Madagascar"
- },
- "f3b7fa3966a34a5b90f9f3b553867c6b0991b067": {
-  "also": [
-   {
-    "fetched": "2026-11-22",
-    "file": "ebay-127576592630.jpg",
-    "image_url": "https://i.ebayimg.com/images/g/6s8AAeSwjFppSIxf/s-l1600.jpg",
-    "page_url": "https://www.ebay.com/itm/127576592630",
-    "query": "Moto Racer Advance GBA PAL cartridge",
-    "searched_release": "AGB-A9MP",
-    "searched_serial": "AGB-A9MP-EUR",
-    "source": "ebay-search",
-    "title_on_page": "Moto Racer Advance Nintendo Game Boy Advance GBA Authentic Tested w New Battery"
-   }
-  ],
-  "fetched": "2026-11-22",
-  "file": "ebay-127576590438.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/6s8AAeSwjFppSIxf/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/127576590438",
-  "query": "Moto Racer Advance GBA PAL",
-  "searched_release": "AGB-A9MP",
-  "searched_serial": "AGB-A9MP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Moto Racer Advance Nintendo Game Boy Advance GBA Original getestet mit neuem Akku"
  },
  "f3b95e0671f3ce17e3aeca406572a097fa5c29ee": {
   "fetched": "2026-11-12",
@@ -233323,17 +232602,6 @@
   "page_url": "https://www.tradera.com/item/300201/753688382/quest-for-camelot-game-boy-dmg-acnp-eur-",
   "source": "tradera-category",
   "title_on_page": "Quest for Camelot Game Boy (DMG-ACNP-EUR)"
- },
- "f570aed0952accd6f2060b0354cd5f9217e14768": {
-  "fetched": "2026-11-10",
-  "file": "ebay-198752613950.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/jvMAAOSwzAVnXAPm/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/198752613950",
-  "query": "Total Soccer 2002 GBA PAL cartridge",
-  "searched_release": "AGB-ATUP",
-  "searched_serial": "AGB-ATUP-EUR",
-  "source": "ebay-search",
-  "title_on_page": "Total Soccer 2002 Nintendo Game Boy Advance GBA PAL EUR Used Game Cartridge"
  },
  "f571e33f3003bdeec017ef4228dc9a4ed3383a05": {
   "file": "gbhwdb/cgb/CGB-BESP-EUR.jpg",
@@ -235899,15 +235167,6 @@
   "source": "shop-retrospillkongen",
   "system": "GB+GBC+GBA",
   "title_on_page": "F-1 Race - Gameboy spill"
- },
- "f882a1586949e3d97456be64e96920e15e87bf78": {
-  "category": 300201,
-  "fetched": "2026-11-17",
-  "file": "tradera-751435805.jpg",
-  "image_url": "https://img.tradera.net/images/583/660775583_7fda1232-2c9c-43e9-bcf4-41532f4c10d1.jpg",
-  "page_url": "https://www.tradera.com/item/300201/751435805/batman-till-gameboy",
-  "source": "tradera-category",
-  "title_on_page": "Batman till Gameboy"
  },
  "f884c70c0f9a964b3d5cd49766b53a2e841ced1c": {
   "fetched": "2026-11-18",
@@ -239789,17 +239048,6 @@
   "note": "named by nothing: no serial read",
   "original_name": "yugiyahirano-42045.jpg",
   "source": "yugiyahirano"
- },
- "fc770afdeb257e8e5d5915a366ad07085f2cfa3c": {
-  "fetched": "2026-11-23",
-  "file": "ebay-147627635857.jpg",
-  "image_url": "https://i.ebayimg.com/images/g/T7wAAeSwaONqifAy/s-l1600.jpg",
-  "page_url": "https://www.ebay.com/itm/147627635857",
-  "query": "Keitai Denju Telefang: Speed Version Game Boy Japan",
-  "searched_release": "DMG-BTZJ",
-  "searched_serial": "DMG-BTZJ-JPN",
-  "source": "ebay-search",
-  "title_on_page": "Keitai Denjuu Telefang Speed Version (Englisch) - Nintendo Game Boy Color GBC"
  },
  "fc779597d0930a5639404152cd2ca9b9b4b08a7e": {
   "fetched": "2026-11-09",
