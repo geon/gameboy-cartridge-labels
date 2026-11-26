@@ -132,7 +132,7 @@ def test_fine_refinement_corrects_a_small_offset_at_full_resolution(tmp_path):
     path = str(tmp_path / "p.png"); cv2.imwrite(path, img)
     photo_to_ink = np.array([[1 / 20, 0, -5.0], [0, 1 / 20, -5.0], [0, 0, 1]])   # photo px -> ink mm
     off = np.array([[1, 0, 0.3], [0, 1, 0], [0, 0, 1.0]]) @ photo_to_ink
-    out = solve.fine_group((["a", "b", "c"], [path] * 3, [photo_to_ink, photo_to_ink, off], "dmg"))
+    out = solve.fine_group((["a", "b", "c"], [path] * 3, [photo_to_ink, photo_to_ink, off], "dmg", False, solve.MAX_FINE_MM))
     C = out["c"][0]
     assert abs(solve.project(C, [[20.0, 18.0]])[0][0] - 19.7) < 0.03          # the 0.3 mm taken back
     assert out["a"][1] < 0.03
@@ -165,3 +165,21 @@ def test_a_family_is_anchored_to_its_frozen_label_photo():
     assert out["f@1,1"]["photo_to_ink"] == T(0.3, -0.2) and out["f@1,1"]["frozen"] == "DMG-X-JPN-bob"
     assert "found" not in out["f@1,1"] and out["f@1,1"]["family_size"] == 2
     assert np.allclose(out["n@1,1"]["photo_to_ink"], T(5.3, -0.2))
+
+
+def test_a_refinement_is_cached_by_its_inputs(tmp_path, monkeypatch):
+    import numpy as np
+    import solve
+    monkeypatch.setattr(solve, "_GEN_DIR", str(tmp_path))
+    H = np.eye(3)
+    f = solve.refine_cache_file("fine", ["v", ["a", "b"], H])
+    assert solve.refine_cache_file("fine", ["v", ["a", "b"], H.copy()]) == f
+    assert solve.refine_cache_file("fine", ["v", ["a", "b"], H + 1e-12]) != f
+    assert solve.refine_cache_file("fine", ["v2", ["a", "b"], H]) != f
+    c = {"a": (np.array([[1.0, 0, 0.1234567890123], [0, 1, 0], [0, 0, 1]]), 0.12)}
+    solve.save_refined(f, solve.corrections_to_json(c))
+    back = solve.corrections_from_json(solve.load_refined(f))
+    assert np.array_equal(back["a"][0], c["a"][0]) and back["a"][1] == 0.12
+    open(tmp_path / "solve" / "refine-cache" / "fine-old.json", "w").write("{}")
+    solve.clean_refine_cache()
+    assert sorted(p.name for p in (tmp_path / "solve" / "refine-cache").iterdir()) == [f.rsplit("/", 1)[1]]

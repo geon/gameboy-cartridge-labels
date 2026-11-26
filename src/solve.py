@@ -1193,6 +1193,7 @@ def stage2(lps, fits, candidates, photo_paths, workers=8):
     all_groups = []
     to_refine = sum(1 for m in families.values() if len(m) >= 2)
     print(f"stage 2: refining the label photos of {to_refine} families by their pixels", flush=True)
+    version_r, refined_now = refine_version(), 0
     for n_fam, members in enumerate((m for m in families.values() if len(m) >= 2), 1):
         if n_fam % 100 == 0 or n_fam == to_refine:
             print(f"stage 2: refining family {n_fam} of {to_refine}", flush=True)
@@ -1208,13 +1209,19 @@ def stage2(lps, fits, candidates, photo_paths, workers=8):
                 largest.append(k)
         groups = [g for g in (by_release.values() if by_release else [members])]
         all_groups += groups
-        for group in groups:
-            if len(group) >= 2:
-                c, bad = refine_family(group, views, offsets, shape_of[group[0]])
-                corrections.update(c)
-                poor |= bad
-        if len(groups) > 1:  # the release groups aligned to each other on the tiles they share
-            align_groups(groups, views, offsets, corrections, shape_of[members[0]])
+        shape = shape_of[members[0]]
+        f = refine_cache_file("family", [version_r, shape, groups, [os.path.basename(view_files[k]) for g in groups for k in g]]
+                              + [np.asarray(offsets[k], np.float64) for g in groups for k in g])
+        d = load_refined(f)
+        if d is None:
+            c, bad = refine_family_groups(groups, views, offsets, shape)
+            save_refined(f, {"corrections": corrections_to_json(c), "poor": sorted(bad)})
+            refined_now += 1
+        else:
+            c, bad = corrections_from_json(d["corrections"]), set(d["poor"])
+        corrections.update(c)
+        poor |= bad
+    print(f"stage 2: {to_refine - refined_now} of {to_refine} families' refinements cached, {refined_now} refined", flush=True)
     info = {"link candidates": len(candidates), "judged": len(judged),
             "pixels agree": int(sum(pixel_ok(i, j) for i, j in judged.items())),
             "counting links": len(links), "poor fits": len(poor),
@@ -1223,6 +1230,91 @@ def stage2(lps, fits, candidates, photo_paths, workers=8):
             "correction_mm": {"median": round(float(np.median([v[1] for v in corrections.values()])), 3) if corrections else None,
                               "90 %": round(float(np.percentile([v[1] for v in corrections.values()], 90)), 3) if corrections else None}}
     return offsets, fam_of, poor, info, corrections, all_groups
+
+
+# The refinements are cached per group in <generated>/solve/refine-cache/ (the user, 2026-11-26: every family was
+# refined again on every run, though a run's new photos touch only a few): a family's coarse refinement (its release
+# groups' refine_family and align_groups) by a hash of its groups and each member's view file (named by its photo, fit,
+# shape and the drawing: view_name) and offset; a fine or print group (fine_group) by a hash of its keys, each photo
+# file's size and time, its ink coordinates before, and the settings; both with REFINING's code and the constants. Files
+# no longer wanted are removed after each run.
+REFINING = ["refine_family", "align_groups", "corrected_view", "ink_view", "mm_to_view_px", "offset_matrix",
+            "fine_view", "fine_group", "coarse_shifts", "corners_mm", "project", "refine_family_groups"]
+_REFINE_USED = set()  # the cache files this run wanted
+
+
+def refine_version():
+    import hashlib, inspect
+    h = hashlib.sha1()
+    for name in REFINING:
+        h.update(inspect.getsource(globals()[name]).encode())
+    for k in ("REFINE_ROUNDS", "MAX_CORRECTION_MM", "COMPARE_PX_PER_MM", "COMPARE_MARGIN", "COMPARE_TILE_MM",
+              "TILE_CORRELATION", "FINE_PX_PER_MM", "FINE_MARGIN", "FINE_ROUNDS", "MAX_FINE_MM", "COARSE_RESPONSE",
+              "PRINT_MAX_MM"):
+        h.update(repr(globals()[k]).encode())
+    h.update(repr(shapes.LABEL_MM).encode())
+    return h.hexdigest()
+
+
+def refine_cache_dir():
+    d = os.path.join(_GEN_DIR or "generated", "solve", "refine-cache")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def refine_cache_file(kind, parts):
+    """The cache file of a refinement of this kind with these inputs (any JSON-able; arrays as their exact bytes)."""
+    import hashlib
+    h = hashlib.sha1(kind.encode())
+    for p in parts:
+        h.update(np.ascontiguousarray(p, dtype=np.float64).tobytes() if isinstance(p, np.ndarray)
+                 else json.dumps(p, sort_keys=True).encode())
+    f = os.path.join(refine_cache_dir(), f"{kind}-{h.hexdigest()}.json")
+    _REFINE_USED.add(os.path.basename(f))
+    return f
+
+
+def corrections_to_json(c):
+    return {k: [np.asarray(C, np.float64).tolist(), float(moved)] for k, (C, moved) in c.items()}
+
+
+def corrections_from_json(d):
+    return {k: (np.array(C, np.float64), moved) for k, (C, moved) in d.items()}
+
+
+def load_refined(f):
+    try:
+        return json.load(open(f))
+    except (OSError, ValueError):
+        return None
+
+
+def save_refined(f, d):
+    tmp = f + f".{os.getpid()}.tmp"
+    with open(tmp, "w") as fh:
+        json.dump(d, fh)
+    os.replace(tmp, f)
+
+
+def clean_refine_cache():
+    d = refine_cache_dir()
+    for f in os.listdir(d):
+        if f not in _REFINE_USED:
+            os.remove(os.path.join(d, f))
+
+
+def refine_family_groups(groups, views, offsets, shape):
+    """A family's coarse refinement: each release group of two or more by refine_family, then the groups aligned to
+    each other (align_groups). (corrections, poor fits)."""
+    corrections, poor = {}, set()
+    for group in groups:
+        if len(group) >= 2:
+            c, bad = refine_family(group, views, offsets, shape)
+            corrections.update(c)
+            poor |= bad
+    if len(groups) > 1:  # the release groups aligned to each other on the tiles they share
+        align_groups(groups, views, offsets, corrections, shape)
+    return corrections, poor
 
 
 # Refinement by pixels: within a family (per release: a series' games share a family), each label photo's view (stage 2's, carried into ink coordinates by its
@@ -1448,13 +1540,32 @@ def refine_fine(groups, photo_to_ink, paths, shape_of, workers=8, coarse=False, 
     """Fine corrections for every refinement group of two or more label photos (fine_group), in parallel."""
     jobs = [(g, [paths.get(k) for k in g], [photo_to_ink[k] for k in g], shape_of[g[0]], coarse, max_mm)
             for g in groups if len(g) >= 2]
-    out = {}
+    version = refine_version()
+    stat = lambda p: [os.path.getsize(p), os.stat(p).st_mtime_ns] if p and os.path.exists(p) else None
+    out, todo = {}, []
+    for job in jobs:
+        keys, ps, to_inks, shape, crs, mx = job
+        f = refine_cache_file("fine", [version, keys, [stat(p) for p in ps], shape, bool(crs), mx]
+                              + [np.asarray(H, np.float64) for H in to_inks])
+        d = load_refined(f)
+        if d is None:
+            todo.append((job, f))
+        else:
+            out.update(corrections_from_json(d))
+    print(f"{what}: {len(jobs) - len(todo)} of {len(jobs)} groups cached, {len(todo)} to do", flush=True)
+    files = [f for _, f in todo]
     with Pool(workers) as pool:
-        for n, c in enumerate(pool.imap_unordered(fine_group, jobs), 1):
+        for n, (i, c) in enumerate(pool.imap_unordered(fine_group_numbered, list(enumerate(j for j, _ in todo))), 1):
             out.update(c)
-            if n % 100 == 0 or n == len(jobs):
-                print(f"{what}: {n} of {len(jobs)} groups", flush=True)
+            save_refined(files[i], corrections_to_json(c))
+            if n % 100 == 0 or n == len(todo):
+                print(f"{what}: {n} of {len(todo)} groups", flush=True)
     return out
+
+
+def fine_group_numbered(item):
+    i, job = item
+    return i, fine_group(job)
 
 
 def refine_prints(print_groups, photo_to_ink, paths, shape_of, workers=8):
@@ -1770,6 +1881,7 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
             sh = max(set(shape_of[k] for k in g), key=lambda x: sum(shape_of[k] == x for k in g))
             groups_p.append([k for k in g if shape_of[k] == sh])
     by_print = refine_prints(groups_p, after_fine, paths, shape_of)
+    clean_refine_cache()
     if by_print:
         links_info["print aligned"] = len(by_print)
         links_info["print correction_mm"] = {"median": round(float(np.median([v[1] for v in by_print.values()])), 3),
