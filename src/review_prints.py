@@ -185,6 +185,23 @@ class Tool:
         several.sort(key=lambda i: (-out[i]["disagree"], -nserials(i), -len(out[i]["keys"])))
         worst = sorted(range(len(out)), key=lambda i: (-out[i]["disagree"], -out[i]["tiles"], -len(out[i]["keys"])))
         none = sorted((i for i in range(len(out)) if not out[i]["serial"]), key=lambda i: -len(out[i]["keys"]))
+        # a print without a serial: its families' other label photos' serial (most of them), and the print holding most
+        # of those reading it (the user, 2026-11-26: prefilled, shown beside it to compare)
+        print_of = {k["key"]: i for i, p in enumerate(out) for k in p["keys"]}
+        members = {}
+        for k, s in self.solved.items():
+            members.setdefault(s["family"], []).append(k)
+        for i in none:
+            mine = {k["key"] for k in out[i]["keys"]}
+            others = [k for f in {self.solved[k]["family"] for k in mine if k in self.solved} for k in members[f]
+                      if k not in mine and k in print_of]
+            reads = Counter(self.label_serial(k, hand) for k in others if self.label_serial(k, hand))
+            if not reads:
+                continue
+            fs = reads.most_common(1)[0][0]
+            holders = Counter(print_of[k] for k in others if self.label_serial(k, hand) == fs)
+            out[i]["family_serial"] = fs
+            out[i]["family_print"] = holders.most_common(1)[0][0]
         new = []
         for c in self.last_run:
             if c["kind"] in ("new", "added") and c["id"] in index and index[c["id"]] not in new:
@@ -583,6 +600,7 @@ button:disabled{opacity:.4;cursor:default}
 #bar{position:fixed;bottom:0;left:0;right:0;background:#1d1d1d;padding:10px 16px;display:flex;gap:10px;align-items:center;z-index:2}
 #msg{color:#fa0}
 .pager{margin:8px 0}
+.family-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;border-bottom:1px solid #444;margin-bottom:6px}
 .pair{display:flex;gap:8px;width:100%}
 .pair figure{flex:1 1 0;min-width:0;margin:0}
 .pair img{width:100%;display:block}
@@ -687,7 +705,8 @@ function printCard(p, extra) {
   const canSplit = () => { const n = keys.filter(k => lpTicks.has(k)).length; return n > 0 && n < keys.length; };
   const split = el("button", {onclick: () => post("/split", {id: p.id, keys: keys.filter(k => lpTicks.has(k))})}, "Split off ticked");
   split.disabled = !canSplit();
-  const input = el("input", {size: "16", placeholder: "serial", value: p.serial || ""});
+  const input = el("input", {size: "16", placeholder: "serial", value: p.serial || p.family_serial || ""});
+  if (!p.serial && p.family_serial) input.title = "its family's serial (the print beside it): not set until Set serial";
   const set = el("button", {onclick: () => post("/serial", {id: p.id, serial: input.value})}, "Set serial");
   const hand = p.keys.every(k => k.by_hand) ? el("span", {class: "note"}, " entered by hand") : "";
   const tagInput = el("input", {size: "16", placeholder: "tag", value: p.tag || ""});
@@ -751,7 +770,15 @@ function render() {
   } else if (tab === "several") {
     list(S.several, `${S.several.length} prints whose label photos read several serials (label photos without one don't count): fix each by splitting or setting the serial. Not restored until fixed. The most label photos reading another serial first.`);
   } else if (tab === "none") {
-    list(S.none, `${S.none.length} prints without a serial: label photos whose straightened image gave none and matched no print. Join them into a print, or set the serial.`);
+    // beside each, the print of its family's serial (most of its family's other label photos), whose serial is prefilled
+    const per = S.per_page.prints;
+    m.append(el("p", {class: "note"}, `${S.none.length} prints without a serial: label photos whose straightened image gave none and matched no print. Join them into a print, or set the serial. Beside each: the print holding its family's other label photos, whose serial is prefilled.`), pager(S.none.length, per));
+    for (const i of S.none.slice(page * per, (page + 1) * per)) {
+      const p = S.prints[i], row = el("div", {class: "family-row"}, printCard(p));
+      if (p.family_print !== undefined) row.append(el("div", {}, el("div", {class: "note"}, `its family: ${p.family_serial}`), printCard(S.prints[p.family_print])));
+      m.append(row);
+    }
+    m.append(pager(S.none.length, per));
   } else if (tab === "new") {
     list(S.new, `${S.new.length} prints the last make prints made or added label photos to.`);
   } else if (tab === "worst") {
