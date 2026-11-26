@@ -707,7 +707,13 @@ function printCard(p, extra) {
   split.disabled = !canSplit();
   const input = el("input", {size: "16", placeholder: "serial", value: p.serial || p.family_serial || ""});
   if (!p.serial && p.family_serial) input.title = "its family's serial (the print beside it): not set until Set serial";
-  const set = el("button", {onclick: () => post("/serial", {id: p.id, serial: input.value})}, "Set serial");
+  // the card stays where it is, redrawn as the renamed print (the user, 2026-11-26: the page mustn't jump)
+  const set = el("button", {onclick: async () => {
+    if (!await post("/serial", {id: p.id, serial: input.value}, false)) return;
+    const mine = [...keys].sort().join(" ");
+    const now = S.prints.find(q => q.keys.map(k => k.key).sort().join(" ") === mine);
+    if (now) card.replaceWith(printCard(now, extra));
+  }}, "Set serial");
   const hand = p.keys.every(k => k.by_hand) ? el("span", {class: "note"}, " entered by hand") : "";
   const tagInput = el("input", {size: "16", placeholder: "tag", value: p.tag || ""});
   tagInput.title = "free text telling prints of one serial apart (PINK, Player's Choice…); empty: none";
