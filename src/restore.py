@@ -40,10 +40,13 @@
 # (src/refreeze.py) restores it again. Nor is an open print of a serial and tag some frozen print has (the user,
 # 2026-11-23: the frozen one is done; review-prints' Same serial tab hides them too); an untagged open print is held
 # back by any frozen print of its serial.
-# Done again when an image is older than this file, cuts.py, descreen.py, prints.json, solve.json or its family's straightened
-# images and cuts.
+# Done again only when its inputs changed (inputs_key, kept in its .json as "inputs"): the code of this file, cuts.py
+# and descreen.py, and the print's own job (its shape, crop, whether joined, and per label photo used: its key, pixels
+# per mm, whether an approximate cut, and its straightened image's and cut's modification time and size). (Was, until
+# 2026-11-26: when the image was older than those files, prints.json or solve.json; any new photo rewrites those two,
+# so every print was restored again on every run.)
 # Usage: restore.py [--sample] [--workers N]
-import argparse, html, json, os, sys
+import argparse, hashlib, html, json, os, sys
 import cv2, numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -443,14 +446,14 @@ def main():
     out_dir = os.path.join(gen, "restore")
     os.makedirs(out_dir, exist_ok=True)
     base = lambda pid: os.path.join(out_dir, straighten.file_name(pid)[:-5])
-    newest = max(os.path.getmtime(p) for p in (prints_file, solve_file, __file__, cuts.__file__, descreen.__file__))
-    mtime = lambda f: os.path.getmtime(f) if os.path.exists(f) else 0
-    jobs, wanted = [], set()
+    code = code_hash()
+    jobs, wanted, keys = [], set(), {}
     for pid, job in print_jobs(gen, result, solved).items():
         wanted |= {os.path.basename(base(pid)) + s for s in (".avif", ".json")}
-        inputs = max([newest] + [max(mtime(f), mtime(straighten.cut_file(f))) for _, f in job[2]])
-        if not os.path.exists(base(pid) + ".avif") or os.path.getmtime(base(pid) + ".avif") < inputs:
+        keys[pid] = inputs_key(job, code)
+        if not os.path.exists(base(pid) + ".avif") or stored_key(base(pid) + ".json") != keys[pid]:
             jobs.append(job + (base(pid),))
+    print(f"{len(keys) - len(jobs)} of {len(keys)} prints unchanged, {len(jobs)} to restore", flush=True)
     for f in os.listdir(out_dir):
         if f not in wanted and f != "index.html":
             os.remove(os.path.join(out_dir, f))
@@ -458,11 +461,38 @@ def main():
     with multiprocessing.Pool(args.workers) as pool:
         for n, (pid, desc) in enumerate(pool.imap_unordered(restore_print, jobs), 1):
             if desc is not None:
-                steps.write_json(base(pid) + ".json", desc)
+                steps.write_json(base(pid) + ".json", {**desc, "inputs": keys[pid]})
             if n % 20 == 0 or n == len(jobs):
                 print(f"restored {n} of {len(jobs)} prints", flush=True)
     page(out_dir, result, gen)
     print(f"page: {os.path.join(out_dir, 'index.html')}")
+
+
+def code_hash():
+    """A hash of the code a restored image depends on: this file, cuts.py and descreen.py."""
+    h = hashlib.sha1()
+    for f in (__file__, cuts.__file__, descreen.__file__):
+        h.update(open(f, "rb").read())
+    return h.hexdigest()
+
+
+def inputs_key(job, code):
+    """A hash of everything a print's restored image depends on (job_of's job, the code's hash): its shape, crop, whether
+    joined, and per label photo used its key, pixels per mm, whether an approximate cut, and its straightened image's
+    and cut's modification time and size (straighten rewrites them only when they change)."""
+    pid, shape, own, px_per_mm, approximate, crop, joined = job
+    stat = lambda f: [os.path.getmtime(f), os.path.getsize(f)] if os.path.exists(f) else None
+    photos_used = [[k, round(float(px_per_mm.get(k, 0)), 4), k in approximate, stat(f), stat(straighten.cut_file(f))]
+                   for k, f in sorted(own)]
+    return hashlib.sha1(json.dumps([code, shape, crop, bool(joined), photos_used], sort_keys=True).encode()).hexdigest()
+
+
+def stored_key(json_path):
+    """The inputs key a restored image was made from (its .json's "inputs"), or None."""
+    try:
+        return json.load(open(json_path)).get("inputs")
+    except (OSError, ValueError):
+        return None
 
 
 def print_jobs(gen, result, solved):

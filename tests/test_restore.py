@@ -78,3 +78,17 @@ def test_dirt_on_one_label_photo_doesnt_push_the_others_out():
     L[0, 20:40, 20:40] *= 10                                           # a dirty patch: lots of "detail"
     assert restore.sharp_enough(L, np.ones(L.shape, bool), 0)[1:].all()
 
+
+
+def test_inputs_key_changes_only_with_the_prints_own_inputs(tmp_path):
+    img = tmp_path / "a.png"
+    img.write_bytes(b"x")
+    crop = {"x": 1, "y": 2, "w": 3, "h": 4, "mm": [0, 0, 1, 1]}
+    job = lambda ppm, c=crop: ("p", "DMG", [("a", str(img))], ppm, set(), c, False)
+    key = restore.inputs_key(job({"a": 10.0, "other": 5.0}), "code")
+    assert restore.inputs_key(job({"a": 10.0, "other": 7.0}), "code") == key  # another photo's fit: unchanged
+    assert restore.inputs_key(job({"a": 11.0}), "code") != key
+    assert restore.inputs_key(job({"a": 10.0}, {**crop, "w": 5}), "code") != key
+    assert restore.inputs_key(job({"a": 10.0}), "new code") != key
+    img.write_bytes(b"xy")
+    assert restore.inputs_key(job({"a": 10.0}), "code") != key
