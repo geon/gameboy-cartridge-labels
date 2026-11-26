@@ -183,3 +183,16 @@ def test_a_refinement_is_cached_by_its_inputs(tmp_path, monkeypatch):
     open(tmp_path / "solve" / "refine-cache" / "fine-old.json", "w").write("{}")
     solve.clean_refine_cache()
     assert sorted(p.name for p in (tmp_path / "solve" / "refine-cache").iterdir()) == [f.rsplit("/", 1)[1]]
+
+
+def test_a_label_photo_stored_after_find_ran_is_never_merged_away():
+    import numpy as np
+    import solve
+    lps = [{"key": "p@10,10", "photo": "p", "shape": "dmg", "found_by": "serial", "strings": []},
+           {"key": "p@11,10", "photo": "p", "shape": "dmg", "found_by": "match", "strings": []}]
+    fit = lambda dx: {"cut_to_photo": np.array([[10.0, 0, 100 + dx], [0, 10.0, 100], [0, 0, 1]]), "edge": None}
+    fits = {"p@10,10": fit(0), "p@11,10": fit(5)}
+    assert solve.merge_fitted([dict(lp) for lp in lps], fits) == {"p@11,10": "p@10,10"}
+    solve.mark_stored(lps, {}, {"p@11,10": {}})
+    assert lps[1]["found_by"] == "stored"
+    assert solve.merge_fitted(lps, fits) == {"p@10,10": "p@11,10"}

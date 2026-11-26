@@ -1823,6 +1823,18 @@ def from_frozen_match(out, lps, failed, photo_paths, frozen_entries):
     return done
 
 
+def mark_stored(lps, frozen_records, stored_records):
+    """found_by "frozen" or "stored" for every label photo the store holds, whatever find marked it: find doesn't run
+    again when the prints step stores label photos it made (find.py), so they come marked as found ("serial", "match"),
+    and merge_fitted merged them away from their stored poses (2026-11-26: 11 stored label photos missing, the prints
+    step stopped)."""
+    for lp in lps:
+        if lp["key"] in frozen_records:
+            lp["found_by"] = "frozen"
+        elif lp["key"] in stored_records:
+            lp["found_by"] = "stored"
+
+
 def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, frozen_entries=None, stored_records=None,
           print_groups=None):
     lps = found["label_photos"]
@@ -1838,6 +1850,7 @@ def solve(found, matches, edges_dir, photo_paths=None, frozen_records=None, froz
     present = {lp["key"] for lp in lps}
     frozen_records = {k: r for k, r in (frozen_records or {}).items() if k in present}
     stored_records = {k: r for k, r in (stored_records or {}).items() if k in present and k not in frozen_records}
+    mark_stored(lps, frozen_records, stored_records)
     fitting = [lp for lp in lps if lp["key"] not in frozen_records and lp["key"] not in stored_records]
     print(f"stage 1: {len(stored_records)} label photos start from their stored poses, {len(frozen_records)} frozen", flush=True)
     fits, failed, choice = stage1(shape_variants(fitting), edges_dir, None)
