@@ -8,11 +8,13 @@ a batch in and downloads the matches that are the right game:
 
     python3 src/lens_photos.py images <dir>                  (one JPEG per wanted print to search, into <dir>)
     python3 src/lens_photos.py ingest <batch.json>
+    python3 src/lens_photos.py retry                         (the failed Yahoo Auctions images again, through Jauce)
 
 Right game: the match's page title holds the release's serial code (L8A, AAKJ), or half the words of one of its titles
 (English or Japanese script), one of 5 letters or more among them; and names no other system. At least MIN_SIDE px on the long side; not screenshot
 or box-art sites (SKIP_HOSTS); not an image already in photo-sources.json or downloaded before (eBay by image id). eBay
-images are fetched at s-l1600, the largest. One image every 5 to 8 s.
+images are fetched at s-l1600, the largest; Yahoo Auctions' through Jauce's image proxy (its address in "via"), as
+jauce_photos'. One image every 5 to 8 s.
 
 Photos go to downloaded-photos/google-lens/ with a listing.json (page_url, image_url, title_on_page, searched_print,
 ...), moved to save-new-images-here/ by make move-downloads for make add-photos. Records, as ebay_photos':
@@ -54,6 +56,7 @@ OTHER_SYSTEM = re.compile(
     r"(?<![a-z0-9])(sega|genesis|mega ?drive|game ?gear|master system|famicom(?! ?mini)|snes|super nintendo|"
     r"super famicom|n64|nintendo 64|playstation|ps[1-5]|psp|n?ds|3ds|gamecube|wii|switch|xbox|amiga|atari|neo ?geo|"
     r"pc engine|turbografx|wonderswan)(?![a-z0-9])|" + jauce_photos.NOT_GAME_BOY, re.I)
+YAHOO = "https://auctions.c.yimg.jp/"
 EBAY_ID = re.compile(r"ebayimg\.com/(?:images/g|\d+/s/[^/]+/z)/([^/]+)/")
 
 
@@ -170,29 +173,55 @@ def ingest(batch_file):
                   "size_on_google": [m["width"], m["height"]], "searched_print": p,
                   "searched_serial": (e.get("serials") or [None])[0], "searched_release": e.get("release"),
                   "query_label_photo": s.get("label_photo"), "query_text": s.get("text"), "fetched": today}
-        tmp = os.path.join(DROP, name + ".part")
-        os.makedirs(DROP, exist_ok=True)
-        rc = subprocess.run(["curl", "-sSL", "--max-time", "60", "-A", UA, "-o", tmp, u]).returncode
-        kind = subprocess.run(["file", "-b", "--mime-type", tmp], capture_output=True, text=True).stdout.strip() \
-            if os.path.exists(tmp) else ""
-        with locked(OUT):
-            sources = load(SOURCES)
-            if rc == 0 and kind.startswith("image/"):
-                data = open(tmp, "rb").read()
-                with locked(DROP):
-                    os.replace(tmp, os.path.join(DROP, name))
-                    listing = load(LISTING)
-                    listing[name] = record
-                    save(LISTING, listing)
-                sources[name] = {**record, "sha1": hashlib.sha1(data).hexdigest(), "bytes": len(data)}
-                print(f"{n + 1}/{len(todo)} ok {name}", flush=True)
-            else:
-                if os.path.exists(tmp):
-                    os.remove(tmp)
-                sources[name] = {**record, "failed": f"curl {rc}, {kind or 'no file'}"}
-                print(f"{n + 1}/{len(todo)} FAILED {name} curl {rc} {kind}", flush=True)
-            save(SOURCES, sources)
+        fetch(name, record, f"{n + 1}/{len(todo)}")
         time.sleep(random.uniform(5, 8))
+
+
+def via(u):
+    """The address to fetch an image from: Yahoo Auctions' images through Jauce's proxy (Yahoo refuses downloads
+    outside a browser), others as they are."""
+    if u.startswith(YAHOO):
+        return jauce_photos.PROXY + u[len(YAHOO):]
+    return u
+
+
+def fetch(name, record, label):
+    """Downloads record's image_url into DROP as name, with its listing.json entry; records it in SOURCES (ok or
+    failed)."""
+    tmp = os.path.join(DROP, name + ".part")
+    os.makedirs(DROP, exist_ok=True)
+    u = via(record["image_url"])
+    rc = subprocess.run(["curl", "-sSL", "--max-time", "60", "-A", UA, "-o", tmp, u]).returncode
+    kind = subprocess.run(["file", "-b", "--mime-type", tmp], capture_output=True, text=True).stdout.strip() \
+        if os.path.exists(tmp) else ""
+    if u != record["image_url"]:
+        record = {**record, "via": u}
+    with locked(OUT):
+        sources = load(SOURCES)
+        if rc == 0 and kind.startswith("image/"):
+            data = open(tmp, "rb").read()
+            with locked(DROP):
+                os.replace(tmp, os.path.join(DROP, name))
+                listing = load(LISTING)
+                listing[name] = record
+                save(LISTING, listing)
+            sources[name] = {**record, "sha1": hashlib.sha1(data).hexdigest(), "bytes": len(data)}
+            print(f"{label} ok {name}", flush=True)
+        else:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+            sources[name] = {**record, "failed": f"curl {rc}, {kind or 'no file'}"}
+            print(f"{label} FAILED {name} curl {rc} {kind}", flush=True)
+        save(SOURCES, sources)
+
+
+def retry():
+    """Downloads again the failed Yahoo Auctions images (now through Jauce's proxy), one a second."""
+    failed = {k: v for k, v in load(SOURCES).items() if "failed" in v and v["image_url"].startswith(YAHOO)}
+    for n, (name, v) in enumerate(failed.items()):
+        record = {k: x for k, x in v.items() if k != "failed"}
+        fetch(name, record, f"{n + 1}/{len(failed)}")
+        time.sleep(1)
 
 
 if __name__ == "__main__":
@@ -200,3 +229,5 @@ if __name__ == "__main__":
         images(sys.argv[2])
     elif sys.argv[1] == "ingest":
         ingest(sys.argv[2])
+    elif sys.argv[1] == "retry":
+        retry()
