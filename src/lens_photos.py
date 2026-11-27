@@ -46,7 +46,7 @@ PRINTS = "prints.json"
 STRAIGHTENED = "generated/straighten"
 MIN_SIDE = 1000
 SKIP_HOSTS = ("ytimg.com", "mobygames.com", "launchbox-app.com", "lutris.net", "igdb.com", "gamefaqs", "fandom.com",
-              "wikipedia.org", "imdb.com")
+              "wikipedia.org", "imdb.com", "game-boy-database.com")
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36"
 STOP = {"the", "of", "a", "an", "and", "in", "to", "no", "de", "game", "boy", "gameboy", "color", "colour", "advance",
         "gb", "gbc", "gba", "series", "edition", "games", "one", "vs"}
